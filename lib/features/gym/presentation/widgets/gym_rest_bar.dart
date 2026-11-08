@@ -40,7 +40,7 @@ class GymRestBar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      ['ISTIRAHAT', ?label].join(' · '),
+                      ['ISTIRAHAT', if (label != null) label!].join(' · '),
                       overflow: TextOverflow.ellipsis,
                       style: FN
                           .label(size: 10.5, color: FN.acid)

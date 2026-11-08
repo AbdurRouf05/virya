@@ -35,10 +35,12 @@ class TaskBridge {
   Future<List<TaskInboxOp>> peekInbox() async {
     final raw = await _call<String>('peekInbox');
     if (raw == null) return const [];
-    return [
-      for (final e in jsonDecode(raw) as List<dynamic>)
-        ?TaskInboxOp.parse(e as Map<String, dynamic>),
-    ];
+    final ops = <TaskInboxOp>[];
+    for (final e in jsonDecode(raw) as List<dynamic>) {
+      final op = TaskInboxOp.parse(e as Map<String, dynamic>);
+      if (op != null) ops.add(op);
+    }
+    return ops;
   }
 
   Future<void> ackInbox(List<String> ids) => _call<void>('ackInbox', ids);
