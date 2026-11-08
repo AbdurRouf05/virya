@@ -44,7 +44,8 @@ class ShareExport {
   /// Saves PNG bytes into documents/shares/.
   static Future<File> savePng(Uint8List bytes, String name) async {
     final d = await docsSubdir('shares');
-    final f = File(p.join(d.path, 'stravo_${name}_${_stamp()}.png'));
+    await _pruneOldFiles(d, 20);
+    final f = File(p.join(d.path, 'virya_${name}_${_stamp()}.png'));
     await f.writeAsBytes(bytes, flush: true);
     return f;
   }
@@ -52,7 +53,21 @@ class ShareExport {
   /// New output path in documents/videos/.
   static Future<String> newVideoPath() async {
     final d = await docsSubdir('videos');
+    await _pruneOldFiles(d, 10);
     return p.join(d.path, 'virya_recap_${_stamp()}.mp4');
+  }
+
+  static Future<void> _pruneOldFiles(Directory dir, int keepMax) async {
+    try {
+      final files = await dir.list().where((e) => e is File).cast<File>().toList();
+      if (files.length <= keepMax) return;
+      files.sort((a, b) => b.lastModifiedSync().compareTo(a.lastModifiedSync()));
+      for (final f in files.skip(keepMax)) {
+        try {
+          await f.delete();
+        } catch (_) {}
+      }
+    } catch (_) {}
   }
 
   static Future<void> shareFile(String path, {String? text, String? mime}) =>

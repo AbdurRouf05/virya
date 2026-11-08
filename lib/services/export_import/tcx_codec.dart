@@ -8,6 +8,9 @@ import 'package:xml/xml.dart';
 /// Parse Garmin TCX v2. One [ParsedActivity] per `Activity` element.
 /// Trackpoints without a position are skipped.
 List<ParsedActivity> parseTcx(String text, {String? sourceName}) {
+  if (text.contains('<!DOCTYPE') || text.contains('<!ENTITY')) {
+    throw const FormatException('XML dengan DTD/entitas eksternal tidak diizinkan');
+  }
   final doc = XmlDocument.parse(text);
   final out = <ParsedActivity>[];
   for (final act in doc.rootElement.descendantElements) {

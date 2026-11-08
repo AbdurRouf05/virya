@@ -18,7 +18,7 @@ class FieldNotesNavBar extends StatelessWidget {
     required this.onRecord,
   });
 
-  static const _tabs = ['JURNAL', 'STATISTIK', 'PETA', 'PROFIL'];
+  static const _tabs = ['HARI INI', 'KALENDER', 'LATIHAN', 'PROFIL'];
   static const _barHeight = 64.0;
   static const _raise = 14.0;
   static const _centerWidth = 84.0;

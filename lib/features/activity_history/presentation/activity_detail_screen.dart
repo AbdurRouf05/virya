@@ -62,7 +62,7 @@ class _ActivityDetailScreenState extends ConsumerState<ActivityDetailScreen> {
           danger: true,
         );
         if (!ok || !mounted) return;
-        await ref.read(databaseProvider).activitiesDao.deleteActivity(_id);
+        await ref.read(activityRepositoryProvider).delete(_id);
         ref.invalidate(activityBundleProvider(_id));
         if (mounted) Navigator.of(context).pop();
     }

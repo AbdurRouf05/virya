@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/integrations.dart';
 import 'package:virya/app/theme/app_theme.dart';
-import 'package:virya/features/activity_history/presentation/journal_screen.dart';
-import 'package:virya/features/dashboard/presentation/stats_screen.dart';
+import 'package:virya/features/calendar/presentation/calendar_screen.dart';
 import 'package:virya/features/home/presentation/widgets/home_nav_bar.dart';
+import 'package:virya/features/home/presentation/widgets/quick_action_sheet.dart';
 import 'package:virya/features/profile/presentation/profile_screen.dart';
+import 'package:virya/features/today/presentation/today_screen.dart';
+import 'package:virya/features/training/presentation/training_screen.dart';
 
-/// Root shell: JURNAL · STATISTIK · [REKAM] · PETA · PROFIL.
+/// Root shell (Fase 3): HARI INI · KALENDER · (+) AKSI · LATIHAN · PROFIL.
 class HomeShell extends ConsumerStatefulWidget {
   final bool checkRecovery;
   const HomeShell({super.key, this.checkRecovery = true});
@@ -43,13 +45,17 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     ));
   }
 
+  void _openQuickActions() {
+    showQuickActionSheet(context, onRecordGps: _openRecording);
+  }
+
   Widget _page(int i) {
     // Build lazily; keep alive once visited.
     if (!_built.contains(i)) return const SizedBox.shrink();
     return switch (i) {
-      0 => const JournalScreen(),
-      1 => const StatsScreen(),
-      2 => ref.read(integrationsProvider).mapPacks(),
+      0 => const TodayScreen(),
+      1 => const CalendarScreen(),
+      2 => const TrainingScreen(),
       _ => const ProfileScreen(),
     };
   }
@@ -67,7 +73,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
           _tab = i;
           _built.add(i);
         }),
-        onRecord: _openRecording,
+        onRecord: _openQuickActions,
       ),
     );
   }

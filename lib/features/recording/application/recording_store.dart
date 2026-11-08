@@ -116,7 +116,8 @@ class RecordingStore {
           .get();
       final wantShoes = !sport.isCycling;
       for (final g in gears) {
-        if ((g.gearType == 'runningShoes') == wantShoes) return g.id;
+        final isShoe = g.gearType.toLowerCase().contains('shoe');
+        if (isShoe == wantShoes) return g.id;
       }
     } catch (_) {}
     return null;

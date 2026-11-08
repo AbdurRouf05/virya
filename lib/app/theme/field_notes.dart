@@ -72,4 +72,28 @@ class FN {
     fontWeight: FontWeight.w500,
     color: color ?? inkMuted,
   );
+
+  static TextStyle heading({double size = 16, Color? color, FontWeight? weight}) => TextStyle(
+    fontFamily: sans,
+    fontSize: size,
+    fontWeight: weight ?? FontWeight.w700,
+    height: 1.2,
+    color: color ?? ink,
+  );
+
+  static TextStyle body({double size = 13, Color? color, FontWeight? weight}) => TextStyle(
+    fontFamily: sans,
+    fontSize: size,
+    fontWeight: weight ?? FontWeight.normal,
+    height: 1.35,
+    color: color ?? ink,
+  );
+
+  static TextStyle monoStyle({double size = 11, Color? color, FontWeight? weight}) => TextStyle(
+    fontFamily: mono,
+    fontSize: size,
+    fontWeight: weight ?? FontWeight.w500,
+    fontFeatures: tabular,
+    color: color ?? inkMuted,
+  );
 }

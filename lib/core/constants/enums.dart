@@ -91,11 +91,3 @@ enum ClimbCategory {
     }
   }
 }
-
-/// Status Sesi Aktivitas Tracking
-enum ActivityTrackingStatus {
-  idle,
-  recording,
-  paused,
-  stopped;
-}

@@ -23,7 +23,7 @@ class RecordingSettings {
     this.mount = PhoneMount.handlebar,
     this.vibrationCalibration = 1.0,
     this.defaultSport = SportType.gravelCycling,
-    this.keepScreenOn = false,
+    this.keepScreenOn = true,
     this.simulated = false,
     this.simSpeedUp = 10,
   });
@@ -66,7 +66,7 @@ class RecordingSettings {
         (s) => s.name == sportName,
         orElse: () => SportType.gravelCycling,
       ),
-      keepScreenOn: flag(await g(keyKeepScreenOn), false),
+      keepScreenOn: flag(await g(keyKeepScreenOn), true),
       simulated: flag(await g(keyUseSimulatedGps), false),
       simSpeedUp: num(await g(keySimSpeedUp), 10),
     );

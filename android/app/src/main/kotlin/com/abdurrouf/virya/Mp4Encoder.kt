@@ -35,6 +35,7 @@ class Mp4Encoder(
     private var yArr = ByteArray(0)
     private var uArr = ByteArray(0)
     private var vArr = ByteArray(0)
+    private var imageBuf: ByteBuffer? = null
     private val threads = maxOf(2, Runtime.getRuntime().availableProcessors() - 1)
     private val pool = java.util.concurrent.Executors.newFixedThreadPool(threads)
 
@@ -60,6 +61,7 @@ class Mp4Encoder(
             c.start()
         } catch (e: Exception) {
             c.release()
+            release(deleteOutput = true)
             throw e
         }
         codec = c
@@ -98,8 +100,13 @@ class Mp4Encoder(
             bmp.recycle()
             bmp = conv
         }
-        // ARGB_8888 is stored as R,G,B,A bytes in memory.
-        val buf = ByteBuffer.allocate(dstW * dstH * 4)
+        val needed = dstW * dstH * 4
+        var buf = imageBuf
+        if (buf == null || buf.capacity() < needed) {
+            buf = ByteBuffer.allocate(needed)
+            imageBuf = buf
+        }
+        buf.clear()
         bmp.copyPixelsToBuffer(buf)
         bmp.recycle()
         addFrameRgba(buf.array(), dstW, dstH)

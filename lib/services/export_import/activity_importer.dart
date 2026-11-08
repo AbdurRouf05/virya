@@ -4,7 +4,6 @@ import 'dart:isolate';
 
 import 'package:archive/archive_io.dart';
 import 'package:drift/drift.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:virya/core/analytics/elevation.dart';
@@ -30,11 +29,15 @@ class ActivityImporter {
   /// Default sport when the file does not say.
   static const SportType fallbackSport = SportType.gravelCycling;
   static const int _batch = 2000;
+  static const int maxInputBytes = 100 * 1024 * 1024; // 100 MB limit
 
   /// Pure parse layer (no DB, no IO). [fileName] selects the format; content
   /// sniffing is used when the extension is unknown. Throws
   /// [FormatException] for unsupported content.
   static List<ParsedActivity> parseBytes(Uint8List bytes, String fileName) {
+    if (bytes.length > maxInputBytes) {
+      throw const FormatException('Ukuran berkas melebihi batas maksimum (100 MB)');
+    }
     var name = fileName.toLowerCase();
     var data = bytes;
     if (name.endsWith('.gz') ||
@@ -190,7 +193,3 @@ class ActivityImporter {
     return haversineM(a.lat, a.lon, b.lat, b.lon) / dt;
   }
 }
-
-final activityImporterProvider = Provider<ActivityImporter>(
-  (ref) => ActivityImporter(ref.watch(databaseProvider)),
-);

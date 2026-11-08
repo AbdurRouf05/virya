@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:virya/core/constants/enums.dart';
@@ -62,7 +61,3 @@ String exportFileStem(String title, DateTime start) {
   String two(int v) => v.toString().padLeft(2, '0');
   return '${t}_${l.year}${two(l.month)}${two(l.day)}_${two(l.hour)}${two(l.minute)}';
 }
-
-final activityExporterProvider = Provider<ActivityExporter>(
-  (ref) => ActivityExporter(ref.watch(databaseProvider)),
-);

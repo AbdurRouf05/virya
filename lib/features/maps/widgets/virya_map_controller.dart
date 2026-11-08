@@ -120,6 +120,10 @@ class ViryaMapController {
   Future<void> call(String fn, [List<Object?> args = const []]) async {
     await _ready.future;
     if (_disposed) return;
+    if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(fn)) {
+      debugPrint('Invalid ViryaMap fn: $fn');
+      return;
+    }
     final a = args.map(jsonEncode).join(',');
     try {
       await web.runJavaScript('ViryaMap.$fn($a)');

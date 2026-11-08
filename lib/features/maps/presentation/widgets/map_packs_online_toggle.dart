@@ -25,7 +25,7 @@ class MapPacksOnlineToggle extends StatelessWidget {
           ),
           Switch(
             value: value,
-            activeThumbColor: FN.paper,
+            activeColor: FN.paper,
             activeTrackColor: FN.signal,
             inactiveThumbColor: FN.inkMuted,
             inactiveTrackColor: FN.paperDeep,

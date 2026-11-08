@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart' show Variable;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/core/database/app_database.dart';
@@ -7,10 +9,14 @@ final completedActivitiesProvider = StreamProvider<List<Activity>>((ref) {
   return ref.watch(databaseProvider).activitiesDao.watchCompletedActivities();
 });
 
-/// Down-sampled (~90 pts) lat/lon for list thumbnails. Cached per id for the
-/// app lifetime (family providers are kept alive).
+/// Down-sampled (~90 pts) lat/lon for list thumbnails. Cached with autoDispose
+/// (kept alive for 3 minutes) so memory stays lean during heavy journal browsing.
 final routeThumbProvider =
-    FutureProvider.family<List<(double, double)>, String>((ref, id) async {
+    FutureProvider.autoDispose.family<List<(double, double)>, String>((ref, id) async {
+      final link = ref.keepAlive();
+      final timer = Timer(const Duration(minutes: 3), link.close);
+      ref.onDispose(timer.cancel);
+
       final db = ref.watch(databaseProvider);
       final count = await db.trackPointsDao.countPointsForActivity(id);
       if (count == 0) return const [];

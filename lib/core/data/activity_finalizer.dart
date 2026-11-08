@@ -27,7 +27,11 @@ class ActivityFinalizer {
     final profile = await db.select(db.userProfiles).getSingleOrNull();
     final athlete = profile == null
         ? const AthleteParams()
-        : AthleteParams(weightKg: profile.weightKg, maxHr: profile.maxHeartRate);
+        : AthleteParams(
+            weightKg: profile.weightKg,
+            maxHr: profile.maxHeartRate,
+            ftpW: profile.ftpWatts?.toDouble(),
+          );
 
     final a = await Isolate.run(
       () => const ActivityAnalyzer().analyze(samples, sport, athlete: athlete),

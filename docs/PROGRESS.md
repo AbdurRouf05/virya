@@ -14,9 +14,30 @@ Newest entries on top. Contract & ownership: [BUILD_CONTRACT_V2.md](BUILD_CONTRA
 | D | Share studio: story cards, sticker PNG, Topo-Ink renderer, MP4 encoder | Modul D | ✅ Done (30 tests) — device test pending |
 | E | Offline maps (PMTiles server), MapLibre WebView, 3D flyover + video | Modul E | ✅ Done (48 tests) — device test pending |
 | 2.1 | Perbaikan v2.1 (stempel, video cepat, durasi, flyover, lari, analitik) | Antigravity | ✅ Done (186 tests) |
-| 2 | Wave 2: live segments + ghost pacer, personal heatmap, BLE HR, polish | — | 🔜 Planned |
+| 2 | Virya modular refactor, rename, token tema, tombol rekam baru | Integrator | ✅ Done |
+| 3 | Layar Hari Ini, Navigasi Baru (5-tab), Audit Kinerja & Keamanan (Paket A-D) | Antigravity | ✅ Done (190 tests) |
+| 4 | Gym + kalender kategori lanjutan | — | 🔜 Planned |
 
 ## Log
+
+### 2026-11-08 — Audit Kinerja, Pengamanan, & Fase 3 (Layar Hari Ini + Navigasi Baru) ✅
+- **Optimasi & Bug Fix (Paket A-D)**:
+  - Repository: `delete(activityId)` kini membersihkan file foto fisik di disk; profil atlet `ftpW` diteruskan ke `finalize()`; `activityBundleProvider` diubah ke `autoDispose` dengan keepAlive 30 detik.
+  - Encoder Android: perbaikan memory churn di `Mp4Encoder.kt` (reused direct `ByteBuffer`, memotong ~5 GB alokasi heap selama 600 frame); pembatalan `enc.cancel()` saat thread pool gagal running.
+  - Branding & Watermark: `'STRAVO // FLYOVER'` diubah menjadi `'VIRYA // FLYOVER'`.
+  - Storage & share: pembersihan otomatis file ekspor dan video share lama (`_pruneOldFiles`, simpan maks 20 kartu / 10 video).
+  - Keamanan: cegah ZipSlip saat backup restore menggunakan verifikasi path kanonikal (`isWithin`); nonaktifkan cleartext HTTP global di Android via `network_security_config.xml` (hanya loopback `127.0.0.1` dan `localhost` diizinkan); CSP ketat pada `map.html`; pembatasan CORS tile server lokal; sanitasi nama fungsi JavaScript di `virya_map_controller`; proteksi XML DTD/external entity di GPX/TCX codec; batas 100 MB impor file.
+  - Database & Cache: SQLite index `idx_activities_status_start` untuk querying riwayat; caching rute di `recording_session.dart`; `autoDispose` 3 menit keepAlive pada `routeThumbProvider`.
+  - Android release: `isMinifyEnabled = true`, `isShrinkResources = true`, dan ProGuard rules.
+  - Dead code: pembersihan `cupertino_icons`, `flutter_foreground_task`, direktori asset kosong, enum tak terpakai, dan unused providers.
+- **Fase 3: Layar Hari Ini + Navigasi Baru**:
+  - `lib/features/today/presentation/today_screen.dart` & `widgets/today_cards.dart`: Sapaan harian dinamis, status kebugaran TSB, latihan hari ini / quick start, mini heatmap mingguan 7 hari, to-do list harian interaktif (persisten di `AppSettings`), dan limit waktu aplikasi.
+  - `lib/features/calendar/presentation/calendar_screen.dart`: Kalender aktivitas multi-olahraga dengan 24-minggu `CalendarHeatStrip`, filter chip kategori, pemilih hari, dan daftar aktivitas harian.
+  - `lib/features/training/presentation/training_screen.dart`: Hub Latihan terpadu yang menggabungkan Jurnal riwayat dan Statistik kebugaran dengan segmented control.
+  - `lib/features/home/presentation/widgets/quick_action_sheet.dart`: Lembar aksi cepat Field Notes dengan 4 tombol: Rekam GPS, Mulai Gym, Catat Tugas Baru, dan Progres Tubuh.
+  - `lib/features/home/presentation/home_shell.dart`: Navigasi 5-tab baru `[HARI INI] [KALENDER] (+) [LATIHAN] [PROFIL]`.
+  - Profil: Ditambahkan akses langsung ke manajemen paket peta offline (.pmtiles).
+  - Tests: Ditambahkan `test/ui/today_and_home_test.dart` menguji `HomeShell`, `TodayScreen`, `TrainingScreen`, dan `CalendarScreen`. Semua file Dart mematuhi batas <= 300 baris.
 
 ### 2026-11-08 — Fase 2: Virya, arsitektur modular ✅
 - Rename Stravo → **Virya** (package `virya`, Android `com.abdurrouf.virya`, channel `virya/*`). Backup lama (`app: stravo`) tetap bisa di-restore.
