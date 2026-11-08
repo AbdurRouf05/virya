@@ -62,7 +62,12 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     }).toList();
 
     final sec = SectionCounter();
-    final selStr = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(_selectedDay);
+    String selStr;
+    try {
+      selStr = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(_selectedDay);
+    } catch (_) {
+      selStr = '${_selectedDay.day}/${_selectedDay.month}/${_selectedDay.year}';
+    }
 
     return Scaffold(
       body: PaperBackground(

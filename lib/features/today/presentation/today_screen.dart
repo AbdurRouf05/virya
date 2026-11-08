@@ -65,7 +65,12 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
     final todayTsb = timeline.isEmpty ? null : timeline.last.form;
 
     final now = DateTime.now();
-    final dateStr = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(now);
+    String dateStr;
+    try {
+      dateStr = DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(now);
+    } catch (_) {
+      dateStr = '${now.day}/${now.month}/${now.year}';
+    }
     final sec = SectionCounter();
 
     return Scaffold(
