@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
@@ -42,6 +43,10 @@ class FocusChannel(
             }
             "openAccessibilitySettings" -> {
                 openSettings(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                result.success(null)
+            }
+            "openAppSettings" -> {
+                openAppSettings()
                 result.success(null)
             }
             "installedApps" -> inBackground(result) { installedApps() }
@@ -84,6 +89,18 @@ class FocusChannel(
             appContext.startActivity(
                 Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
             )
+        }
+    }
+
+    private fun openAppSettings() {
+        try {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", appContext.packageName, null)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            appContext.startActivity(intent)
+        } catch (_: ActivityNotFoundException) {
+            openSettings(Settings.ACTION_SETTINGS)
         }
     }
 

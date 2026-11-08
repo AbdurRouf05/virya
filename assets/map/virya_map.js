@@ -458,7 +458,7 @@
     g.textBaseline = 'alphabetic';
     g.fillStyle = '#C6FF00';
     g.font = (26 * s) + 'px PlexMono, monospace';
-    g.fillText('STRAVO // FLYOVER', 56 * s, 96 * s);
+    g.fillText('VIRYA // FLYOVER', 56 * s, 96 * s);
     g.fillStyle = '#EFE9DC';
     g.font = (64 * s) + 'px Anton, sans-serif';
     g.fillText(String(exp.title || '').toUpperCase().slice(0, 26), 56 * s, 176 * s);

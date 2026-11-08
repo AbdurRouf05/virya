@@ -9,7 +9,7 @@ BodyEntry _entry(
 }) => BodyEntry(
   id: 'c${day.toIso8601String()}',
   day: day,
-  values: {BodyField.weightKg: ?weight},
+  values: {if (weight != null) BodyField.weightKg: weight},
   note: null,
   shots: {
     for (final p in poses)

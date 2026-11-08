@@ -139,6 +139,46 @@ class ProfileScreen extends ConsumerWidget {
               ),
               SectionHeader(number: sec.next(), title: 'Garasi'),
               const GearGarage(),
+              SectionHeader(number: sec.next(), title: 'Peta Offline & Wilayah'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: InkWell(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => ref.read(integrationsProvider).mapPacks(),
+                    ),
+                  ),
+                  child: InkBox(
+                    child: Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 36,
+                            height: 36,
+                            color: FN.paper,
+                            alignment: Alignment.center,
+                            child: Icon(Icons.map_outlined, size: 20, color: FN.ink),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('KELOLA PAKET PETA (.PMTILES)', style: FN.heading(size: 13, color: FN.ink)),
+                                const SizedBox(height: 2),
+                                Text('Unduh atau impor peta vektor & elevasi DEM 3D',
+                                    style: FN.body(size: 11, color: FN.inkMuted)),
+                              ],
+                            ),
+                          ),
+                          Icon(Icons.chevron_right, size: 20, color: FN.inkMuted),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

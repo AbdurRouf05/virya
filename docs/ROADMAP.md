@@ -108,12 +108,12 @@ Kartu dari atas ke bawah: sapaan + tanggal → **Tugas hari ini** (centang langs
 
 ## 5. Urutan pengerjaan
 
-| Fase | Isi |
-|---|---|
-| 2 | Refactor modular, rename, token tema, tombol rekam baru |
-| 3 | Logo + splash, layar Hari Ini, navigasi baru, peta gabungan (online + unduh wilayah) |
-| 4 | Gym + kalender kategori |
-| 5 | Tugas + widget + catat cepat dari notifikasi |
-| 6 | Fokus (batas waktu aplikasi) |
-| 7 | Progres tubuh |
-| 8 | Mode style tambahan |
+| Fase | Isi | Status |
+|---|---|---|
+| 2 | Refactor modular, rename, token tema, tombol rekam baru | ✅ Selesai |
+| 3 | Layar Hari Ini, navigasi baru (5 tab & tombol cepat), audit performa & keamanan | ✅ Selesai |
+| 4 | Gym + kalender kategori lanjutan | 🔜 Berikutnya |
+| 5 | Tugas + widget + catat cepat dari notifikasi | 📋 Terjadwal |
+| 6 | Fokus (batas waktu aplikasi) | 📋 Terjadwal |
+| 7 | Progres tubuh | 📋 Terjadwal |
+| 8 | Mode style tambahan | 📋 Terjadwal |

@@ -78,7 +78,12 @@ Map<String, ExercisePr> personalRecordsByExercise(Iterable<SetRecord> sets) {
   for (final s in sets) {
     (groups[s.exerciseId] ??= []).add(s);
   }
-  return {for (final e in groups.entries) e.key: ?personalRecords(e.value)};
+  final result = <String, ExercisePr>{};
+  for (final e in groups.entries) {
+    final pr = personalRecords(e.value);
+    if (pr != null) result[e.key] = pr;
+  }
+  return result;
 }
 
 /// Senin 00:00 (lokal) dari minggu tempat [t] berada.

@@ -100,10 +100,17 @@ class LocalTileServer {
 
   void unregisterCaptureSink(String token) => _sinks.remove(token);
 
+  static const int _maxCaptureBytes = 15 * 1024 * 1024; // 15 MB per frame limit
+
   Future<void> _handle(HttpRequest req) async {
     final res = req.response;
+    final origin = req.headers.value('origin');
+    if (origin == null ||
+        origin.startsWith('http://127.0.0.1') ||
+        origin.startsWith('http://localhost')) {
+      res.headers.set('Access-Control-Allow-Origin', origin ?? '*');
+    }
     res.headers
-      ..set('Access-Control-Allow-Origin', '*')
       ..set('Access-Control-Allow-Headers', 'Range, Content-Type')
       ..set(
         'Access-Control-Expose-Headers',
@@ -157,7 +164,13 @@ class LocalTileServer {
       return;
     }
     final b = BytesBuilder(copy: false);
+    var total = 0;
     await for (final chunk in req) {
+      total += chunk.length;
+      if (total > _maxCaptureBytes) {
+        res.statusCode = HttpStatus.requestEntityTooLarge;
+        return;
+      }
       b.add(chunk);
     }
     sink(frame, b.takeBytes());

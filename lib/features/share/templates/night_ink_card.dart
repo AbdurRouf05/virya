@@ -20,11 +20,12 @@ class NightInkCard extends StatelessWidget {
         ? FNExport
               .acid // night default
         : options.accent.resolve(dark: true);
-    final compact = f == CardFormat.square;
+    final isStory = f == CardFormat.story;
+    final compact = !isStory;
     final big = switch (f) {
       CardFormat.story => 120.0,
-      CardFormat.feed => 92.0,
-      CardFormat.square => 70.0,
+      CardFormat.feed => 80.0,
+      CardFormat.square => 66.0,
     };
     const muted = Color(0xFF8C887D);
 
@@ -37,7 +38,7 @@ class NightInkCard extends StatelessWidget {
               painter: _TopoPainter(
                 data: data,
                 accent: accent,
-                compact: compact,
+                format: f,
               ),
             ),
           ),
@@ -158,11 +159,11 @@ class NightInkCard extends StatelessWidget {
 class _TopoPainter extends CustomPainter {
   final ShareData data;
   final Color accent;
-  final bool compact;
+  final CardFormat format;
   _TopoPainter({
     required this.data,
     required this.accent,
-    required this.compact,
+    required this.format,
   });
 
   @override
@@ -178,8 +179,10 @@ class _TopoPainter extends CustomPainter {
           if (data.distanceM > 0) p.distanceM / data.distanceM,
       ],
     );
-    final top = compact ? 0.12 : 0.1;
-    final bottom = compact ? 0.48 : 0.42;
+    final top = format == CardFormat.story ? 0.08 : 0.12;
+    final bottom = format == CardFormat.story
+        ? 0.40
+        : (format == CardFormat.feed ? 0.48 : 0.52);
     final vp = Rect.fromLTRB(
       0,
       size.height * top,
@@ -194,11 +197,11 @@ class _TopoPainter extends CustomPainter {
       tilt: 1.0,
       viewport: vp,
       style: TopoInkStyle.night(accent: accent, background: false),
-      zoom: compact ? 1.0 : 1.08,
+      zoom: format == CardFormat.story ? 1.08 : 1.0,
     );
   }
 
   @override
   bool shouldRepaint(_TopoPainter old) =>
-      old.data != data || old.accent != accent;
+      old.data != data || old.accent != accent || old.format != format;
 }

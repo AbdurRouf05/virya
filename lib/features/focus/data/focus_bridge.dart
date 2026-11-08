@@ -34,6 +34,8 @@ class FocusBridge {
   Future<void> openAccessibilitySettings() =>
       _call<void>('openAccessibilitySettings');
 
+  Future<void> openAppSettings() => _call<void>('openAppSettings');
+
   /// Aplikasi yang punya ikon peluncur, tanpa Virya sendiri.
   Future<List<FocusInstalledApp>> installedApps() async {
     final raw = await _call<String>('installedApps');

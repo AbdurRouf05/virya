@@ -26,6 +26,7 @@ class RecordingSession {
   double _lastDistance = 0;
   final Map<SurfaceType, double> _surfaceDist = {};
   final List<(double, double)> _route = [];
+  List<(double, double)>? _cachedRoute;
 
   RecordingSession({
     required AppDatabase db,
@@ -65,8 +66,8 @@ class RecordingSession {
   /// Time of the last accepted sample (null when nothing recorded yet).
   DateTime? get lastSampleTime => _lastSampleTime;
 
-  /// Immutable copy of the thinned route.
-  List<(double, double)> get route => List.unmodifiable(_route);
+  /// Immutable copy of the thinned route, cached until points are added.
+  List<(double, double)> get route => _cachedRoute ??= List.unmodifiable(_route);
 
   /// Snapshot "now". Simulated time runs faster than the wall clock, so
   /// simulated sessions use the last fix time.
@@ -160,5 +161,6 @@ class RecordingSession {
       if (GeoMath.haversine(plat, plon, lat, lon) < _routeStepM) return;
     }
     _route.add((lat, lon));
+    _cachedRoute = null;
   }
 }

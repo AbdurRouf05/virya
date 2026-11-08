@@ -12,12 +12,6 @@ class FocusPermissionPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bridge = ref.read(focusBridgeProvider);
-    final body = TextStyle(
-      fontFamily: FN.sans,
-      fontSize: 13,
-      height: 1.35,
-      color: FN.inkMuted,
-    );
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       padding: const EdgeInsets.all(14),
@@ -44,15 +38,50 @@ class FocusPermissionPanel extends ConsumerWidget {
               onOpen: bridge.openAccessibilitySettings,
             ),
           const SizedBox(height: 12),
-          Text('Data pemakaian hanya tersimpan di HP ini.', style: body),
-          if (!permissions.accessibility) ...[
-            const SizedBox(height: 6),
-            Text(
-              'Kalau Aksesibilitas tidak bisa dinyalakan: buka Info aplikasi '
-              'Virya, menu titik tiga, lalu Izinkan setelan terbatas.',
-              style: body,
+          Container(
+            padding: const EdgeInsets.all(10),
+            color: FN.paperDeep,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.info_outline, size: 16, color: FN.signal),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        'TOMBOL PENGATURAN TIDAK BISA DI-KLIK?',
+                        style: FN
+                            .label(size: 9.5, color: FN.ink)
+                            .copyWith(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Di Android 13/14+, sistem mengunci izin untuk APK ("Controlled by Restricted Setting").\n'
+                  'Cara membukanya:\n'
+                  '1. Klik tombol "BUKA INFO APLIKASI" di bawah.\n'
+                  '2. Tekan menu titik tiga (⋮) di pojok kanan atas.\n'
+                  '3. Pilih "Izinkan setelan terbatas" (Allow restricted settings).\n'
+                  '4. Masukkan PIN HP, lalu kembali ke sini.',
+                  style: TextStyle(
+                    fontFamily: FN.sans,
+                    fontSize: 11.5,
+                    color: FN.inkSoft,
+                    height: 1.35,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                InkButton(
+                  label: 'Buka Info Aplikasi (Buka Titik Tiga)',
+                  height: 36,
+                  onPressed: bridge.openAppSettings,
+                ),
+              ],
             ),
-          ],
+          ),
         ],
       ),
     );

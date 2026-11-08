@@ -44,7 +44,12 @@ class VideoEncoderChannel(messenger: BinaryMessenger) : MethodChannel.MethodCall
                     val fps = call.argument<Int>("fps") ?: 30
                     val bitrate = call.argument<Int>("bitrate") ?: 8_000_000
                     val enc = Mp4Encoder(path, w, h, fps, bitrate)
-                    enc.start()
+                    try {
+                        enc.start()
+                    } catch (e: Throwable) {
+                        enc.cancel()
+                        throw e
+                    }
                     val id = nextId++
                     sessions[id] = enc
                     ok(result, mapOf("id" to id, "width" to enc.width, "height" to enc.height))

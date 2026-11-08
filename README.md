@@ -30,6 +30,29 @@ Flutter · Riverpod · Drift (SQLite) · MapLibre GL · PMTiles · MediaCodec (e
 
 Mulai dari [docs/PANDUAN.md](docs/PANDUAN.md): status fase, cara menjalankan, alur kerja, dan aturan kode.
 
+## Panduan Fitur Unggulan
+
+### 1. Catat Cepat To-Do / Tugas (Quick Capture)
+- **Notifikasi Permanen**: Aktifkan di layar **Tugas** atau **Pengaturan**. Notifikasi akan standby di status bar Android dengan kolom input langsung. Ketik tugas lalu tekan tombol kirim (panah) tanpa perlu membuka aplikasi.
+- **Quick Settings Tile**: Buka panel notifikasi HP (geser 2x ke bawah), tap ikon pensil/edit tile, lalu tambahkan tile **"Catat Tugas"** (Virya). Cukup 1 klik dari mana saja untuk membuka popup pencatatan cepat.
+- **Widget Layar Utama**: Tersedia widget daftar tugas yang interaktif (bisa langsung dicentang dari homescreen).
+
+### 2. Fokus & Anti-Doom Scrolling (Android)
+Membatasi waktu pemakaian aplikasi yang sering bikin kecanduan (misal: TikTok, Instagram, YouTube Shorts).
+> **PENTING untuk Android 13, 14, dan 15:**
+> Karena Virya di-install secara mandiri (sideload APK di luar Google Play Store), sistem keamanan Android secara otomatis mengunci izin dengan pesan **"Controlled by Restricted Setting"** (tombol izin abu-abu).
+> 
+> **Cara Mengaktifkannya:**
+> 1. Buka **Pengaturan HP** ➜ **Aplikasi** ➜ pilih **Virya** (Layar Info Aplikasi).
+> 2. Di pojok kanan atas, ketuk tombol **Menu Titik Tiga (⋮)**.
+> 3. Pilih **"Izinkan setelan terbatas"** (*Allow restricted settings*).
+> 4. Masukkan PIN / sidik jari HP.
+> 5. Kembali ke menu **Fokus** di Virya, lalu nyalakan **Akses Penggunaan** dan **Aksesibilitas**.
+
+### 3. Share Studio & Video Recap
+- Ekspor kartu aktivitas berestetika *Field Notes* dalam 3 format: **Story (9:16)**, **Feed (4:5)**, dan **Kotak (1:1)**.
+- Video Recap rute 3D MP4 dengan encoder native hemat baterai dan bebas memory leak.
+
 ## Menjalankan
 
 ```bash

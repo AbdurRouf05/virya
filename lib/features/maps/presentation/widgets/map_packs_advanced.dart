@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,24 +39,28 @@ class _MapPacksAdvancedState extends ConsumerState<MapPacksAdvanced> {
   }
 
   Future<void> _import() async {
-    final List<PlatformFile> files;
+    final FilePickerResult? res;
     try {
-      files = await FilePicker.pickFiles(dialogTitle: 'Pilih file .pmtiles');
+      res = await FilePicker.pickFiles(dialogTitle: 'Pilih file .pmtiles');
     } catch (e) {
       _toast('Gagal membuka pemilih file: $e');
       return;
     }
-    if (files.isEmpty) return;
-    final f = files.first;
+    final f = res?.files.singleOrNull;
+    if (f == null) return;
+    final path = f.path;
+    if (path == null) return;
+    final file = File(path);
+    final fileName = f.name;
     setState(() {
       _importProgress = 0;
-      _importName = f.name;
+      _importName = fileName;
     });
     try {
-      final total = f.lengthSync() ?? await f.length();
+      final total = file.lengthSync();
       final pack = await _repo.importStream(
-        f.name,
-        f.readAsByteStream(),
+        fileName,
+        file.openRead(),
         totalBytes: total,
         onProgress: (p) {
           if (mounted) setState(() => _importProgress = p);

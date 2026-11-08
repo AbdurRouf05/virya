@@ -49,7 +49,7 @@ class SettingRow extends StatelessWidget {
                   ],
                 ),
               ),
-              ?trailing,
+              if (trailing != null) trailing!,
             ],
           ),
           if (below != null) ...[const SizedBox(height: 8), below!],

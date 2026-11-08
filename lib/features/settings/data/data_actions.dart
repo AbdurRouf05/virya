@@ -68,18 +68,21 @@ class DataActions {
     final db = ref.read(databaseProvider);
     final PlatformFile? file;
     try {
-      file = await FilePicker.pickFile(
-          dialogTitle: 'Pilih GPX / TCX / FIT / ZIP');
+      final res = await FilePicker.pickFiles(
+        dialogTitle: 'Pilih GPX / TCX / FIT / ZIP',
+      );
+      file = res?.files.singleOrNull;
     } catch (e) {
       if (context.mounted) toast(context, 'Tidak bisa membuka pemilih file: $e');
       return const [];
     }
-    final path = file?.path;
+    if (file == null) return const [];
+    final path = file.path;
     if (path == null) return const [];
     if (!context.mounted) return const [];
     try {
       final ids = await withProgress(context,
-          'Mengimpor ${file!.name}…', () => integ.importFile(db, path));
+          'Mengimpor ${file.name}…', () => integ.importFile(db, path));
       if (context.mounted) {
         toast(
             context,
@@ -131,17 +134,21 @@ class DataActions {
     final db = ref.read(databaseProvider);
     final PlatformFile? file;
     try {
-      file = await FilePicker.pickFile(dialogTitle: 'Pilih file cadangan .zip');
+      final res = await FilePicker.pickFiles(
+        dialogTitle: 'Pilih file cadangan .zip',
+      );
+      file = res?.files.singleOrNull;
     } catch (e) {
       if (context.mounted) toast(context, 'Tidak bisa membuka pemilih file: $e');
       return;
     }
-    final path = file?.path;
+    if (file == null) return;
+    final path = file.path;
     if (path == null || !context.mounted) return;
     final ok = await confirm(
       context,
       title: 'Pulihkan cadangan?',
-      body: 'Semua data saat ini akan diganti isi "${file!.name}". '
+      body: 'Semua data saat ini akan diganti isi "${file.name}". '
           'Tindakan ini tidak bisa dibatalkan.',
       action: 'PULIHKAN',
       danger: true,

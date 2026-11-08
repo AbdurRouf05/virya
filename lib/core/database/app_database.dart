@@ -91,6 +91,10 @@ class AppDatabase extends _$AppDatabase {
             'CREATE INDEX IF NOT EXISTS idx_activities_sport_status '
             'ON activities (sport_type, status);',
           );
+          await customStatement(
+            'CREATE INDEX IF NOT EXISTS idx_activities_status_start '
+            'ON activities (status, start_time DESC);',
+          );
           await _createGymIndexes();
           await _createTaskIndexes();
           await seedExerciseLibrary(this);
@@ -129,6 +133,10 @@ class AppDatabase extends _$AppDatabase {
         beforeOpen: (details) async {
           // Aktifkan Foreign Keys di SQLite
           await customStatement('PRAGMA foreign_keys = ON');
+          await customStatement(
+            'CREATE INDEX IF NOT EXISTS idx_activities_status_start '
+            'ON activities (status, start_time DESC);',
+          );
         },
       );
 
@@ -196,7 +204,6 @@ final bodyDaoProvider = Provider<BodyDao>((ref) {
 final gearsDaoProvider = Provider<GearsDao>((ref) {
   return ref.watch(databaseProvider).gearsDao;
 });
-
 /// Typed helpers over the AppSettings key/value table.
 extension AppSettingsX on AppDatabase {
   Future<String?> getSetting(String key) async {

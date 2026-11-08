@@ -24,7 +24,8 @@ BodyEntry bodyEntryOf(BodyCheckinRow row, String basePath) {
     id: c.id,
     day: dayFromKey(c.day)!,
     values: {
-      for (final e in measured.entries) e.key: ?e.value,
+      for (final e in measured.entries)
+        if (e.value != null) e.key: e.value!,
     },
     note: c.note,
     shots: {

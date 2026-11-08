@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,12 +55,25 @@ class ActivityRepository {
     );
   }
 
+  /// Deletes the activity, its track points and cleans up physical photo files.
+  Future<void> delete(String activityId) async {
+    try {
+      final photos = await db.waypointPhotosDao.getPhotosForActivity(activityId);
+      for (final ph in photos) {
+        final f = File(ph.filePath);
+        if (await f.exists()) await f.delete();
+      }
+    } catch (_) {}
+    await db.activitiesDao.deleteActivity(activityId);
+  }
+
   Future<AthleteParams> _athleteParams() async {
     final profile = await db.select(db.userProfiles).getSingleOrNull();
     if (profile == null) return const AthleteParams();
     return AthleteParams(
       weightKg: profile.weightKg,
       maxHr: profile.maxHeartRate,
+      ftpW: profile.ftpWatts?.toDouble(),
     );
   }
 }
@@ -67,8 +82,12 @@ final activityRepositoryProvider = Provider<ActivityRepository>(
   (ref) => ActivityRepository(ref.watch(databaseProvider)),
 );
 
-/// Load + analyze one activity. Invalidate after edits.
+/// Load + analyze one activity. Auto-disposes 30s after closing the screen
+/// to free large track point arrays from memory while keeping transitions fast.
 final activityBundleProvider =
-    FutureProvider.family<ActivityBundle?, String>((ref, id) {
+    FutureProvider.autoDispose.family<ActivityBundle?, String>((ref, id) {
+  final link = ref.keepAlive();
+  final timer = Timer(const Duration(seconds: 30), link.close);
+  ref.onDispose(timer.cancel);
   return ref.watch(activityRepositoryProvider).load(id);
 });

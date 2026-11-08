@@ -7,6 +7,9 @@ import 'package:xml/xml.dart';
 /// Parse GPX 1.0/1.1 tracks (all trk/trkseg merged into one activity).
 /// Reads Garmin TrackPointExtension hr/cad and optional speed.
 List<ParsedActivity> parseGpx(String text, {String? sourceName}) {
+  if (text.contains('<!DOCTYPE') || text.contains('<!ENTITY')) {
+    throw const FormatException('XML dengan DTD/entitas eksternal tidak diizinkan');
+  }
   final doc = XmlDocument.parse(text);
   final root = doc.rootElement;
   final samples = <TrackSample>[];

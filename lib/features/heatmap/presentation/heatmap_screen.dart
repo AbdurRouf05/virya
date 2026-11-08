@@ -56,7 +56,8 @@ class _HeatmapScreenState extends ConsumerState<HeatmapScreen> {
                   ref
                       .watch(integrationsProvider)
                       .heatmapView(points: result?.points ?? const []),
-                  ?_overlay(async, result),
+                  if (_overlay(async, result) != null)
+                    _overlay(async, result)!,
                 ],
               ),
             ),

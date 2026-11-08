@@ -31,7 +31,11 @@ class TaskTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final overdue = isTaskOverdue(task, today);
-    final meta = [?_dueLabel(), if (task.important) 'PENTING'].join(' · ');
+    final dueLabel = _dueLabel();
+    final meta = [
+      if (dueLabel != null) dueLabel,
+      if (task.important) 'PENTING',
+    ].join(' · ');
     return InkWell(
       onTap: onTap,
       child: Padding(

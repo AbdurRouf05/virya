@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:virya/core/database/app_database.dart';
@@ -120,6 +119,9 @@ class BackupService {
           continue;
         }
         final target = File(p.joinAll([tmp.path, ...rel.split('/')]));
+        if (!p.isWithin(p.normalize(tmp.path), p.normalize(target.path))) {
+          continue;
+        }
         await target.parent.create(recursive: true);
         final bytes = f.readBytes();
         if (bytes != null) await target.writeAsBytes(bytes, flush: true);
@@ -179,6 +181,15 @@ class BackupService {
     return true;
   }
 
+  /// Removes staged rollback files from previous restores.
+  static Future<void> cleanupPreviousRestore({Directory? baseDir}) async {
+    try {
+      final base = baseDir ?? await getApplicationDocumentsDirectory();
+      final prev = Directory(p.join(base.path, previousDir));
+      if (prev.existsSync()) await prev.delete(recursive: true);
+    } catch (_) {}
+  }
+
   static bool _isSqlite(Uint8List b) {
     const magic = 'SQLite format 3';
     if (b.length < 16) return false;
@@ -194,7 +205,3 @@ class BackupService {
         '${two(t.hour)}${two(t.minute)}${two(t.second)}';
   }
 }
-
-final backupServiceProvider = Provider<BackupService>(
-  (ref) => BackupService(ref.watch(databaseProvider)),
-);

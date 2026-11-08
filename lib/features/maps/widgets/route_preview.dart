@@ -114,7 +114,7 @@ class RoutePreviewPainter extends CustomPainter {
     for (var y = step; y < size.height; y += step) {
       canvas.drawLine(Offset(0, y), Offset(size.width, y), grid);
     }
-    final all = [...points, ?currentPosition];
+    final all = [...points, if (currentPosition != null) currentPosition!];
     if (all.isEmpty) return;
 
     // Fit with equirectangular projection.

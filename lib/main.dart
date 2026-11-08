@@ -15,6 +15,7 @@ Future<void> main() async {
   // Apply a staged backup restore before the database is opened.
   try {
     await BackupService.applyPendingRestore();
+    await BackupService.cleanupPreviousRestore();
   } catch (e) {
     debugPrint('applyPendingRestore failed: $e');
   }
