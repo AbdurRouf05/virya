@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/format.dart';
+import 'package:virya/app/integrations.dart';
 import 'package:virya/app/settings.dart';
 import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/activity_history/data/journal_providers.dart';
@@ -55,6 +56,20 @@ class _StatsScreenState extends ConsumerState<StatsScreen> {
                 child: CalendarHeatStrip(
                   dailyValue: dailySum(list, (a) => a.totalDistanceMeters),
                   weeks: 26,
+                ),
+              ),
+              SectionHeader(number: sec.next(), title: 'Heatmap pribadi'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: InkButton(
+                  label: 'BUKA HEATMAP',
+                  icon: Icons.map_outlined,
+                  expand: true,
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => ref.read(integrationsProvider).heatmap(),
+                    ),
+                  ),
                 ),
               ),
               SectionHeader(number: sec.next(), title: 'Rekor pribadi'),

@@ -5,10 +5,13 @@ import 'package:virya/app/integrations_live.dart';
 import 'package:virya/app/settings.dart';
 import 'package:virya/app/virya_app.dart';
 import 'package:virya/core/backup/backup_service.dart';
+import 'package:virya/core/data/activity_finalizer.dart';
 import 'package:virya/core/database/app_database.dart';
+import 'package:virya/features/segments/data/segment_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  ActivityFinalizer.afterFinalize = syncSegmentsAfterFinalize;
   // Apply a staged backup restore before the database is opened.
   try {
     await BackupService.applyPendingRestore();

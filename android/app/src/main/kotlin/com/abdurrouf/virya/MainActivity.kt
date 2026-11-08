@@ -10,6 +10,7 @@ class MainActivity : FlutterActivity() {
     private var videoEncoder: VideoEncoderChannel? = null
     private var tasks: TaskChannel? = null
     private var focus: FocusChannel? = null
+    private var style: StyleChannel? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -17,6 +18,7 @@ class MainActivity : FlutterActivity() {
         videoEncoder = VideoEncoderChannel(messenger)
         tasks = TaskChannel(this, messenger).also { it.handleIntent(intent) }
         focus = FocusChannel(this, messenger)
+        style = StyleChannel(this, messenger)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -32,6 +34,8 @@ class MainActivity : FlutterActivity() {
         tasks = null
         focus?.dispose()
         focus = null
+        style?.dispose()
+        style = null
         super.cleanUpFlutterEngine(flutterEngine)
     }
 }

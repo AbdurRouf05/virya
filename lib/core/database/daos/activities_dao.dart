@@ -82,8 +82,10 @@ class ActivitiesDao extends DatabaseAccessor<AppDatabase>
         .getSingleOrNull();
   }
 
-  /// Hapus atau batalkan aktivitas
-  Future<int> deleteActivity(String id) {
+  /// Hapus atau batalkan aktivitas, beserta upaya segmennya.
+  Future<int> deleteActivity(String id) => transaction(() async {
+    final efforts = attachedDatabase.segmentEfforts;
+    await (delete(efforts)..where((t) => t.activityId.equals(id))).go();
     return (delete(activities)..where((t) => t.id.equals(id))).go();
-  }
+  });
 }

@@ -8,6 +8,7 @@ import 'package:virya/features/body/domain/body_models.dart';
 import 'package:virya/features/body/presentation/body_checkin_screen.dart';
 import 'package:virya/features/body/presentation/body_compare_screen.dart';
 import 'package:virya/features/body/presentation/widgets/body_entry_tile.dart';
+import 'package:virya/features/body/presentation/widgets/body_reminder_picker.dart';
 import 'package:virya/features/body/presentation/widgets/body_timelapse_dialog.dart';
 import 'package:virya/features/body/presentation/widgets/body_weight_chart.dart';
 
@@ -102,6 +103,8 @@ class BodyScreen extends ConsumerWidget {
               ],
             ),
           ),
+          const SectionHeader(title: 'Ingatkan check-in tiap'),
+          const BodyReminderPicker(),
           SectionHeader(
             title: 'Riwayat',
             trailing: Text('${entries.length}', style: FN.label(size: 11)),

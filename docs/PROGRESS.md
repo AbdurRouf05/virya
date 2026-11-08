@@ -21,9 +21,18 @@ Newest entries on top. Baru bergabung? Mulai dari [PANDUAN.md](PANDUAN.md). Atur
 | F6 | Fokus: batas waktu harian per aplikasi (Android) | — | ✅ Done (41 tes baru) — uji perangkat pending |
 | F7 | Progres tubuh: foto berkala, perbandingan, timelapse | — | ✅ Done (60 tes baru) — uji perangkat pending |
 | F8 | Mode style tambahan | — | ✅ Done (39 tes baru) — uji perangkat pending |
-| 2 | Wave 2: live segments + ghost pacer, personal heatmap, BLE HR, polish | — | 🔜 Planned |
+| 2 | Wave 2: segmen live + ghost pacer, heatmap pribadi, sensor detak jantung BLE | — | ✅ Done (89 tes baru bersama sisa kecil) — uji perangkat pending |
 
 ## Log
+
+### 2026-11-08 — Wave 2 dan sisa kecil ✅
+- **Segmen live + ghost** (`features/segments`): buat segmen dari rute di detail aktivitas, upaya lama langsung dicari, upaya baru dicocokkan tiap aktivitas selesai direkam, diimpor, atau dihitung ulang. HUD dan suara di layar rekam (mendekat, dimulai, selisih ghost tiap 30 detik, hasil akhir). Masuk dari ikon bendera di Jurnal dan bagian Segmen di detail aktivitas. HUD dan suara selalu memakai meter walau setelan imperial aktif.
+- **Heatmap pribadi** (`features/heatmap`): layer `heat` di MapLibre, filter Semua/Sepeda/Lari/Jalan, dihitung di luar UI thread, maksimal 40.000 titik. Masuk dari tab Statistik. Hanya 2D; versi 3D dari PRD tidak dibuat.
+- **Sensor detak jantung BLE** (`core/sensors`, `features/sensors`): pindai, sambung, simpan sensor terakhir, sambung ulang otomatis, bpm masuk ke track point. Pengaturan → Perekaman → Sensor detak jantung. Sensor speed/cadence belum dikerjakan. `flutter_blue_plus` memakai `License.nonprofit`, dan lisensinya menyebut "ping" saat build (nama paket, nama dan versi aplikasi, versi paket, tanggal), bukan saat aplikasi berjalan. Build rilis butuh `android/app/proguard-rules.pro`.
+- **Sisa kecil:** judul kartu latihan di Hari Ini aman di layar sempit; jadwal pengingat foto tubuh 7/14/30 hari atau mati; warna zona detak jantung, layar "Waktu habis", dan widget tugas mengikuti style (channel `virya/style`).
+- Audit ROADMAP bagian 2 dan 4: tidak ada butir besar yang hilang. Belum ada: gelembung mengambang (opsional). Beda dari rancangan: riwayat Fokus hanya di detail hari, bukan tanda di kotak kalender; widget juga menampilkan tugas jatuh tempo; intensitas kalender hanya dari durasi.
+- Tes yang memompa `HomeShell`: macetnya artefak urutan penutupan. Urutan yang benar: `container.dispose()`, `tester.pump()`, lalu `tester.runAsync(db.close)`.
+- Verifikasi: analyze bersih, 534 tes lulus, APK rilis arm64 dan armeabi-v7a berhasil. Belum diuji di HP; sensor BLE asli, GPS, dan WebView heatmap hanya teruji lewat tes dengan pengganti palsu. Daftarnya di `PANDUAN.md` bagian 8.
 
 ### 2026-11-08 — Fase 8: Mode style ✅
 - Tiga style baru selain Field Notes: **Malam** (gelap), **Cetak Biru**, **Hutan**. Semuanya memakai font yang sudah ada di aplikasi. Daftarnya di `lib/app/theme/styles/styles.dart`; id yang tidak dikenal jatuh ke Field Notes.
@@ -31,8 +40,8 @@ Newest entries on top. Baru bergabung? Mulai dari [PANDUAN.md](PANDUAN.md). Atur
 - `FNExport` selalu Field Notes. Dipakai oleh kartu share, video recap, timelapse, dan warna rute di peta dasar yang tetap krem.
 - Pilihan ada di Pengaturan → Tampilan (`StylePicker`), tersimpan di setting `style_id`, dan dibaca sebelum `runApp` supaya tidak berkedip saat aplikasi dibuka.
 - `MaterialApp` memakai `ValueKey(style.id)`, karena banyak widget `const` membaca `FN.*`. Akibatnya, setelah ganti style aplikasi kembali ke beranda; state Riverpod tetap ada.
-- Belum mengikuti style: splash native, widget layar utama, layar blokir Fokus, warna zona di `surface_bar.dart`, dan cover loading flyover.
-- Tes rebuild memakai `ViryaApp(home: Scaffold())`, karena tes dengan `HomeShell` asli macet dan penyebabnya belum dipastikan. Tes itu juga mencatat overflow 28 px di `today_training_card.dart:61` pada lebar 186 px. Font tes (Ahem) lebih lebar dari font asli, jadi perlu dicek di HP.
+- Splash native tidak mengikuti style, karena digambar sebelum kode aplikasi berjalan.
+- Tes rebuild memakai `ViryaApp(home: Scaffold())`. Sisa pekerjaan dan penjelasan tes `HomeShell` ada di entri Wave 2 di atas.
 - Verifikasi: analyze bersih, 445 tes lulus, APK debug berhasil. Belum diuji di HP; daftarnya di `PANDUAN.md` bagian 8.
 
 ### 2026-11-08 — Fase 7: Progres tubuh ✅

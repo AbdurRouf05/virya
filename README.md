@@ -18,10 +18,9 @@ Aplikasi pribadi untuk membangun konsistensi: olahraga, latihan, fokus, dan tuga
 - **Fokus**: batas waktu harian untuk aplikasi tertentu (Android).
 - **Progres tubuh**: foto berkala, perbandingan, timelapse.
 - **Mode tampilan**: Field Notes, Malam, Cetak Biru, Hutan.
-
-## Peta jalan
-
-- Segmen live, heatmap pribadi, sensor detak jantung BLE
+- **Segmen live** dengan ghost pacer dan panduan suara.
+- **Heatmap pribadi** dari semua jalur yang pernah direkam.
+- **Sensor detak jantung** Bluetooth.
 
 ## Teknologi
 
@@ -41,7 +40,7 @@ flutter run
 Build rilis Android:
 
 ```bash
-flutter build apk --release
+flutter build apk --release --split-per-abi --target-platform android-arm,android-arm64
 ```
 
 ## Lisensi data peta

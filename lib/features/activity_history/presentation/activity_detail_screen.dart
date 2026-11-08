@@ -251,6 +251,8 @@ class _ActivityDetailScreenState extends ConsumerState<ActivityDetailScreen> {
             'Upaya terbaik',
             BestEffortsTable(efforts: a.bestEfforts, sport: sport, fmt: fmt),
           ),
+        if (b.samples.length >= 2)
+          ..._section(sec.next(), 'Segmen', integ.activitySegments(_id)),
         if (a.hrZoneSeconds.values.any((v) => v > 0))
           ..._section(
             sec.next(),

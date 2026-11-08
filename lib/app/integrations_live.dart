@@ -16,11 +16,17 @@ import 'package:virya/features/focus/presentation/widgets/today_focus_card.dart'
 import 'package:virya/features/gym/presentation/gym_home_screen.dart';
 import 'package:virya/features/gym/presentation/gym_launcher.dart';
 import 'package:virya/features/gym/presentation/gym_session_detail.dart';
+import 'package:virya/features/heatmap/presentation/heatmap_screen.dart';
 import 'package:virya/features/maps/presentation/flyover_screen.dart';
 import 'package:virya/features/maps/presentation/map_packs_screen.dart';
+import 'package:virya/features/maps/widgets/heatmap_map_view.dart';
 import 'package:virya/features/maps/widgets/route_map_view.dart';
 import 'package:virya/features/recording/presentation/recording_screen.dart';
 import 'package:virya/features/recording/presentation/recovery_prompt.dart';
+import 'package:virya/features/sensors/presentation/heart_rate_sensor_screen.dart';
+import 'package:virya/features/segments/presentation/segments_screen.dart';
+import 'package:virya/features/segments/presentation/widgets/activity_segments_section.dart';
+import 'package:virya/features/segments/presentation/widgets/segment_live_hud.dart';
 import 'package:virya/features/share/presentation/share_studio_screen.dart';
 import 'package:virya/features/tasks/presentation/task_host.dart';
 import 'package:virya/features/tasks/presentation/widgets/task_quick_add_sheet.dart';
@@ -42,6 +48,8 @@ class LiveIntegrations extends Integrations {
   Widget flyover(String activityId) => FlyoverScreen(activityId: activityId);
   @override
   Widget mapPacks() => const MapPacksScreen();
+  @override
+  Widget heartRateSensors() => const HeartRateSensorScreen();
   @override
   Widget activityDetail(String activityId) =>
       ActivityDetailScreen(activityId: activityId);
@@ -100,6 +108,20 @@ class LiveIntegrations extends Integrations {
   Widget todayBodyCard() => const TodayBodyCard();
   @override
   Widget bodyOnDay(DateTime day) => BodyDayEntry(day: day);
+
+  @override
+  Widget heatmap() => const HeatmapScreen();
+  @override
+  Widget heatmapView({required List<(double, double, double)> points}) =>
+      HeatmapMapView(points: points);
+
+  @override
+  Widget segmentsHome() => const SegmentsScreen();
+  @override
+  Widget activitySegments(String activityId) =>
+      ActivitySegmentsSection(activityId: activityId);
+  @override
+  Widget recordingSegmentHud() => const SegmentLiveHud();
 
   @override
   Future<List<String>> importFile(AppDatabase db, String path) =>

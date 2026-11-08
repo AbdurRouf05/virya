@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/settings.dart';
 import 'package:virya/app/theme/app_theme.dart';
 import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/native_style.dart';
 import 'package:virya/app/theme/styles/styles.dart';
 import 'package:virya/features/home/presentation/home_shell.dart';
 
@@ -16,6 +17,7 @@ class ViryaApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final style = styleById(ref.watch(styleIdProvider));
     FN.use(style);
+    pushNativeStyle(style);
     final icons = style.brightness == Brightness.dark
         ? Brightness.light
         : Brightness.dark;

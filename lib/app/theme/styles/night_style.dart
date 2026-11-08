@@ -48,6 +48,12 @@ const nightStyle = Palette(
     Color(0xFFE5484D),
     Color(0xFFE0527A),
   ],
+  hrZones: [
+    Color(0xFF6E6A5F),
+    Color(0xFF9A958A),
+    Color(0xFFD8B23A),
+    Color(0xFFE8812A),
+  ],
   display: 'Anton',
   mono: 'PlexMono',
   sans: 'PlexSans',

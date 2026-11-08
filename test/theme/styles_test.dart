@@ -84,6 +84,15 @@ void main() {
           }
         });
 
+        test('zona detak jantung terlihat dan berbeda', () {
+          FN.use(s);
+          expect(FN.hrZones, hasLength(5));
+          expect(FN.hrZones.toSet(), hasLength(5));
+          for (final z in FN.hrZones) {
+            expect(contrast(z, s.paper), greaterThanOrEqualTo(1.5));
+          }
+        });
+
         test('angka di atas warna kategori terbaca', () {
           for (final c in SportCategory.values) {
             expect(

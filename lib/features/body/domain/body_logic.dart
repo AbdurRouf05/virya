@@ -1,7 +1,16 @@
 import 'package:virya/features/body/domain/body_models.dart';
 
-/// Jarak antar check-in yang dianjurkan.
+/// Jarak antar check-in bawaan.
 const bodyCheckinIntervalDays = 7;
+
+/// Pilihan jarak pengingat. `0` berarti pengingat mati.
+const bodyCheckinIntervalChoices = [7, 14, 30, 0];
+
+/// Nilai tersimpan menjadi jarak pengingat; nilai asing jatuh ke bawaan.
+int bodyCheckinIntervalOf(String? raw) {
+  final v = int.tryParse(raw ?? '');
+  return bodyCheckinIntervalChoices.contains(v) ? v! : bodyCheckinIntervalDays;
+}
 
 /// Selisih hari kalender, kebal terhadap pergantian jam musim panas.
 int bodyDaysBetween(DateTime from, DateTime to) => DateTime.utc(
@@ -12,12 +21,16 @@ int bodyDaysBetween(DateTime from, DateTime to) => DateTime.utc(
 
 /// Pengingat muncul bila check-in terakhir sudah lewat jadwalnya. Belum pernah
 /// check-in berarti belum ada jadwal, jadi tidak diingatkan.
-bool isBodyCheckinDue(Iterable<BodyEntry> entries, DateTime today) {
-  if (entries.isEmpty) return false;
+bool isBodyCheckinDue(
+  Iterable<BodyEntry> entries,
+  DateTime today, {
+  int intervalDays = bodyCheckinIntervalDays,
+}) {
+  if (intervalDays <= 0 || entries.isEmpty) return false;
   final last = entries
       .map((e) => e.day)
       .reduce((a, b) => a.isAfter(b) ? a : b);
-  return bodyDaysBetween(last, today) >= bodyCheckinIntervalDays;
+  return bodyDaysBetween(last, today) >= intervalDays;
 }
 
 /// Angka dari input pengguna. Koma diterima sebagai pemisah desimal.

@@ -66,11 +66,15 @@ class TodayTrainingCard extends StatelessWidget {
                 color: done ? FN.category(today.first.category) : FN.inkMuted,
               ),
               const SizedBox(width: 8),
-              Text(
-                'LATIHAN HARI INI',
-                style: FN
-                    .label(size: 11, color: FN.ink)
-                    .copyWith(fontWeight: FontWeight.w700),
+              Flexible(
+                child: Text(
+                  'LATIHAN HARI INI',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: FN
+                      .label(size: 11, color: FN.ink)
+                      .copyWith(fontWeight: FontWeight.w700),
+                ),
               ),
             ],
           ),

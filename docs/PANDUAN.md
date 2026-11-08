@@ -38,11 +38,11 @@ Fase dikerjakan berurutan. Status terbaru selalu ada di papan status `docs/PROGR
 | 6 | Fokus: batas waktu harian per aplikasi (khusus Android) | Selesai |
 | 7 | Progres tubuh: foto berkala, perbandingan, timelapse | Selesai |
 | 8 | Mode style: pilihan tampilan | Selesai |
-| Wave 2 | Segmen live + ghost pacer, heatmap pribadi, sensor detak jantung BLE | Belum |
+| Wave 2 | Segmen live + ghost pacer, heatmap pribadi, sensor detak jantung BLE | Selesai |
 
 Di log lama ada kode seperti "Modul A–E", "v2.1", dan "T1–T8". Itu nama tahap pengerjaan Fondasi.
 
-Fase 1–8 sudah lulus tes otomatis, tetapi **banyak fitur Android belum diuji di HP sungguhan**.
+Fase 1–8 dan Wave 2 sudah lulus tes otomatis, tetapi **banyak fitur Android belum diuji di HP sungguhan**.
 Daftarnya ada di bagian 8, dan ini tempat yang bagus untuk mulai membantu.
 
 ## 4. Menjalankan proyek
@@ -162,6 +162,30 @@ Centang di PR atau catat di `docs/PROGRESS.md` kalau sudah dicoba.
 - [ ] Ikon status bar terang di Malam dan gelap di style terang
 - [ ] Kartu dan video share tetap Field Notes di style apa pun
 - [ ] Ganti style saat sesi gym berjalan: sesinya tidak hilang
+- [ ] Widget tugas dan layar "Waktu habis" mengikuti style; bingkai widget Field Notes tetap rapi
+- [ ] Bar zona detak jantung terbaca di tiap style
+
+**Segmen dan ghost**
+- [ ] Buat segmen dari aktivitas GPS: jumlah upaya lama muncul
+- [ ] Rekam melewati segmen: "mendekat", "dimulai", selisih ghost tiap 30 detik, hasil akhir; upaya masuk riwayat dan rekor diperbarui
+- [ ] Ulangi dengan layar mati: suara tetap keluar
+- [ ] Keluar dari rute di tengah segmen: muncul "Kamu keluar dari segmen"
+- [ ] Hapus segmen, lalu hapus aktivitas yang punya upaya: daftarnya tetap benar
+
+**Heatmap**
+- [ ] Statistik → BUKA HEATMAP: jalur menyala, peta pas ke area jalur, rute yang sering dilewati lebih terang
+- [ ] Ganti filter kategori: jalur berubah dan layar tidak patah-patah
+- [ ] Mode pesawat dengan paket peta terpasang; riwayat panjang tidak macet
+
+**Sensor detak jantung (di APK rilis)**
+- [ ] Pengaturan → Sensor detak jantung → Cari: izin Perangkat sekitar muncul dan sensor tampil
+- [ ] Sambung sensor, bpm hidup; rekam 10 menit layar mati: grafik dan rata-rata HR ada di detail aktivitas
+- [ ] Lepas sensor dari kulit: bpm hilang lalu kembali. Matikan Bluetooth di tengah rekaman: tersambung lagi, rekaman tetap jalan
+- [ ] Lupakan sensor: rekaman berikutnya tanpa bpm dan tanpa pesan error
+
+**Progres tubuh dan Hari Ini (tambahan)**
+- [ ] Ubah pengingat foto ke 14 hari dan MATI, cek kartu di Hari Ini
+- [ ] Hari Ini di HP layar sempit: tidak ada teks meluber
 
 **Gym**
 - [ ] Sesi penuh sampai selesai, timer istirahat berjalan

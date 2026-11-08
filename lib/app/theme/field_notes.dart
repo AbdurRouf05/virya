@@ -56,6 +56,9 @@ class FN {
 
   static Map<SurfaceType, Color> get surface => _p.surface;
 
+  /// Warna zona detak jantung Z1 sampai Z5.
+  static List<Color> get hrZones => [..._p.hrZones, _p.signal];
+
   /// Color for a grade in percent (climb index).
   static Color grade(double pct) {
     final r = _p.gradeRamp;

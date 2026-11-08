@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/focus_block_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/task_paper"
@@ -9,6 +10,7 @@
     android:padding="28dp">
 
     <TextView
+        android:id="@+id/focus_block_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/focus_block_title"

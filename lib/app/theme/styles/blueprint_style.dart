@@ -48,6 +48,12 @@ const blueprintStyle = Palette(
     Color(0xFFA3161B),
     Color(0xFF5B0E2D),
   ],
+  hrZones: [
+    Color(0xFFA9B6C2),
+    Color(0xFF7D8A96),
+    Color(0xFFD8B23A),
+    Color(0xFFE8812A),
+  ],
   display: 'Anton',
   mono: 'PlexMono',
   sans: 'PlexSans',

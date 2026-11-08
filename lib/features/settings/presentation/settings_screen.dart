@@ -87,6 +87,20 @@ class SettingsScreen extends ConsumerWidget {
                 'Berhenti mencatat saat kamu diam',
               ),
               toggle(SettingKeys.keepScreenOn, 'Layar tetap menyala'),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) =>
+                        ref.read(integrationsProvider).heartRateSensors(),
+                  ),
+                ),
+                child: const SettingRow(
+                  title: 'Sensor detak jantung',
+                  note: 'Sambungkan sensor Bluetooth untuk merekam detak',
+                  trailing: Icon(Icons.chevron_right),
+                ),
+              ),
               SettingRow(
                 title: 'Posisi ponsel',
                 note: 'Memengaruhi klasifikasi permukaan dari getaran',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/format.dart';
+import 'package:virya/app/integrations.dart';
 import 'package:virya/app/settings.dart';
 import 'package:virya/app/sport_ui.dart';
 import 'package:virya/core/database/app_database.dart';
@@ -64,6 +65,17 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
                       subtitle:
                           '${list.length} entri · ${fmt.distanceFull(total, decimals: 0)} tercatat',
                       actions: [
+                        InkIconButton(
+                          icon: Icons.flag_outlined,
+                          tooltip: 'Segmen',
+                          size: 36,
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) =>
+                                  ref.read(integrationsProvider).segmentsHome(),
+                            ),
+                          ),
+                        ),
                         InkIconButton(
                           icon: Icons.upload_file,
                           tooltip: 'Impor riwayat (GPX/TCX/FIT/ZIP Strava)',

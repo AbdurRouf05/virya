@@ -17,6 +17,7 @@ abstract class Integrations {
   Widget shareStudio(String activityId);
   Widget flyover(String activityId);
   Widget mapPacks();
+  Widget heartRateSensors();
 
   /// Full detail page of one saved activity (journal module).
   Widget activityDetail(String activityId);
@@ -71,6 +72,23 @@ abstract class Integrations {
   /// Check-in pada [day], untuk detail hari di kalender.
   Widget bodyOnDay(DateTime day);
 
+  /// Layar "HEATMAP" pribadi.
+  Widget heatmap();
+
+  /// Peta dengan layer heatmap; bobot titik 0 sampai 1.
+  Widget heatmapView({
+    required List<(double lat, double lon, double weight)> points,
+  });
+
+  /// Layar daftar segmen.
+  Widget segmentsHome();
+
+  /// Bagian "Segmen" di detail aktivitas.
+  Widget activitySegments(String activityId);
+
+  /// HUD segmen dan ghost di layar rekam.
+  Widget recordingSegmentHud();
+
   Future<List<String>> importFile(AppDatabase db, String path);
   Future<File> exportGpx(AppDatabase db, String activityId);
   Future<File> exportTcx(AppDatabase db, String activityId);
@@ -104,6 +122,8 @@ class PlaceholderIntegrations extends Integrations {
   Widget flyover(String activityId) => _missing('FLYOVER');
   @override
   Widget mapPacks() => _missing('PETA');
+  @override
+  Widget heartRateSensors() => _missing('SENSOR');
   @override
   Widget activityDetail(String activityId) => _missing('AKTIVITAS');
   @override
@@ -155,6 +175,19 @@ class PlaceholderIntegrations extends Integrations {
   Widget todayBodyCard() => const SizedBox.shrink();
   @override
   Widget bodyOnDay(DateTime day) => const SizedBox.shrink();
+
+  @override
+  Widget heatmap() => _missing('HEATMAP');
+  @override
+  Widget heatmapView({required List<(double, double, double)> points}) =>
+      const SizedBox.expand();
+
+  @override
+  Widget segmentsHome() => _missing('SEGMEN');
+  @override
+  Widget activitySegments(String activityId) => const SizedBox.shrink();
+  @override
+  Widget recordingSegmentHud() => const SizedBox.shrink();
 
   Never _unavailable() =>
       throw UnsupportedError('Modul impor/ekspor belum terpasang');

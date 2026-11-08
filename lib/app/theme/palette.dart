@@ -49,6 +49,9 @@ class Palette {
   /// Climb colors for grade buckets: <3, <5, <8, <11, <15, >=15 (%).
   final List<Color> gradeRamp;
 
+  /// Zona detak jantung Z1 sampai Z4; Z5 memakai [signal].
+  final List<Color> hrZones;
+
   /// Warna per kategori olahraga (kalender, filter, legenda).
   final Map<SportCategory, Color> category;
 
@@ -81,6 +84,7 @@ class Palette {
     required this.onAccent,
     required this.surface,
     required this.gradeRamp,
+    required this.hrZones,
     required this.category,
     required this.display,
     required this.mono,

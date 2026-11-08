@@ -20,6 +20,9 @@ class SettingKeys {
   /// [styleIdProvider].
   static const styleId = 'style_id';
 
+  /// Jarak pengingat foto tubuh dalam hari, `0` berarti mati.
+  static const bodyCheckinDays = 'body_checkin_days';
+
   /// Per-gear service reminder: "intervalKm|lastServiceKm".
   static String gearService(String gearId) => 'gear_service_$gearId';
 }

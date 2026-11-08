@@ -48,6 +48,12 @@ const forestStyle = Palette(
     Color(0xFFA3161B),
     Color(0xFF5B0E2D),
   ],
+  hrZones: [
+    Color(0xFFB2B69E),
+    Color(0xFF83886F),
+    Color(0xFFD8B23A),
+    Color(0xFFE8812A),
+  ],
   display: 'Anton',
   mono: 'PlexMono',
   sans: 'PlexSans',

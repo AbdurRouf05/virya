@@ -56,7 +56,7 @@ class LiveSegmentTracker {
     int? prTimeS,
     this.approachRadiusM = 300,
     this.endpointRadiusM = 25,
-    this.corridorM = 40,
+    this.corridorM = 30, // Sama dengan SegmentMatcher yang menyimpan upaya.
     this.maxOffFixes = 5,
   })  : path = SegmentPath(polyline),
         prTimeS = prTimeS ??
@@ -159,7 +159,7 @@ class LiveSegmentTracker {
       }
     }
     final limit = prTimeS == null ? null : prTimeS! * 3 + 120;
-    if ((limit != null && tS > limit) || _traveled > 1.5 * len + 200) {
+    if ((limit != null && tS > limit) || _traveled > 1.5 * len + 100) {
       return _abandon(tS);
     }
     final dEnd = path.distanceToEnd(lat, lon);

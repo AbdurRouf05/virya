@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:virya/app/settings.dart';
 import 'package:virya/core/database/app_database.dart';
 import 'package:virya/core/time/current_day.dart';
 import 'package:virya/core/time/day_key.dart';
@@ -39,9 +40,20 @@ final bodyEntryOnProvider = Provider.family<BodyEntry?, String>((ref, day) {
   return null;
 });
 
+/// Jarak pengingat check-in dalam hari; `0` berarti mati.
+final bodyCheckinIntervalProvider = Provider<int>(
+  (ref) => bodyCheckinIntervalOf(
+    ref.watch(settingsProvider)[SettingKeys.bodyCheckinDays],
+  ),
+);
+
 /// Apakah sudah waktunya check-in lagi.
 final bodyCheckinDueProvider = Provider<bool>((ref) {
   final today = ref.watch(currentDayProvider);
   final all = ref.watch(bodyEntriesProvider).valueOrNull ?? const <BodyEntry>[];
-  return isBodyCheckinDue(all, today);
+  return isBodyCheckinDue(
+    all,
+    today,
+    intervalDays: ref.watch(bodyCheckinIntervalProvider),
+  );
 });

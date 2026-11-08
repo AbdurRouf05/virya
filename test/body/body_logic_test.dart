@@ -34,6 +34,23 @@ void main() {
       expect(isBodyCheckinDue([_entry(last)], DateTime(2026, 11, 8)), isTrue);
     });
 
+    test('jarak pengingat bisa diatur dan bisa dimatikan', () {
+      final entries = [_entry(last)];
+      final day13 = DateTime(2026, 11, 14);
+      final day14 = DateTime(2026, 11, 15);
+      expect(isBodyCheckinDue(entries, day13, intervalDays: 14), isFalse);
+      expect(isBodyCheckinDue(entries, day14, intervalDays: 14), isTrue);
+      expect(isBodyCheckinDue(entries, day14, intervalDays: 0), isFalse);
+    });
+
+    test('nilai tersimpan yang asing jatuh ke bawaan', () {
+      expect(bodyCheckinIntervalOf(null), bodyCheckinIntervalDays);
+      expect(bodyCheckinIntervalOf('abc'), bodyCheckinIntervalDays);
+      expect(bodyCheckinIntervalOf('5'), bodyCheckinIntervalDays);
+      expect(bodyCheckinIntervalOf('30'), 30);
+      expect(bodyCheckinIntervalOf('0'), 0);
+    });
+
     test('memakai check-in terakhir tanpa peduli urutan', () {
       final today = DateTime(2026, 11, 8);
       final old = _entry(DateTime(2026, 10, 1));

@@ -11,6 +11,7 @@ import 'package:virya/core/database/daos/body_dao.dart';
 import 'package:virya/core/database/daos/focus_dao.dart';
 import 'package:virya/core/database/daos/gears_dao.dart';
 import 'package:virya/core/database/daos/gym_dao.dart';
+import 'package:virya/core/database/daos/segments_dao.dart';
 import 'package:virya/core/database/daos/tasks_dao.dart';
 import 'package:virya/core/database/daos/track_points_dao.dart';
 import 'package:virya/core/database/daos/waypoint_photos_dao.dart';
@@ -57,6 +58,7 @@ part 'app_database.g.dart';
     TasksDao,
     FocusDao,
     BodyDao,
+    SegmentsDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {

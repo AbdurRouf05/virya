@@ -15,6 +15,15 @@ class ActivityFinalizer {
   final AppDatabase db;
   ActivityFinalizer(this.db);
 
+  /// Dijalankan setelah ringkasan tersimpan. Dipasang di `main.dart`, karena
+  /// `core/` tidak boleh mengenal modul fitur.
+  static Future<void> Function(
+    AppDatabase db,
+    String activityId,
+    List<TrackSample> samples,
+    SportType sport,
+  )? afterFinalize;
+
   Future<ActivityAnalysis?> finalize(String activityId) async {
     final activity = await db.activitiesDao.getActivityById(activityId);
     if (activity == null) return null;
@@ -64,6 +73,7 @@ class ActivityFinalizer {
       updatedAt: Value(DateTime.now()),
     ));
     if (activity.gearId != null) await syncGearDistance(activity.gearId!);
+    await afterFinalize?.call(db, activityId, samples, sport);
     return a;
   }
 
