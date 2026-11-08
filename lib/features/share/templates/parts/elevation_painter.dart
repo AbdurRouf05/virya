@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_data.dart';
 import 'package:virya/features/share/render/paper_painters.dart';
 
 /// Elevation silhouette painter for widgets. [fill]/[edge] default to
-/// `FN.ink`.
+/// `FNExport.ink`.
 class ElevationPainter extends CustomPainter {
   final ShareData data;
   final bool byGrade;
@@ -27,8 +27,8 @@ class ElevationPainter extends CustomPainter {
       ele: data.ele,
       grade: data.grade,
       byGrade: byGrade,
-      fill: fill ?? FN.ink,
-      edge: edge ?? FN.ink,
+      fill: fill ?? FNExport.ink,
+      edge: edge ?? FNExport.ink,
       hatch: hatch,
     );
   }

@@ -9,16 +9,8 @@ import 'package:virya/app/theme/field_notes.dart';
 class RecordButton extends StatefulWidget {
   final VoidCallback onTap;
   final double diameter;
-  final IconData icon;
-  final String label;
 
-  const RecordButton({
-    super.key,
-    required this.onTap,
-    this.diameter = 58,
-    this.icon = Icons.add,
-    this.label = 'AKSI',
-  });
+  const RecordButton({super.key, required this.onTap, this.diameter = 58});
 
   @override
   State<RecordButton> createState() => _RecordButtonState();
@@ -40,7 +32,7 @@ class _RecordButtonState extends State<RecordButton> {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'Aksi cepat',
+      label: 'Rekam aktivitas',
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTapDown: (_) => _setPressed(true),
@@ -54,11 +46,12 @@ class _RecordButtonState extends State<RecordButton> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _Circle(diameter: widget.diameter, icon: widget.icon),
+              _Circle(diameter: widget.diameter),
               const SizedBox(height: 4),
               Text(
-                widget.label,
-                style: FN.label(size: 9.5, color: FN.ink)
+                'REKAM',
+                style: FN
+                    .label(size: 9.5, color: FN.ink)
                     .copyWith(fontWeight: FontWeight.w700),
               ),
             ],
@@ -71,8 +64,7 @@ class _RecordButtonState extends State<RecordButton> {
 
 class _Circle extends StatelessWidget {
   final double diameter;
-  final IconData icon;
-  const _Circle({required this.diameter, required this.icon});
+  const _Circle({required this.diameter});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +77,11 @@ class _Circle extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: FN.ink, width: 2),
       ),
-      child: Icon(icon, color: FN.paper, size: 28),
+      child: Container(
+        width: 18,
+        height: 18,
+        decoration: BoxDecoration(color: FN.onNight, shape: BoxShape.circle),
+      ),
     );
   }
 }

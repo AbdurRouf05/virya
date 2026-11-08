@@ -7,6 +7,7 @@ import 'package:virya/core/constants/enums.dart';
 import 'package:virya/core/data/demo_data.dart';
 import 'package:virya/core/offline_maps/local_tile_server.dart';
 import 'package:virya/core/offline_maps/map_pack_repository.dart';
+import 'package:virya/features/maps/data/offline_map_providers.dart';
 import 'package:virya/features/maps/presentation/map_packs_screen.dart';
 import 'package:virya/features/maps/widgets/route_map_view.dart';
 import 'package:virya/features/maps/widgets/route_preview.dart';
@@ -52,7 +53,7 @@ void main() {
     expect(sp.first, isNot(sp.last));
   });
 
-  testWidgets('MapPacksScreen renders empty state + instructions',
+  testWidgets('MapPacksScreen: status, download button, advanced section',
       (tester) async {
     final tmp = Directory.systemTemp.createTempSync('virya_ui_');
     addTearDown(() => tmp.deleteSync(recursive: true));
@@ -64,15 +65,36 @@ void main() {
       server: LocalTileServer(packsDir: () async => tmp),
     );
     await tester.pumpWidget(ProviderScope(
-      overrides: [mapPackRepositoryProvider.overrideWithValue(repo)],
+      overrides: [
+        mapPackRepositoryProvider.overrideWithValue(repo),
+        offlineMapStatusProvider.overrideWith((ref) async => const OfflineMapStatus(
+            online: true, cacheBytes: 0, regionBytes: 0, regions: [])),
+      ],
       child: const MaterialApp(home: MapPacksScreen()),
     ));
-    for (var i = 0; i < 10 && find.byType(CircularProgressIndicator).evaluate().isNotEmpty; i++) {
-      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 100)));
-      await tester.pump();
+    Future<void> settle() async {
+      for (var i = 0;
+          i < 10 && find.byType(CircularProgressIndicator).evaluate().isNotEmpty;
+          i++) {
+        await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 100)));
+        await tester.pump();
+      }
     }
+
+    await settle();
     expect(find.text('PETA OFFLINE'), findsOneWidget);
-    expect(find.textContaining('Belum ada paket'), findsOneWidget);
+    expect(find.textContaining('ONLINE · CACHE'), findsOneWidget);
+    expect(find.text('Rekam GPS tetap jalan tanpa internet.'), findsOneWidget);
+    expect(find.text('UNDUH WILAYAH'), findsOneWidget);
+    expect(find.textContaining('Belum ada. Unduh wilayah'), findsOneWidget);
+    // Advanced PMTiles section is collapsed by default.
+    expect(find.text('IMPOR FILE .PMTILES'), findsNothing);
+    await tester.scrollUntilVisible(find.text('LANJUTAN'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('LANJUTAN'));
+    await tester.pump(const Duration(milliseconds: 400));
+    await settle();
     await tester.scrollUntilVisible(find.text('IMPOR FILE .PMTILES'), 200,
         scrollable: find.byType(Scrollable).first);
     await tester.scrollUntilVisible(find.text('CARA MENDAPATKAN PAKET'), 200,

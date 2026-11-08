@@ -140,13 +140,6 @@ class HrZoneBar extends StatelessWidget {
     required this.formatTime,
   });
 
-  static List<Color> get zoneColors => [
-    const Color(0xFFBDB6A6),
-    const Color(0xFF8C8A80),
-    const Color(0xFFD8B23A),
-    const Color(0xFFE8812A),
-    FN.signal,
-  ];
   static const zoneNames = [
     'PEMULIHAN',
     'DAYA TAHAN',
@@ -194,7 +187,7 @@ class HrZoneBar extends StatelessWidget {
                         child: Container(
                           height: 12,
                           width: (c.maxWidth * f).clamp(1, c.maxWidth),
-                          color: zoneColors[z - 1],
+                          color: FN.hrZones[z - 1],
                         ),
                       );
                     },

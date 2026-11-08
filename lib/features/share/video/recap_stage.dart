@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/painting.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_data.dart';
 import 'package:virya/features/share/render/paper_painters.dart';
 import 'package:virya/features/share/render/topo_ink_renderer.dart';
@@ -126,11 +126,11 @@ class RecapStage {
 
   void _backgroundRaw(Canvas c, {required bool paper}) {
     final r = Rect.fromLTWH(0, 0, 360, h);
-    final bg = paper ? FN.paper : pal.bg;
+    final bg = paper ? FNExport.paper : pal.bg;
     c.drawRect(r, Paint()..color = bg);
     paintContours(c, r,
         seed: data.seed,
-        color: paper ? FN.paperLine : pal.contour,
+        color: paper ? FNExport.paperLine : pal.contour,
         width: 0.6,
         cols: 36);
   }

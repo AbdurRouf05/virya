@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_task_shortcut"
+        android:shortcutId="quick_task"
+        android:shortcutLongLabel="@string/task_shortcut_long"
+        android:shortcutShortLabel="@string/task_shortcut_short">
+        <intent
+            android:action="com.abdurrouf.virya.QUICK_TASK"
+            android:targetClass="com.abdurrouf.virya.MainActivity"
+            android:targetPackage="com.abdurrouf.virya" />
+    </shortcut>
+</shortcuts>

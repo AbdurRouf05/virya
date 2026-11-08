@@ -17,6 +17,7 @@ String defaultRecordingTitle(SportType sport, DateTime t) {
     SportType.trailRunning => 'Trail Run',
     SportType.hiking => 'Hiking',
     SportType.walking => 'Jalan',
+    SportType.strength => 'Gym',
   };
   return '$name $part';
 }

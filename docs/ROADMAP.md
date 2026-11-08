@@ -1,6 +1,7 @@
 # Rancangan Virya: Modul, Data, dan UX
 
-Status: **rancangan**, untuk ditinjau sebelum fase 4–8 dikerjakan.
+Rancangan tiap modul. Fase 2–8 sudah dikerjakan; status terbaru ada di papan status
+[PROGRESS.md](PROGRESS.md).
 
 ## 1. Prinsip
 
@@ -61,8 +62,8 @@ app_usage_days                        (BARU: catatan pemakaian harian)
 | `body_checkins` | id, date, weightKg?, bodyFatPct?, waistCm?, chestCm?, armCm?, note |
 | `body_photos` | id, checkinId, pose (depan/samping/belakang), filePath |
 | `tasks` | id, title, note?, dueDate?, priority, doneAt?, pinned (tampil di widget), createdAt |
-| `app_limits` | packageName, label, dailyMinutes, enabled |
-| `app_usage_days` | date, packageName, minutes |
+| `app_limits` | packageName, label, dailyMinutes, enabled, createdAt |
+| `app_usage_days` | day, packageName, label, minutes, limitMinutes |
 
 ## 4. Modul per modul
 

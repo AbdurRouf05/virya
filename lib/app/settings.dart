@@ -16,6 +16,13 @@ class SettingKeys {
   static const keepScreenOn = 'keep_screen_on';
   static const useSimulatedGps = 'use_simulated_gps';
 
+  /// Id style tampilan. Sengaja tidak ada di [settingDefaults]; lihat
+  /// [styleIdProvider].
+  static const styleId = 'style_id';
+
+  /// Jarak pengingat foto tubuh dalam hari, `0` berarti mati.
+  static const bodyCheckinDays = 'body_checkin_days';
+
   /// Per-gear service reminder: "intervalKm|lastServiceKm".
   static String gearService(String gearId) => 'gear_service_$gearId';
 }
@@ -62,6 +69,17 @@ final settingsProvider =
       (ref) => SettingsController(ref.watch(databaseProvider)),
     );
 
+/// Style yang dibaca dari database sebelum `runApp`, diisi di `main.dart`.
+final initialStyleIdProvider = Provider<String?>((ref) => null);
+
+/// Id style aktif. Selama pengaturan belum termuat nilainya dari
+/// [initialStyleIdProvider], jadi style tidak berkedip saat aplikasi dibuka.
+final styleIdProvider = Provider<String?>(
+  (ref) =>
+      ref.watch(settingsProvider)[SettingKeys.styleId] ??
+      ref.watch(initialStyleIdProvider),
+);
+
 final unitsProvider = Provider<Units>(
   (ref) => ref.watch(settingsProvider)[SettingKeys.units] == 'imperial'
       ? Units.imperial
@@ -74,7 +92,8 @@ extension SettingsMapX on Map<String, String> {
   bool flag(String key) => (this[key] ?? settingDefaults[key]) == 'true';
   double number(String key, double fallback) =>
       double.tryParse(this[key] ?? '') ?? fallback;
-  SportType get defaultSport => SportType.values.firstWhere(
+  /// Olahraga GPS bawaan untuk perekam (gym tidak pernah jadi bawaan).
+  SportType get defaultSport => SportType.gps.firstWhere(
     (s) => s.name == this[SettingKeys.defaultSport],
     orElse: () => SportType.gravelCycling,
   );

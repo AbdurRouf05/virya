@@ -7,6 +7,7 @@ import 'package:virya/core/constants/enums.dart';
 import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/settings/data/data_actions.dart';
 import 'package:virya/features/settings/presentation/widgets/settings_row.dart';
+import 'package:virya/features/settings/presentation/widgets/style_picker.dart';
 
 /// "PENGATURAN" — units, recording, voice, data, about.
 class SettingsScreen extends ConsumerWidget {
@@ -58,6 +59,8 @@ class SettingsScreen extends ConsumerWidget {
                 title: 'Pengaturan',
                 subtitle: 'Semua tersimpan di perangkat, tanpa akun',
               ),
+              SectionHeader(number: sec.next(), title: 'Tampilan'),
+              _pad(const StylePicker()),
               SectionHeader(number: sec.next(), title: 'Satuan'),
               _pad(
                 chips(const [
@@ -73,7 +76,7 @@ class SettingsScreen extends ConsumerWidget {
                     Text('OLAHRAGA DEFAULT', style: FN.label(size: 10)),
                     const SizedBox(height: 6),
                     chips([
-                      for (final t in SportType.values) (t.name, t.label),
+                      for (final t in SportType.gps) (t.name, t.label),
                     ], SettingKeys.defaultSport),
                   ],
                 ),
@@ -84,6 +87,20 @@ class SettingsScreen extends ConsumerWidget {
                 'Berhenti mencatat saat kamu diam',
               ),
               toggle(SettingKeys.keepScreenOn, 'Layar tetap menyala'),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) =>
+                        ref.read(integrationsProvider).heartRateSensors(),
+                  ),
+                ),
+                child: const SettingRow(
+                  title: 'Sensor detak jantung',
+                  note: 'Sambungkan sensor Bluetooth untuk merekam detak',
+                  trailing: Icon(Icons.chevron_right),
+                ),
+              ),
               SettingRow(
                 title: 'Posisi ponsel',
                 note: 'Memengaruhi klasifikasi permukaan dari getaran',
@@ -174,7 +191,7 @@ class SettingsScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 10),
                     InkButton(
-                      label: 'Paket peta offline',
+                      label: 'Peta offline',
                       icon: Icons.map_outlined,
                       style: InkButtonStyle.outline,
                       expand: true,

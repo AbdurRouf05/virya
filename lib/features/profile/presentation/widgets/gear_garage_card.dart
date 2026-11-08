@@ -193,7 +193,7 @@ class _ServiceStrip extends StatelessWidget {
           Icon(
             Icons.build_outlined,
             size: 14,
-            color: remaining <= 0 ? FN.ink : FN.inkSoft,
+            color: remaining <= 0 ? FN.onAccent : FN.inkSoft,
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -202,7 +202,7 @@ class _ServiceStrip extends StatelessWidget {
                   ? 'WAKTUNYA SERVIS · LEWAT ${(-remaining).round()} KM'
                   : 'SERVIS DALAM ${remaining.round()} KM',
               style: FN
-                  .label(size: 10, color: FN.ink)
+                  .label(size: 10, color: remaining <= 0 ? FN.onAccent : FN.ink)
                   .copyWith(fontWeight: FontWeight.w700),
             ),
           ),
@@ -210,7 +210,7 @@ class _ServiceStrip extends StatelessWidget {
             width: 80,
             child: LinearProgressIndicator(
               value: (1 - remaining / reminder.intervalKm).clamp(0.0, 1.0),
-              color: FN.ink,
+              color: remaining <= 0 ? FN.onAccent : FN.ink,
               backgroundColor: FN.paperLine,
             ),
           ),

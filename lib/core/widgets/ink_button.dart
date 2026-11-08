@@ -37,7 +37,7 @@ class _InkButtonState extends State<InkButton> {
     final ink = scheme.onSurface;
     final enabled = widget.onPressed != null && !widget.busy;
     final (Color bg, Color fg, Color border) = switch (widget.style) {
-      InkButtonStyle.primary => (FN.signal, FN.ink, FN.ink),
+      InkButtonStyle.primary => (FN.signal, FN.onAccent, FN.ink),
       InkButtonStyle.ink => (ink, scheme.surface, ink),
       InkButtonStyle.danger => (Colors.transparent, FN.warn, FN.warn),
       InkButtonStyle.outline => (Colors.transparent, ink, ink),

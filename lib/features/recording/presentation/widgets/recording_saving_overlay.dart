@@ -20,7 +20,7 @@ class RecordingSavingOverlay extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text('MENYIMPAN & MENGANALISIS…',
-                style: FN.label(size: 12, color: FN.paper)),
+                style: FN.label(size: 12, color: FN.onNight)),
           ],
         ),
       ),

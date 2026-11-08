@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/row_check"
+            android:layout_width="48dp"
+            android:layout_height="48dp">
+
+            <!-- Bingkai dari padding: warna drawable tidak bisa diubah lewat RemoteViews. -->
+            <FrameLayout
+                android:id="@+id/row_box"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:background="@color/task_ink"
+                android:padding="2dp">
+
+                <FrameLayout
+                    android:id="@+id/row_box_fill"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/task_paper" />
+            </FrameLayout>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/row_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:paddingEnd="12dp"
+            android:textColor="@color/task_ink"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/row_rule"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/task_muted" />
+</LinearLayout>

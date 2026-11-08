@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:virya/app/theme/palette.dart';
 import 'package:virya/app/theme/styles/field_notes_style.dart';
 import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/constants/sport_category.dart';
 
 /// Design tokens used by every widget. Values come from the active
 /// [Palette] (see `styles/`), so tokens are NOT const — never use `FN.*`
@@ -30,14 +31,33 @@ class FN {
   static Color get nightSurface => _p.nightSurface;
   static Color get nightLine => _p.nightLine;
 
+  /// Teks/ikon di atas night, foto, atau peta. Jangan pakai [paper] di sana:
+  /// pada style gelap [paper] ikut gelap.
+  static Color get onNight => _p.onNight;
+  static Color get onNightMuted => _p.onNightMuted;
+
+  /// Teks/ikon gelap di atas [signal]/[acid], juga untuk bayangan dan scrim.
+  /// Jangan pakai [ink] di sana: pada style gelap [ink] menjadi terang.
+  static Color get onAccent => _p.onAccent;
+
+  static bool get isDark => _p.brightness == Brightness.dark;
+
+  /// Warna [accent] di atas blok berisi [ink]. Pada style gelap blok itu
+  /// terang sehingga aksen tidak terbaca, jadi dipakai [paper].
+  static Color onInk(Color accent) => isDark ? paper : accent;
+
   // Accents
   static Color get signal => _p.signal; // the one loud color
   static Color get acid => _p.acid; // highlight on night backgrounds only
   static Color get ok => _p.ok;
   static Color get warn => _p.warn;
   static Color get caution => _p.caution;
+  static Color category(SportCategory c) => _p.category[c]!;
 
   static Map<SurfaceType, Color> get surface => _p.surface;
+
+  /// Warna zona detak jantung Z1 sampai Z5.
+  static List<Color> get hrZones => [..._p.hrZones, _p.signal];
 
   /// Color for a grade in percent (climb index).
   static Color grade(double pct) {

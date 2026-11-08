@@ -35,13 +35,13 @@ class RecordingPrimaryMetric extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(label, style: FN.label(color: FN.paperLine)),
+              Text(label, style: FN.label(color: FN.onNightMuted)),
               if (ribbon != null)
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   color: ribbonColor,
-                  child: Text(ribbon, style: FN.label(size: 10, color: FN.ink)),
+                  child: Text(ribbon, style: FN.label(size: 10, color: FN.onAccent)),
                 ),
             ],
           ),
@@ -52,8 +52,8 @@ class RecordingPrimaryMetric extends StatelessWidget {
               style: FN.bigNumber(
                 size,
                 color: state.isActive && !snap.isPaused
-                    ? FN.paper
-                    : FN.paper.withValues(alpha: 0.55),
+                    ? FN.onNight
+                    : FN.onNight.withValues(alpha: 0.55),
               ),
             ),
           ),

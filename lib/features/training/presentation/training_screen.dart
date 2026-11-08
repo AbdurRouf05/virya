@@ -1,86 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:virya/app/integrations.dart';
 import 'package:virya/app/theme/field_notes.dart';
-import 'package:virya/core/widgets/paper_background.dart';
 import 'package:virya/features/activity_history/presentation/journal_screen.dart';
 import 'package:virya/features/dashboard/presentation/stats_screen.dart';
+import 'package:virya/features/training/presentation/widgets/training_switch.dart';
 
-/// "LATIHAN" hub — unifies activity history (Journal) and analytics (Stats),
-/// with slot ready for Gym workout templates in Phase 4.
-class TrainingScreen extends StatefulWidget {
-  final int initialSubTab;
-  const TrainingScreen({super.key, this.initialSubTab = 0});
+/// "LATIHAN": saklar JURNAL · STATISTIK · GYM di atas, isi layar di bawahnya.
+/// GYM datang dari modul gym lewat [Integrations.gymHome].
+///
+/// Saklar menggantikan judul besar; halaman di bawahnya tampil `embedded`
+/// (masthead tanpa judul). SafeArea luar sudah memakan padding atas, jadi SafeArea di dalam
+/// halaman tidak menambah jarak ganda.
+class TrainingScreen extends ConsumerStatefulWidget {
+  const TrainingScreen({super.key});
 
   @override
-  State<TrainingScreen> createState() => _TrainingScreenState();
+  ConsumerState<TrainingScreen> createState() => _TrainingScreenState();
 }
 
-class _TrainingScreenState extends State<TrainingScreen> {
-  late int _subTab;
+class _TrainingScreenState extends ConsumerState<TrainingScreen> {
+  static const _labels = ['JURNAL', 'STATISTIK', 'GYM'];
+  int _index = 0;
+  final _built = <int>{0};
 
-  @override
-  void initState() {
-    super.initState();
-    _subTab = widget.initialSubTab;
+  Widget _page(int i) {
+    if (!_built.contains(i)) return const SizedBox.shrink();
+    return switch (i) {
+      0 => const JournalScreen(embedded: true),
+      1 => const StatsScreen(embedded: true),
+      _ => ref.watch(integrationsProvider).gymHome(),
+    };
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PaperBackground(
-        child: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              // Sub-navigation bar
-              Container(
-                margin: const EdgeInsets.fromLTRB(16, 8, 16, 6),
-                decoration: BoxDecoration(
-                  color: FN.paper,
-                  border: Border.all(color: FN.ink, width: 1.5),
-                ),
-                child: Row(
-                  children: [
-                    _subTabButton(0, 'JURNAL RIWAYAT'),
-                    Container(width: 1.5, height: 36, color: FN.ink),
-                    _subTabButton(1, 'STATISTIK & BEBAN'),
-                  ],
-                ),
+    return ColoredBox(
+      color: FN.paper,
+      child: SafeArea(
+        bottom: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+              child: TrainingSwitch(
+                labels: _labels,
+                index: _index,
+                onChanged: (i) => setState(() {
+                  _index = i;
+                  _built.add(i);
+                }),
               ),
-              Expanded(
-                child: IndexedStack(
-                  index: _subTab,
-                  children: const [
-                    JournalScreen(),
-                    StatsScreen(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _subTabButton(int index, String label) {
-    final active = _subTab == index;
-    return Expanded(
-      child: InkWell(
-        onTap: () => setState(() => _subTab = index),
-        child: Container(
-          height: 36,
-          color: active ? FN.ink : Colors.transparent,
-          alignment: Alignment.center,
-          child: Text(
-            label,
-            style: FN.label(size: 11, color: active ? FN.paper : FN.ink).copyWith(
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1.1,
             ),
-          ),
+            Expanded(
+              child: IndexedStack(
+                index: _index,
+                children: [for (var i = 0; i < _labels.length; i++) _page(i)],
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-

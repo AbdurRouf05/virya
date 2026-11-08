@@ -62,7 +62,7 @@ class RecordingSettings {
       autoPause: flag(await g(keyAutoPause), true),
       mount: PhoneMount.parse(await g(keyPhoneMount)),
       vibrationCalibration: num(await g(keyVibrationCalibration), 1.0),
-      defaultSport: SportType.values.firstWhere(
+      defaultSport: SportType.gps.firstWhere(
         (s) => s.name == sportName,
         orElse: () => SportType.gravelCycling,
       ),

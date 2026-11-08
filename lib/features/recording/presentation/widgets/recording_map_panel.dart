@@ -61,9 +61,9 @@ class _PhotoCount extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       color: FN.night.withValues(alpha: 0.85),
       child: Row(children: [
-        Icon(Icons.photo_camera, size: 14, color: FN.paper),
+        Icon(Icons.photo_camera, size: 14, color: FN.onNight),
         const SizedBox(width: 4),
-        Text('$count', style: FN.label(size: 11, color: FN.paper)),
+        Text('$count', style: FN.label(size: 11, color: FN.onNight)),
       ]),
     );
   }
@@ -106,7 +106,7 @@ class _SurfaceChip extends StatelessWidget {
           Container(width: 12, height: 12, color: color),
           const SizedBox(width: 6),
           Text(surface.label.toUpperCase(),
-              style: FN.label(size: 10, color: FN.paper)),
+              style: FN.label(size: 10, color: FN.onNight)),
         ],
       ),
     );

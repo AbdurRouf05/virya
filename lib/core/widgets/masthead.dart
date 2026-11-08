@@ -4,14 +4,16 @@ import 'package:virya/app/theme/field_notes.dart';
 /// Big notebook page title: mono kicker, Anton title, ink rule.
 class Masthead extends StatelessWidget {
   final String kicker;
-  final String title;
+
+  /// Judul besar. `null` = disembunyikan (layar tertanam di tab lain).
+  final String? title;
   final String? subtitle;
   final List<Widget> actions;
 
   const Masthead({
     super.key,
     required this.kicker,
-    required this.title,
+    this.title,
     this.subtitle,
     this.actions = const [],
   });
@@ -37,17 +39,19 @@ class Masthead extends StatelessWidget {
               ...actions,
             ],
           ),
-          const SizedBox(height: 2),
-          Text(
-            title.toUpperCase(),
-            style: TextStyle(
-              fontFamily: FN.display,
-              fontSize: 52,
-              height: 1.0,
-              color: fg,
-              letterSpacing: 0.5,
+          if (title != null) ...[
+            const SizedBox(height: 2),
+            Text(
+              title!.toUpperCase(),
+              style: TextStyle(
+                fontFamily: FN.display,
+                fontSize: 52,
+                height: 1.0,
+                color: fg,
+                letterSpacing: 0.5,
+              ),
             ),
-          ),
+          ],
           if (subtitle != null) ...[
             const SizedBox(height: 4),
             Text(subtitle!.toUpperCase(), style: FN.label(size: 10.5)),

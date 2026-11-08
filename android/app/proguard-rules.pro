@@ -6,6 +6,9 @@
 -keep class io.flutter.** { *; }
 -keep class io.flutter.plugins.** { *; }
 
+# Wajib untuk flutter_blue_plus di build rilis (lihat README paketnya).
+-keep class com.lib.flutter_blue_plus.* { *; }
+
 # Play Core (unused in standalone offline app)
 -dontwarn com.google.android.play.core.**
 

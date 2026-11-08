@@ -95,12 +95,12 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
                   children: [
                     Icon(widget.icon,
                         size: 30,
-                        color: _c.value > 0.5 ? FN.ink : color),
+                        color: _c.value > 0.5 ? FN.onAccent : color),
                     const SizedBox(height: 4),
                     Text(widget.label,
                         style: FN.label(
                             size: 11,
-                            color: _c.value > 0.5 ? FN.ink : color)),
+                            color: _c.value > 0.5 ? FN.onAccent : color)),
                   ],
                 ),
               ],

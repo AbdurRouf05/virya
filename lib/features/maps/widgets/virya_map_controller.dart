@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/app/theme/field_notes.dart';
 import 'package:virya/core/constants/enums.dart';
 import 'package:virya/core/offline_maps/map_pack_repository.dart';
@@ -20,27 +21,34 @@ bool get mapWebViewSupported {
 String _hex(Color c) =>
     '#${(c.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
 
-/// Speed ramp (slow → fast), Field Notes.
-List<Color> get routeSpeedRamp => [
-  FN.inkSoft,
+List<Color> _speedRamp(Color slow, Color quick) => [
+  slow,
   const Color(0xFFC9A227),
   const Color(0xFFE8812A),
-  FN.signal,
+  quick,
   const Color(0xFFA3161B),
 ];
+
+/// Speed ramp (slow → fast) untuk pratinjau rute di atas halaman.
+List<Color> get routeSpeedRamp => _speedRamp(FN.inkSoft, FN.signal);
 const gradeStops = [3.0, 5.0, 8.0, 11.0, 15.0];
 
+/// Dasar peta selalu krem (`assets/map/map_style.js`), jadi warna rute di
+/// atasnya tidak ikut style aktif.
 Map<String, Object> mapPalette() => {
-      'speed': [for (final c in routeSpeedRamp) _hex(c)],
+      'speed': [
+        for (final c in _speedRamp(FNExport.inkSoft, FNExport.signal)) _hex(c),
+      ],
       'grade': {
         'stops': gradeStops,
         'colors': [
-          _hex(FN.grade(0)),
-          for (final s in gradeStops) _hex(FN.grade(s)),
+          _hex(FNExport.grade(0)),
+          for (final s in gradeStops) _hex(FNExport.grade(s)),
         ],
       },
       'surface': [
-        for (final s in SurfaceType.values) _hex(FN.surface[s] ?? FN.inkMuted)
+        for (final s in SurfaceType.values)
+          _hex(FNExport.surface[s] ?? FNExport.inkMuted),
       ],
     };
 
@@ -76,7 +84,7 @@ class ViryaMapController {
     late final ViryaMapController c;
     final web = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(FN.paper)
+      ..setBackgroundColor(FNExport.paper)
       ..addJavaScriptChannel('Virya', onMessageReceived: (m) => c._onMessage(m.message))
       ..setNavigationDelegate(NavigationDelegate(
         onPageFinished: (_) => c._sendInit(),

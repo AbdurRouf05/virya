@@ -71,17 +71,21 @@ class ActivitiesDao extends DatabaseAccessor<AppDatabase>
     return query.get();
   }
 
-  /// Cari aktivitas yang belum selesai (Crash Recovery check)
+  /// Cari rekaman GPS yang belum selesai (Crash Recovery check).
+  /// Sesi gym yang berjalan punya pemulihan sendiri (lihat `GymDao`).
   Future<Activity?> getUnfinishedActivity() {
     return (select(activities)
           ..where((t) => t.status.equals('inProgress'))
+          ..where((t) => t.sportType.equals('strength').not())
           ..orderBy([(t) => OrderingTerm.desc(t.startTime)])
           ..limit(1))
         .getSingleOrNull();
   }
 
-  /// Hapus atau batalkan aktivitas
-  Future<int> deleteActivity(String id) {
+  /// Hapus atau batalkan aktivitas, beserta upaya segmennya.
+  Future<int> deleteActivity(String id) => transaction(() async {
+    final efforts = attachedDatabase.segmentEfforts;
+    await (delete(efforts)..where((t) => t.activityId.equals(id))).go();
     return (delete(activities)..where((t) => t.id.equals(id))).go();
-  }
+  });
 }

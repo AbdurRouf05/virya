@@ -25,7 +25,7 @@ class FlyoverHud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gradeCol = k.gradePct < 3 ? FN.paper : FN.grade(k.gradePct);
+    final gradeCol = k.gradePct < 3 ? FN.onNight : FN.grade(k.gradePct);
     return Column(
       children: [
         Row(
@@ -59,7 +59,7 @@ class _Cell extends StatelessWidget {
   const _Cell(this.label, this.value, this.unit, {this.color});
   final String label, value, unit;
 
-  /// Defaults to [FN.paper].
+  /// Defaults to [FN.onNight].
   final Color? color;
 
   @override
@@ -77,11 +77,11 @@ class _Cell extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: value,
-                      style: FN.bigNumber(30, color: color ?? FN.paper),
+                      style: FN.bigNumber(30, color: color ?? FN.onNight),
                     ),
                     TextSpan(
                       text: ' $unit',
-                      style: FN.label(size: 10, color: FN.paperLine),
+                      style: FN.label(size: 10, color: FN.onNightMuted),
                     ),
                   ],
                 ),

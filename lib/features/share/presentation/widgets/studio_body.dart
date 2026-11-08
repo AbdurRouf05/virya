@@ -62,8 +62,8 @@ class _ShareStudioBodyState extends State<ShareStudioBody> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
-        backgroundColor: FN.paper,
-        content: Text(msg, style: FN.label(size: 11, color: FN.ink)),
+        backgroundColor: FN.onNight,
+        content: Text(msg, style: FN.label(size: 11, color: FN.onAccent)),
       ));
   }
 

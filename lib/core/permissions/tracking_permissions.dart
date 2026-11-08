@@ -115,14 +115,14 @@ class TrackingPermissions {
       builder: (ctx) => AlertDialog(
         backgroundColor: FN.nightSurface,
         shape: const RoundedRectangleBorder(),
-        title: Text(title, style: FN.label(size: 14, color: FN.paper)),
+        title: Text(title, style: FN.label(size: 14, color: FN.onNight)),
         content: Text(body,
             style: TextStyle(
-                fontFamily: FN.sans, color: FN.paper, height: 1.4)),
+                fontFamily: FN.sans, color: FN.onNight, height: 1.4)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('BATAL', style: FN.label(color: FN.paperLine)),
+            child: Text('BATAL', style: FN.label(color: FN.onNightMuted)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -180,7 +180,7 @@ Future<void> showBatteryOptimizationSheet(BuildContext context) {
               child: FilledButton(
                 style: FilledButton.styleFrom(
                   backgroundColor: FN.signal,
-                  foregroundColor: FN.ink,
+                  foregroundColor: FN.onAccent,
                   shape: const RoundedRectangleBorder(),
                 ),
                 onPressed: () async {
@@ -190,12 +190,12 @@ Future<void> showBatteryOptimizationSheet(BuildContext context) {
                   if (ctx.mounted) Navigator.pop(ctx);
                 },
                 child: Text('IZINKAN TANPA PEMBATASAN',
-                    style: FN.label(size: 13, color: FN.ink)),
+                    style: FN.label(size: 13, color: FN.onAccent)),
               ),
             ),
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text('NANTI SAJA', style: FN.label(color: FN.paperLine)),
+              child: Text('NANTI SAJA', style: FN.label(color: FN.onNightMuted)),
             ),
           ],
         ),
@@ -212,7 +212,7 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) => Text(
         text,
         style: TextStyle(
-            fontFamily: FN.sans, fontSize: 14, color: FN.paper, height: 1.4),
+            fontFamily: FN.sans, fontSize: 14, color: FN.onNight, height: 1.4),
       );
 }
 
@@ -239,7 +239,7 @@ class _Tip extends StatelessWidget {
                 style: TextStyle(
                     fontFamily: FN.sans,
                     fontSize: 13,
-                    color: FN.paperDeep,
+                    color: FN.isDark ? FN.onNight : FN.paperDeep,
                     height: 1.35)),
           ],
         ),

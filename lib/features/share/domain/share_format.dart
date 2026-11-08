@@ -56,6 +56,7 @@ class SF {
         SportType.trailRunning => 'TRAIL RUN',
         SportType.hiking => 'HIKING',
         SportType.walking => 'JALAN',
+        SportType.strength => 'GYM',
       };
 
   static String stars(int n) {

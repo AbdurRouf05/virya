@@ -48,9 +48,16 @@
 
   function addRouteLayers() {
     var e = fc();
-    ['route', 'live', 'trace', 'ends', 'pos', 'photos'].forEach(function (id) {
+    ['heat', 'route', 'live', 'trace', 'ends', 'pos', 'photos'].forEach(function (id) {
       map.addSource(id, { type: 'geojson', data: e });
     });
+    map.addLayer({ id: 'heat', type: 'heatmap', source: 'heat',
+      paint: { 'heatmap-weight': ['get', 'w'],
+        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 6, 0.4, 12, 1, 16, 1.8],
+        'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 6, 1.5, 10, 2.5, 14, 4, 16, 12, 18, 40],
+        'heatmap-opacity': 0.92,
+        'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'],
+          0, 'rgba(255,79,0,0)', 0.08, 'rgba(255,120,30,0.5)', 0.35, SIGNAL, 0.7, '#A3161B', 1, '#5B0E2D'] } });
     map.addLayer({ id: 'route-casing', type: 'line', source: 'route',
       layout: { 'line-cap': 'round', 'line-join': 'round' },
       paint: { 'line-color': C.ink, 'line-width': ['interpolate', ['linear'], ['zoom'], 8, 4, 16, 9] } });
@@ -233,6 +240,25 @@
       applyTerrain();
       if (!fly.plan) map.easeTo({ pitch: is3d ? 55 : 0, duration: 600 });
       else applyFly(fly.u);
+    });
+  }
+
+  // flat: [lat, lon, weight, lat, lon, weight, ...]
+  function setHeat(flat, fit) {
+    whenLoaded(function () {
+      var f = [], s = 90, n = -90, w = 180, e = -180;
+      for (var i = 0; i + 2 < (flat || []).length; i += 3) {
+        var lat = flat[i], lon = flat[i + 1];
+        f.push(pt(lon, lat, { w: flat[i + 2] }));
+        if (lat < s) s = lat;
+        if (lat > n) n = lat;
+        if (lon < w) w = lon;
+        if (lon > e) e = lon;
+      }
+      src('heat').setData(fc(f));
+      if (f.length && fit !== false) {
+        map.fitBounds([[w, s], [e, n]], { padding: cfg.padding || 36, maxZoom: 14, duration: 0 });
+      }
     });
   }
 
@@ -532,7 +558,7 @@
 
   window.ViryaMap = {
     init: init, setRoute: setRoute, appendLivePoint: appendLivePoint, appendLivePoints: appendLivePoints,
-    setPosition: setPosition, fitRoute: fitRoute, set3d: set3d, setPhotos: setPhotos,
+    setPosition: setPosition, fitRoute: fitRoute, set3d: set3d, setPhotos: setPhotos, setHeat: setHeat,
     flyLoad: flyLoad, flyPlay: flyPlay, flyPause: flyPause, flySeek: flySeek,
     flySetSpeed: flySetSpeed, flySetDuration: flySetDuration,
     exportBegin: exportBegin, exportWarmup: exportWarmup, renderFrame: renderFrame, exportEnd: exportEnd

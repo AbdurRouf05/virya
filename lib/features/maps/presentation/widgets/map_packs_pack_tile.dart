@@ -69,7 +69,7 @@ class MapPacksPackTile extends StatelessWidget {
           TextButton(
             onPressed: onActivate,
             child: Text(active ? 'AKTIF ✓' : 'AKTIFKAN',
-                style: FN.label(size: 10, color: active ? FN.acid : FN.ink)),
+                style: FN.label(size: 10, color: active ? FN.onInk(FN.acid) : FN.ink)),
           ),
         IconButton(
           tooltip: 'Hapus',

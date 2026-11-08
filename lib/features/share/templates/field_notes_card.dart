@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_data.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/domain/share_options.dart';
@@ -44,12 +44,12 @@ class FieldNotesCard extends StatelessWidget {
                 Expanded(
                   child: MonoLabel(
                     'VIRYA · FIELD NOTES',
-                    color: FN.ink,
+                    color: FNExport.ink,
                     weight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(width: 8),
-                MonoLabel(SF.entryNo(data), color: FN.ink),
+                MonoLabel(SF.entryNo(data), color: FNExport.ink),
               ],
             ),
             const SizedBox(height: 5),
@@ -62,11 +62,11 @@ class FieldNotesCard extends StatelessWidget {
                 Expanded(
                   child: MonoLabel(
                     '${SF.sport(data.sport)} · ${SF.date(data.start)}',
-                    color: FN.inkSoft,
+                    color: FNExport.inkSoft,
                   ),
                 ),
                 const SizedBox(width: 8),
-                MonoLabel('MULAI ${SF.time(data.start)}', color: FN.inkSoft),
+                MonoLabel('MULAI ${SF.time(data.start)}', color: FNExport.inkSoft),
               ],
             ),
             if (!compact) ...[
@@ -76,11 +76,11 @@ class FieldNotesCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontFamily: FN.sans,
+                  fontFamily: FNExport.sans,
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
                   letterSpacing: 0.6,
-                  color: FN.ink,
+                  color: FNExport.ink,
                 ),
               ),
             ],
@@ -95,7 +95,7 @@ class FieldNotesCard extends StatelessWidget {
                         accent: accent,
                         sectors: true,
                         width: 2.2,
-                        markFill: FN.paper,
+                        markFill: FNExport.paper,
                         padding: compact ? 14 : 24,
                       ),
                     ),
@@ -108,7 +108,7 @@ class FieldNotesCard extends StatelessWidget {
                         SF.coord(data.startLat, data.startLon),
                         'TITIK NOL',
                       ],
-                      color: FN.ink,
+                      color: FNExport.ink,
                       size: 7.5,
                     ),
                   ),
@@ -141,7 +141,7 @@ class FieldNotesCard extends StatelessWidget {
                     children: [
                       Text(
                         'KM',
-                        style: FN.bigNumber(big * 0.22, color: accent),
+                        style: FNExport.bigNumber(big * 0.22, color: accent),
                       ),
                       const MonoLabel('JARAK', size: 7),
                     ],

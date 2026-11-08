@@ -122,6 +122,21 @@ class ProfileScreen extends ConsumerWidget {
                   ],
                 ),
               ),
+              SectionHeader(number: sec.next(), title: 'Progres tubuh'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: InkButton(
+                  label: 'Foto & ukuran',
+                  icon: Icons.photo_camera_outlined,
+                  expand: true,
+                  onPressed: () {
+                    final screen = ref.read(integrationsProvider).bodyHome();
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(builder: (_) => screen),
+                    );
+                  },
+                ),
+              ),
               SectionHeader(number: sec.next(), title: 'Garasi'),
               const GearGarage(),
               SectionHeader(number: sec.next(), title: 'Peta Offline & Wilayah'),

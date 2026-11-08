@@ -31,9 +31,9 @@ class MapPacksGuide extends StatelessWidget {
       ]),
       const SizedBox(height: 6),
       Text(
-        'Semua peta berjalan 100% offline dari file PMTiles di ponsel. Siapkan '
-        'file di komputer, salin ke ponsel (USB / kabel data / Drive), lalu tekan '
-        '"IMPOR FILE .PMTILES".',
+        'Untuk pengguna mahir. Siapkan file di komputer, salin ke ponsel '
+        '(USB / kabel data / Drive), lalu tekan "IMPOR FILE .PMTILES". '
+        'Paket basemap aktif menggantikan peta online.',
         style: body,
       ),
       h('1 · BASEMAP VEKTOR (PROTOMAPS)'),
@@ -60,8 +60,7 @@ class MapPacksGuide extends StatelessWidget {
       const _Code(_demCmd1),
       const _Code(_demCmd2),
       Text(
-        'Tanpa terrain, flyover tetap jalan dengan kamera miring di atas peta datar. '
-        'Tanpa basemap, rute digambar di atas kertas polos.',
+        'Tanpa terrain, flyover tetap jalan dengan kamera miring di atas peta datar.',
         style: body,
       ),
       h('3 · LISENSI'),

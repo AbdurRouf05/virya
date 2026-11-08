@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:virya/core/widgets/field_kit.dart';
 
-/// Overflow menu on the detail app bar. Emits 'edit', 'gpx', 'tcx', 'delete'.
+/// Overflow menu on the detail app bar. Emits 'edit', 'gpx', 'tcx', 'delete'
+/// ('gpx'/'tcx' only when [exports] is true).
 class ActivityDetailMenu extends StatelessWidget {
   final ValueChanged<String> onSelected;
-  const ActivityDetailMenu({super.key, required this.onSelected});
+  final bool exports;
+  const ActivityDetailMenu({
+    super.key,
+    required this.onSelected,
+    this.exports = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +20,10 @@ class ActivityDetailMenu extends StatelessWidget {
       onSelected: onSelected,
       itemBuilder: (_) => [
         const PopupMenuItem(value: 'edit', child: Text('Ubah catatan')),
-        const PopupMenuItem(value: 'gpx', child: Text('Ekspor GPX')),
-        const PopupMenuItem(value: 'tcx', child: Text('Ekspor TCX')),
+        if (exports) ...[
+          const PopupMenuItem(value: 'gpx', child: Text('Ekspor GPX')),
+          const PopupMenuItem(value: 'tcx', child: Text('Ekspor TCX')),
+        ],
         PopupMenuItem(
           value: 'delete',
           child: Text('Hapus', style: TextStyle(color: FN.warn)),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:virya/app/integrations.dart';
 import 'package:virya/app/theme/field_notes.dart';
 import 'package:virya/core/constants/enums.dart';
 import 'package:virya/core/database/app_database.dart';
@@ -157,6 +158,7 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
                       onClose: () => Navigator.of(context).maybePop(),
                       onSport: () => _pickSport(s.sport),
                     ),
+                    ref.watch(integrationsProvider).recordingSegmentHud(),
                     Expanded(flex: 5, child: RecordingMapPanel(state: s)),
                     RecordingPrimaryMetric(state: s, fmt: fmt),
                     RecordingMetricGrid(state: s, fmt: fmt),

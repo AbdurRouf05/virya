@@ -10,15 +10,15 @@ Future<bool?> showDiscardRecordingDialog(BuildContext context) {
     builder: (ctx) => AlertDialog(
       backgroundColor: FN.nightSurface,
       shape: const RoundedRectangleBorder(),
-      title: Text('BUANG AKTIVITAS?', style: FN.label(size: 14, color: FN.paper)),
+      title: Text('BUANG AKTIVITAS?', style: FN.label(size: 14, color: FN.onNight)),
       content: Text(
         'Seluruh rute, data, dan foto sesi ini akan dihapus permanen.',
-        style: TextStyle(fontFamily: FN.sans, color: FN.paper),
+        style: TextStyle(fontFamily: FN.sans, color: FN.onNight),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx, false),
-          child: Text('BATAL', style: FN.label(color: FN.paperLine)),
+          child: Text('BATAL', style: FN.label(color: FN.onNightMuted)),
         ),
         TextButton(
           onPressed: () => Navigator.pop(ctx, true),
@@ -45,17 +45,17 @@ Future<SportType?> showRecordingSportPicker(
             child: Text('PILIH OLAHRAGA',
                 style: FN.label(size: 12, color: FN.signal)),
           ),
-          for (final s in SportType.values)
+          for (final s in SportType.gps)
             ListTile(
               minTileHeight: 56,
               leading: Icon(sportIcon(s),
-                  color: s == current ? FN.acid : FN.paperLine),
+                  color: s == current ? FN.acid : FN.onNightMuted),
               title: Text(
                 s.displayName.toUpperCase(),
                 style: TextStyle(
                   fontFamily: FN.display,
                   fontSize: 20,
-                  color: s == current ? FN.acid : FN.paper,
+                  color: s == current ? FN.acid : FN.onNight,
                 ),
               ),
               onTap: () => Navigator.pop(ctx, s),

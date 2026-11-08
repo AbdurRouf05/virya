@@ -8,6 +8,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:path/path.dart' as p;
 import 'package:virya/core/offline_maps/http_utils.dart';
 import 'package:virya/core/offline_maps/map_storage.dart';
+import 'package:virya/core/offline_maps/offline_tiles.dart';
+import 'package:virya/core/offline_maps/tile_proxy.dart';
 
 /// Loads a bundled asset by full key, e.g. `assets/map/map.html`.
 typedef AssetLoader = Future<Uint8List> Function(String assetKey);
@@ -18,6 +20,8 @@ typedef FrameSink = void Function(int frame, Uint8List bytes);
 /// - `GET|HEAD /app/<file>`   bundled `assets/map/<file>`
 /// - `GET|HEAD /fonts/<file>` bundled `assets/fonts/<file>` (HUD in frames)
 /// - `GET|HEAD /packs/<file>` PMTiles from `<docs>/maps/` (Range → 206)
+/// - `GET|HEAD /tiles/<z>/<x>/<y>.pbf` online tiles via [TileProxy]
+///   (regions → cache → OpenFreeMap); 204 when unavailable
 /// - `POST /capture/<token>/<frame>` JPEG frames during video export
 ///
 /// http:// is used because pmtiles.js needs Range requests (file:// can't).
@@ -25,11 +29,17 @@ class LocalTileServer {
   LocalTileServer({
     Future<Directory> Function()? packsDir,
     AssetLoader? assetLoader,
-  })  : _packsDir = packsDir ?? defaultMapsDir,
-        _assetLoader = assetLoader ?? _bundleLoader;
+    this.tiles,
+  }) : _packsDir = packsDir ?? defaultMapsDir,
+       _assetLoader = assetLoader ?? _bundleLoader;
 
   /// App-wide singleton, started lazily.
-  static final LocalTileServer instance = LocalTileServer();
+  static final LocalTileServer instance = LocalTileServer(
+    tiles: OfflineTiles.instance.proxy,
+  );
+
+  /// Online tile proxy; null → `/tiles/` answers 404.
+  final TileProxy? tiles;
 
   final Future<Directory> Function() _packsDir;
   final AssetLoader _assetLoader;
@@ -60,9 +70,12 @@ class LocalTileServer {
       final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
       server.autoCompress = false;
       _server = server;
-      server.listen(_handle, onError: (Object e) {
-        debugPrint('LocalTileServer: $e');
-      });
+      server.listen(
+        _handle,
+        onError: (Object e) {
+          debugPrint('LocalTileServer: $e');
+        },
+      );
       return baseUri!;
     } finally {
       _starting = null;
@@ -77,8 +90,10 @@ class LocalTileServer {
   /// Registers a sink for exported frames. Returns the URL token.
   String registerCaptureSink(FrameSink sink) {
     final r = math.Random.secure();
-    final token = List.generate(16, (_) => r.nextInt(16).toRadixString(16))
-        .join();
+    final token = List.generate(
+      16,
+      (_) => r.nextInt(16).toRadixString(16),
+    ).join();
     _sinks[token] = sink;
     return token;
   }
@@ -97,8 +112,10 @@ class LocalTileServer {
     }
     res.headers
       ..set('Access-Control-Allow-Headers', 'Range, Content-Type')
-      ..set('Access-Control-Expose-Headers',
-          'Content-Length, Content-Range, Accept-Ranges, ETag');
+      ..set(
+        'Access-Control-Expose-Headers',
+        'Content-Length, Content-Range, Accept-Ranges, ETag',
+      );
     try {
       final segs = req.uri.pathSegments;
       if (req.method == 'OPTIONS') {
@@ -115,6 +132,8 @@ class LocalTileServer {
         await _serveAsset(req, 'assets/fonts/', _rest(req));
       } else if (segs.first == 'packs') {
         await _servePack(req, _rest(req));
+      } else if (segs.first == 'tiles') {
+        await _serveTile(req, segs);
       } else {
         res.statusCode = HttpStatus.notFound;
       }
@@ -238,5 +257,31 @@ class LocalTileServer {
         res.headers.contentLength = size;
         if (req.method != 'HEAD') await res.addStream(file.openRead());
     }
+  }
+
+  Future<void> _serveTile(HttpRequest req, List<String> segs) async {
+    final res = req.response;
+    final proxy = tiles;
+    final z = segs.length == 4 ? int.tryParse(segs[1]) : null;
+    final x = segs.length == 4 ? int.tryParse(segs[2]) : null;
+    final yStr = segs.length == 4 ? segs[3] : '';
+    final y = yStr.endsWith('.pbf')
+        ? int.tryParse(yStr.substring(0, yStr.length - 4))
+        : null;
+    if (proxy == null || z == null || x == null || y == null) {
+      res.statusCode = HttpStatus.notFound;
+      return;
+    }
+    final bytes = await proxy.tile(z, x, y);
+    if (bytes == null || bytes.isEmpty) {
+      res.statusCode = HttpStatus.noContent;
+      return;
+    }
+    res.statusCode = HttpStatus.ok;
+    res.headers
+      ..contentType = ContentType('application', 'x-protobuf')
+      ..set('Cache-Control', 'max-age=3600')
+      ..contentLength = bytes.length;
+    if (req.method != 'HEAD') res.add(bytes);
   }
 }

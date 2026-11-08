@@ -20,12 +20,12 @@ class FlyoverMessage extends StatelessWidget {
                   Text(
                     message,
                     textAlign: TextAlign.center,
-                    style: FN.label(size: 12, color: FN.paper),
+                    style: FN.label(size: 12, color: FN.onNight),
                   ),
                 ],
               ),
             ),
-            Positioned(left: 4, top: 4, child: BackButton(color: FN.paper)),
+            Positioned(left: 4, top: 4, child: BackButton(color: FN.onNight)),
           ],
         ),
       );

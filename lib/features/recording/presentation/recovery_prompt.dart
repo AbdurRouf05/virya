@@ -41,7 +41,7 @@ Future<void> checkAndOfferRecovery(BuildContext context, WidgetRef ref) async {
         'tertutup atau baterai habis.\n\n'
         '${check.recoveredPointsCount} titik GPS berhasil diselamatkan.',
         style: TextStyle(
-            fontFamily: FN.sans, color: FN.paper, height: 1.4),
+            fontFamily: FN.sans, color: FN.onNight, height: 1.4),
       ),
       actionsOverflowDirection: VerticalDirection.down,
       actions: [
@@ -51,7 +51,7 @@ Future<void> checkAndOfferRecovery(BuildContext context, WidgetRef ref) async {
         ),
         TextButton(
           onPressed: () => Navigator.pop(ctx, _RecoveryChoice.save),
-          child: Text('SIMPAN', style: FN.label(color: FN.paper)),
+          child: Text('SIMPAN', style: FN.label(color: FN.onNight)),
         ),
         TextButton(
           onPressed: () => Navigator.pop(ctx, _RecoveryChoice.resume),
@@ -93,13 +93,13 @@ Future<void> checkAndOfferRecovery(BuildContext context, WidgetRef ref) async {
           backgroundColor: FN.nightSurface,
           shape: const RoundedRectangleBorder(),
           title: Text('YAKIN BUANG?',
-              style: FN.label(size: 14, color: FN.paper)),
+              style: FN.label(size: 14, color: FN.onNight)),
           content: Text('Data rekaman ini akan dihapus permanen.',
-              style: TextStyle(fontFamily: FN.sans, color: FN.paper)),
+              style: TextStyle(fontFamily: FN.sans, color: FN.onNight)),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: Text('BATAL', style: FN.label(color: FN.paperLine)),
+              child: Text('BATAL', style: FN.label(color: FN.onNightMuted)),
             ),
             TextButton(
               onPressed: () => Navigator.pop(ctx, true),

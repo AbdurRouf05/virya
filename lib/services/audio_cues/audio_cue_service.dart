@@ -101,6 +101,9 @@ class AudioCueService {
 
   String? onStart() => enabled ? _say(_fmt.started()) : null;
 
+  /// Membacakan teks dari modul lain; `null` berarti tidak ada yang dibacakan.
+  String? announce(String? text) => enabled && text != null ? _say(text) : null;
+
   String _say(String text) {
     engine.speak(text);
     return text;

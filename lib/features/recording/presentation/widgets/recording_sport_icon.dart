@@ -10,4 +10,5 @@ IconData sportIcon(SportType s) => switch (s) {
       SportType.roadRunning || SportType.trailRunning => Icons.directions_run,
       SportType.hiking => Icons.hiking,
       SportType.walking => Icons.directions_walk,
+      SportType.strength => Icons.fitness_center,
     };

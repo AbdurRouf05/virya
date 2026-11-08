@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/format.dart';
+import 'package:virya/app/integrations.dart';
 import 'package:virya/app/settings.dart';
 import 'package:virya/app/sport_ui.dart';
 import 'package:virya/core/database/app_database.dart';
@@ -18,7 +19,9 @@ export 'package:virya/features/activity_history/presentation/widgets/journal_ent
 
 /// "JURNAL" — activity history as notebook entries grouped by month.
 class JournalScreen extends ConsumerStatefulWidget {
-  const JournalScreen({super.key});
+  /// `true` saat tampil di dalam tab LATIHAN (judul besar disembunyikan).
+  final bool embedded;
+  const JournalScreen({super.key, this.embedded = false});
 
   @override
   ConsumerState<JournalScreen> createState() => _JournalScreenState();
@@ -58,10 +61,21 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
                   SliverToBoxAdapter(
                     child: Masthead(
                       kicker: 'Buku catatan lapangan',
-                      title: 'Jurnal',
+                      title: widget.embedded ? null : 'Jurnal',
                       subtitle:
                           '${list.length} entri · ${fmt.distanceFull(total, decimals: 0)} tercatat',
                       actions: [
+                        InkIconButton(
+                          icon: Icons.flag_outlined,
+                          tooltip: 'Segmen',
+                          size: 36,
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) =>
+                                  ref.read(integrationsProvider).segmentsHome(),
+                            ),
+                          ),
+                        ),
                         InkIconButton(
                           icon: Icons.upload_file,
                           tooltip: 'Impor riwayat (GPX/TCX/FIT/ZIP Strava)',

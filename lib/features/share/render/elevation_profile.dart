@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 
 /// Elevation silhouette, optionally colored by grade, with hatching.
 /// Returns the top-edge points (for annotation). [fill]/[edge] default to
-/// `FN.ink`.
+/// `FNExport.ink`.
 List<Offset> paintElevation(
   Canvas canvas,
   Rect rect, {
@@ -20,7 +20,7 @@ List<Offset> paintElevation(
   Color hatchColor = const Color(0x33141414),
   double headroom = 0.08,
 }) {
-  final edgeColor = edge ?? FN.ink;
+  final edgeColor = edge ?? FNExport.ink;
   final n = math.min(dist.length, ele.length);
   if (n < 2) return const [];
   final total = math.max(dist[n - 1] - dist[0], 1e-6);
@@ -47,12 +47,12 @@ List<Offset> paintElevation(
   if (byGrade && grade != null && grade.length >= n) {
     var i = 1;
     while (i < n) {
-      final c = FN.grade(grade[i]);
+      final c = FNExport.grade(grade[i]);
       final seg = Path()
         ..moveTo(pts[i - 1].dx, rect.bottom)
         ..lineTo(pts[i - 1].dx, pts[i - 1].dy);
       var j = i;
-      while (j < n && FN.grade(grade[j]) == c) {
+      while (j < n && FNExport.grade(grade[j]) == c) {
         seg.lineTo(pts[j].dx, pts[j].dy);
         j++;
       }
@@ -64,7 +64,7 @@ List<Offset> paintElevation(
       i = j;
     }
   } else {
-    canvas.drawPath(whole, Paint()..color = fill ?? FN.ink);
+    canvas.drawPath(whole, Paint()..color = fill ?? FNExport.ink);
   }
   if (hatch) {
     canvas.save();

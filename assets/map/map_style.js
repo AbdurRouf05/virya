@@ -109,7 +109,7 @@
         'hillshade-accent-color': C.inkMuted, 'hillshade-exaggeration': 0.35 } };
   }
 
-  // cfg: { basemapUrl, demUrl, online }
+  // cfg: { basemapUrl, demUrl, online, tilesUrl }
   function build(cfg) {
     var sources = {};
     var layers = [{ id: 'background', type: 'background', paint: { 'background-color': C.paper } }];
@@ -118,8 +118,11 @@
       sources.base = { type: 'vector', url: cfg.basemapUrl, attribution: '© Protomaps ' + OSM };
       base = protomapsLayers('base');
     } else if (cfg.online) {
-      sources.base = { type: 'vector', url: 'https://tiles.openfreemap.org/planet',
-        attribution: '<a href="https://openfreemap.org">OpenFreeMap</a> ' + OSM };
+      var attr = '<a href="https://openfreemap.org">OpenFreeMap</a> ' + OSM;
+      // tilesUrl = local caching proxy (online + cache + downloaded regions).
+      sources.base = cfg.tilesUrl
+        ? { type: 'vector', tiles: [cfg.tilesUrl], minzoom: 0, maxzoom: 14, attribution: attr }
+        : { type: 'vector', url: 'https://tiles.openfreemap.org/planet', attribution: attr };
       base = omtLayers('base');
     }
     if (cfg.demUrl) {

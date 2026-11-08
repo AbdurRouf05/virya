@@ -38,7 +38,7 @@ class FlyoverExportOverlay extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     '${(progress * 100).toStringAsFixed(0)}%',
-                    style: FN.bigNumber(56, color: FN.paper),
+                    style: FN.bigNumber(56, color: FN.onNight),
                   ),
                   const SizedBox(height: 8),
                   LinearProgressIndicator(
@@ -48,7 +48,7 @@ class FlyoverExportOverlay extends StatelessWidget {
                     backgroundColor: FN.nightLine,
                   ),
                   const SizedBox(height: 8),
-                  Text(stage, style: FN.label(size: 10, color: FN.paperLine)),
+                  Text(stage, style: FN.label(size: 10, color: FN.onNightMuted)),
                   const SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerRight,
