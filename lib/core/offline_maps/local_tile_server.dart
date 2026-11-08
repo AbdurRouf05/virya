@@ -6,8 +6,8 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path/path.dart' as p;
-import 'package:stravo/core/offline_maps/http_utils.dart';
-import 'package:stravo/core/offline_maps/map_storage.dart';
+import 'package:virya/core/offline_maps/http_utils.dart';
+import 'package:virya/core/offline_maps/map_storage.dart';
 
 /// Loads a bundled asset by full key, e.g. `assets/map/map.html`.
 typedef AssetLoader = Future<Uint8List> Function(String assetKey);

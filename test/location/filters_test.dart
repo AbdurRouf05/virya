@@ -1,13 +1,13 @@
 import 'dart:math' as math;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/location/filters/auto_pause.dart';
-import 'package:stravo/core/location/filters/elevation_filter.dart';
-import 'package:stravo/core/location/filters/fix_gate.dart';
-import 'package:stravo/core/location/filters/grade_calculator.dart';
-import 'package:stravo/core/location/filters/kalman_filter.dart';
-import 'package:stravo/core/location/geo_math.dart';
-import 'package:stravo/core/location/location_fix.dart';
+import 'package:virya/core/location/filters/auto_pause.dart';
+import 'package:virya/core/location/filters/elevation_filter.dart';
+import 'package:virya/core/location/filters/fix_gate.dart';
+import 'package:virya/core/location/filters/grade_calculator.dart';
+import 'package:virya/core/location/filters/kalman_filter.dart';
+import 'package:virya/core/location/geo_math.dart';
+import 'package:virya/core/location/location_fix.dart';
 
 final t0 = DateTime(2026, 1, 1, 7);
 DateTime at(int s) => t0.add(Duration(seconds: s));

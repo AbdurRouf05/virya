@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 /// Bordered mono text like an ink stamp. Selectable for filters.
 class StampChip extends StatelessWidget {
   final String text;
   final bool selected;
-  final Color color;
+  final Color? _color;
+  Color get color => _color ?? FN.ink;
   final VoidCallback? onTap;
   final IconData? icon;
   final double fontSize;
@@ -15,12 +16,12 @@ class StampChip extends StatelessWidget {
     super.key,
     required this.text,
     this.selected = false,
-    this.color = FN.ink,
+    Color? color,
     this.onTap,
     this.icon,
     this.fontSize = 11,
     this.padding = const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-  });
+  }) : _color = color;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +47,12 @@ class StampChip extends StatelessWidget {
                 Icon(icon, size: fontSize + 3, color: fg),
                 const SizedBox(width: 6),
               ],
-              Text(text.toUpperCase(),
-                  style: FN.label(size: fontSize, color: fg)
-                      .copyWith(fontWeight: FontWeight.w700)),
+              Text(
+                text.toUpperCase(),
+                style: FN
+                    .label(size: fontSize, color: fg)
+                    .copyWith(fontWeight: FontWeight.w700),
+              ),
             ],
           ),
         ),

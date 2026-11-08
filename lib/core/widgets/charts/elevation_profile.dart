@@ -1,16 +1,18 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/core/widgets/charts/chart_kit.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/core/widgets/charts/chart_kit.dart';
 
 /// A marked range on the distance axis (e.g. a climb or gravel sector).
 class ChartMark {
   final double startM;
   final double endM;
   final String label;
-  final Color color;
-  const ChartMark(this.startM, this.endM, this.label, {this.color = FN.ink});
+  final Color? _color;
+  Color get color => _color ?? FN.ink;
+  const ChartMark(this.startM, this.endM, this.label, {Color? color})
+    : _color = color;
 }
 
 /// Filled elevation profile, each slice colored by its grade (FN.grade).
@@ -41,9 +43,7 @@ class ElevationProfile extends StatelessWidget {
       height: height,
       width: double.infinity,
       child: RepaintBoundary(
-        child: CustomPaint(
-          painter: _ElevationPainter(this, fg),
-        ),
+        child: CustomPaint(painter: _ElevationPainter(this, fg)),
       ),
     );
   }
@@ -58,9 +58,12 @@ class _ElevationPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final n = math.min(w.distanceM.length, w.ele.length);
     if (n < 2) {
-      ChartKit.text(canvas, 'TIDAK ADA DATA ELEVASI',
-          Offset(size.width / 2, size.height / 2 - 6),
-          align: TextAlign.center);
+      ChartKit.text(
+        canvas,
+        'TIDAK ADA DATA ELEVASI',
+        Offset(size.width / 2, size.height / 2 - 6),
+        align: TextAlign.center,
+      );
       return;
     }
     var lo = w.ele.take(n).reduce(math.min);
@@ -69,12 +72,14 @@ class _ElevationPainter extends CustomPainter {
     lo = (lo - pad).floorToDouble();
     hi = hi + pad;
     final topGutter = w.marks.isEmpty ? 8.0 : 26.0;
-    final f = ChartFrame(size,
-        minX: w.distanceM.first,
-        maxX: w.distanceM[n - 1],
-        minY: lo,
-        maxY: hi,
-        top: topGutter);
+    final f = ChartFrame(
+      size,
+      minX: w.distanceM.first,
+      maxX: w.distanceM[n - 1],
+      minY: lo,
+      maxY: hi,
+      top: topGutter,
+    );
 
     // Grid
     final grid = Paint()
@@ -82,8 +87,13 @@ class _ElevationPainter extends CustomPainter {
       ..strokeWidth = 0.7;
     for (final t in ChartKit.niceTicks(lo, hi, count: 3)) {
       ChartKit.dashedH(canvas, f.plot.left, f.plot.right, f.y(t), grid);
-      ChartKit.text(canvas, w.formatY(t), Offset(f.plot.left - 4, f.y(t) - 6),
-          align: TextAlign.right, color: fg.withValues(alpha: 0.6));
+      ChartKit.text(
+        canvas,
+        w.formatY(t),
+        Offset(f.plot.left - 4, f.y(t) - 6),
+        align: TextAlign.right,
+        color: fg.withValues(alpha: 0.6),
+      );
     }
 
     // Graded fill
@@ -108,24 +118,36 @@ class _ElevationPainter extends CustomPainter {
       line.lineTo(f.x(w.distanceM[i]), f.y(w.ele[i]));
     }
     canvas.drawPath(
-        line,
-        Paint()
-          ..color = fg
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.6
-          ..strokeJoin = StrokeJoin.round);
+      line,
+      Paint()
+        ..color = fg
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.6
+        ..strokeJoin = StrokeJoin.round,
+    );
 
     // Baseline + x ticks
-    canvas.drawLine(f.plot.bottomLeft, f.plot.bottomRight,
-        Paint()
-          ..color = fg
-          ..strokeWidth = 1);
+    canvas.drawLine(
+      f.plot.bottomLeft,
+      f.plot.bottomRight,
+      Paint()
+        ..color = fg
+        ..strokeWidth = 1,
+    );
     for (final t in ChartKit.niceTicks(f.minX, f.maxX, count: 5)) {
       final x = f.x(t);
-      canvas.drawLine(Offset(x, f.plot.bottom), Offset(x, f.plot.bottom + 3),
-          Paint()..color = fg);
-      ChartKit.text(canvas, w.formatX(t), Offset(x, f.plot.bottom + 4),
-          align: TextAlign.center, color: fg.withValues(alpha: 0.7));
+      canvas.drawLine(
+        Offset(x, f.plot.bottom),
+        Offset(x, f.plot.bottom + 3),
+        Paint()..color = fg,
+      );
+      ChartKit.text(
+        canvas,
+        w.formatX(t),
+        Offset(x, f.plot.bottom + 4),
+        align: TextAlign.center,
+        color: fg.withValues(alpha: 0.7),
+      );
     }
 
     // Marks: bracket above the range + label
@@ -146,12 +168,16 @@ class _ElevationPainter extends CustomPainter {
           canvas.drawLine(Offset(x, yy), Offset(x, yy + 3), dash);
         }
       }
-      ChartKit.text(canvas, m.label, Offset((x0 + x1) / 2, y - 13),
-          align: TextAlign.center,
-          bold: true,
-          size: 9,
-          color: FN.paper,
-          background: m.color);
+      ChartKit.text(
+        canvas,
+        m.label,
+        Offset((x0 + x1) / 2, y - 13),
+        align: TextAlign.center,
+        bold: true,
+        size: 9,
+        color: FN.paper,
+        background: m.color,
+      );
     }
   }
 
@@ -165,19 +191,29 @@ class GradeLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const steps = [(0.0, '<3'), (4.0, '3-5'), (6.0, '5-8'), (9.0, '8-11'),
-      (12.0, '11-15'), (16.0, '15+')];
-    return Row(children: [
-      Text('TANJAKAN %', style: FN.label(size: 9)),
-      const SizedBox(width: 8),
-      for (final (g, l) in steps)
-        Expanded(
-          child: Column(children: [
-            Container(height: 6, color: FN.grade(g)),
-            const SizedBox(height: 2),
-            Text(l, style: FN.label(size: 8.5)),
-          ]),
-        ),
-    ]);
+    const steps = [
+      (0.0, '<3'),
+      (4.0, '3-5'),
+      (6.0, '5-8'),
+      (9.0, '8-11'),
+      (12.0, '11-15'),
+      (16.0, '15+'),
+    ];
+    return Row(
+      children: [
+        Text('TANJAKAN %', style: FN.label(size: 9)),
+        const SizedBox(width: 8),
+        for (final (g, l) in steps)
+          Expanded(
+            child: Column(
+              children: [
+                Container(height: 6, color: FN.grade(g)),
+                const SizedBox(height: 2),
+                Text(l, style: FN.label(size: 8.5)),
+              ],
+            ),
+          ),
+      ],
+    );
   }
 }

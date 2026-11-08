@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/features/share/domain/share_data.dart';
-import 'package:stravo/features/share/domain/share_format.dart';
-import 'package:stravo/features/share/domain/share_options.dart';
-import 'package:stravo/features/share/templates/card_parts.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/features/share/domain/share_data.dart';
+import 'package:virya/features/share/domain/share_format.dart';
+import 'package:virya/features/share/domain/share_options.dart';
+import 'package:virya/features/share/templates/card_parts.dart';
 
 /// STICKER — transparent overlay for IG Stories: route + 3 stats with an
 /// ink outline and soft shadow so it reads on any photo.
@@ -102,7 +102,7 @@ class StickerCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'STRAVO · ${SF.sport(data.sport)} · ${SF.date(data.start)}',
+            'VIRYA · ${SF.sport(data.sport)} · ${SF.date(data.start)}',
             style: FN
                 .label(size: 7, color: routeColor)
                 .copyWith(letterSpacing: 2, shadows: _shadows),

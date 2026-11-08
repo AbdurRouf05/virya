@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 enum InkButtonStyle { primary, outline, ink, danger }
 
@@ -42,7 +42,8 @@ class _InkButtonState extends State<InkButton> {
       InkButtonStyle.danger => (Colors.transparent, FN.warn, FN.warn),
       InkButtonStyle.outline => (Colors.transparent, ink, ink),
     };
-    final shadow = widget.style == InkButtonStyle.primary ||
+    final shadow =
+        widget.style == InkButtonStyle.primary ||
         widget.style == InkButtonStyle.ink;
     final offset = _down || !enabled ? 0.0 : 3.0;
 
@@ -63,7 +64,8 @@ class _InkButtonState extends State<InkButton> {
           child: Text(
             widget.label.toUpperCase(),
             overflow: TextOverflow.ellipsis,
-            style: FN.label(size: 12.5, color: fg)
+            style: FN
+                .label(size: 12.5, color: fg)
                 .copyWith(fontWeight: FontWeight.w700, letterSpacing: 1.6),
           ),
         ),
@@ -84,12 +86,17 @@ class _InkButtonState extends State<InkButton> {
           opacity: enabled || widget.busy ? 1 : 0.4,
           child: Padding(
             padding: EdgeInsets.only(
-                right: shadow ? 3 : 0, bottom: shadow ? 3 : 0),
+              right: shadow ? 3 : 0,
+              bottom: shadow ? 3 : 0,
+            ),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 70),
               height: widget.height,
               transform: Matrix4.translationValues(
-                  shadow ? 3 - offset : 0, shadow ? 3 - offset : 0, 0),
+                shadow ? 3 - offset : 0,
+                shadow ? 3 - offset : 0,
+                0,
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: bg,

@@ -1,6 +1,6 @@
-import 'package:stravo/core/analytics/geo.dart';
-import 'package:stravo/core/models/track_sample.dart';
-import 'package:stravo/features/segments/domain/segment_path.dart';
+import 'package:virya/core/analytics/geo.dart';
+import 'package:virya/core/models/track_sample.dart';
+import 'package:virya/features/segments/domain/segment_path.dart';
 
 /// One effort of a segment found inside an activity.
 class SegmentEffortMatch {

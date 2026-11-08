@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:stravo/core/analytics/geo.dart';
+import 'package:virya/core/analytics/geo.dart';
 
 /// Result of projecting a point onto a [SegmentPath].
 class PathProjection {

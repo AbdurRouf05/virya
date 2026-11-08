@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 /// Big notebook page title: mono kicker, Anton title, ink rule.
 class Masthead extends StatelessWidget {
@@ -24,22 +24,30 @@ class Masthead extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(children: [
-            Expanded(
-              child: Text(kicker.toUpperCase(),
-                  style: FN.label(size: 10, color: FN.signal)
-                      .copyWith(fontWeight: FontWeight.w700)),
-            ),
-            ...actions,
-          ]),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  kicker.toUpperCase(),
+                  style: FN
+                      .label(size: 10, color: FN.signal)
+                      .copyWith(fontWeight: FontWeight.w700),
+                ),
+              ),
+              ...actions,
+            ],
+          ),
           const SizedBox(height: 2),
-          Text(title.toUpperCase(),
-              style: TextStyle(
-                  fontFamily: FN.display,
-                  fontSize: 52,
-                  height: 1.0,
-                  color: fg,
-                  letterSpacing: 0.5)),
+          Text(
+            title.toUpperCase(),
+            style: TextStyle(
+              fontFamily: FN.display,
+              fontSize: 52,
+              height: 1.0,
+              color: fg,
+              letterSpacing: 0.5,
+            ),
+          ),
           if (subtitle != null) ...[
             const SizedBox(height: 4),
             Text(subtitle!.toUpperCase(), style: FN.label(size: 10.5)),

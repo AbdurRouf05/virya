@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:stravo/core/analytics/analysis_models.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
 
 class RacePrediction {
   final String label;

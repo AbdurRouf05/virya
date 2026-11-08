@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/offline_maps/http_utils.dart';
+import 'package:virya/core/offline_maps/http_utils.dart';
 
 void main() {
   group('parseRange', () {

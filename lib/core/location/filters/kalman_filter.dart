@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:stravo/core/location/geo_math.dart';
+import 'package:virya/core/location/geo_math.dart';
 
 /// Constant-position Kalman filter for lat/lon with accuracy-weighted gain.
 ///

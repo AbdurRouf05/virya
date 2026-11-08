@@ -1,5 +1,5 @@
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/models/track_sample.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/models/track_sample.dart';
 
 /// Activity decoded from a file, before it touches the database.
 class ParsedActivity {

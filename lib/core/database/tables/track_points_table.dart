@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:stravo/core/database/tables/activities_table.dart';
+import 'package:virya/core/database/tables/activities_table.dart';
 
 /// Tabel TrackPoints: Menyimpan breadcrumb GPS 1Hz dan telemetri sensor
 class TrackPoints extends Table {

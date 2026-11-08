@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stravo/app/format.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/database/app_database.dart';
+import 'package:virya/app/format.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/database/app_database.dart';
 
 /// AppSettings keys (shared with recording module).
 class SettingKeys {
@@ -59,13 +59,14 @@ class SettingsController extends StateNotifier<Map<String, String>> {
 
 final settingsProvider =
     StateNotifierProvider<SettingsController, Map<String, String>>(
-  (ref) => SettingsController(ref.watch(databaseProvider)),
-);
+      (ref) => SettingsController(ref.watch(databaseProvider)),
+    );
 
-final unitsProvider = Provider<Units>((ref) =>
-    ref.watch(settingsProvider)[SettingKeys.units] == 'imperial'
-        ? Units.imperial
-        : Units.metric);
+final unitsProvider = Provider<Units>(
+  (ref) => ref.watch(settingsProvider)[SettingKeys.units] == 'imperial'
+      ? Units.imperial
+      : Units.metric,
+);
 
 final fmtProvider = Provider<Fmt>((ref) => Fmt(ref.watch(unitsProvider)));
 
@@ -74,7 +75,7 @@ extension SettingsMapX on Map<String, String> {
   double number(String key, double fallback) =>
       double.tryParse(this[key] ?? '') ?? fallback;
   SportType get defaultSport => SportType.values.firstWhere(
-        (s) => s.name == this[SettingKeys.defaultSport],
-        orElse: () => SportType.gravelCycling,
-      );
+    (s) => s.name == this[SettingKeys.defaultSport],
+    orElse: () => SportType.gravelCycling,
+  );
 }

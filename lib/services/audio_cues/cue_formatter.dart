@@ -1,5 +1,5 @@
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/location/models/telemetry_snapshot.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/location/models/telemetry_snapshot.dart';
 
 enum CueLanguage { indonesian, english }
 

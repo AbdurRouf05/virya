@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
-import 'package:stravo/core/offline_maps/local_tile_server.dart';
-import 'package:stravo/core/offline_maps/map_pack.dart';
-import 'package:stravo/core/offline_maps/map_pack_repository.dart';
+import 'package:virya/core/offline_maps/local_tile_server.dart';
+import 'package:virya/core/offline_maps/map_pack.dart';
+import 'package:virya/core/offline_maps/map_pack_repository.dart';
 
 /// Minimal valid PMTiles v3 header (+ padding).
 Uint8List fakePmtiles({int tileType = 1, int minZ = 0, int maxZ = 15, int pad = 512}) {
@@ -80,7 +80,7 @@ void main() {
     late LocalTileServer server;
 
     setUp(() async {
-      tmp = await Directory.systemTemp.createTemp('stravo_packs_');
+      tmp = await Directory.systemTemp.createTemp('virya_packs_');
       settings = {};
       server = LocalTileServer(packsDir: () async => tmp);
       repo = MapPackRepository(

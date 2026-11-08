@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 /// Location settings for live recording.
 ///
@@ -15,7 +15,7 @@ LocationSettings trackingLocationSettings({String? sportLabel}) {
       distanceFilter: 0,
       intervalDuration: const Duration(seconds: 1),
       foregroundNotificationConfig: ForegroundNotificationConfig(
-        notificationTitle: 'Stravo merekam${sportLabel == null ? '' : ' · $sportLabel'}',
+        notificationTitle: 'Virya merekam${sportLabel == null ? '' : ' · $sportLabel'}',
         notificationText: 'GPS aktif. Ketuk untuk kembali ke rekaman.',
         notificationChannelName: 'Rekaman aktivitas',
         enableWakeLock: true,

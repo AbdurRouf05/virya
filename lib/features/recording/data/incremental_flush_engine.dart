@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:drift/drift.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/database/daos/activities_dao.dart';
-import 'package:stravo/core/database/daos/track_points_dao.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/database/daos/activities_dao.dart';
+import 'package:virya/core/database/daos/track_points_dao.dart';
 
 /// Incremental Local Flush Engine (Mesin Komit Berkala Anti-Crash)
 ///

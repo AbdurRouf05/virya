@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 /// Hand-drawn style 5-point stars (filled vs outlined), classic-race sector
 /// difficulty.
@@ -9,7 +9,8 @@ class StarRating extends StatelessWidget {
   final int stars;
   final int max;
   final double size;
-  final Color color;
+  final Color? _color;
+  Color get color => _color ?? FN.signal;
   final Color? emptyColor;
 
   const StarRating({
@@ -17,14 +18,15 @@ class StarRating extends StatelessWidget {
     required this.stars,
     this.max = 5,
     this.size = 14,
-    this.color = FN.signal,
+    Color? color,
     this.emptyColor,
-  });
+  }) : _color = color;
 
   @override
   Widget build(BuildContext context) {
     final empty =
-        emptyColor ?? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.35);
+        emptyColor ??
+        Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.35);
     return Semantics(
       label: '$stars dari $max bintang',
       child: CustomPaint(

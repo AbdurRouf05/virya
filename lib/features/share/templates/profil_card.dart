@@ -1,12 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/features/share/domain/share_data.dart';
-import 'package:stravo/features/share/domain/share_format.dart';
-import 'package:stravo/features/share/domain/share_options.dart';
-import 'package:stravo/features/share/render/paper_painters.dart';
-import 'package:stravo/features/share/templates/card_parts.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/features/share/domain/share_data.dart';
+import 'package:virya/features/share/domain/share_format.dart';
+import 'package:virya/features/share/domain/share_options.dart';
+import 'package:virya/features/share/render/paper_painters.dart';
+import 'package:virya/features/share/templates/card_parts.dart';
 
 /// PROFIL — the ride as a mountain: grade-colored silhouette with annotated
 /// climbs and minimal stats.
@@ -48,7 +48,7 @@ class ProfilCard extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: const MonoLabel(
+                  child: MonoLabel(
                     'PROFIL ELEVASI',
                     color: FN.ink,
                     weight: FontWeight.w700,

@@ -2,11 +2,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:stravo/app/integrations.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/core/data/activity_finalizer.dart';
-import 'package:stravo/core/data/demo_data.dart';
-import 'package:stravo/core/database/app_database.dart';
+import 'package:virya/app/integrations.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/core/data/activity_finalizer.dart';
+import 'package:virya/core/data/demo_data.dart';
+import 'package:virya/core/database/app_database.dart';
 
 /// User-facing data flows shared by Jurnal, Detail and Pengaturan.
 class DataActions {
@@ -119,7 +119,7 @@ class DataActions {
           context, 'Membuat cadangan…', () => integ.createBackup(db));
       await SharePlus.instance.share(ShareParams(
         files: [XFile(file.path)],
-        subject: 'Cadangan Stravo Pro',
+        subject: 'Cadangan Virya',
       ));
     } catch (e) {
       if (context.mounted) toast(context, 'Cadangan gagal: $e');

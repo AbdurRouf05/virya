@@ -1,11 +1,11 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/features/share/domain/share_data.dart';
-import 'package:stravo/features/share/domain/share_format.dart';
-import 'package:stravo/features/share/domain/share_options.dart';
-import 'package:stravo/features/share/templates/card_parts.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/features/share/domain/share_data.dart';
+import 'package:virya/features/share/domain/share_format.dart';
+import 'package:virya/features/share/domain/share_options.dart';
+import 'package:virya/features/share/templates/card_parts.dart';
 
 /// FOTO — user's photo as a film frame (faded, grain, edge print) with a
 /// Field Notes stats strip.
@@ -43,7 +43,7 @@ class FotoCard extends StatelessWidget {
                       CustomPaint(painter: _PhotoPainter(photo))
                     else ...[
                       CustomPaint(painter: PaperPainter(seed: data.seed + 21)),
-                      const Center(
+                      Center(
                         child: MonoLabel(
                           '[ PILIH FOTO ]',
                           size: 11,
@@ -144,7 +144,7 @@ class _EdgePrint extends StatelessWidget {
   Widget build(BuildContext context) {
     final frame = data.seed % 30 + 4;
     final text = top
-        ? 'STRAVO 400  ▸ ${frame}A          ▸ ${frame + 1}          ${SF.sport(data.sport)}'
+        ? 'VIRYA 400  ▸ ${frame}A          ▸ ${frame + 1}          ${SF.sport(data.sport)}'
         : '${SF.date(data.start)}  ·  ${SF.entryNo(data)}  ·  DICATAT OFFLINE';
     return SizedBox(
       height: 22,

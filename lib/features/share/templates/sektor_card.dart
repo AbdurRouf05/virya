@@ -1,13 +1,13 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/features/share/domain/share_data.dart';
-import 'package:stravo/features/share/domain/share_format.dart';
-import 'package:stravo/features/share/domain/share_options.dart';
-import 'package:stravo/features/share/templates/card_parts.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/features/share/domain/share_data.dart';
+import 'package:virya/features/share/domain/share_format.dart';
+import 'package:virya/features/share/domain/share_options.dart';
+import 'package:virya/features/share/templates/card_parts.dart';
 
 /// SEKTOR — classic-race gravel poster: numbered sector list, surface bar,
 /// grit score stamp.
@@ -95,7 +95,7 @@ class SektorCard extends StatelessWidget {
                               : '—',
                           style: FN.bigNumber(compact ? 40 : 56, color: accent)),
                       if (data.gritScore > 0)
-                        const MonoLabel('/100', color: FN.inkSoft),
+                        MonoLabel('/100', color: FN.inkSoft),
                     ],
                   ),
                 ],
@@ -106,7 +106,7 @@ class SektorCard extends StatelessWidget {
             Expanded(
               child: ClipRect(
                 child: sectors.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: MonoLabel(
                           'TIDAK ADA SEKTOR — MURNI ASPAL',
                           color: FN.inkSoft,
@@ -171,7 +171,7 @@ class _SectorRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = sector;
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: FN.ink, width: 0.5)),
       ),
       child: Row(
@@ -193,7 +193,7 @@ class _SectorRow extends StatelessWidget {
                   s.name.toUpperCase(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: FN.sans,
                     fontWeight: FontWeight.w600,
                     fontSize: 10,

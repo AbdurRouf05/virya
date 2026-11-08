@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/database/tables/gears_table.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/database/tables/gears_table.dart';
 
 part 'gears_dao.g.dart';
 

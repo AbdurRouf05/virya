@@ -135,5 +135,5 @@
     return { version: 8, sources: sources, layers: layers };
   }
 
-  window.StravoStyle = { build: build, colors: C };
+  window.ViryaStyle = { build: build, colors: C };
 })();

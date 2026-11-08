@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stravo/app/integrations.dart';
-import 'package:stravo/app/integrations_live.dart';
-import 'package:stravo/app/stravo_app.dart';
-import 'package:stravo/core/backup/backup_service.dart';
+import 'package:virya/app/integrations.dart';
+import 'package:virya/app/integrations_live.dart';
+import 'package:virya/app/virya_app.dart';
+import 'package:virya/core/backup/backup_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +17,6 @@ Future<void> main() async {
     overrides: [
       integrationsProvider.overrideWithValue(const LiveIntegrations()),
     ],
-    child: const StravoApp(),
+    child: const ViryaApp(),
   ));
 }

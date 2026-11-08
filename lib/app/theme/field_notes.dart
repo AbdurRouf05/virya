@@ -1,77 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/core/constants/enums.dart';
+import 'package:virya/app/theme/palette.dart';
+import 'package:virya/app/theme/styles/field_notes_style.dart';
+import 'package:virya/core/constants/enums.dart';
 
-/// SHARED CONTRACT — "Field Notes / Topo Brutalist" visual identity.
-///
-/// Expedition-notebook look: cream paper, black ink, one loud safety-orange
-/// accent, contour-line textures, condensed poster numerals, mono labels.
-/// Night variant (ink background) is used while recording (OLED friendly).
-/// Extend freely; do not rename existing tokens.
+/// Design tokens used by every widget. Values come from the active
+/// [Palette] (see `styles/`), so tokens are NOT const — never use `FN.*`
+/// inside a `const` expression. Change style with [FN.use].
 class FN {
   FN._();
 
+  static Palette _p = fieldNotesStyle;
+  static Palette get palette => _p;
+
+  /// Switch the active style. Caller must rebuild the app afterwards.
+  static void use(Palette p) => _p = p;
+
   // Paper (day)
-  static const paper = Color(0xFFEFE9DC);
-  static const paperDeep = Color(0xFFE3DBC9);
-  static const paperLine = Color(0xFFCFC6B2); // grid / contour lines on paper
+  static Color get paper => _p.paper;
+  static Color get paperDeep => _p.paperDeep;
+  static Color get paperLine => _p.paperLine; // grid / contour lines
 
   // Ink
-  static const ink = Color(0xFF141414);
-  static const inkSoft = Color(0xFF3A3A36);
-  static const inkMuted = Color(0xFF77736A);
+  static Color get ink => _p.ink;
+  static Color get inkSoft => _p.inkSoft;
+  static Color get inkMuted => _p.inkMuted;
 
   // Night (recording, dark cards)
-  static const night = Color(0xFF0E0E0C);
-  static const nightSurface = Color(0xFF1A1A17);
-  static const nightLine = Color(0xFF2E2E29);
+  static Color get night => _p.night;
+  static Color get nightSurface => _p.nightSurface;
+  static Color get nightLine => _p.nightLine;
 
   // Accents
-  static const signal = Color(0xFFFF4F00); // safety orange — the one loud color
-  static const acid = Color(0xFFC6FF00); // highlight on night backgrounds only
-  static const ok = Color(0xFF2F7D4F);
-  static const warn = Color(0xFFD9481B);
+  static Color get signal => _p.signal; // the one loud color
+  static Color get acid => _p.acid; // highlight on night backgrounds only
+  static Color get ok => _p.ok;
+  static Color get warn => _p.warn;
+  static Color get caution => _p.caution;
 
-  // Surface ramp
-  static const Map<SurfaceType, Color> surface = {
-    SurfaceType.asphalt: Color(0xFF6B6B66),
-    SurfaceType.smoothGravel: Color(0xFFC9A227),
-    SurfaceType.roughGravel: Color(0xFFB5541B),
-    SurfaceType.dirt: Color(0xFF7A4E2D),
-    SurfaceType.cobblestone: Color(0xFF8A7F72),
-    SurfaceType.unknown: Color(0xFFA9A49A),
-  };
+  static Map<SurfaceType, Color> get surface => _p.surface;
 
-  /// Gradient color for a grade in percent (climb index).
+  /// Color for a grade in percent (climb index).
   static Color grade(double pct) {
-    if (pct < 3) return inkSoft;
-    if (pct < 5) return const Color(0xFFD8B23A);
-    if (pct < 8) return const Color(0xFFE8812A);
-    if (pct < 11) return const Color(0xFFD9481B);
-    if (pct < 15) return const Color(0xFFA3161B);
-    return const Color(0xFF5B0E2D);
+    final r = _p.gradeRamp;
+    if (pct < 3) return r[0];
+    if (pct < 5) return r[1];
+    if (pct < 8) return r[2];
+    if (pct < 11) return r[3];
+    if (pct < 15) return r[4];
+    return r[5];
   }
 
   // Font families (bundled in assets/fonts, fully offline)
-  static const display = 'Anton'; // condensed poster numerals & titles
-  static const mono = 'PlexMono'; // labels, units, data
-  static const sans = 'PlexSans'; // body text
+  static String get display => _p.display; // poster numerals & titles
+  static String get mono => _p.mono; // labels, units, data
+  static String get sans => _p.sans; // body text
 
   static const tabular = [FontFeature.tabularFigures()];
 
-  static TextStyle bigNumber(double size, {Color color = ink}) => TextStyle(
-        fontFamily: display,
-        fontSize: size,
-        height: 0.95,
-        color: color,
-        fontFeatures: tabular,
-      );
+  static TextStyle bigNumber(double size, {Color? color}) => TextStyle(
+    fontFamily: display,
+    fontSize: size,
+    height: 0.95,
+    color: color ?? ink,
+    fontFeatures: tabular,
+  );
 
-  static TextStyle label({double size = 11, Color color = inkMuted}) =>
-      TextStyle(
-        fontFamily: mono,
-        fontSize: size,
-        letterSpacing: 1.2,
-        fontWeight: FontWeight.w500,
-        color: color,
-      );
+  static TextStyle label({double size = 11, Color? color}) => TextStyle(
+    fontFamily: mono,
+    fontSize: size,
+    letterSpacing: 1.2,
+    fontWeight: FontWeight.w500,
+    color: color ?? inkMuted,
+  );
 }

@@ -1,5 +1,5 @@
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/database/app_database.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/database/app_database.dart';
 
 /// SHARED CONTRACT — one GPS/sensor sample of a recorded or imported activity.
 ///

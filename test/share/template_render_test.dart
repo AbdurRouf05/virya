@@ -3,12 +3,12 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/data/demo_data.dart';
-import 'package:stravo/features/share/domain/share_data.dart';
-import 'package:stravo/features/share/domain/share_options.dart';
-import 'package:stravo/features/share/templates/share_card.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/data/demo_data.dart';
+import 'package:virya/features/share/domain/share_data.dart';
+import 'package:virya/features/share/domain/share_options.dart';
+import 'package:virya/features/share/templates/share_card.dart';
 
 import 'share_fixture.dart';
 

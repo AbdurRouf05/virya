@@ -4,10 +4,10 @@ import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/offline_maps/local_tile_server.dart';
-import 'package:stravo/core/offline_maps/map_pack.dart';
-import 'package:stravo/core/offline_maps/map_storage.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/offline_maps/local_tile_server.dart';
+import 'package:virya/core/offline_maps/map_pack.dart';
+import 'package:virya/core/offline_maps/map_storage.dart';
 
 /// Setting keys.
 class MapSettingKeys {

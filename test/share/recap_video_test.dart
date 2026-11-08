@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/features/share/domain/share_data.dart';
-import 'package:stravo/features/share/video/recap_timeline.dart';
-import 'package:stravo/features/share/video/recap_video_renderer.dart';
-import 'package:stravo/features/share/video/video_encoder.dart';
+import 'package:virya/features/share/domain/share_data.dart';
+import 'package:virya/features/share/video/recap_timeline.dart';
+import 'package:virya/features/share/video/recap_video_renderer.dart';
+import 'package:virya/features/share/video/video_encoder.dart';
 
 import 'share_fixture.dart';
 

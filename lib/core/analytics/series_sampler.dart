@@ -1,6 +1,6 @@
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/analytics/prepared_track.dart';
-import 'package:stravo/core/constants/enums.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/analytics/prepared_track.dart';
+import 'package:virya/core/constants/enums.dart';
 
 /// Pick ≤ [maxPoints] sample indices: evenly spaced, with the global
 /// highest / lowest elevation swapped in for their nearest pick.

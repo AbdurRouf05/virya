@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/database/tables/waypoint_photos_table.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/database/tables/waypoint_photos_table.dart';
 
 part 'waypoint_photos_dao.g.dart';
 

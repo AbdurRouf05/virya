@@ -1,4 +1,4 @@
-import 'package:stravo/core/location/location_fix.dart';
+import 'package:virya/core/location/location_fix.dart';
 
 /// Abstraction over GNSS so the pipeline is testable and simulatable.
 abstract class LocationSource {

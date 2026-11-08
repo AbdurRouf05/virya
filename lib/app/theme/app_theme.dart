@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 /// Field Notes ThemeData: paper (day) and night (recording).
 class FieldNotesTheme {
   FieldNotesTheme._();
 
-  static const _square = RoundedRectangleBorder(borderRadius: BorderRadius.zero);
+  static const _square = RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  );
 
   static ThemeData get paper => _build(
-        brightness: Brightness.light,
-        bg: FN.paper,
-        surface: FN.paper,
-        surfaceHigh: FN.paperDeep,
-        fg: FN.ink,
-        muted: FN.inkMuted,
-        line: FN.ink,
-        accent: FN.signal,
-      );
+    brightness: Brightness.light,
+    bg: FN.paper,
+    surface: FN.paper,
+    surfaceHigh: FN.paperDeep,
+    fg: FN.ink,
+    muted: FN.inkMuted,
+    line: FN.ink,
+    accent: FN.signal,
+  );
 
   static ThemeData get night => _build(
-        brightness: Brightness.dark,
-        bg: FN.night,
-        surface: FN.nightSurface,
-        surfaceHigh: FN.nightLine,
-        fg: FN.paper,
-        muted: FN.paperLine,
-        line: FN.nightLine,
-        accent: FN.acid,
-      );
+    brightness: Brightness.dark,
+    bg: FN.night,
+    surface: FN.nightSurface,
+    surfaceHigh: FN.nightLine,
+    fg: FN.paper,
+    muted: FN.paperLine,
+    line: FN.nightLine,
+    accent: FN.acid,
+  );
 
   static ThemeData _build({
     required Brightness brightness,
@@ -84,7 +86,11 @@ class FieldNotesTheme {
         displaySmall: FN.bigNumber(36, color: fg),
         headlineMedium: FN.bigNumber(28, color: fg),
         titleLarge: TextStyle(
-            fontFamily: FN.display, fontSize: 24, color: fg, height: 1.0),
+          fontFamily: FN.display,
+          fontSize: 24,
+          color: fg,
+          height: 1.0,
+        ),
         labelLarge: mono.copyWith(fontWeight: FontWeight.w700),
         labelMedium: FN.label(size: 11, color: muted),
         labelSmall: FN.label(size: 10, color: muted),
@@ -96,7 +102,8 @@ class FieldNotesTheme {
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
         centerTitle: false,
-        titleTextStyle: FN.label(size: 13, color: fg)
+        titleTextStyle: FN
+            .label(size: 13, color: fg)
             .copyWith(fontWeight: FontWeight.w700, letterSpacing: 2),
         shape: Border(bottom: BorderSide(color: fg, width: 1)),
       ),
@@ -106,13 +113,16 @@ class FieldNotesTheme {
         border: border,
         enabledBorder: border,
         focusedBorder: border.copyWith(
-            borderSide: BorderSide(color: accent, width: 2)),
+          borderSide: BorderSide(color: accent, width: 2),
+        ),
         labelStyle: FN.label(size: 11, color: muted),
         floatingLabelStyle: FN.label(size: 11, color: fg),
         isDense: true,
         filled: false,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 12,
+        ),
       ),
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: accent,
@@ -136,9 +146,16 @@ class FieldNotesTheme {
           side: BorderSide(color: fg, width: 2),
         ),
         titleTextStyle: TextStyle(
-            fontFamily: FN.display, fontSize: 26, color: fg, height: 1.05),
-        contentTextStyle:
-            TextStyle(fontFamily: FN.sans, fontSize: 14, color: fg),
+          fontFamily: FN.display,
+          fontSize: 26,
+          color: fg,
+          height: 1.05,
+        ),
+        contentTextStyle: TextStyle(
+          fontFamily: FN.sans,
+          fontSize: 14,
+          color: fg,
+        ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: bg,
@@ -179,10 +196,12 @@ class FieldNotesTheme {
           textStyle: mono.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
-      pageTransitionsTheme: const PageTransitionsTheme(builders: {
-        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
-        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-      }),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
     );
   }
 }

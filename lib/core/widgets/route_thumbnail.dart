@@ -1,13 +1,14 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 /// Lightweight route sketch (equirectangular, aspect-correct) with start dot
 /// and finish square. Optional per-point colors.
 class RouteThumbnail extends StatelessWidget {
   final List<(double lat, double lon)> points;
-  final Color color;
+  final Color? _color;
+  Color get color => _color ?? FN.ink;
   final double strokeWidth;
   final List<Color>? colors;
   final EdgeInsets padding;
@@ -15,21 +16,23 @@ class RouteThumbnail extends StatelessWidget {
   const RouteThumbnail({
     super.key,
     required this.points,
-    this.color = FN.ink,
+    Color? color,
     this.strokeWidth = 1.6,
     this.colors,
     this.padding = const EdgeInsets.all(6),
-  });
+  }) : _color = color;
 
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: CustomPaint(
-        painter: RoutePainter(points,
-            color: color,
-            strokeWidth: strokeWidth,
-            colors: colors,
-            padding: padding),
+        painter: RoutePainter(
+          points,
+          color: color,
+          strokeWidth: strokeWidth,
+          colors: colors,
+          padding: padding,
+        ),
         size: Size.infinite,
       ),
     );
@@ -43,11 +46,13 @@ class RoutePainter extends CustomPainter {
   final List<Color>? colors;
   final EdgeInsets padding;
 
-  RoutePainter(this.points,
-      {required this.color,
-      required this.strokeWidth,
-      this.colors,
-      this.padding = const EdgeInsets.all(6)});
+  RoutePainter(
+    this.points, {
+    required this.color,
+    required this.strokeWidth,
+    this.colors,
+    this.padding = const EdgeInsets.all(6),
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -66,8 +71,8 @@ class RoutePainter extends CustomPainter {
     final scale = math.min(area.width / w, area.height / h);
     final ox = area.left + (area.width - w * scale) / 2;
     final oy = area.top + (area.height - h * scale) / 2;
-    Offset map((double, double) p) => Offset(
-        ox + (p.$2 - minLon) * k * scale, oy + (maxLat - p.$1) * scale);
+    Offset map((double, double) p) =>
+        Offset(ox + (p.$2 - minLon) * k * scale, oy + (maxLat - p.$1) * scale);
 
     final paint = Paint()
       ..color = color
@@ -95,8 +100,9 @@ class RoutePainter extends CustomPainter {
     final r = strokeWidth * 1.8 + 1;
     canvas.drawCircle(start, r, Paint()..color = FN.signal);
     canvas.drawRect(
-        Rect.fromCenter(center: end, width: r * 2, height: r * 2),
-        Paint()..color = color == FN.signal ? FN.ink : color);
+      Rect.fromCenter(center: end, width: r * 2, height: r * 2),
+      Paint()..color = color == FN.signal ? FN.ink : color,
+    );
   }
 
   @override

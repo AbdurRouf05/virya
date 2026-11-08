@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/analytics/activity_analyzer.dart';
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/analytics/heatmap_grid.dart';
-import 'package:stravo/core/analytics/race_predictor.dart';
+import 'package:virya/core/analytics/activity_analyzer.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/analytics/heatmap_grid.dart';
+import 'package:virya/core/analytics/race_predictor.dart';
 
 void main() {
   group('fitnessTimeline', () {

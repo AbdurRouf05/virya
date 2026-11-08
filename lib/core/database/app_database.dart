@@ -6,16 +6,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-import 'package:stravo/core/database/daos/activities_dao.dart';
-import 'package:stravo/core/database/daos/gears_dao.dart';
-import 'package:stravo/core/database/daos/track_points_dao.dart';
-import 'package:stravo/core/database/daos/waypoint_photos_dao.dart';
-import 'package:stravo/core/database/tables/activities_table.dart';
-import 'package:stravo/core/database/tables/gears_table.dart';
-import 'package:stravo/core/database/tables/segments_table.dart';
-import 'package:stravo/core/database/tables/track_points_table.dart';
-import 'package:stravo/core/database/tables/user_profile_table.dart';
-import 'package:stravo/core/database/tables/waypoint_photos_table.dart';
+import 'package:virya/core/database/daos/activities_dao.dart';
+import 'package:virya/core/database/daos/gears_dao.dart';
+import 'package:virya/core/database/daos/track_points_dao.dart';
+import 'package:virya/core/database/daos/waypoint_photos_dao.dart';
+import 'package:virya/core/database/tables/activities_table.dart';
+import 'package:virya/core/database/tables/gears_table.dart';
+import 'package:virya/core/database/tables/segments_table.dart';
+import 'package:virya/core/database/tables/track_points_table.dart';
+import 'package:virya/core/database/tables/user_profile_table.dart';
+import 'package:virya/core/database/tables/waypoint_photos_table.dart';
 
 part 'app_database.g.dart';
 
@@ -85,6 +85,7 @@ class AppDatabase extends _$AppDatabase {
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbFolder = await getApplicationDocumentsDirectory();
+    // Legacy name kept for backup compatibility (see BackupService.dbFileName).
     final file = File(p.join(dbFolder.path, 'stravo_local.sqlite'));
     return NativeDatabase.createInBackground(file);
   });

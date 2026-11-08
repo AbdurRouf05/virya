@@ -1,16 +1,16 @@
 import 'dart:math' as math;
 
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/location/filters/auto_pause.dart';
-import 'package:stravo/core/location/filters/elevation_filter.dart';
-import 'package:stravo/core/location/filters/fix_gate.dart';
-import 'package:stravo/core/location/filters/grade_calculator.dart';
-import 'package:stravo/core/location/filters/kalman_filter.dart';
-import 'package:stravo/core/location/geo_math.dart';
-import 'package:stravo/core/location/location_fix.dart';
-import 'package:stravo/core/location/models/telemetry_snapshot.dart';
-import 'package:stravo/core/location/tracking_profile.dart';
-import 'package:stravo/core/models/track_sample.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/location/filters/auto_pause.dart';
+import 'package:virya/core/location/filters/elevation_filter.dart';
+import 'package:virya/core/location/filters/fix_gate.dart';
+import 'package:virya/core/location/filters/grade_calculator.dart';
+import 'package:virya/core/location/filters/kalman_filter.dart';
+import 'package:virya/core/location/geo_math.dart';
+import 'package:virya/core/location/location_fix.dart';
+import 'package:virya/core/location/models/telemetry_snapshot.dart';
+import 'package:virya/core/location/tracking_profile.dart';
+import 'package:virya/core/models/track_sample.dart';
 
 /// Output of one [TelemetryPipeline.process] call.
 class PipelineResult {

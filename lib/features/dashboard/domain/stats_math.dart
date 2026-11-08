@@ -1,5 +1,5 @@
-import 'package:stravo/app/sport_ui.dart';
-import 'package:stravo/core/database/app_database.dart';
+import 'package:virya/app/sport_ui.dart';
+import 'package:virya/core/database/app_database.dart';
 
 enum StatsPeriod {
   week('MINGGU INI'),

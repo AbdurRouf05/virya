@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:sensors_plus/sensors_plus.dart';
-import 'package:stravo/core/location/sources/simulated_location_source.dart';
-import 'package:stravo/core/sensors/vibration_rms.dart';
+import 'package:virya/core/location/sources/simulated_location_source.dart';
+import 'package:virya/core/sensors/vibration_rms.dart';
 
 /// Per-second vibration RMS (m/s^2, gravity removed).
 abstract class VibrationSource {

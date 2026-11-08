@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/core/data/activity_finalizer.dart';
-import 'package:stravo/features/recording/application/recording_controller.dart';
-import 'package:stravo/features/recording/data/crash_recovery_service.dart';
-import 'package:stravo/features/recording/presentation/recording_screen.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/core/data/activity_finalizer.dart';
+import 'package:virya/features/recording/application/recording_controller.dart';
+import 'package:virya/features/recording/data/crash_recovery_service.dart';
+import 'package:virya/features/recording/presentation/recording_screen.dart';
 
 enum _RecoveryChoice { resume, save, discard }
 
@@ -40,7 +40,7 @@ Future<void> checkAndOfferRecovery(BuildContext context, WidgetRef ref) async {
         '"${activity.title}" ($when) belum selesai — kemungkinan aplikasi '
         'tertutup atau baterai habis.\n\n'
         '${check.recoveredPointsCount} titik GPS berhasil diselamatkan.',
-        style: const TextStyle(
+        style: TextStyle(
             fontFamily: FN.sans, color: FN.paper, height: 1.4),
       ),
       actionsOverflowDirection: VerticalDirection.down,
@@ -94,7 +94,7 @@ Future<void> checkAndOfferRecovery(BuildContext context, WidgetRef ref) async {
           shape: const RoundedRectangleBorder(),
           title: Text('YAKIN BUANG?',
               style: FN.label(size: 14, color: FN.paper)),
-          content: const Text('Data rekaman ini akan dihapus permanen.',
+          content: Text('Data rekaman ini akan dihapus permanen.',
               style: TextStyle(fontFamily: FN.sans, color: FN.paper)),
           actions: [
             TextButton(
@@ -121,6 +121,6 @@ Future<void> checkAndOfferRecovery(BuildContext context, WidgetRef ref) async {
 void _snack(BuildContext context, String text) {
   if (!context.mounted) return;
   ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-    SnackBar(content: Text(text, style: const TextStyle(fontFamily: FN.sans))),
+    SnackBar(content: Text(text, style: TextStyle(fontFamily: FN.sans))),
   );
 }

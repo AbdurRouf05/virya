@@ -1,4 +1,4 @@
-import 'package:stravo/core/constants/enums.dart';
+import 'package:virya/core/constants/enums.dart';
 
 /// Sport-specific tuning for the telemetry pipeline. All thresholds live here.
 class TrackingProfile {

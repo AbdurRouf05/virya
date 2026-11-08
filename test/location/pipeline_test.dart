@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/data/demo_data.dart';
-import 'package:stravo/core/location/location_fix.dart';
-import 'package:stravo/core/location/sources/simulated_location_source.dart';
-import 'package:stravo/core/location/telemetry_pipeline.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/data/demo_data.dart';
+import 'package:virya/core/location/location_fix.dart';
+import 'package:virya/core/location/sources/simulated_location_source.dart';
+import 'package:virya/core/location/telemetry_pipeline.dart';
 
 final t0 = DateTime(2026, 1, 1, 7);
 

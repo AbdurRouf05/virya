@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stravo/core/offline_maps/map_pack_repository.dart';
-import 'package:stravo/features/maps/domain/route_geometry.dart';
-import 'package:stravo/features/maps/widgets/route_preview.dart';
-import 'package:stravo/features/maps/widgets/stravo_map_controller.dart';
+import 'package:virya/core/offline_maps/map_pack_repository.dart';
+import 'package:virya/features/maps/domain/route_geometry.dart';
+import 'package:virya/features/maps/widgets/route_preview.dart';
+import 'package:virya/features/maps/widgets/virya_map_controller.dart';
 
 /// How the route line is coloured. `values` semantics:
 /// speed (any unit), grade (%), surface (`SurfaceType.index`).
@@ -82,7 +82,7 @@ class _WebRouteMapState extends State<_WebRouteMap> {
   static const _maxStaticPoints = 3000;
   static const _liveThrottle = Duration(milliseconds: 800);
 
-  late final StravoMapController _map;
+  late final ViryaMapController _map;
   int _sent = 0; // live points already sent
   Timer? _flush;
   bool _fitOnce = false;
@@ -93,7 +93,7 @@ class _WebRouteMapState extends State<_WebRouteMap> {
   void initState() {
     super.initState();
     final c = v.currentPosition ?? (v.points.isEmpty ? null : v.points.last);
-    _map = StravoMapController.create(
+    _map = ViryaMapController.create(
       config: widget.config,
       interactive: v.interactive,
       enable3d: v.enable3d,
@@ -186,5 +186,5 @@ class _WebRouteMapState extends State<_WebRouteMap> {
 
   @override
   Widget build(BuildContext context) =>
-      StravoMapWebView(controller: _map, interactive: v.interactive);
+      ViryaMapWebView(controller: _map, interactive: v.interactive);
 }

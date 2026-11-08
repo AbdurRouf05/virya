@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/core/database/app_database.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/core/database/app_database.dart';
 
 /// Permission flow for recording.
 ///
@@ -53,7 +53,7 @@ class TrackingPermissions {
       final open = await _confirm(
         context,
         title: 'GPS NONAKTIF',
-        body: 'Aktifkan Lokasi di pengaturan ponsel agar Stravo bisa '
+        body: 'Aktifkan Lokasi di pengaturan ponsel agar Virya bisa '
             'merekam rute kamu.',
         ok: 'Buka Pengaturan',
       );
@@ -81,7 +81,7 @@ class TrackingPermissions {
     final proceed = await _confirm(
       context,
       title: 'IZIN LOKASI',
-      body: 'Stravo butuh lokasi presisi untuk merekam rute, jarak, dan '
+      body: 'Virya butuh lokasi presisi untuk merekam rute, jarak, dan '
           'kecepatan. Data tetap 100% di ponsel kamu — tidak pernah '
           'dikirim ke mana pun.\n\nSaat merekam, notifikasi tetap tampil '
           'agar GPS tetap jalan walau layar mati.',
@@ -117,7 +117,7 @@ class TrackingPermissions {
         shape: const RoundedRectangleBorder(),
         title: Text(title, style: FN.label(size: 14, color: FN.paper)),
         content: Text(body,
-            style: const TextStyle(
+            style: TextStyle(
                 fontFamily: FN.sans, color: FN.paper, height: 1.4)),
         actions: [
           TextButton(
@@ -156,23 +156,23 @@ Future<void> showBatteryOptimizationSheet(BuildContext context) {
             const _Body(
               'Beberapa ponsel menghentikan aplikasi di latar belakang untuk '
               'menghemat baterai. Akibatnya rute bisa terpotong saat layar '
-              'mati. Izinkan Stravo berjalan tanpa pembatasan baterai.',
+              'mati. Izinkan Virya berjalan tanpa pembatasan baterai.',
             ),
             const SizedBox(height: 14),
             const _Tip('XIAOMI / MIUI / HyperOS',
-                'Setelan → Aplikasi → Stravo → Penghemat baterai → "Tanpa '
+                'Setelan → Aplikasi → Virya → Penghemat baterai → "Tanpa '
                     'batasan". Aktifkan juga "Mulai otomatis". Di Recent Apps, '
-                    'tahan kartu Stravo lalu ketuk ikon gembok.'),
+                    'tahan kartu Virya lalu ketuk ikon gembok.'),
             const _Tip('OPPO / REALME / ColorOS',
-                'Setelan → Baterai → Stravo → izinkan "Aktivitas latar '
+                'Setelan → Baterai → Virya → izinkan "Aktivitas latar '
                     'belakang" dan "Mulai otomatis". Kunci aplikasi di Recent '
                     'Apps.'),
             const _Tip('SAMSUNG / One UI',
-                'Setelan → Aplikasi → Stravo → Baterai → "Tidak dibatasi". '
-                    'Pastikan Stravo tidak ada di daftar "Aplikasi tidur".'),
+                'Setelan → Aplikasi → Virya → Baterai → "Tidak dibatasi". '
+                    'Pastikan Virya tidak ada di daftar "Aplikasi tidur".'),
             const _Tip('VIVO / FUNTOUCH',
                 'i Manager → Manajemen aplikasi → Konsumsi daya latar tinggi '
-                    '→ aktifkan Stravo.'),
+                    '→ aktifkan Virya.'),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
@@ -211,7 +211,7 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
             fontFamily: FN.sans, fontSize: 14, color: FN.paper, height: 1.4),
       );
 }
@@ -226,7 +226,7 @@ class _Tip extends StatelessWidget {
         width: double.infinity,
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(left: BorderSide(color: FN.acid, width: 3)),
           color: FN.night,
         ),
@@ -236,7 +236,7 @@ class _Tip extends StatelessWidget {
             Text(brand, style: FN.label(size: 10, color: FN.acid)),
             const SizedBox(height: 4),
             Text(text,
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: FN.sans,
                     fontSize: 13,
                     color: FN.paperDeep,

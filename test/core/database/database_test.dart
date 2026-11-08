@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/features/recording/data/crash_recovery_service.dart';
-import 'package:stravo/features/recording/data/incremental_flush_engine.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/features/recording/data/crash_recovery_service.dart';
+import 'package:virya/features/recording/data/incremental_flush_engine.dart';
 
 void main() {
   late AppDatabase db;
@@ -127,7 +127,7 @@ void main() {
         WaypointPhotosCompanion.insert(
           id: 'photo_001',
           activityId: 'act_photo_test',
-          filePath: '/storage/emulated/0/Stravo/photos/puncak.jpg',
+          filePath: '/storage/emulated/0/Virya/photos/puncak.jpg',
           latitude: -7.2345,
           longitude: 107.9123,
           altitudeMeters: 1450.0,

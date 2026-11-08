@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/features/recording/data/incremental_flush_engine.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/features/recording/data/incremental_flush_engine.dart';
 
 void main() {
   late AppDatabase db;

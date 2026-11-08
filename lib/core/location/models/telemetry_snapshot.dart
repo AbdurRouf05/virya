@@ -1,4 +1,4 @@
-import 'package:stravo/core/constants/enums.dart';
+import 'package:virya/core/constants/enums.dart';
 
 /// Model Snapshot Telemetri Realtime (Frekuensi 1 Hz / 1 detik)
 /// Diproduksi oleh Live Tracking Engine.

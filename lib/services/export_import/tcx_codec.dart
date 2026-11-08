@@ -1,8 +1,8 @@
-import 'package:stravo/core/analytics/geo.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/models/track_sample.dart';
-import 'package:stravo/services/export_import/parsed_activity.dart';
-import 'package:stravo/services/export_import/xml_util.dart';
+import 'package:virya/core/analytics/geo.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/models/track_sample.dart';
+import 'package:virya/services/export_import/parsed_activity.dart';
+import 'package:virya/services/export_import/xml_util.dart';
 import 'package:xml/xml.dart';
 
 /// Parse Garmin TCX v2. One [ParsedActivity] per `Activity` element.
@@ -146,7 +146,7 @@ String buildTcx({
     ..writeln('    </Track>')
     ..writeln('   </Lap>')
     ..writeln('   <Notes>${xmlEscape(title)}</Notes>')
-    ..writeln('   <Creator xsi:type="Device_t"><Name>Stravo Pro</Name>'
+    ..writeln('   <Creator xsi:type="Device_t"><Name>Virya</Name>'
         '<UnitId>0</UnitId><ProductID>0</ProductID>'
         '<Version><VersionMajor>2</VersionMajor><VersionMinor>0</VersionMinor>'
         '</Version></Creator>')

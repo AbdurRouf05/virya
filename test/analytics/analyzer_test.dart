@@ -1,15 +1,15 @@
 import 'dart:math' as math;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/analytics/activity_analyzer.dart';
-import 'package:stravo/core/analytics/elevation.dart';
-import 'package:stravo/core/analytics/gap.dart';
-import 'package:stravo/core/analytics/geo.dart';
-import 'package:stravo/core/analytics/gravel.dart';
-import 'package:stravo/core/analytics/power.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/data/demo_data.dart';
-import 'package:stravo/core/models/track_sample.dart';
+import 'package:virya/core/analytics/activity_analyzer.dart';
+import 'package:virya/core/analytics/elevation.dart';
+import 'package:virya/core/analytics/gap.dart';
+import 'package:virya/core/analytics/geo.dart';
+import 'package:virya/core/analytics/gravel.dart';
+import 'package:virya/core/analytics/power.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/data/demo_data.dart';
+import 'package:virya/core/models/track_sample.dart';
 
 const _an = ActivityAnalyzer();
 final _t0 = DateTime.utc(2026, 1, 1, 6);

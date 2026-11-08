@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/data/demo_data.dart';
-import 'package:stravo/core/models/track_sample.dart';
-import 'package:stravo/features/maps/domain/flyover_plan.dart';
-import 'package:stravo/features/maps/domain/route_geometry.dart';
+import 'package:virya/core/data/demo_data.dart';
+import 'package:virya/core/models/track_sample.dart';
+import 'package:virya/features/maps/domain/flyover_plan.dart';
+import 'package:virya/features/maps/domain/route_geometry.dart';
 
 void main() {
   group('geometry', () {

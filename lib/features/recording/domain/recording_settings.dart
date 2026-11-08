@@ -1,6 +1,6 @@
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/sensors/surface_classifier.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/sensors/surface_classifier.dart';
 
 /// Recording-related values from the AppSettings table (string values).
 class RecordingSettings {

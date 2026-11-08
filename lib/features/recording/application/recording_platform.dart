@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-import 'package:stravo/core/location/location_source.dart';
-import 'package:stravo/core/location/sources/geolocator_location_source.dart';
-import 'package:stravo/core/location/sources/simulated_location_source.dart';
-import 'package:stravo/core/sensors/sensor_sources.dart';
+import 'package:virya/core/location/location_source.dart';
+import 'package:virya/core/location/sources/geolocator_location_source.dart';
+import 'package:virya/core/location/sources/simulated_location_source.dart';
+import 'package:virya/core/sensors/sensor_sources.dart';
 
 /// Plugin-touching factories used by the recording controller.
 /// Override [recordingPlatformProvider] in tests.

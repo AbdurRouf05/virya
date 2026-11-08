@@ -2,66 +2,12 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/features/share/render/paper_painters.dart';
+import 'package:virya/features/share/render/topo_ink_camera.dart';
+import 'package:virya/features/share/render/topo_ink_ground.dart';
+import 'package:virya/features/share/render/topo_ink_markers.dart';
+import 'package:virya/features/share/render/topo_ink_style.dart';
 
-/// Colors for the Topo-Ink renderer.
-class TopoInkStyle {
-  final Color? background;
-  final Color ground;
-  final Color rim;
-  final Color grid;
-  final Color contour;
-  final Color shadow;
-  final Color curtain;
-  final Color ribbon;
-  final Color accent;
-  final Color head;
-  final bool glow;
-
-  const TopoInkStyle({
-    this.background,
-    required this.ground,
-    required this.rim,
-    required this.grid,
-    required this.contour,
-    required this.shadow,
-    required this.curtain,
-    required this.ribbon,
-    required this.accent,
-    required this.head,
-    this.glow = true,
-  });
-
-  factory TopoInkStyle.night({Color accent = FN.acid, bool background = true}) =>
-      TopoInkStyle(
-        background: background ? FN.night : null,
-        ground: const Color(0xFF151513),
-        rim: const Color(0xFF55554C),
-        grid: const Color(0xFF26261F),
-        contour: const Color(0xFF2E2E27),
-        shadow: const Color(0x66000000),
-        curtain: const Color(0x40EFE9DC),
-        ribbon: const Color(0x80EFE9DC),
-        accent: accent,
-        head: FN.paper,
-      );
-
-  factory TopoInkStyle.paper({Color accent = FN.signal, bool background = true}) =>
-      TopoInkStyle(
-        background: background ? FN.paper : null,
-        ground: FN.paperDeep,
-        rim: FN.inkSoft,
-        grid: const Color(0x30141414),
-        contour: FN.paperLine,
-        shadow: const Color(0x30141414),
-        curtain: const Color(0x55141414),
-        ribbon: FN.ink,
-        accent: accent,
-        head: FN.ink,
-        glow: false,
-      );
-}
+export 'package:virya/features/share/render/topo_ink_style.dart';
 
 /// Pure-Flutter oblique "2.5D" route: ribbon lifted by exaggerated elevation,
 /// hatched curtain down to a contour ground disc, rotating camera, animated
@@ -135,12 +81,12 @@ class TopoInkRenderer {
 
   int get length => _x.length;
 
-  _Cam _cam(Rect vp, double yaw, double tilt, double zoom) {
+  TopoCam _cam(Rect vp, double yaw, double tilt, double zoom) {
     final ct = math.cos(tilt), st = math.sin(tilt);
     final s = math.min(vp.width * 0.43, vp.height * 0.9 / (2.2 * ct + zMax * st)) *
         zoom;
     final cy = vp.center.dy + zMax * st * s / 2;
-    return _Cam(vp.center.dx, cy, s, math.cos(yaw), math.sin(yaw), ct, st);
+    return TopoCam(vp.center.dx, cy, s, math.cos(yaw), math.sin(yaw), ct, st);
   }
 
   /// Index i and blend w such that position = lerp(p[i], p[i+1], w).
@@ -169,14 +115,6 @@ class TopoInkRenderer {
     return (l(_x), l(_y), l(_z));
   }
 
-  /// Screen position of the tracer head.
-  Offset headOffset(Size size,
-      {double t = 1, double yaw = 0, double tilt = 0.95, Rect? viewport, double zoom = 1}) {
-    final cam = _cam(viewport ?? Offset.zero & size, yaw, tilt, zoom);
-    final (x, y, z) = _at(t);
-    return cam.p(x, y, z);
-  }
-
   void paint(
     Canvas canvas,
     Size size, {
@@ -196,44 +134,8 @@ class TopoInkRenderer {
     }
     final cam = _cam(vp, yaw, tilt, zoom);
     const rr = 1.06;
-    final disc = Rect.fromCenter(
-        center: Offset(cam.cx, cam.cy), width: 2 * rr * cam.s, height: 2 * rr * cam.s * cam.ct);
-    final discPath = Path()..addOval(disc);
-
-    // Ground plate, grid, contours.
-    canvas.drawOval(disc, Paint()..color = st.ground);
-    canvas.save();
-    canvas.clipPath(discPath);
-    final gp = Paint()
-      ..color = st.grid
-      ..strokeWidth = 0.8 * u;
-    for (var c = -1.0; c <= 1.0001; c += 0.25) {
-      final h = math.sqrt(math.max(0, rr * rr - c * c));
-      canvas.drawLine(cam.p(c, -h, 0), cam.p(c, h, 0), gp);
-      canvas.drawLine(cam.p(-h, c, 0), cam.p(h, c, 0), gp);
-    }
-    final field = ContourField.of(seed, cols: 40);
-    final ax = 2 * rr / field.cols, ay = -2 * rr / field.rows;
-    const bx = -rr, by = rr;
-    final m = Float64List(16)
-      ..[0] = cam.s * cam.cyaw * ax
-      ..[1] = -cam.s * cam.ct * cam.syaw * ax
-      ..[4] = -cam.s * cam.syaw * ay
-      ..[5] = -cam.s * cam.ct * cam.cyaw * ay
-      ..[10] = 1
-      ..[12] = cam.cx + cam.s * cam.cyaw * bx - cam.s * cam.syaw * by
-      ..[13] = cam.cy - cam.s * cam.ct * cam.syaw * bx - cam.s * cam.ct * cam.cyaw * by
-      ..[15] = 1;
-    final cp = Paint()
-      ..style = PaintingStyle.stroke
-      ..color = st.contour;
-    for (var k = 0; k < field.levels.length; k++) {
-      cp.strokeWidth = (k % 5 == 2 ? 1.5 : 0.7) * u;
-      canvas.drawPath(field.levels[k].transform(m), cp);
-    }
-    canvas.restore();
-
-    if (showRim) _paintRim(canvas, cam, rr, st, u);
+    paintTopoGround(canvas, cam, rr: rr, seed: seed, st: st, u: u);
+    if (showRim) paintTopoRim(canvas, cam, rr, st, u);
 
     final n = length;
     if (n < 2) return;
@@ -296,99 +198,12 @@ class TopoInkRenderer {
         ..strokeWidth = 3 * u
         ..color = st.accent);
     }
-    // Start flag.
-    final s0 = top.first;
-    final fp = Paint()
-      ..color = st.head
-      ..strokeWidth = 1.2 * u;
-    canvas.drawLine(s0, s0.translate(0, -18 * u), fp);
-    canvas.drawPath(
-        Path()
-          ..moveTo(s0.dx, s0.dy - 18 * u)
-          ..lineTo(s0.dx + 10 * u, s0.dy - 14.5 * u)
-          ..lineTo(s0.dx, s0.dy - 11 * u)
-          ..close(),
-        Paint()..color = st.accent);
-
-    // Photo markers.
+    paintTopoStartFlag(canvas, top.first, st, u);
     for (final f in markerFracs) {
       final (mx, my, mz) = _at(f.clamp(0, 1));
-      final p = cam.p(mx, my, mz);
-      final q = p.translate(0, -14 * u);
-      canvas.drawLine(p, q, Paint()
-        ..color = st.head
-        ..strokeWidth = 1 * u);
-      final box = Rect.fromCenter(center: q.translate(0, -4 * u), width: 9 * u, height: 7 * u);
-      if (f <= tc) {
-        canvas.drawRect(box, Paint()..color = st.accent);
-      } else {
-        canvas.drawRect(
-            box,
-            Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 1 * u
-              ..color = st.head);
-      }
+      paintTopoPhotoMarker(canvas, cam.p(mx, my, mz), f <= tc, st, u);
     }
-
-    // Head: drop line, ground ring, glow, core.
-    if (tc > 0) {
-      final g = cam.p(hx, hy, 0);
-      final dl = Paint()
-        ..color = st.accent.withValues(alpha: 0.7)
-        ..strokeWidth = 1 * u;
-      final len = (head - g).distance;
-      for (var d = 0.0; d < len; d += 5 * u) {
-        final a = Offset.lerp(head, g, d / len)!;
-        final b = Offset.lerp(head, g, math.min(1, (d + 2.5 * u) / len))!;
-        canvas.drawLine(a, b, dl);
-      }
-      canvas.drawOval(
-          Rect.fromCenter(center: g, width: 14 * u, height: 14 * u * cam.ct),
-          Paint()
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 1 * u
-            ..color = st.accent);
-      if (st.glow) {
-        canvas.drawCircle(
-            head,
-            20 * u,
-            Paint()
-              ..shader = Gradient.radial(head, 20 * u, [
-                st.accent.withValues(alpha: 0.75),
-                st.accent.withValues(alpha: 0),
-              ]));
-      } else {
-        canvas.drawCircle(head, 7 * u, Paint()..color = st.accent.withValues(alpha: 0.25));
-      }
-      canvas.drawCircle(head, 4 * u, Paint()..color = st.accent);
-      canvas.drawCircle(head, 2 * u, Paint()..color = st.head);
-    }
-  }
-
-  void _paintRim(Canvas canvas, _Cam cam, double r, TopoInkStyle st, double u) {
-    canvas.drawOval(
-        Rect.fromCenter(
-            center: Offset(cam.cx, cam.cy),
-            width: 2 * r * cam.s,
-            height: 2 * r * cam.s * cam.ct),
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.1 * u
-          ..color = st.rim);
-    final tp = Paint()..color = st.rim;
-    for (var d = 0; d < 360; d += 10) {
-      final a = d * math.pi / 180;
-      final long = d % 90 == 0;
-      final p0 = cam.p(r * math.sin(a), r * math.cos(a), 0);
-      final p1 = cam.p((r + (long ? 0.07 : 0.035)) * math.sin(a),
-          (r + (long ? 0.07 : 0.035)) * math.cos(a), 0);
-      tp.strokeWidth = (long ? 1.4 : 0.8) * u;
-      canvas.drawLine(p0, p1, tp);
-    }
-    final np = cam.p(0, r + 0.16, 0);
-    final label = monoText('N', size: 9 * u, color: st.rim, weight: FontWeight.w700);
-    label.paint(canvas, np - Offset(label.width / 2, label.height / 2));
+    if (tc > 0) paintTopoHead(canvas, cam, head, cam.p(hx, hy, 0), st, u);
   }
 
   static Path _poly(List<Offset> pts, int from, int to) {
@@ -400,17 +215,5 @@ class TopoInkRenderer {
       p.lineTo(pts[i].dx, pts[i].dy);
     }
     return p;
-  }
-}
-
-class _Cam {
-  final double cx, cy, s, cyaw, syaw, ct, st;
-  // cyaw/syaw: cos/sin of yaw.
-  const _Cam(this.cx, this.cy, this.s, this.cyaw, this.syaw, this.ct, this.st);
-
-  Offset p(double x, double y, double z) {
-    final xr = x * cyaw - y * syaw;
-    final yr = x * syaw + y * cyaw;
-    return Offset(cx + xr * s, cy - yr * ct * s - z * st * s);
   }
 }

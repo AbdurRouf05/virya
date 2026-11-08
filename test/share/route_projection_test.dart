@@ -2,8 +2,8 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/features/share/domain/share_format.dart';
-import 'package:stravo/features/share/render/route_projection.dart';
+import 'package:virya/features/share/domain/share_format.dart';
+import 'package:virya/features/share/render/route_projection.dart';
 
 import 'share_fixture.dart';
 

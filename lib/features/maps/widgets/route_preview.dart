@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/features/maps/domain/route_geometry.dart';
-import 'package:stravo/features/maps/widgets/route_map_view.dart';
-import 'package:stravo/features/maps/widgets/stravo_map_controller.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/features/maps/domain/route_geometry.dart';
+import 'package:virya/features/maps/widgets/route_map_view.dart';
+import 'package:virya/features/maps/widgets/virya_map_controller.dart';
 
 /// Per-point colours for [mode] (same rules as the JS side).
 List<Color>? routeColors(List<double>? values, RouteColorMode mode) {

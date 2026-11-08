@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:stravo/core/constants/enums.dart';
+import 'package:virya/core/constants/enums.dart';
 
 /// Rolling resistance coefficient by surface.
 double crrFor(SurfaceType s) => switch (s) {

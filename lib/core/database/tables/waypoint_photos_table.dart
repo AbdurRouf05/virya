@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:stravo/core/database/tables/activities_table.dart';
+import 'package:virya/core/database/tables/activities_table.dart';
 
 /// Tabel WaypointPhotos: Menyimpan foto-foto geotagged di rute
 class WaypointPhotos extends Table {

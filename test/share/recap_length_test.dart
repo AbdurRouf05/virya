@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/features/share/domain/share_options.dart';
-import 'package:stravo/features/share/video/recap_timeline.dart';
+import 'package:virya/features/share/domain/share_options.dart';
+import 'package:virya/features/share/video/recap_timeline.dart';
 
 void main() {
   group('RecapLength', () {

@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 enum PaperTexture { none, grid, contours }
 
@@ -66,8 +66,15 @@ class _PaperPainter extends CustomPainter {
 }
 
 /// Wobbly concentric "contour lines" around a few peaks. Deterministic.
-void paintContours(Canvas canvas, Size size, Color color, int seed,
-    {int peaks = 3, int rings = 9, double strokeWidth = 0.8}) {
+void paintContours(
+  Canvas canvas,
+  Size size,
+  Color color,
+  int seed, {
+  int peaks = 3,
+  int rings = 9,
+  double strokeWidth = 0.8,
+}) {
   final rnd = math.Random(seed);
   final p = Paint()
     ..color = color
@@ -75,8 +82,10 @@ void paintContours(Canvas canvas, Size size, Color color, int seed,
     ..strokeWidth = strokeWidth;
   final maxR = math.max(size.width, size.height) * 0.55;
   for (var k = 0; k < peaks; k++) {
-    final c = Offset(rnd.nextDouble() * size.width,
-        rnd.nextDouble() * size.height);
+    final c = Offset(
+      rnd.nextDouble() * size.width,
+      rnd.nextDouble() * size.height,
+    );
     final ph1 = rnd.nextDouble() * 6.28, ph2 = rnd.nextDouble() * 6.28;
     final stretch = 0.7 + rnd.nextDouble() * 0.6;
     for (var r = 1; r <= rings; r++) {
@@ -84,12 +93,16 @@ void paintContours(Canvas canvas, Size size, Color color, int seed,
       final path = Path();
       for (var i = 0; i <= 72; i++) {
         final a = i / 72 * math.pi * 2;
-        final wob = 1 +
+        final wob =
+            1 +
             0.12 * math.sin(3 * a + ph1 + r * 0.3) +
             0.07 * math.cos(5 * a + ph2 - r * 0.2);
-        final pt = c +
-            Offset(math.cos(a) * radius * wob,
-                math.sin(a) * radius * wob * stretch);
+        final pt =
+            c +
+            Offset(
+              math.cos(a) * radius * wob,
+              math.sin(a) * radius * wob * stretch,
+            );
         i == 0 ? path.moveTo(pt.dx, pt.dy) : path.lineTo(pt.dx, pt.dy);
       }
       path.close();

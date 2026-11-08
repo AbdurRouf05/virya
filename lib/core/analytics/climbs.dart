@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/analytics/geo.dart';
-import 'package:stravo/core/analytics/prepared_track.dart';
-import 'package:stravo/core/constants/enums.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/analytics/geo.dart';
+import 'package:virya/core/analytics/prepared_track.dart';
+import 'package:virya/core/constants/enums.dart';
 
 const double _step = 10; // resample spacing (m)
 

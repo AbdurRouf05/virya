@@ -6,7 +6,7 @@ import 'package:archive/archive_io.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:stravo/core/database/app_database.dart';
+import 'package:virya/core/database/app_database.dart';
 
 /// Full local backup: zip of the SQLite file, `photos/` and `manifest.json`.
 ///
@@ -15,6 +15,7 @@ import 'package:stravo/core/database/app_database.dart';
 /// [applyPendingRestore] (call in `main()` BEFORE opening the DB) swaps the
 /// staged files in. The replaced files are kept in `pre_restore/`.
 class BackupService {
+  // Legacy file name kept so old backups restore without migration.
   static const String dbFileName = 'stravo_local.sqlite';
   static const String photosDir = 'photos';
   static const String manifestName = 'manifest.json';
@@ -33,7 +34,7 @@ class BackupService {
   Future<Directory> _base() async =>
       baseDir ?? await getApplicationDocumentsDirectory();
 
-  /// Writes `backups/stravo_backup_<timestamp>.zip` and returns it.
+  /// Writes `backups/virya_backup_<timestamp>.zip` and returns it.
   Future<File> createBackup() async {
     final base = await _base();
     try {
@@ -48,7 +49,7 @@ class BackupService {
     final now = DateTime.now();
     final outDir = Directory(p.join(base.path, 'backups'));
     await outDir.create(recursive: true);
-    final out = File(p.join(outDir.path, 'stravo_backup_${_stamp(now)}.zip'));
+    final out = File(p.join(outDir.path, 'virya_backup_${_stamp(now)}.zip'));
 
     // Snapshot the DB first so the zip never streams a file being written.
     final snapshot = File(p.join(outDir.path, '.db_snapshot'));
@@ -57,7 +58,7 @@ class BackupService {
     try {
       enc.create(out.path);
       final manifest = {
-        'app': 'stravo',
+        'app': 'virya',
         'version': formatVersion,
         'createdAt': now.toUtc().toIso8601String(),
         'schemaVersion': db.schemaVersion,
@@ -82,7 +83,7 @@ class BackupService {
   }
 
   /// Validate [zipPath] and stage it for [applyPendingRestore]. Throws
-  /// [FormatException] when the archive is not a valid Stravo backup.
+  /// [FormatException] when the archive is not a valid Virya backup.
   Future<void> restore(String zipPath) async {
     final base = await _base();
     final input = InputFileStream(zipPath);
@@ -94,8 +95,8 @@ class BackupService {
         throw const FormatException('Backup: manifest.json missing');
       }
       final manifest = jsonDecode(utf8.decode(manifestFile.readBytes()!));
-      if (manifest is! Map || manifest['app'] != 'stravo') {
-        throw const FormatException('Backup: not a Stravo backup');
+      if (manifest is! Map || !const {'virya', 'stravo'}.contains(manifest['app'])) {
+        throw const FormatException('Backup: not a Virya backup');
       }
       final schema = manifest['schemaVersion'];
       if (schema is! int || schema > db.schemaVersion) {

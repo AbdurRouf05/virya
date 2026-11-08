@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:stravo/core/analytics/analysis_models.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
 
 /// Daily CTL/ATL as exponentially weighted moving averages of load:
 ///   CTL_d = CTL_{d−1} + (load_d − CTL_{d−1})·(1 − e^(−1/42))

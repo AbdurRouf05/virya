@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/data/demo_data.dart';
-import 'package:stravo/core/offline_maps/local_tile_server.dart';
-import 'package:stravo/core/offline_maps/map_pack_repository.dart';
-import 'package:stravo/features/maps/presentation/map_packs_screen.dart';
-import 'package:stravo/features/maps/widgets/route_map_view.dart';
-import 'package:stravo/features/maps/widgets/route_preview.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/data/demo_data.dart';
+import 'package:virya/core/offline_maps/local_tile_server.dart';
+import 'package:virya/core/offline_maps/map_pack_repository.dart';
+import 'package:virya/features/maps/presentation/map_packs_screen.dart';
+import 'package:virya/features/maps/widgets/route_map_view.dart';
+import 'package:virya/features/maps/widgets/route_preview.dart';
 
 void main() {
   final ride = demoGravelRide(seconds: 1200);
@@ -54,7 +54,7 @@ void main() {
 
   testWidgets('MapPacksScreen renders empty state + instructions',
       (tester) async {
-    final tmp = Directory.systemTemp.createTempSync('stravo_ui_');
+    final tmp = Directory.systemTemp.createTempSync('virya_ui_');
     addTearDown(() => tmp.deleteSync(recursive: true));
     final settings = <String, String>{};
     final repo = MapPackRepository(

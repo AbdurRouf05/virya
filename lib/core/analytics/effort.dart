@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/analytics/geo.dart';
-import 'package:stravo/core/analytics/prepared_track.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/analytics/geo.dart';
+import 'package:virya/core/analytics/prepared_track.dart';
 
 /// Zone 1..5 by % of max HR: <60, 60–70, 70–80, 80–90, ≥90.
 int hrZone(int hr, int maxHr) {

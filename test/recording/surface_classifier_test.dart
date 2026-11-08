@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/sensors/surface_classifier.dart';
-import 'package:stravo/core/sensors/vibration_rms.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/sensors/surface_classifier.dart';
+import 'package:virya/core/sensors/vibration_rms.dart';
 
 /// Feeds 1 s of synthetic 50 Hz vibration: sine of [amp] on z plus a gravity
 /// leak offset of 0.3 m/s^2 that must be removed.

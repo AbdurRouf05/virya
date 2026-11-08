@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/painting.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 /// Output formats. Cards are laid out at 360 logical px wide and exported
 /// with pixelRatio = width / 360, giving exact pixel sizes.

@@ -18,6 +18,15 @@ Newest entries on top. Contract & ownership: [BUILD_CONTRACT_V2.md](BUILD_CONTRA
 
 ## Log
 
+### 2026-11-08 — Fase 2: Virya, arsitektur modular ✅
+- Rename Stravo → **Virya** (package `virya`, Android `com.abdurrouf.virya`, channel `virya/*`). Backup lama (`app: stravo`) tetap bisa di-restore.
+- `docs/ARCHITECTURE.md` (aturan folder, maks 300 baris/file, arah dependensi) dan `docs/ROADMAP.md` (modul baru + relasi data).
+- Token tema: `FN.*` kini dibaca dari `Palette` aktif (`lib/app/theme/palette.dart`, `styles/`). Tambah token `caution`.
+- Semua file besar dipecah: recording, maps/flyover, share/video, activity detail, stats, gear. File terbesar kini 293 baris (sebelumnya 925).
+- Tombol rekam baru: lingkaran oranye terangkat, titik putih, efek tekan + haptic.
+- Ikon/label impor di Jurnal & Pengaturan diperjelas ("Impor riwayat"). Ekspor GPX/TCX diberi label jelas.
+- `flutter analyze` bersih, 186 test lulus.
+
 ### 2026-11-07 — v2.1 T8 Penutup & verifikasi rilis v2.1 ✅
 - `flutter analyze`: No issues found! (0 warnings, 0 infos).
 - `flutter test`: 186/186 tes lolos.

@@ -1,19 +1,19 @@
 import 'dart:typed_data';
 
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/analytics/best_efforts.dart';
-import 'package:stravo/core/analytics/climbs.dart';
-import 'package:stravo/core/analytics/effort.dart';
-import 'package:stravo/core/analytics/elevation.dart';
-import 'package:stravo/core/analytics/fitness.dart';
-import 'package:stravo/core/analytics/gap.dart';
-import 'package:stravo/core/analytics/gravel.dart';
-import 'package:stravo/core/analytics/power.dart';
-import 'package:stravo/core/analytics/prepared_track.dart';
-import 'package:stravo/core/analytics/series_sampler.dart';
-import 'package:stravo/core/analytics/splits.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/models/track_sample.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/analytics/best_efforts.dart';
+import 'package:virya/core/analytics/climbs.dart';
+import 'package:virya/core/analytics/effort.dart';
+import 'package:virya/core/analytics/elevation.dart';
+import 'package:virya/core/analytics/fitness.dart';
+import 'package:virya/core/analytics/gap.dart';
+import 'package:virya/core/analytics/gravel.dart';
+import 'package:virya/core/analytics/power.dart';
+import 'package:virya/core/analytics/prepared_track.dart';
+import 'package:virya/core/analytics/series_sampler.dart';
+import 'package:virya/core/analytics/splits.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/models/track_sample.dart';
 
 /// SHARED CONTRACT — entry point for all activity analysis.
 ///

@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:stravo/core/location/location_fix.dart';
-import 'package:stravo/core/location/location_source.dart';
-import 'package:stravo/services/background/tracking_location_settings.dart';
+import 'package:virya/core/location/location_fix.dart';
+import 'package:virya/core/location/location_source.dart';
+import 'package:virya/services/background/tracking_location_settings.dart';
 
 /// Real GNSS via geolocator (1 Hz, best accuracy, foreground service).
 class GeolocatorLocationSource implements LocationSource {

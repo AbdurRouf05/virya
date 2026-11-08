@@ -52,7 +52,7 @@ class ShareExport {
   /// New output path in documents/videos/.
   static Future<String> newVideoPath() async {
     final d = await docsSubdir('videos');
-    return p.join(d.path, 'stravo_recap_${_stamp()}.mp4');
+    return p.join(d.path, 'virya_recap_${_stamp()}.mp4');
   }
 
   static Future<void> shareFile(String path, {String? text, String? mime}) =>

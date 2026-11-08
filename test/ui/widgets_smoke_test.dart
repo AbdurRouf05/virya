@@ -2,11 +2,11 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/app/format.dart';
-import 'package:stravo/app/theme/app_theme.dart';
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/data/demo_data.dart';
-import 'package:stravo/core/widgets/field_kit.dart';
+import 'package:virya/app/format.dart';
+import 'package:virya/app/theme/app_theme.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/data/demo_data.dart';
+import 'package:virya/core/widgets/field_kit.dart';
 
 Widget _host(Widget child) => MaterialApp(
       theme: FieldNotesTheme.paper,

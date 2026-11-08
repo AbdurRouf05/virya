@@ -19,10 +19,10 @@ typedef FrameSinkFactory = Future<FrameSink> Function({
 });
 
 /// H.264 MP4 encoder backed by Android MediaCodec + MediaMuxer
-/// (channel `stravo/video_encoder`). Frames are given at the requested size;
+/// (channel `virya/video_encoder`). Frames are given at the requested size;
 /// the native side center-crops to a multiple of 16 when needed.
 class VideoEncoder implements FrameSink {
-  static const _ch = MethodChannel('stravo/video_encoder');
+  static const _ch = MethodChannel('virya/video_encoder');
 
   final int _id;
   final String outputPath;

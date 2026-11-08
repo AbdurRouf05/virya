@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/models/track_sample.dart';
-import 'package:stravo/services/export_import/gpx_codec.dart';
-import 'package:stravo/services/export_import/tcx_codec.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/models/track_sample.dart';
+import 'package:virya/services/export_import/gpx_codec.dart';
+import 'package:virya/services/export_import/tcx_codec.dart';
 
 /// Writes activities as GPX 1.1 / TCX v2 into `app documents/exports/`.
 class ActivityExporter {
@@ -57,7 +57,7 @@ String exportFileStem(String title, DateTime start) {
       .trim()
       .replaceAll(RegExp(r'\s+'), '_');
   if (t.length > 60) t = t.substring(0, 60);
-  if (t.isEmpty) t = 'stravo';
+  if (t.isEmpty) t = 'virya';
   final l = start.toLocal();
   String two(int v) => v.toString().padLeft(2, '0');
   return '${t}_${l.year}${two(l.month)}${two(l.day)}_${two(l.hour)}${two(l.minute)}';

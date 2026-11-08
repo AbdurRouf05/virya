@@ -1,5 +1,5 @@
-import 'package:stravo/core/analytics/geo.dart';
-import 'package:stravo/features/segments/domain/segment_path.dart';
+import 'package:virya/core/analytics/geo.dart';
+import 'package:virya/features/segments/domain/segment_path.dart';
 
 enum LiveSegmentPhase { idle, approaching, active, finished, abandoned }
 

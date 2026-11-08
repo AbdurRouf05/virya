@@ -3,13 +3,13 @@ import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/models/track_sample.dart';
-import 'package:stravo/services/export_import/activity_importer.dart';
-import 'package:stravo/services/export_import/fit_decoder.dart';
-import 'package:stravo/services/export_import/gpx_codec.dart';
-import 'package:stravo/services/export_import/strava_archive.dart';
-import 'package:stravo/services/export_import/tcx_codec.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/models/track_sample.dart';
+import 'package:virya/services/export_import/activity_importer.dart';
+import 'package:virya/services/export_import/fit_decoder.dart';
+import 'package:virya/services/export_import/gpx_codec.dart';
+import 'package:virya/services/export_import/strava_archive.dart';
+import 'package:virya/services/export_import/tcx_codec.dart';
 
 import 'fit_test_encoder.dart';
 

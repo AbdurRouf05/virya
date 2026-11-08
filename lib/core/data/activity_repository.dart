@@ -1,11 +1,11 @@
 import 'dart:isolate';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stravo/core/analytics/activity_analyzer.dart';
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/models/track_sample.dart';
+import 'package:virya/core/analytics/activity_analyzer.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/models/track_sample.dart';
 
 /// SHARED CONTRACT — everything a screen needs to render one activity.
 class ActivityBundle {

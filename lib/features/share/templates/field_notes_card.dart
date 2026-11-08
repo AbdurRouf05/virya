@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/features/share/domain/share_data.dart';
-import 'package:stravo/features/share/domain/share_format.dart';
-import 'package:stravo/features/share/domain/share_options.dart';
-import 'package:stravo/features/share/templates/card_parts.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/features/share/domain/share_data.dart';
+import 'package:virya/features/share/domain/share_format.dart';
+import 'package:virya/features/share/domain/share_options.dart';
+import 'package:virya/features/share/templates/card_parts.dart';
 
 /// FIELD NOTES — expedition notebook page: contour paper, inked route,
 /// giant distance, mono stat row, coordinate stamp, sector stamps.
@@ -42,8 +42,8 @@ class FieldNotesCard extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: const MonoLabel(
-                    'STRAVO · FIELD NOTES',
+                  child: MonoLabel(
+                    'VIRYA · FIELD NOTES',
                     color: FN.ink,
                     weight: FontWeight.w700,
                   ),
@@ -75,7 +75,7 @@ class FieldNotesCard extends StatelessWidget {
                 data.title.toUpperCase(),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: FN.sans,
                   fontWeight: FontWeight.w600,
                   fontSize: 12,

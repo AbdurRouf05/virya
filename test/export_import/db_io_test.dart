@@ -5,13 +5,13 @@ import 'dart:typed_data';
 import 'package:archive/archive.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
-import 'package:stravo/core/backup/backup_service.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/services/export_import/activity_exporter.dart';
-import 'package:stravo/services/export_import/activity_importer.dart';
-import 'package:stravo/services/export_import/gpx_codec.dart';
-import 'package:stravo/services/export_import/tcx_codec.dart';
+import 'package:virya/core/backup/backup_service.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/services/export_import/activity_exporter.dart';
+import 'package:virya/services/export_import/activity_importer.dart';
+import 'package:virya/services/export_import/gpx_codec.dart';
+import 'package:virya/services/export_import/tcx_codec.dart';
 
 import 'codecs_test.dart' show sampleTrack;
 
@@ -21,7 +21,7 @@ void main() {
 
   setUp(() {
     db = AppDatabase.memory();
-    tmp = Directory.systemTemp.createTempSync('stravo_io_');
+    tmp = Directory.systemTemp.createTempSync('virya_io_');
   });
   tearDown(() async {
     await db.close();

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:stravo/core/models/track_sample.dart';
-import 'package:stravo/services/export_import/parsed_activity.dart';
+import 'package:virya/core/models/track_sample.dart';
+import 'package:virya/services/export_import/parsed_activity.dart';
 
 /// Compact FIT (Flexible and Interoperable Data Transfer) decoder.
 ///

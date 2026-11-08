@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:stravo/core/analytics/elevation.dart';
-import 'package:stravo/core/analytics/geo.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/models/track_sample.dart';
+import 'package:virya/core/analytics/elevation.dart';
+import 'package:virya/core/analytics/geo.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/models/track_sample.dart';
 
 /// Minimum speed (m/s) to count time as moving.
 double movingThreshold(SportType sport) {

@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/data/demo_data.dart';
-import 'package:stravo/features/share/domain/share_data.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/data/demo_data.dart';
+import 'package:virya/features/share/domain/share_data.dart';
 
 /// Hand-built analysis from `demoGravelRide()` (independent of the analyzer).
 ActivityAnalysis fakeAnalysis() {

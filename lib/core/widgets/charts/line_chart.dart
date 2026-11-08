@@ -1,15 +1,16 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/core/widgets/charts/chart_kit.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/core/widgets/charts/chart_kit.dart';
 
 /// Single-series line chart over distance. Nulls create gaps.
 /// [invert] puts low values on top (pace: faster = higher).
 class InkLineChart extends StatelessWidget {
   final List<double> x;
   final List<double?> y;
-  final Color color;
+  final Color? _color;
+  Color get color => _color ?? FN.ink;
   final double height;
   final bool invert;
   final bool fill;
@@ -25,14 +26,14 @@ class InkLineChart extends StatelessWidget {
     required this.y,
     required this.formatY,
     required this.formatX,
-    this.color = FN.ink,
+    Color? color,
     this.height = 140,
     this.invert = false,
     this.fill = true,
     this.average,
     this.clampMin,
     this.clampMax,
-  });
+  }) : _color = color;
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +58,15 @@ class _LinePainter extends CustomPainter {
     final n = math.min(w.x.length, w.y.length);
     final vals = <double>[
       for (var i = 0; i < n; i++)
-        if (w.y[i] != null && w.y[i]!.isFinite) w.y[i]!
+        if (w.y[i] != null && w.y[i]!.isFinite) w.y[i]!,
     ];
     if (n < 2 || vals.length < 2) {
-      ChartKit.text(canvas, 'TIDAK ADA DATA',
-          Offset(size.width / 2, size.height / 2 - 6),
-          align: TextAlign.center);
+      ChartKit.text(
+        canvas,
+        'TIDAK ADA DATA',
+        Offset(size.width / 2, size.height / 2 - 6),
+        align: TextAlign.center,
+      );
       return;
     }
     double clamp(double v) {
@@ -75,11 +79,13 @@ class _LinePainter extends CustomPainter {
     final pad = math.max((hi - lo) * 0.1, 0.5);
     lo -= pad;
     hi += pad;
-    final f = ChartFrame(size,
-        minX: w.x.first,
-        maxX: w.x[n - 1],
-        minY: w.invert ? -hi : lo,
-        maxY: w.invert ? -lo : hi);
+    final f = ChartFrame(
+      size,
+      minX: w.x.first,
+      maxX: w.x[n - 1],
+      minY: w.invert ? -hi : lo,
+      maxY: w.invert ? -lo : hi,
+    );
     double yy(double v) => f.y(w.invert ? -clamp(v) : clamp(v));
 
     final grid = Paint()
@@ -87,8 +93,13 @@ class _LinePainter extends CustomPainter {
       ..strokeWidth = 0.7;
     for (final t in ChartKit.niceTicks(lo, hi, count: 3)) {
       ChartKit.dashedH(canvas, f.plot.left, f.plot.right, yy(t), grid);
-      ChartKit.text(canvas, w.formatY(t), Offset(f.plot.left - 4, yy(t) - 6),
-          align: TextAlign.right, color: fg.withValues(alpha: 0.6));
+      ChartKit.text(
+        canvas,
+        w.formatY(t),
+        Offset(f.plot.left - 4, yy(t) - 6),
+        align: TextAlign.right,
+        color: fg.withValues(alpha: 0.6),
+      );
     }
 
     final line = Path();
@@ -126,43 +137,59 @@ class _LinePainter extends CustomPainter {
       canvas.drawPath(area, Paint()..color = w.color.withValues(alpha: 0.14));
     }
     canvas.drawPath(
-        line,
-        Paint()
-          ..color = w.color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5
-          ..strokeJoin = StrokeJoin.round);
+      line,
+      Paint()
+        ..color = w.color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.5
+        ..strokeJoin = StrokeJoin.round,
+    );
 
     if (w.average != null && w.average!.isFinite) {
       final ay = yy(w.average!);
       ChartKit.dashedH(
-          canvas,
-          f.plot.left,
-          f.plot.right,
-          ay,
-          Paint()
-            ..color = fg
-            ..strokeWidth = 1,
-          dash: 6,
-          gap: 3);
-      ChartKit.text(canvas, 'RATA ${w.formatY(w.average!)}',
-          Offset(f.plot.right - 2, ay - 13),
-          align: TextAlign.right,
-          bold: true,
-          color: FN.paper,
-          background: fg);
-    }
-
-    canvas.drawLine(f.plot.bottomLeft, f.plot.bottomRight,
+        canvas,
+        f.plot.left,
+        f.plot.right,
+        ay,
         Paint()
           ..color = fg
-          ..strokeWidth = 1);
+          ..strokeWidth = 1,
+        dash: 6,
+        gap: 3,
+      );
+      ChartKit.text(
+        canvas,
+        'RATA ${w.formatY(w.average!)}',
+        Offset(f.plot.right - 2, ay - 13),
+        align: TextAlign.right,
+        bold: true,
+        color: FN.paper,
+        background: fg,
+      );
+    }
+
+    canvas.drawLine(
+      f.plot.bottomLeft,
+      f.plot.bottomRight,
+      Paint()
+        ..color = fg
+        ..strokeWidth = 1,
+    );
     for (final t in ChartKit.niceTicks(f.minX, f.maxX, count: 5)) {
       final x = f.x(t);
-      canvas.drawLine(Offset(x, f.plot.bottom), Offset(x, f.plot.bottom + 3),
-          Paint()..color = fg);
-      ChartKit.text(canvas, w.formatX(t), Offset(x, f.plot.bottom + 4),
-          align: TextAlign.center, color: fg.withValues(alpha: 0.7));
+      canvas.drawLine(
+        Offset(x, f.plot.bottom),
+        Offset(x, f.plot.bottom + 3),
+        Paint()..color = fg,
+      );
+      ChartKit.text(
+        canvas,
+        w.formatX(t),
+        Offset(x, f.plot.bottom + 4),
+        align: TextAlign.center,
+        color: fg.withValues(alpha: 0.7),
+      );
     }
   }
 

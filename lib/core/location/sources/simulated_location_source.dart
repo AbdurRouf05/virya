@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:stravo/core/data/demo_data.dart';
-import 'package:stravo/core/location/location_fix.dart';
-import 'package:stravo/core/location/location_source.dart';
-import 'package:stravo/core/models/track_sample.dart';
+import 'package:virya/core/data/demo_data.dart';
+import 'package:virya/core/location/location_fix.dart';
+import 'package:virya/core/location/location_source.dart';
+import 'package:virya/core/models/track_sample.dart';
 
 /// Replays a recorded track (default: [demoGravelRide]) as live fixes.
 ///

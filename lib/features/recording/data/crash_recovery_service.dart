@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/database/daos/activities_dao.dart';
-import 'package:stravo/core/database/daos/track_points_dao.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/database/daos/activities_dao.dart';
+import 'package:virya/core/database/daos/track_points_dao.dart';
 
 /// State hasil pemeriksaan pemulihan sesi crash
 class CrashRecoveryState {
@@ -26,7 +26,7 @@ class CrashRecoveryState {
 
 /// Crash Recovery Service (Layanan Pemulihan Sesi Pasca Crash / Mati Lampu / Habis Baterai)
 ///
-/// Setiap kali Stravo Pro dibuka, layanan ini mendeteksi apakah ada aktivitas
+/// Setiap kali Virya dibuka, layanan ini mendeteksi apakah ada aktivitas
 /// dengan status 'inProgress'. Jika ada, pengguna diberikan opsi:
 /// 1. Lanjutkan sesi pelacakan (Resume)
 /// 2. Simpan sesi yang terputus (Finalize & Save)

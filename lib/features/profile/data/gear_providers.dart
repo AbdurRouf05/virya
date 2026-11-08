@@ -1,16 +1,15 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stravo/core/database/app_database.dart';
+import 'package:virya/core/database/app_database.dart';
 
 /// Every gear incl. retired, default first.
 final allGearsProvider = StreamProvider<List<Gear>>((ref) {
   final db = ref.watch(databaseProvider);
-  return (db.select(db.gears)
-        ..orderBy([
-          (t) => OrderingTerm.asc(t.isRetired),
-          (t) => OrderingTerm.desc(t.isDefault),
-          (t) => OrderingTerm.asc(t.createdAt),
-        ]))
+  return (db.select(db.gears)..orderBy([
+        (t) => OrderingTerm.asc(t.isRetired),
+        (t) => OrderingTerm.desc(t.isDefault),
+        (t) => OrderingTerm.asc(t.createdAt),
+      ]))
       .watch();
 });
 
@@ -21,13 +20,16 @@ final gearDistanceProvider = StreamProvider<Map<String, double>>((ref) {
   final sum = db.activities.totalDistanceMeters.sum();
   final q = db.selectOnly(db.activities)
     ..addColumns([db.activities.gearId, sum])
-    ..where(db.activities.status.equals('completed') &
-        db.activities.gearId.isNotNull())
+    ..where(
+      db.activities.status.equals('completed') &
+          db.activities.gearId.isNotNull(),
+    )
     ..groupBy([db.activities.gearId]);
-  return q.watch().map((rows) => {
-        for (final r in rows)
-          r.read(db.activities.gearId)!: r.read(sum) ?? 0,
-      });
+  return q.watch().map(
+    (rows) => {
+      for (final r in rows) r.read(db.activities.gearId)!: r.read(sum) ?? 0,
+    },
+  );
 });
 
 const gearTypes = {
@@ -39,3 +41,12 @@ const gearTypes = {
 };
 
 bool gearIsShoe(String type) => type.toLowerCase().contains('shoe');
+
+/// Retire / un-retire a gear. Retired gear is never the default.
+Future<void> toggleGearRetired(AppDatabase db, Gear gear) =>
+    (db.update(db.gears)..where((t) => t.id.equals(gear.id))).write(
+      GearsCompanion(
+        isRetired: Value(!gear.isRetired),
+        isDefault: const Value(false),
+      ),
+    );

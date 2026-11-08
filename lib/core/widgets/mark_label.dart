@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 /// Label lurus & datar — pengganti semua "stempel". Tanpa rotasi, tanpa border ganda.
 class MarkLabel extends StatelessWidget {
   const MarkLabel(
     this.text, {
     super.key,
-    this.color = FN.signal,
+    Color? color,
     this.filled = true,
     this.fontSize = 11,
-  });
+  }) : _color = color;
 
   final String text;
-  final Color color;
+  final Color? _color;
+  Color get color => _color ?? FN.signal;
   final bool filled; // true = blok solid, false = garis kiri
   final double fontSize;
 
@@ -23,15 +24,19 @@ class MarkLabel extends StatelessWidget {
         : color;
     return Container(
       padding: EdgeInsets.symmetric(
-          horizontal: fontSize * 0.6, vertical: fontSize * 0.3),
+        horizontal: fontSize * 0.6,
+        vertical: fontSize * 0.3,
+      ),
       decoration: filled
           ? BoxDecoration(color: color)
           : BoxDecoration(
-              border: Border(left: BorderSide(color: color, width: 3))),
+              border: Border(left: BorderSide(color: color, width: 3)),
+            ),
       child: Text(
         text.toUpperCase(),
         maxLines: 1,
-        style: FN.label(size: fontSize, color: fg)
+        style: FN
+            .label(size: fontSize, color: fg)
             .copyWith(fontWeight: FontWeight.w700),
       ),
     );

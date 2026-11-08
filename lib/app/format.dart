@@ -1,4 +1,4 @@
-import 'package:stravo/core/constants/enums.dart';
+import 'package:virya/core/constants/enums.dart';
 
 enum Units { metric, imperial }
 
@@ -86,16 +86,42 @@ class Fmt {
 
   // Dates (Indonesian, no intl init needed)
   static const monthsShort = [
-    'JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUN',
-    'JUL', 'AGU', 'SEP', 'OKT', 'NOV', 'DES'
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MEI',
+    'JUN',
+    'JUL',
+    'AGU',
+    'SEP',
+    'OKT',
+    'NOV',
+    'DES',
   ];
   static const monthsLong = [
-    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
   ];
   static const daysShort = ['SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB', 'MIN'];
   static const daysLong = [
-    'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'
+    'Senin',
+    'Selasa',
+    'Rabu',
+    'Kamis',
+    'Jumat',
+    'Sabtu',
+    'Minggu',
   ];
 
   static String time(DateTime d) =>

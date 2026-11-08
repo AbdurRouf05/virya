@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:drift/drift.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/data/activity_finalizer.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/models/track_sample.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/data/activity_finalizer.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/models/track_sample.dart';
 import 'package:uuid/uuid.dart';
 
 /// SHARED DEV UTILITY — deterministic synthetic gravel ride (~32 km loop in

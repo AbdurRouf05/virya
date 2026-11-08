@@ -1,4 +1,4 @@
-import 'package:stravo/core/constants/enums.dart';
+import 'package:virya/core/constants/enums.dart';
 
 /// SHARED CONTRACT — output of `ActivityAnalyzer.analyze()`.
 ///

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 /// "01 / RINGKASAN ─────────── trailing"
 class SectionHeader extends StatelessWidget {
@@ -25,14 +25,20 @@ class SectionHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (number != null) ...[
-            Text(number!,
-                style: FN.label(size: 12, color: FN.signal)
-                    .copyWith(fontWeight: FontWeight.w700)),
+            Text(
+              number!,
+              style: FN
+                  .label(size: 12, color: FN.signal)
+                  .copyWith(fontWeight: FontWeight.w700),
+            ),
             Text(' / ', style: FN.label(size: 12, color: fg)),
           ],
-          Text(title.toUpperCase(),
-              style: FN.label(size: 12, color: fg)
-                  .copyWith(fontWeight: FontWeight.w700, letterSpacing: 2)),
+          Text(
+            title.toUpperCase(),
+            style: FN
+                .label(size: 12, color: fg)
+                .copyWith(fontWeight: FontWeight.w700, letterSpacing: 2),
+          ),
           const SizedBox(width: 10),
           Expanded(child: Container(height: 1, color: fg)),
           if (trailing != null) ...[const SizedBox(width: 10), trailing!],

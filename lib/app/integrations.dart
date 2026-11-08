@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/widgets/paper_background.dart';
-import 'package:stravo/core/widgets/route_thumbnail.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/widgets/paper_background.dart';
+import 'package:virya/core/widgets/route_thumbnail.dart';
 
 /// Seam to other modules' screens/services. UI code depends on this only;
 /// the live implementation (`integrations_live.dart`) is injected in main.
@@ -39,15 +39,17 @@ class PlaceholderIntegrations extends Integrations {
   const PlaceholderIntegrations();
 
   Widget _missing(String what) => Scaffold(
-        appBar: AppBar(title: Text(what)),
-        body: PaperBackground(
-          texture: PaperTexture.contours,
-          child: Center(
-            child: Text('MODUL BELUM TERPASANG',
-                style: FN.label(size: 13, color: FN.ink)),
-          ),
+    appBar: AppBar(title: Text(what)),
+    body: PaperBackground(
+      texture: PaperTexture.contours,
+      child: Center(
+        child: Text(
+          'MODUL BELUM TERPASANG',
+          style: FN.label(size: 13, color: FN.ink),
         ),
-      );
+      ),
+    ),
+  );
 
   @override
   Widget recordingScreen() => _missing('REKAM');
@@ -63,15 +65,14 @@ class PlaceholderIntegrations extends Integrations {
     List<double>? values,
     String colorMode = 'plain',
     bool interactive = true,
-  }) =>
-      PaperBackground(
-        texture: PaperTexture.contours,
-        child: RouteThumbnail(
-          points: points,
-          strokeWidth: 2.4,
-          padding: const EdgeInsets.all(20),
-        ),
-      );
+  }) => PaperBackground(
+    texture: PaperTexture.contours,
+    child: RouteThumbnail(
+      points: points,
+      strokeWidth: 2.4,
+      padding: const EdgeInsets.all(20),
+    ),
+  );
 
   @override
   Future<void> checkRecovery(BuildContext context, WidgetRef ref) async {}
@@ -94,5 +95,6 @@ class PlaceholderIntegrations extends Integrations {
       _unavailable();
 }
 
-final integrationsProvider =
-    Provider<Integrations>((ref) => const PlaceholderIntegrations());
+final integrationsProvider = Provider<Integrations>(
+  (ref) => const PlaceholderIntegrations(),
+);

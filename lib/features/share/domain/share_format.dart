@@ -1,6 +1,6 @@
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/features/share/domain/share_data.dart';
-import 'package:stravo/features/share/domain/share_options.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/features/share/domain/share_data.dart';
+import 'package:virya/features/share/domain/share_options.dart';
 
 /// Text formatting for share cards (Indonesian, uppercase poster style).
 class SF {

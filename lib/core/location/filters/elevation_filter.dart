@@ -1,4 +1,4 @@
-import 'package:stravo/core/location/geo_math.dart';
+import 'package:virya/core/location/geo_math.dart';
 
 /// Fuses barometric and GNSS altitude and accumulates gain/loss with
 /// hysteresis so sensor noise does not inflate climbing.

@@ -1,6 +1,6 @@
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/analytics/prepared_track.dart';
-import 'package:stravo/core/constants/enums.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/analytics/prepared_track.dart';
+import 'package:virya/core/constants/enums.dart';
 
 const runningEfforts = <(String, double)>[
   ('400m', 400),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/features/share/domain/share_data.dart';
-import 'package:stravo/features/share/domain/share_format.dart';
-import 'package:stravo/features/share/domain/share_options.dart';
-import 'package:stravo/features/share/render/topo_ink_renderer.dart';
-import 'package:stravo/features/share/templates/card_parts.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/features/share/domain/share_data.dart';
+import 'package:virya/features/share/domain/share_format.dart';
+import 'package:virya/features/share/domain/share_options.dart';
+import 'package:virya/features/share/render/topo_ink_renderer.dart';
+import 'package:virya/features/share/templates/card_parts.dart';
 
 /// NIGHT INK — night ground, ghost contours, Topo-Ink 2.5D route in acid,
 /// bold paper numerals.
@@ -75,7 +75,7 @@ class NightInkCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 5),
-                const HairRule(color: FN.nightLine, thickness: 1),
+                HairRule(color: FN.nightLine, thickness: 1),
                 const SizedBox(height: 6),
                 Row(
                   children: [
@@ -84,7 +84,7 @@ class NightInkCard extends StatelessWidget {
                         data.title.toUpperCase(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: FN.sans,
                           fontWeight: FontWeight.w600,
                           fontSize: 11,
@@ -122,7 +122,7 @@ class NightInkCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                const HairRule(color: FN.nightLine),
+                HairRule(color: FN.nightLine),
                 const SizedBox(height: 7),
                 StatStrip(
                   stats: statValues(data, options.stats),
@@ -132,7 +132,7 @@ class NightInkCard extends StatelessWidget {
                   valueSize: compact ? 18 : 22,
                 ),
                 const SizedBox(height: 7),
-                const HairRule(color: FN.nightLine),
+                HairRule(color: FN.nightLine),
                 const SizedBox(height: 6),
                 Row(
                   children: [

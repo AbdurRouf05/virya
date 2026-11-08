@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/location/models/telemetry_snapshot.dart';
-import 'package:stravo/services/audio_cues/cue_formatter.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/location/models/telemetry_snapshot.dart';
+import 'package:virya/services/audio_cues/cue_formatter.dart';
 
 /// Minimal speech interface so cue logic is testable without the plugin.
 abstract class TtsEngine {

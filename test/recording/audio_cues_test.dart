@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/location/models/telemetry_snapshot.dart';
-import 'package:stravo/services/audio_cues/audio_cue_service.dart';
-import 'package:stravo/services/audio_cues/cue_formatter.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/location/models/telemetry_snapshot.dart';
+import 'package:virya/services/audio_cues/audio_cue_service.dart';
+import 'package:virya/services/audio_cues/cue_formatter.dart';
 
 class FakeTts implements TtsEngine {
   final CueLanguage lang;

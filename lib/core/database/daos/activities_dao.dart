@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/database/tables/activities_table.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/database/tables/activities_table.dart';
 
 part 'activities_dao.g.dart';
 

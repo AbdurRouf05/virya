@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
-import 'package:stravo/core/offline_maps/local_tile_server.dart';
+import 'package:virya/core/offline_maps/local_tile_server.dart';
 
 void main() {
   late Directory tmp;
@@ -14,7 +14,7 @@ void main() {
   final data = Uint8List.fromList(List.generate(4096, (i) => i % 251));
 
   setUp(() async {
-    tmp = await Directory.systemTemp.createTemp('stravo_maps_');
+    tmp = await Directory.systemTemp.createTemp('virya_maps_');
     final packs = await Directory(p.join(tmp.path, 'maps')).create();
     await File(p.join(packs.path, 'jawa.pmtiles')).writeAsBytes(data);
     await File(p.join(tmp.path, 'outside.txt')).writeAsString('secret');

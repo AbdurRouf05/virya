@@ -1,7 +1,7 @@
-// Stravo Pro - Shared Enums
+// Virya - Shared Enums
 // Enum domain bersama untuk seluruh modul.
 
-/// Jenis aktivitas olahraga luar ruangan yang didukung Stravo Pro
+/// Jenis aktivitas olahraga luar ruangan yang didukung Virya
 enum SportType {
   gravelCycling,
   roadCycling,

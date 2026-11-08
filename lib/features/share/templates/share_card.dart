@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
-import 'package:stravo/features/share/domain/share_data.dart';
-import 'package:stravo/features/share/domain/share_options.dart';
-import 'package:stravo/features/share/templates/field_notes_card.dart';
-import 'package:stravo/features/share/templates/foto_card.dart';
-import 'package:stravo/features/share/templates/night_ink_card.dart';
-import 'package:stravo/features/share/templates/profil_card.dart';
-import 'package:stravo/features/share/templates/sektor_card.dart';
-import 'package:stravo/features/share/templates/sticker_card.dart';
+import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/features/share/domain/share_data.dart';
+import 'package:virya/features/share/domain/share_options.dart';
+import 'package:virya/features/share/templates/field_notes_card.dart';
+import 'package:virya/features/share/templates/foto_card.dart';
+import 'package:virya/features/share/templates/night_ink_card.dart';
+import 'package:virya/features/share/templates/profil_card.dart';
+import 'package:virya/features/share/templates/sektor_card.dart';
+import 'package:virya/features/share/templates/sticker_card.dart';
 
 /// Renders [template] at the exact logical size of the chosen format
 /// (360 px wide). Wrap in a RepaintBoundary and export with
@@ -41,7 +41,7 @@ class ShareCard extends StatelessWidget {
         child: Directionality(
           textDirection: TextDirection.ltr,
           child: DefaultTextStyle(
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: FN.mono,
               color: FN.ink,
               decoration: TextDecoration.none,

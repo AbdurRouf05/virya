@@ -7,20 +7,20 @@ import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
-import 'package:stravo/core/analytics/elevation.dart';
-import 'package:stravo/core/analytics/geo.dart';
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/data/activity_finalizer.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/core/models/track_sample.dart';
-import 'package:stravo/services/export_import/fit_decoder.dart';
-import 'package:stravo/services/export_import/gpx_codec.dart';
-import 'package:stravo/services/export_import/parsed_activity.dart';
-import 'package:stravo/services/export_import/strava_archive.dart';
-import 'package:stravo/services/export_import/tcx_codec.dart';
+import 'package:virya/core/analytics/elevation.dart';
+import 'package:virya/core/analytics/geo.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/data/activity_finalizer.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/core/models/track_sample.dart';
+import 'package:virya/services/export_import/fit_decoder.dart';
+import 'package:virya/services/export_import/gpx_codec.dart';
+import 'package:virya/services/export_import/parsed_activity.dart';
+import 'package:virya/services/export_import/strava_archive.dart';
+import 'package:virya/services/export_import/tcx_codec.dart';
 import 'package:uuid/uuid.dart';
 
-export 'package:stravo/services/export_import/parsed_activity.dart';
+export 'package:virya/services/export_import/parsed_activity.dart';
 
 /// Imports GPX / TCX / FIT (optionally .gz) and Strava bulk-export .zip.
 class ActivityImporter {

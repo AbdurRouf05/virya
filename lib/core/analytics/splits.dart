@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:stravo/core/analytics/analysis_models.dart';
-import 'package:stravo/core/analytics/geo.dart';
-import 'package:stravo/core/analytics/prepared_track.dart';
+import 'package:virya/core/analytics/analysis_models.dart';
+import 'package:virya/core/analytics/geo.dart';
+import 'package:virya/core/analytics/prepared_track.dart';
 
 /// Per-km splits. [gapCum] (cumulative grade-adjusted distance over moving
 /// intervals) is optional; when given each split gets a GAP speed.

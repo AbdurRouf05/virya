@@ -1,7 +1,7 @@
-import 'package:stravo/core/constants/enums.dart';
-import 'package:stravo/core/models/track_sample.dart';
-import 'package:stravo/services/export_import/parsed_activity.dart';
-import 'package:stravo/services/export_import/xml_util.dart';
+import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/models/track_sample.dart';
+import 'package:virya/services/export_import/parsed_activity.dart';
+import 'package:virya/services/export_import/xml_util.dart';
 import 'package:xml/xml.dart';
 
 /// Parse GPX 1.0/1.1 tracks (all trk/trkseg merged into one activity).
@@ -93,7 +93,7 @@ String buildGpx({
 }) {
   final b = StringBuffer()
     ..writeln('<?xml version="1.0" encoding="UTF-8"?>')
-    ..writeln('<gpx version="1.1" creator="Stravo Pro" '
+    ..writeln('<gpx version="1.1" creator="Virya" '
         'xmlns="http://www.topografix.com/GPX/1/1" '
         'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
         'xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" '

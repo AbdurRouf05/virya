@@ -1,5 +1,5 @@
-import 'package:stravo/core/location/geo_math.dart';
-import 'package:stravo/core/location/location_fix.dart';
+import 'package:virya/core/location/geo_math.dart';
+import 'package:virya/core/location/location_fix.dart';
 
 enum FixRejectReason { inaccurate, duplicate, teleport }
 

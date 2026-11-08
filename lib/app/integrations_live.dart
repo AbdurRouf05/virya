@@ -2,17 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stravo/app/integrations.dart';
-import 'package:stravo/core/backup/backup_service.dart';
-import 'package:stravo/core/database/app_database.dart';
-import 'package:stravo/features/maps/presentation/flyover_screen.dart';
-import 'package:stravo/features/maps/presentation/map_packs_screen.dart';
-import 'package:stravo/features/maps/widgets/route_map_view.dart';
-import 'package:stravo/features/recording/presentation/recording_screen.dart';
-import 'package:stravo/features/recording/presentation/recovery_prompt.dart';
-import 'package:stravo/features/share/presentation/share_studio_screen.dart';
-import 'package:stravo/services/export_import/activity_exporter.dart';
-import 'package:stravo/services/export_import/activity_importer.dart';
+import 'package:virya/app/integrations.dart';
+import 'package:virya/core/backup/backup_service.dart';
+import 'package:virya/core/database/app_database.dart';
+import 'package:virya/features/maps/presentation/flyover_screen.dart';
+import 'package:virya/features/maps/presentation/map_packs_screen.dart';
+import 'package:virya/features/maps/widgets/route_map_view.dart';
+import 'package:virya/features/recording/presentation/recording_screen.dart';
+import 'package:virya/features/recording/presentation/recovery_prompt.dart';
+import 'package:virya/features/share/presentation/share_studio_screen.dart';
+import 'package:virya/services/export_import/activity_exporter.dart';
+import 'package:virya/services/export_import/activity_importer.dart';
 
 /// Real wiring to the recording, share, maps and IO modules.
 class LiveIntegrations extends Integrations {
@@ -33,14 +33,13 @@ class LiveIntegrations extends Integrations {
     List<double>? values,
     String colorMode = 'plain',
     bool interactive = true,
-  }) =>
-      RouteMapView(
-        points: points,
-        values: values,
-        colorMode: RouteColorMode.values.asNameMap()[colorMode] ??
-            RouteColorMode.plain,
-        interactive: interactive,
-      );
+  }) => RouteMapView(
+    points: points,
+    values: values,
+    colorMode:
+        RouteColorMode.values.asNameMap()[colorMode] ?? RouteColorMode.plain,
+    interactive: interactive,
+  );
 
   @override
   Future<void> checkRecovery(BuildContext context, WidgetRef ref) =>

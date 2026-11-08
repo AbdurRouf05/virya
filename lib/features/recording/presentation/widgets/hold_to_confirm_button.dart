@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 /// Large button that only fires after being held for [holdDuration]
 /// (prevents accidental stops; usable with gloves).
@@ -8,7 +8,8 @@ class HoldToConfirmButton extends StatefulWidget {
   final String label;
   final IconData icon;
   final VoidCallback onConfirmed;
-  final Color color;
+  /// Accent color; defaults to [FN.signal].
+  final Color? color;
   final Duration holdDuration;
   final double height;
 
@@ -17,7 +18,7 @@ class HoldToConfirmButton extends StatefulWidget {
     required this.label,
     required this.icon,
     required this.onConfirmed,
-    this.color = FN.signal,
+    this.color,
     this.holdDuration = const Duration(milliseconds: 1200),
     this.height = 88,
   });
@@ -65,6 +66,7 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
 
   @override
   Widget build(BuildContext context) {
+    final color = widget.color ?? FN.signal;
     return Semantics(
       button: true,
       label: '${widget.label}, tahan untuk konfirmasi',
@@ -77,7 +79,7 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
           builder: (context, _) => Container(
             height: widget.height,
             decoration: BoxDecoration(
-              border: Border.all(color: widget.color, width: 2),
+              border: Border.all(color: color, width: 2),
               color: FN.night,
             ),
             child: Stack(
@@ -86,19 +88,19 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
                 FractionallySizedBox(
                   alignment: Alignment.bottomCenter,
                   heightFactor: _c.value,
-                  child: ColoredBox(color: widget.color),
+                  child: ColoredBox(color: color),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(widget.icon,
                         size: 30,
-                        color: _c.value > 0.5 ? FN.ink : widget.color),
+                        color: _c.value > 0.5 ? FN.ink : color),
                     const SizedBox(height: 4),
                     Text(widget.label,
                         style: FN.label(
                             size: 11,
-                            color: _c.value > 0.5 ? FN.ink : widget.color)),
+                            color: _c.value > 0.5 ? FN.ink : color)),
                   ],
                 ),
               ],

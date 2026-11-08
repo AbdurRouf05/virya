@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stravo/app/theme/field_notes.dart';
+import 'package:virya/app/theme/field_notes.dart';
 
 /// Hairline ink frame. Optional hard (unblurred) offset shadow like a
 /// printed block.
@@ -7,10 +7,12 @@ class InkBox extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
   final Color? color;
-  final Color borderColor;
+  final Color? _borderColor;
+  Color get borderColor => _borderColor ?? FN.ink;
   final double borderWidth;
   final bool hardShadow;
-  final Color shadowColor;
+  final Color? _shadowColor;
+  Color get shadowColor => _shadowColor ?? FN.ink;
   final VoidCallback? onTap;
 
   const InkBox({
@@ -18,12 +20,13 @@ class InkBox extends StatelessWidget {
     required this.child,
     this.padding = const EdgeInsets.all(12),
     this.color,
-    this.borderColor = FN.ink,
+    Color? borderColor,
     this.borderWidth = 1,
     this.hardShadow = false,
-    this.shadowColor = FN.ink,
+    Color? shadowColor,
     this.onTap,
-  });
+  }) : _shadowColor = shadowColor,
+       _borderColor = borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +55,15 @@ class InkBox extends StatelessWidget {
 /// 1px ink rule; dashed variant for notebook separators.
 class InkRule extends StatelessWidget {
   final bool dashed;
-  final Color color;
+  final Color? _color;
+  Color get color => _color ?? FN.ink;
   final double thickness;
-  const InkRule(
-      {super.key, this.dashed = false, this.color = FN.ink, this.thickness = 1});
+  const InkRule({
+    super.key,
+    this.dashed = false,
+    Color? color,
+    this.thickness = 1,
+  }) : _color = color;
 
   @override
   Widget build(BuildContext context) {
