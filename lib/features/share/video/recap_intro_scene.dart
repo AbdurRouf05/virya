@@ -19,9 +19,9 @@ void paintRecapIntro(Canvas c, RecapStage s, double t) {
   final rule = recapEase((t / 0.5).clamp(0, 1));
   c.drawRect(Rect.fromLTWH(22, 56, 316 * rule, 1.6), Paint()..color = ink);
 
-  final y0 = h * 0.36;
+  final y0 = h * 0.28;
   final big = TextPainter(
-    text: TextSpan(text: SF.sport(data.sport), style: FNExport.bigNumber(92, color: ink)),
+    text: TextSpan(text: SF.sport(data.sport), style: FNExport.bigNumber(62, color: ink)),
     textDirection: TextDirection.ltr,
   )..layout();
   final sc = math.min(1.0, 316 / big.width);
@@ -29,21 +29,24 @@ void paintRecapIntro(Canvas c, RecapStage s, double t) {
   c.translate(22, y0);
   c.scale(sc);
   final reveal = recapEase((t / 0.4).clamp(0, 1));
-  c.clipRect(Rect.fromLTWH(0, 0, big.width * reveal, big.height));
+  // Toleransi vertikal -24..+48 agar ascender font Anton tidak terpotong klip.
+  c.clipRect(Rect.fromLTWH(0, -24, big.width * reveal, big.height + 48));
   big.paint(c, Offset.zero);
   c.restore();
 
   final title = data.title.toUpperCase();
   final chars = (title.length * ((t - 0.2) / 0.55).clamp(0.0, 1.0)).round();
-  recapText(c, title.substring(0, chars), 22, y0 + big.height * sc + 10,
-      size: 15, color: ink, family: FNExport.sans, bold: true, maxW: 316);
-  recapText(c, '${SF.date(data.start)} · MULAI ${SF.time(data.start)}', 22,
-      y0 + big.height * sc + 36,
+  final titleY = y0 + big.height * sc + 10;
+  recapText(c, title.substring(0, chars), 22, titleY,
+      size: 14, color: ink, family: FNExport.sans, bold: true, maxW: 316);
+  final dateY = titleY + 24;
+  recapText(c, '${SF.date(data.start)} · MULAI ${SF.time(data.start)}', 22, dateY,
       mono: true, size: 9, color: FNExport.inkSoft);
 
   if (t > 0.55) {
     final k = recapEase(((t - 0.55) / 0.3).clamp(0, 1));
-    recapNote(c, Offset(22, h * 0.68), [
+    final noteY = math.max(dateY + 36, h * 0.58);
+    recapNote(c, Offset(22, noteY), [
       SF.coord(data.startLat, data.startLon),
       '${SF.km(data.distanceM)} KM',
     ], a, alpha: k);

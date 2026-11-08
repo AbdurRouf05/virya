@@ -16,11 +16,12 @@ class FieldNotesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final f = options.format;
     final accent = options.accent.resolve(dark: false);
-    final compact = f == CardFormat.square;
+    final isStory = f == CardFormat.story;
+    final isSquare = f == CardFormat.square;
     final big = switch (f) {
       CardFormat.story => 132.0,
-      CardFormat.feed => 100.0,
-      CardFormat.square => 78.0,
+      CardFormat.feed => 84.0,
+      CardFormat.square => 70.0,
     };
     final sectors = data.sectors;
     final topSector = sectors.isEmpty
@@ -32,9 +33,9 @@ class FieldNotesCard extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.fromLTRB(
           20,
-          compact ? 16 : 22,
+          isStory ? 22 : (isSquare ? 14 : 16),
           20,
-          compact ? 14 : 20,
+          isStory ? 20 : (isSquare ? 12 : 14),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -69,7 +70,7 @@ class FieldNotesCard extends StatelessWidget {
                 MonoLabel('MULAI ${SF.time(data.start)}', color: FNExport.inkSoft),
               ],
             ),
-            if (!compact) ...[
+            if (isStory) ...[
               const SizedBox(height: 4),
               Text(
                 data.title.toUpperCase(),
@@ -86,7 +87,7 @@ class FieldNotesCard extends StatelessWidget {
             ],
             Expanded(
               child: Stack(
-                clipBehavior: Clip.none,
+                clipBehavior: Clip.hardEdge,
                 children: [
                   Positioned.fill(
                     child: CustomPaint(
@@ -96,23 +97,23 @@ class FieldNotesCard extends StatelessWidget {
                         sectors: true,
                         width: 2.2,
                         markFill: FNExport.paper,
-                        padding: compact ? 14 : 24,
+                        padding: isStory ? 24 : 14,
                       ),
                     ),
                   ),
                   Positioned(
                     right: 0,
-                    top: compact ? 4 : 12,
+                    top: isStory ? 12 : 4,
                     child: CardNote(
                       lines: [
                         SF.coord(data.startLat, data.startLon),
                         'TITIK NOL',
                       ],
                       color: FNExport.ink,
-                      size: 7.5,
+                      size: isStory ? 7.5 : 7.0,
                     ),
                   ),
-                  if (topSector != null && !compact)
+                  if (topSector != null && isStory)
                     Positioned(
                       left: 0,
                       bottom: 6,
@@ -149,16 +150,16 @@ class FieldNotesCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             const HairRule(),
-            const SizedBox(height: 7),
+            const SizedBox(height: 6),
             StatStrip(
               stats: statValues(data, options.stats),
-              valueSize: compact ? 18 : 22,
+              valueSize: isStory ? 22 : 18,
             ),
-            const SizedBox(height: 7),
+            const SizedBox(height: 6),
             const HairRule(),
-            if (!compact) ...[
+            if (isStory) ...[
               const SizedBox(height: 7),
               Row(
                 children: [

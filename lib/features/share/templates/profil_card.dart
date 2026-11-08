@@ -19,11 +19,11 @@ class ProfilCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final f = options.format;
     final accent = options.accent.resolve(dark: false);
-    final compact = f == CardFormat.square;
+    final compact = f != CardFormat.story;
     final big = switch (f) {
       CardFormat.story => 92.0,
-      CardFormat.feed => 70.0,
-      CardFormat.square => 54.0,
+      CardFormat.feed => 64.0,
+      CardFormat.square => 52.0,
     };
     final stats = statValues(
       data,

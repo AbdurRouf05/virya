@@ -20,7 +20,7 @@ class SektorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final f = options.format;
     final accent = options.accent.resolve(dark: false);
-    final compact = f == CardFormat.square;
+    final compact = f != CardFormat.story;
     final maxRows = switch (f) {
       CardFormat.story => 7,
       CardFormat.feed => 4,
