@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 
 /// Colors used by the recap video scenes.
 class RecapPalette {
@@ -9,13 +9,13 @@ class RecapPalette {
       this.accent, this.panel);
 
   /// Night (dark scene) or paper palette with [accent]
-  /// (defaults to `FN.acid` at night, `FN.signal` on paper).
+  /// (defaults to `FNExport.acid` at night, `FNExport.signal` on paper).
   factory RecapPalette.of({required bool night, Color? accent}) {
-    final a = accent ?? (night ? FN.acid : FN.signal);
+    final a = accent ?? (night ? FNExport.acid : FNExport.signal);
     return night
-        ? RecapPalette(FN.night, FN.paper, const Color(0xFF8C887D), FN.nightLine,
-            const Color(0xFF24241F), a, FN.nightSurface)
-        : RecapPalette(FN.paper, FN.ink, FN.inkMuted, FN.ink, FN.paperLine, a,
-            FN.paperDeep);
+        ? RecapPalette(FNExport.night, FNExport.paper, const Color(0xFF8C887D), FNExport.nightLine,
+            const Color(0xFF24241F), a, FNExport.nightSurface)
+        : RecapPalette(FNExport.paper, FNExport.ink, FNExport.inkMuted, FNExport.ink, FNExport.paperLine, a,
+            FNExport.paperDeep);
   }
 }

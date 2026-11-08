@@ -8,6 +8,7 @@ Future<void> showStartSheet(
   required VoidCallback onRecordGps,
   VoidCallback? onStartGym,
   VoidCallback? onNewTask,
+  VoidCallback? onBodyCheckin,
 }) {
   return showModalBottomSheet<void>(
     context: context,
@@ -31,6 +32,12 @@ Future<void> showStartSheet(
               Navigator.of(sheet).pop();
               onNewTask();
             },
+      onBodyCheckin: onBodyCheckin == null
+          ? null
+          : () {
+              Navigator.of(sheet).pop();
+              onBodyCheckin();
+            },
     ),
   );
 }
@@ -41,11 +48,13 @@ class StartSheet extends StatelessWidget {
   final VoidCallback onRecordGps;
   final VoidCallback? onStartGym;
   final VoidCallback? onNewTask;
+  final VoidCallback? onBodyCheckin;
   const StartSheet({
     super.key,
     required this.onRecordGps,
     this.onStartGym,
     this.onNewTask,
+    this.onBodyCheckin,
   });
 
   @override
@@ -107,10 +116,11 @@ class StartSheet extends StatelessWidget {
                 subtitle: 'CATAT CEPAT',
                 onTap: onNewTask,
               ),
-              const _StartTile(
+              _StartTile(
                 icon: Icons.photo_camera_outlined,
                 title: 'FOTO TUBUH',
                 subtitle: 'CHECK-IN MINGGUAN',
+                onTap: onBodyCheckin,
               ),
             ),
           ],
@@ -152,7 +162,7 @@ class _StartTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = onTap != null;
-    final fg = enabled ? FN.ink : FN.inkMuted;
+    final fg = !enabled ? FN.inkMuted : (highlight ? FN.onAccent : FN.ink);
     return Semantics(
       button: true,
       enabled: enabled,

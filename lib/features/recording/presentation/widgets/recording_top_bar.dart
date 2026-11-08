@@ -26,7 +26,7 @@ class RecordingTopBar extends StatelessWidget {
           if (idle)
             IconButton(
               onPressed: onClose,
-              icon: Icon(Icons.close, color: FN.paper),
+              icon: Icon(Icons.close, color: FN.onNight),
               tooltip: 'Tutup',
             )
           else
@@ -45,11 +45,11 @@ class RecordingTopBar extends StatelessWidget {
                       style: TextStyle(
                           fontFamily: FN.display,
                           fontSize: 20,
-                          color: FN.paper,
+                          color: FN.onNight,
                           letterSpacing: 0.5),
                     ),
                   ),
-                  if (idle) Icon(Icons.expand_more, color: FN.paperLine),
+                  if (idle) Icon(Icons.expand_more, color: FN.onNightMuted),
                 ],
               ),
             ),

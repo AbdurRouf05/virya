@@ -80,7 +80,7 @@ class _Circle extends StatelessWidget {
       child: Container(
         width: 18,
         height: 18,
-        decoration: BoxDecoration(color: FN.paper, shape: BoxShape.circle),
+        decoration: BoxDecoration(color: FN.onNight, shape: BoxShape.circle),
       ),
     );
   }

@@ -19,7 +19,7 @@ void main() {
     if (dir.existsSync()) dir.deleteSync(recursive: true);
   });
 
-  test('database v3 naik ke v4 dengan tabel tasks + indeks', () async {
+  test('database v3 naik ke versi terbaru dengan tabel tasks + indeks', () async {
     var db = AppDatabase.forTesting(NativeDatabase(file));
     await db.activitiesDao.insertActivity(
       ActivitiesCompanion.insert(
@@ -33,6 +33,10 @@ void main() {
     );
     final exerciseCount = (await db.gymDao.watchExercises().first).length;
     await db.customStatement('DROP TABLE tasks');
+    await db.customStatement('DROP TABLE body_photos');
+    await db.customStatement('DROP TABLE body_checkins');
+    await db.customStatement('DROP TABLE app_limits');
+    await db.customStatement('DROP TABLE app_usage_days');
     await db.customStatement('PRAGMA user_version = 3');
     await db.close();
 
@@ -41,7 +45,7 @@ void main() {
         .customSelect('PRAGMA user_version')
         .map((r) => r.read<int>('user_version'))
         .getSingle();
-    expect(version, 4);
+    expect(version, 6);
 
     final objects = await db
         .customSelect('SELECT name FROM sqlite_master')

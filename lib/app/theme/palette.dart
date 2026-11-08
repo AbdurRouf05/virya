@@ -9,6 +9,12 @@ class Palette {
   final String id;
   final String name;
 
+  /// Satu kalimat di pemilih tampilan.
+  final String description;
+
+  /// Terang atau gelapnya halaman biasa (status bar ikut ini).
+  final Brightness brightness;
+
   // Day surfaces
   final Color paper;
   final Color paperDeep;
@@ -24,12 +30,19 @@ class Palette {
   final Color nightSurface;
   final Color nightLine;
 
+  /// Teks/ikon di atas permukaan night, foto, atau peta. Selalu terang.
+  final Color onNight;
+  final Color onNightMuted;
+
   // Accents
   final Color signal;
   final Color acid;
   final Color ok;
   final Color warn;
   final Color caution; // amber: degraded state (weak GPS, near limit)
+
+  /// Teks/ikon gelap di atas [signal] dan [acid]. Selalu gelap.
+  final Color onAccent;
 
   final Map<SurfaceType, Color> surface;
 
@@ -47,6 +60,8 @@ class Palette {
   const Palette({
     required this.id,
     required this.name,
+    required this.description,
+    required this.brightness,
     required this.paper,
     required this.paperDeep,
     required this.paperLine,
@@ -56,11 +71,14 @@ class Palette {
     required this.night,
     required this.nightSurface,
     required this.nightLine,
+    required this.onNight,
+    required this.onNightMuted,
     required this.signal,
     required this.acid,
     required this.ok,
     required this.warn,
     required this.caution,
+    required this.onAccent,
     required this.surface,
     required this.gradeRamp,
     required this.category,

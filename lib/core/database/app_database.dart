@@ -7,6 +7,8 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'package:virya/core/database/daos/activities_dao.dart';
+import 'package:virya/core/database/daos/body_dao.dart';
+import 'package:virya/core/database/daos/focus_dao.dart';
 import 'package:virya/core/database/daos/gears_dao.dart';
 import 'package:virya/core/database/daos/gym_dao.dart';
 import 'package:virya/core/database/daos/tasks_dao.dart';
@@ -14,6 +16,8 @@ import 'package:virya/core/database/daos/track_points_dao.dart';
 import 'package:virya/core/database/daos/waypoint_photos_dao.dart';
 import 'package:virya/core/database/tables/activities_table.dart';
 import 'package:virya/core/database/seed/exercise_library.dart';
+import 'package:virya/core/database/tables/body_tables.dart';
+import 'package:virya/core/database/tables/focus_tables.dart';
 import 'package:virya/core/database/tables/gears_table.dart';
 import 'package:virya/core/database/tables/gym_tables.dart';
 import 'package:virya/core/database/tables/segments_table.dart';
@@ -39,6 +43,10 @@ part 'app_database.g.dart';
     WorkoutTemplates,
     WorkoutTemplateItems,
     Tasks,
+    AppLimits,
+    AppUsageDays,
+    BodyCheckins,
+    BodyPhotos,
   ],
   daos: [
     ActivitiesDao,
@@ -47,6 +55,8 @@ part 'app_database.g.dart';
     GearsDao,
     GymDao,
     TasksDao,
+    FocusDao,
+    BodyDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -63,7 +73,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -104,6 +114,14 @@ class AppDatabase extends _$AppDatabase {
           if (from < 4) {
             await m.createTable(tasks);
             await _createTaskIndexes();
+          }
+          if (from < 5) {
+            await m.createTable(appLimits);
+            await m.createTable(appUsageDays);
+          }
+          if (from < 6) {
+            await m.createTable(bodyCheckins);
+            await m.createTable(bodyPhotos);
           }
         },
         beforeOpen: (details) async {
@@ -163,6 +181,14 @@ final gymDaoProvider = Provider<GymDao>((ref) {
 
 final tasksDaoProvider = Provider<TasksDao>((ref) {
   return ref.watch(databaseProvider).tasksDao;
+});
+
+final focusDaoProvider = Provider<FocusDao>((ref) {
+  return ref.watch(databaseProvider).focusDao;
+});
+
+final bodyDaoProvider = Provider<BodyDao>((ref) {
+  return ref.watch(databaseProvider).bodyDao;
 });
 
 final gearsDaoProvider = Provider<GearsDao>((ref) {

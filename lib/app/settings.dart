@@ -16,6 +16,10 @@ class SettingKeys {
   static const keepScreenOn = 'keep_screen_on';
   static const useSimulatedGps = 'use_simulated_gps';
 
+  /// Id style tampilan. Sengaja tidak ada di [settingDefaults]; lihat
+  /// [styleIdProvider].
+  static const styleId = 'style_id';
+
   /// Per-gear service reminder: "intervalKm|lastServiceKm".
   static String gearService(String gearId) => 'gear_service_$gearId';
 }
@@ -61,6 +65,17 @@ final settingsProvider =
     StateNotifierProvider<SettingsController, Map<String, String>>(
       (ref) => SettingsController(ref.watch(databaseProvider)),
     );
+
+/// Style yang dibaca dari database sebelum `runApp`, diisi di `main.dart`.
+final initialStyleIdProvider = Provider<String?>((ref) => null);
+
+/// Id style aktif. Selama pengaturan belum termuat nilainya dari
+/// [initialStyleIdProvider], jadi style tidak berkedip saat aplikasi dibuka.
+final styleIdProvider = Provider<String?>(
+  (ref) =>
+      ref.watch(settingsProvider)[SettingKeys.styleId] ??
+      ref.watch(initialStyleIdProvider),
+);
 
 final unitsProvider = Provider<Units>(
   (ref) => ref.watch(settingsProvider)[SettingKeys.units] == 'imperial'

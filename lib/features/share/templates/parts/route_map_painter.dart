@@ -1,14 +1,14 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_data.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/render/paper_painters.dart';
 import 'package:virya/features/share/render/route_projection.dart';
 
 /// 2D route map with start/finish and optional sector tags.
-/// [ink] defaults to `FN.ink`, [accent] to `FN.signal`.
+/// [ink] defaults to `FNExport.ink`, [accent] to `FNExport.signal`.
 class RouteMapPainter extends CustomPainter {
   final ShareData data;
   final Color? ink;
@@ -39,8 +39,8 @@ class RouteMapPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (!data.hasRoute) return;
-    final ink = this.ink ?? FN.ink;
-    final accent = this.accent ?? FN.signal;
+    final ink = this.ink ?? FNExport.ink;
+    final accent = this.accent ?? FNExport.signal;
     final pts = RouteProjection.fitPoints(
       data.lat,
       data.lon,
@@ -116,7 +116,7 @@ class RouteMapPainter extends CustomPainter {
         label.width + 6,
         label.height + 3,
       );
-      canvas.drawRect(box, Paint()..color = markFill ?? FN.paper);
+      canvas.drawRect(box, Paint()..color = markFill ?? FNExport.paper);
       canvas.drawRect(
         box,
         Paint()

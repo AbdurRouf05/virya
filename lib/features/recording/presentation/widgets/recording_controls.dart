@@ -63,7 +63,7 @@ class RecordingControls extends StatelessWidget {
             child: _BigButton(
               label: 'JEDA',
               icon: Icons.pause,
-              color: FN.paper,
+              color: FN.onNight,
               onTap: onPause,
             ),
           ),
@@ -141,13 +141,13 @@ class _BigButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 36, color: FN.ink),
+              Icon(icon, size: 36, color: FN.onAccent),
               const SizedBox(width: 10),
               Text(label,
                   style: TextStyle(
                       fontFamily: FN.display,
                       fontSize: 32,
-                      color: FN.ink,
+                      color: FN.onAccent,
                       letterSpacing: 1)),
             ],
           ),
@@ -173,7 +173,7 @@ class _SquareButton extends StatelessWidget {
         child: SizedBox(
           width: 72,
           height: 88,
-          child: Icon(icon, color: FN.paper, size: 30),
+          child: Icon(icon, color: FN.onNight, size: 30),
         ),
       ),
     );

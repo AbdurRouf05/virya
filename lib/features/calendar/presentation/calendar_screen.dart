@@ -109,6 +109,8 @@ class _CalendarBody extends ConsumerWidget {
             onOpen: (id) => _open(context, ref, id),
           ),
           ref.read(integrationsProvider).tasksDoneOn(sel),
+          ref.read(integrationsProvider).focusDayUsage(sel),
+          ref.read(integrationsProvider).bodyOnDay(sel),
         ],
       ],
     );

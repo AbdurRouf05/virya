@@ -60,15 +60,15 @@ class GymRestBar extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
-              Text(mmss, style: FN.bigNumber(44, color: FN.paper)),
+              Text(mmss, style: FN.bigNumber(44, color: FN.onNight)),
             ],
           ),
           const SizedBox(height: 10),
           Row(
             children: [
-              _btn('−15 D', onMinus, FN.paper),
+              _btn('−15 D', onMinus, FN.onNight),
               const SizedBox(width: 8),
-              _btn('+15 D', onPlus, FN.paper),
+              _btn('+15 D', onPlus, FN.onNight),
               const SizedBox(width: 8),
               _btn('LEWATI', onSkip, FN.acid),
             ],

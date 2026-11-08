@@ -31,6 +31,21 @@ class FN {
   static Color get nightSurface => _p.nightSurface;
   static Color get nightLine => _p.nightLine;
 
+  /// Teks/ikon di atas night, foto, atau peta. Jangan pakai [paper] di sana:
+  /// pada style gelap [paper] ikut gelap.
+  static Color get onNight => _p.onNight;
+  static Color get onNightMuted => _p.onNightMuted;
+
+  /// Teks/ikon gelap di atas [signal]/[acid], juga untuk bayangan dan scrim.
+  /// Jangan pakai [ink] di sana: pada style gelap [ink] menjadi terang.
+  static Color get onAccent => _p.onAccent;
+
+  static bool get isDark => _p.brightness == Brightness.dark;
+
+  /// Warna [accent] di atas blok berisi [ink]. Pada style gelap blok itu
+  /// terang sehingga aksen tidak terbaca, jadi dipakai [paper].
+  static Color onInk(Color accent) => isDark ? paper : accent;
+
   // Accents
   static Color get signal => _p.signal; // the one loud color
   static Color get acid => _p.acid; // highlight on night backgrounds only

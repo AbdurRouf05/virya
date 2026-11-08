@@ -65,7 +65,7 @@ class ActivityDetailStrength extends StatelessWidget {
                     child: StatBlock(
                       label: 'Durasi',
                       value: Fmt.duration(act.elapsedTimeSeconds),
-                      valueColor: FN.paper,
+                      valueColor: FN.onNight,
                       labelColor: FN.acid,
                       size: 36,
                     ),
@@ -74,7 +74,7 @@ class ActivityDetailStrength extends StatelessWidget {
                     end == null
                         ? Fmt.time(start)
                         : '${Fmt.time(start)}–${Fmt.time(end)}',
-                    style: FN.label(size: 10.5, color: FN.paper),
+                    style: FN.label(size: 10.5, color: FN.onNight),
                   ),
                 ],
               ),

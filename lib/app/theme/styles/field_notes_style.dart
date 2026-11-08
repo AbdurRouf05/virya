@@ -8,6 +8,11 @@ import 'package:virya/core/constants/sport_category.dart';
 const fieldNotesStyle = Palette(
   id: 'field_notes',
   name: 'Field Notes',
+  description: 'Kertas krem, tinta hitam, aksen oranye',
+  brightness: Brightness.light,
+  onNight: Color(0xFFEFE9DC),
+  onNightMuted: Color(0xFFCFC6B2),
+  onAccent: Color(0xFF141414),
   paper: Color(0xFFEFE9DC),
   paperDeep: Color(0xFFE3DBC9),
   paperLine: Color(0xFFCFC6B2),

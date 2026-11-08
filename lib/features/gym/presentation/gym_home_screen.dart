@@ -76,7 +76,7 @@ class _GymHomeScreenState extends ConsumerState<GymHomeScreen> {
                         style: TextStyle(
                           fontFamily: FN.display,
                           fontSize: 22,
-                          color: FN.paper,
+                          color: FN.onNight,
                         ),
                       ),
                     ],

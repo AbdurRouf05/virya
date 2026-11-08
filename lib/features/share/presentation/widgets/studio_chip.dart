@@ -23,8 +23,8 @@ class StudioChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 9),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: selected ? FN.paper : Colors.transparent,
-            border: Border.all(color: selected ? FN.paper : FN.nightLine),
+            color: selected ? FN.onNight : Colors.transparent,
+            border: Border.all(color: selected ? FN.onNight : FN.nightLine),
           ),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
             if (swatch != null) ...[
@@ -40,7 +40,7 @@ class StudioChip extends StatelessWidget {
             ],
             Text(
               label,
-              style: FN.label(size: 9.5, color: selected ? FN.ink : FN.paper)
+              style: FN.label(size: 9.5, color: selected ? FN.onAccent : FN.onNight)
                   .copyWith(fontWeight: FontWeight.w700),
             ),
           ]),

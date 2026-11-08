@@ -22,7 +22,7 @@ class FlyoverPlanError extends StatelessWidget {
                       'GAGAL MENYIAPKAN FLYOVER',
                       textAlign: TextAlign.center,
                       style: FN
-                          .label(size: 13, color: FN.paper)
+                          .label(size: 13, color: FN.onNight)
                           .copyWith(fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 8),
@@ -39,7 +39,7 @@ class FlyoverPlanError extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(left: 4, top: 4, child: BackButton(color: FN.paper)),
+            Positioned(left: 4, top: 4, child: BackButton(color: FN.onNight)),
           ],
         ),
       );

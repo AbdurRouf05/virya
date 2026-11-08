@@ -18,10 +18,10 @@ class ShareStudioScreen extends ConsumerWidget {
       backgroundColor: FN.night,
       appBar: AppBar(
         backgroundColor: FN.night,
-        foregroundColor: FN.paper,
+        foregroundColor: FN.onNight,
         elevation: 0,
         title: Text('STUDIO BAGIKAN',
-            style: FN.label(size: 13, color: FN.paper)
+            style: FN.label(size: 13, color: FN.onNight)
                 .copyWith(fontWeight: FontWeight.w700, letterSpacing: 2)),
       ),
       body: async.when(
@@ -45,7 +45,7 @@ class _Message extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           child: Text(text,
               textAlign: TextAlign.center,
-              style: FN.label(size: 12, color: FN.paper)),
+              style: FN.label(size: 12, color: FN.onNight)),
         ),
       );
 }

@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/painting.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/render/paper_painters.dart';
 import 'package:virya/features/share/render/topo_ink_renderer.dart';
@@ -36,7 +36,7 @@ void paintRecapRoute(Canvas c, RecapStage s, RecapFrame f) {
   if (data.surface.isNotEmpty) {
     final sf = data.surface[idx.clamp(0, data.surface.length - 1)];
     final y = h * 0.77;
-    c.drawRect(Rect.fromLTWH(22, y + 1, 8, 8), Paint()..color = FN.surface[sf]!);
+    c.drawRect(Rect.fromLTWH(22, y + 1, 8, 8), Paint()..color = FNExport.surface[sf]!);
     recapText(c, 'PERMUKAAN · ${SF.surface(sf)}', 36, y,
         mono: true, size: 8, color: pal.ink, bold: true);
   }
@@ -88,8 +88,8 @@ void _hud(Canvas c, RecapStage s, int idx, double distShown) {
   recapText(c, 'JARAK', 22, 50, mono: true, size: 7, color: pal.muted);
   final dv = TextPainter(
     text: TextSpan(children: [
-      TextSpan(text: SF.km(distShown), style: FN.bigNumber(58, color: pal.ink)),
-      TextSpan(text: ' KM', style: FN.bigNumber(18, color: pal.accent)),
+      TextSpan(text: SF.km(distShown), style: FNExport.bigNumber(58, color: pal.ink)),
+      TextSpan(text: ' KM', style: FNExport.bigNumber(18, color: pal.accent)),
     ]),
     textDirection: TextDirection.ltr,
   )..layout();
@@ -112,8 +112,8 @@ void _elevationStrip(Canvas c, RecapStage s, double p, int idx, double distShown
       ele: data.ele,
       grade: data.grade,
       byGrade: !night,
-      fill: night ? pal.panel : FN.ink,
-      edge: night ? pal.muted : FN.ink,
+      fill: night ? pal.panel : FNExport.ink,
+      edge: night ? pal.muted : FNExport.ink,
       edgeWidth: 1,
       hatch: !night,
       headroom: 0.05);

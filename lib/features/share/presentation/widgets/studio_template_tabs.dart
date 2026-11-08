@@ -39,7 +39,7 @@ class StudioTemplateTabs extends StatelessWidget {
                     t.label,
                     style: FN.label(
                       size: 11,
-                      color: t == selected ? FN.paper : FN.inkMuted,
+                      color: t == selected ? FN.onNight : FN.inkMuted,
                     ).copyWith(fontWeight: FontWeight.w700),
                   ),
                 ),

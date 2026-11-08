@@ -6,6 +6,13 @@ import 'package:virya/app/integrations.dart';
 import 'package:virya/core/backup/backup_service.dart';
 import 'package:virya/core/database/app_database.dart';
 import 'package:virya/features/activity_history/presentation/activity_detail_screen.dart';
+import 'package:virya/features/body/presentation/body_checkin_screen.dart';
+import 'package:virya/features/body/presentation/body_screen.dart';
+import 'package:virya/features/body/presentation/widgets/body_day_entry.dart';
+import 'package:virya/features/body/presentation/widgets/today_body_card.dart';
+import 'package:virya/features/focus/presentation/focus_host.dart';
+import 'package:virya/features/focus/presentation/widgets/focus_day_usage.dart';
+import 'package:virya/features/focus/presentation/widgets/today_focus_card.dart';
 import 'package:virya/features/gym/presentation/gym_home_screen.dart';
 import 'package:virya/features/gym/presentation/gym_launcher.dart';
 import 'package:virya/features/gym/presentation/gym_session_detail.dart';
@@ -73,6 +80,26 @@ class LiveIntegrations extends Integrations {
   Future<void> showQuickTask(BuildContext context) => showQuickAddTask(context);
   @override
   Widget taskHost({required Widget child}) => TaskHost(child: child);
+
+  @override
+  Widget todayFocusCard() => const TodayFocusCard();
+  @override
+  Widget focusDayUsage(DateTime day) => FocusDayUsage(day: day);
+  @override
+  Widget focusHost({required Widget child}) => FocusHost(child: child);
+
+  @override
+  Widget bodyHome() => const BodyScreen();
+  @override
+  Future<void> startBodyCheckin(BuildContext context) {
+    final now = DateTime.now();
+    return openBodyCheckin(context, DateTime(now.year, now.month, now.day));
+  }
+
+  @override
+  Widget todayBodyCard() => const TodayBodyCard();
+  @override
+  Widget bodyOnDay(DateTime day) => BodyDayEntry(day: day);
 
   @override
   Future<List<String>> importFile(AppDatabase db, String path) =>

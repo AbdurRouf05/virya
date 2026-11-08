@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/painting.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/video/recap_draw.dart';
 import 'package:virya/features/share/video/recap_stage.dart';
@@ -12,8 +12,8 @@ void paintRecapIntro(Canvas c, RecapStage s, double t) {
   final data = s.data;
   final h = s.h;
   s.background(c, paper: true);
-  final ink = FN.ink;
-  final a = s.pal.accent == FN.acid ? FN.signal : s.pal.accent;
+  final ink = FNExport.ink;
+  final a = s.pal.accent == FNExport.acid ? FNExport.signal : s.pal.accent;
   recapText(c, 'VIRYA · FIELD NOTES', 22, 40, mono: true, size: 9, color: ink, bold: true);
   recapTextR(c, SF.entryNo(data), 338, 40, size: 9, color: ink);
   final rule = recapEase((t / 0.5).clamp(0, 1));
@@ -21,7 +21,7 @@ void paintRecapIntro(Canvas c, RecapStage s, double t) {
 
   final y0 = h * 0.36;
   final big = TextPainter(
-    text: TextSpan(text: SF.sport(data.sport), style: FN.bigNumber(92, color: ink)),
+    text: TextSpan(text: SF.sport(data.sport), style: FNExport.bigNumber(92, color: ink)),
     textDirection: TextDirection.ltr,
   )..layout();
   final sc = math.min(1.0, 316 / big.width);
@@ -36,10 +36,10 @@ void paintRecapIntro(Canvas c, RecapStage s, double t) {
   final title = data.title.toUpperCase();
   final chars = (title.length * ((t - 0.2) / 0.55).clamp(0.0, 1.0)).round();
   recapText(c, title.substring(0, chars), 22, y0 + big.height * sc + 10,
-      size: 15, color: ink, family: FN.sans, bold: true, maxW: 316);
+      size: 15, color: ink, family: FNExport.sans, bold: true, maxW: 316);
   recapText(c, '${SF.date(data.start)} · MULAI ${SF.time(data.start)}', 22,
       y0 + big.height * sc + 36,
-      mono: true, size: 9, color: FN.inkSoft);
+      mono: true, size: 9, color: FNExport.inkSoft);
 
   if (t > 0.55) {
     final k = recapEase(((t - 0.55) / 0.3).clamp(0, 1));
@@ -49,6 +49,6 @@ void paintRecapIntro(Canvas c, RecapStage s, double t) {
     ], a, alpha: k);
   }
   recapText(c, 'RECAP · ${s.timeline.durationS.round()} DTK', 22, h - 40,
-      mono: true, size: 8, color: FN.inkMuted);
+      mono: true, size: 8, color: FNExport.inkMuted);
   s.grain(c, RecapScene.intro);
 }

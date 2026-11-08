@@ -35,8 +35,8 @@ class ClimbCard extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('KAT', style: FN.label(size: 8.5, color: FN.paper)),
-                  Text(cat, style: FN.bigNumber(34, color: FN.paper)),
+                  Text('KAT', style: FN.label(size: 8.5, color: FN.onNight)),
+                  Text(cat, style: FN.bigNumber(34, color: FN.onNight)),
                 ],
               ),
             ),

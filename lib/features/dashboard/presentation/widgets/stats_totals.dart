@@ -46,7 +46,7 @@ class StatsTotals extends StatelessWidget {
                     unit: fmt.distUnit,
                     size: 48,
                     valueColor: FN.paper,
-                    labelColor: FN.signal,
+                    labelColor: FN.onInk(FN.signal),
                   ),
                 ),
                 Column(

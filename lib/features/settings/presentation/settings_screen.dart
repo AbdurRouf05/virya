@@ -7,6 +7,7 @@ import 'package:virya/core/constants/enums.dart';
 import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/settings/data/data_actions.dart';
 import 'package:virya/features/settings/presentation/widgets/settings_row.dart';
+import 'package:virya/features/settings/presentation/widgets/style_picker.dart';
 
 /// "PENGATURAN" — units, recording, voice, data, about.
 class SettingsScreen extends ConsumerWidget {
@@ -58,6 +59,8 @@ class SettingsScreen extends ConsumerWidget {
                 title: 'Pengaturan',
                 subtitle: 'Semua tersimpan di perangkat, tanpa akun',
               ),
+              SectionHeader(number: sec.next(), title: 'Tampilan'),
+              _pad(const StylePicker()),
               SectionHeader(number: sec.next(), title: 'Satuan'),
               _pad(
                 chips(const [

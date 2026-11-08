@@ -14,12 +14,12 @@ class FlyoverChip extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
           decoration: BoxDecoration(
-            color: selected ? FN.paper : Colors.transparent,
-            border: Border.all(color: FN.paper, width: 1.2),
+            color: selected ? FN.onNight : Colors.transparent,
+            border: Border.all(color: FN.onNight, width: 1.2),
           ),
           child: Text(
             label,
-            style: FN.label(size: 11, color: selected ? FN.night : FN.paper),
+            style: FN.label(size: 11, color: selected ? FN.night : FN.onNight),
           ),
         ),
       );

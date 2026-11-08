@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_data.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/domain/share_options.dart';
@@ -33,7 +33,7 @@ class ProfilCard extends StatelessWidget {
     return CustomPaint(
       painter: PaperPainter(
         seed: data.seed + 5,
-        contour: FN.paperLine.withValues(alpha: 0.5),
+        contour: FNExport.paperLine.withValues(alpha: 0.5),
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(
@@ -50,12 +50,12 @@ class ProfilCard extends StatelessWidget {
                 Expanded(
                   child: MonoLabel(
                     'PROFIL ELEVASI',
-                    color: FN.ink,
+                    color: FNExport.ink,
                     weight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(width: 8),
-                MonoLabel(SF.date(data.start), color: FN.ink),
+                MonoLabel(SF.date(data.start), color: FNExport.ink),
               ],
             ),
             const SizedBox(height: 5),
@@ -75,7 +75,7 @@ class ProfilCard extends StatelessWidget {
                   padding: EdgeInsets.only(bottom: big * 0.1),
                   child: Text(
                     'M',
-                    style: FN.bigNumber(big * 0.3, color: accent),
+                    style: FNExport.bigNumber(big * 0.3, color: accent),
                   ),
                 ),
               ],
@@ -83,7 +83,7 @@ class ProfilCard extends StatelessWidget {
             const SizedBox(height: 3),
             MonoLabel(
               '${SF.km(data.distanceM)} KM · PUNCAK ${SF.meters(data.maxEleM)} MDPL · ${data.climbs.length} TANJAKAN',
-              color: FN.inkSoft,
+              color: FNExport.inkSoft,
             ),
             const SizedBox(height: 6),
             Expanded(
@@ -128,9 +128,9 @@ class _GradeLegend extends StatelessWidget {
         const MonoLabel('KEMIRINGAN %', size: 6.5),
         const SizedBox(width: 6),
         for (final s in _steps) ...[
-          Container(width: 8, height: 8, color: FN.grade(s.$1)),
+          Container(width: 8, height: 8, color: FNExport.grade(s.$1)),
           const SizedBox(width: 2),
-          MonoLabel(s.$2, size: 6.2, spacing: 0.4, color: FN.inkSoft),
+          MonoLabel(s.$2, size: 6.2, spacing: 0.4, color: FNExport.inkSoft),
           const SizedBox(width: 5),
         ],
       ],
@@ -179,12 +179,12 @@ class _ProfilePainter extends CustomPainter {
         ? 2
         : 1;
     final tick = Paint()
-      ..color = FN.ink
+      ..color = FNExport.ink
       ..strokeWidth = 0.8;
     for (var k = 0; k <= km; k += stepKm) {
       final x = rect.left + k * 1000 / math.max(total, 1) * rect.width;
       canvas.drawLine(Offset(x, rect.bottom), Offset(x, rect.bottom + 3), tick);
-      final tp = monoText('$k', size: 6.5, color: FN.inkMuted, spacing: 0.4);
+      final tp = monoText('$k', size: 6.5, color: FNExport.inkMuted, spacing: 0.4);
       tp.paint(
         canvas,
         Offset(math.min(x + 1.5, size.width - tp.width), rect.bottom + 3),
@@ -208,7 +208,7 @@ class _ProfilePainter extends CustomPainter {
       final l2 = monoText(
         '+${c.gainM.round()} M · ${c.avgGradePct.toStringAsFixed(1)}% · ${SF.km(c.lengthM)} KM',
         size: 6.2,
-        color: FN.ink,
+        color: FNExport.ink,
         spacing: 0.5,
       );
       final w = math.max(l1.width, l2.width) + 8;
@@ -227,17 +227,17 @@ class _ProfilePainter extends CustomPainter {
         Offset(peak.dx, peak.dy - 3),
         Offset(peak.dx, box.bottom),
         Paint()
-          ..color = FN.ink
+          ..color = FNExport.ink
           ..strokeWidth = 0.7,
       );
       canvas.drawCircle(peak, 2.6, Paint()..color = accent);
-      canvas.drawRect(box, Paint()..color = FN.paper);
+      canvas.drawRect(box, Paint()..color = FNExport.paper);
       canvas.drawRect(
         box,
         Paint()
           ..style = PaintingStyle.stroke
           ..strokeWidth = 0.8
-          ..color = FN.ink,
+          ..color = FNExport.ink,
       );
       l1.paint(canvas, box.topLeft + const Offset(4, 2));
       l2.paint(canvas, box.topLeft + Offset(4, 3 + l1.height));
@@ -247,7 +247,7 @@ class _ProfilePainter extends CustomPainter {
     final hi = monoText(
       '${SF.meters(data.maxEleM)} M',
       size: 6.5,
-      color: FN.inkMuted,
+      color: FNExport.inkMuted,
     );
     hi.paint(canvas, Offset(size.width - hi.width, top - hi.height - 1));
   }

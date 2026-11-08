@@ -10,7 +10,7 @@ class FieldNotesTheme {
   );
 
   static ThemeData get paper => _build(
-    brightness: Brightness.light,
+    brightness: FN.palette.brightness,
     bg: FN.paper,
     surface: FN.paper,
     surfaceHigh: FN.paperDeep,
@@ -25,8 +25,8 @@ class FieldNotesTheme {
     bg: FN.night,
     surface: FN.nightSurface,
     surfaceHigh: FN.nightLine,
-    fg: FN.paper,
-    muted: FN.paperLine,
+    fg: FN.onNight,
+    muted: FN.onNightMuted,
     line: FN.nightLine,
     accent: FN.acid,
   );
@@ -46,11 +46,11 @@ class FieldNotesTheme {
       primary: fg,
       onPrimary: bg,
       secondary: accent,
-      onSecondary: FN.ink,
+      onSecondary: FN.onAccent,
       tertiary: FN.signal,
-      onTertiary: FN.ink,
+      onTertiary: FN.onAccent,
       error: FN.warn,
-      onError: FN.paper,
+      onError: FN.onNight,
       surface: surface,
       onSurface: fg,
       onSurfaceVariant: muted,

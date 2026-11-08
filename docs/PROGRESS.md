@@ -18,12 +18,39 @@ Newest entries on top. Baru bergabung? Mulai dari [PANDUAN.md](PANDUAN.md). Atur
 | F3 | Logo + splash, Hari Ini, navigasi baru, kalender, peta gabungan | — | ✅ Done |
 | F4 | Gym (gerakan, set, template, PR) | — | ✅ Done (22 tes gym) — uji perangkat pending |
 | F5 | Tugas, widget layar utama, catat cepat dari notifikasi | — | ✅ Done (38 tes tugas) — uji perangkat pending |
-| F6 | Fokus: batas waktu harian per aplikasi (Android) | — | 🚧 Sedang dikerjakan |
-| F7 | Progres tubuh: foto berkala, perbandingan, timelapse | — | 🔜 Planned |
-| F8 | Mode style tambahan | — | 🔜 Planned |
+| F6 | Fokus: batas waktu harian per aplikasi (Android) | — | ✅ Done (41 tes baru) — uji perangkat pending |
+| F7 | Progres tubuh: foto berkala, perbandingan, timelapse | — | ✅ Done (60 tes baru) — uji perangkat pending |
+| F8 | Mode style tambahan | — | ✅ Done (39 tes baru) — uji perangkat pending |
 | 2 | Wave 2: live segments + ghost pacer, personal heatmap, BLE HR, polish | — | 🔜 Planned |
 
 ## Log
+
+### 2026-11-08 — Fase 8: Mode style ✅
+- Tiga style baru selain Field Notes: **Malam** (gelap), **Cetak Biru**, **Hutan**. Semuanya memakai font yang sudah ada di aplikasi. Daftarnya di `lib/app/theme/styles/styles.dart`; id yang tidak dikenal jatuh ke Field Notes.
+- Token baru `FN.onNight`, `FN.onNightMuted`, `FN.onAccent`, `FN.isDark`, dan `FN.onInk(accent)`, supaya teks di atas foto, peta, dan warna aksen tetap terbaca di style gelap. Nilainya sama dengan warna lama di Field Notes, jadi tampilan Field Notes tidak berubah. Aturan pakainya di `ARCHITECTURE.md` bagian 5.
+- `FNExport` selalu Field Notes. Dipakai oleh kartu share, video recap, timelapse, dan warna rute di peta dasar yang tetap krem.
+- Pilihan ada di Pengaturan → Tampilan (`StylePicker`), tersimpan di setting `style_id`, dan dibaca sebelum `runApp` supaya tidak berkedip saat aplikasi dibuka.
+- `MaterialApp` memakai `ValueKey(style.id)`, karena banyak widget `const` membaca `FN.*`. Akibatnya, setelah ganti style aplikasi kembali ke beranda; state Riverpod tetap ada.
+- Belum mengikuti style: splash native, widget layar utama, layar blokir Fokus, warna zona di `surface_bar.dart`, dan cover loading flyover.
+- Tes rebuild memakai `ViryaApp(home: Scaffold())`, karena tes dengan `HomeShell` asli macet dan penyebabnya belum dipastikan. Tes itu juga mencatat overflow 28 px di `today_training_card.dart:61` pada lebar 186 px. Font tes (Ahem) lebih lebar dari font asli, jadi perlu dicek di HP.
+- Verifikasi: analyze bersih, 445 tes lulus, APK debug berhasil. Belum diuji di HP; daftarnya di `PANDUAN.md` bagian 8.
+
+### 2026-11-08 — Fase 7: Progres tubuh ✅
+- **Skema DB v6**: tabel `body_checkins` (satu check-in per hari, `day` berupa `YYYY-MM-DD`) dan `body_photos` (cascade dari check-in, satu foto per pose), migrasi 5→6, `BodyDao`.
+- `features/body`: layar PROGRES TUBUH (grafik berat, grid foto per tanggal), form check-in (3 pose, 5 ukuran, catatan), kamera dengan bayangan foto sebelumnya, slider sebelum/sesudah, dan video timelapse 720x960 yang bisa dibagikan.
+- Foto disimpan di `photos/body/` dalam folder dokumen aplikasi, jadi tidak masuk galeri dan ikut backup. Database menyimpan path relatif supaya restore di HP lain tetap jalan. Video timelapse dibuat di folder sementara dan dihapus saat dialog ditutup.
+- Pratinjau, bayangan, tampilan foto, dan timelapse semuanya memakai potongan tengah 3:4, supaya posisi tetap sejajar walau rasio kamera berbeda.
+- Pengingat di Hari Ini muncul 7 hari setelah check-in terakhir (konstanta, belum ada pengaturan) dan hanya bila sudah pernah check-in.
+- Titik masuk: tombol FOTO TUBUH di lembar "MAU NGAPAIN?", seksi Progres tubuh di Profil, kartu pengingat di Hari Ini, dan detail hari kalender.
+- `video_encoder.dart` pindah dari `features/share/video/` ke `core/video/` karena dipakai dua modul. Paket baru: `camera`.
+- Verifikasi: analyze bersih, 406 tes lulus, APK debug berhasil. Kamera dan encoder belum diuji di HP; daftarnya di `PANDUAN.md` bagian 8.
+
+### 2026-11-08 — Fase 6: Fokus ✅
+- **Skema DB v5**: tabel `app_limits` dan `app_usage_days`, migrasi 4→5, `FocusDao`. Riwayat ikut menyimpan nama dan batas yang berlaku saat itu, jadi tetap benar setelah batasnya diubah atau dihapus. Pemakaian sebelum batas dibuat tidak dicatat.
+- `features/focus`: layar FOKUS (izin, daftar batas, pilih aplikasi, atur menit), kartu Fokus di Hari Ini setelah Tugas, pemakaian per aplikasi di detail hari kalender. `FocusHost` menyinkronkan saat aplikasi aktif dan tiap 60 detik.
+- Native `android/.../focus/`, channel `virya/focus`: pemakaian dihitung dari event `UsageStatsManager` per hari lokal; `FocusAccessibilityService` menutup aplikasi saat kuota habis dan membuka layar "Waktu habis" dengan +5 menit (1× per aplikasi per hari). Native tidak menulis ke SQLite.
+- Belum ada: titik penanda di sel grid kalender (indikator baru ada di detail hari).
+- Verifikasi: analyze bersih, 346 tes lulus, APK debug berhasil. Belum diuji di HP; daftarnya di `PANDUAN.md` bagian 8.
 
 ### 2026-11-08 — Fase 5: Tugas ✅
 - **Skema DB v4**: tabel `tasks` + indeks `done_at`, migrasi 3→4, `TasksDao`. Jatuh tempo disimpan sebagai teks `YYYY-MM-DD` agar tidak bergeser saat zona waktu berubah.

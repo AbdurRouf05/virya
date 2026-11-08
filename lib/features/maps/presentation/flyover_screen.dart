@@ -98,7 +98,7 @@ class _FlyoverScreenState extends ConsumerState<FlyoverScreen>
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: FN.nightSurface,
-        content: Text(m, style: FN.label(size: 12, color: FN.paper)),
+        content: Text(m, style: FN.label(size: 12, color: FN.onNight)),
       ),
     );
   }

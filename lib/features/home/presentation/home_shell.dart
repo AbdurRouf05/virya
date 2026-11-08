@@ -53,6 +53,8 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     onRecordGps: _openRecording,
     onStartGym: () => ref.read(integrationsProvider).startGym(context, ref),
     onNewTask: () => ref.read(integrationsProvider).showQuickTask(context),
+    onBodyCheckin: () =>
+        ref.read(integrationsProvider).startBodyCheckin(context),
   );
 
   Widget _page(int i) {
@@ -68,23 +70,24 @@ class _HomeShellState extends ConsumerState<HomeShell> {
 
   @override
   Widget build(BuildContext context) {
-    return ref
-        .read(integrationsProvider)
-        .taskHost(
-          child: Scaffold(
-            body: IndexedStack(
-              index: _tab,
-              children: [for (var i = 0; i < 4; i++) _page(i)],
-            ),
-            bottomNavigationBar: FieldNotesNavBar(
-              index: _tab,
-              onTab: (i) => setState(() {
-                _tab = i;
-                _built.add(i);
-              }),
-              onRecord: _openStartSheet,
-            ),
+    final integ = ref.read(integrationsProvider);
+    return integ.focusHost(
+      child: integ.taskHost(
+        child: Scaffold(
+          body: IndexedStack(
+            index: _tab,
+            children: [for (var i = 0; i < 4; i++) _page(i)],
           ),
-        );
+          bottomNavigationBar: FieldNotesNavBar(
+            index: _tab,
+            onTab: (i) => setState(() {
+              _tab = i;
+              _built.add(i);
+            }),
+            onRecord: _openStartSheet,
+          ),
+        ),
+      ),
+    );
   }
 }

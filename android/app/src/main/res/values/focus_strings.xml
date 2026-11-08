@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="focus_service_label">Virya Fokus</string>
+    <string name="focus_service_description">Dipakai untuk mengetahui aplikasi mana yang sedang terbuka dan menutupnya saat batas harian habis. Isi layar tidak dibaca dan tidak ada data yang keluar dari HP.</string>
+    <string name="focus_block_title">Waktu habis</string>
+    <string name="focus_block_message">Batas %1$d menit hari ini sudah terpakai</string>
+    <string name="focus_block_extend">Tambah 5 menit</string>
+    <string name="focus_block_close">Tutup</string>
+</resources>

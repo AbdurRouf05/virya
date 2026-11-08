@@ -7867,6 +7867,1701 @@ class TasksCompanion extends UpdateCompanion<Task> {
   }
 }
 
+class $AppLimitsTable extends AppLimits
+    with TableInfo<$AppLimitsTable, AppLimit> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AppLimitsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _packageNameMeta = const VerificationMeta(
+    'packageName',
+  );
+  @override
+  late final GeneratedColumn<String> packageName = GeneratedColumn<String>(
+    'package_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _labelMeta = const VerificationMeta('label');
+  @override
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+    'label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dailyMinutesMeta = const VerificationMeta(
+    'dailyMinutes',
+  );
+  @override
+  late final GeneratedColumn<int> dailyMinutes = GeneratedColumn<int>(
+    'daily_minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _enabledMeta = const VerificationMeta(
+    'enabled',
+  );
+  @override
+  late final GeneratedColumn<bool> enabled = GeneratedColumn<bool>(
+    'enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("enabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    packageName,
+    label,
+    dailyMinutes,
+    enabled,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'app_limits';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AppLimit> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('package_name')) {
+      context.handle(
+        _packageNameMeta,
+        packageName.isAcceptableOrUnknown(
+          data['package_name']!,
+          _packageNameMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_packageNameMeta);
+    }
+    if (data.containsKey('label')) {
+      context.handle(
+        _labelMeta,
+        label.isAcceptableOrUnknown(data['label']!, _labelMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_labelMeta);
+    }
+    if (data.containsKey('daily_minutes')) {
+      context.handle(
+        _dailyMinutesMeta,
+        dailyMinutes.isAcceptableOrUnknown(
+          data['daily_minutes']!,
+          _dailyMinutesMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_dailyMinutesMeta);
+    }
+    if (data.containsKey('enabled')) {
+      context.handle(
+        _enabledMeta,
+        enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {packageName};
+  @override
+  AppLimit map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AppLimit(
+      packageName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}package_name'],
+      )!,
+      label: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}label'],
+      )!,
+      dailyMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}daily_minutes'],
+      )!,
+      enabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}enabled'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $AppLimitsTable createAlias(String alias) {
+    return $AppLimitsTable(attachedDatabase, alias);
+  }
+}
+
+class AppLimit extends DataClass implements Insertable<AppLimit> {
+  final String packageName;
+  final String label;
+  final int dailyMinutes;
+  final bool enabled;
+
+  /// Pemakaian sebelum tanggal ini tidak dicatat sebagai riwayat.
+  final DateTime createdAt;
+  const AppLimit({
+    required this.packageName,
+    required this.label,
+    required this.dailyMinutes,
+    required this.enabled,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['package_name'] = Variable<String>(packageName);
+    map['label'] = Variable<String>(label);
+    map['daily_minutes'] = Variable<int>(dailyMinutes);
+    map['enabled'] = Variable<bool>(enabled);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  AppLimitsCompanion toCompanion(bool nullToAbsent) {
+    return AppLimitsCompanion(
+      packageName: Value(packageName),
+      label: Value(label),
+      dailyMinutes: Value(dailyMinutes),
+      enabled: Value(enabled),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory AppLimit.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AppLimit(
+      packageName: serializer.fromJson<String>(json['packageName']),
+      label: serializer.fromJson<String>(json['label']),
+      dailyMinutes: serializer.fromJson<int>(json['dailyMinutes']),
+      enabled: serializer.fromJson<bool>(json['enabled']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'packageName': serializer.toJson<String>(packageName),
+      'label': serializer.toJson<String>(label),
+      'dailyMinutes': serializer.toJson<int>(dailyMinutes),
+      'enabled': serializer.toJson<bool>(enabled),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  AppLimit copyWith({
+    String? packageName,
+    String? label,
+    int? dailyMinutes,
+    bool? enabled,
+    DateTime? createdAt,
+  }) => AppLimit(
+    packageName: packageName ?? this.packageName,
+    label: label ?? this.label,
+    dailyMinutes: dailyMinutes ?? this.dailyMinutes,
+    enabled: enabled ?? this.enabled,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  AppLimit copyWithCompanion(AppLimitsCompanion data) {
+    return AppLimit(
+      packageName: data.packageName.present
+          ? data.packageName.value
+          : this.packageName,
+      label: data.label.present ? data.label.value : this.label,
+      dailyMinutes: data.dailyMinutes.present
+          ? data.dailyMinutes.value
+          : this.dailyMinutes,
+      enabled: data.enabled.present ? data.enabled.value : this.enabled,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppLimit(')
+          ..write('packageName: $packageName, ')
+          ..write('label: $label, ')
+          ..write('dailyMinutes: $dailyMinutes, ')
+          ..write('enabled: $enabled, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(packageName, label, dailyMinutes, enabled, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AppLimit &&
+          other.packageName == this.packageName &&
+          other.label == this.label &&
+          other.dailyMinutes == this.dailyMinutes &&
+          other.enabled == this.enabled &&
+          other.createdAt == this.createdAt);
+}
+
+class AppLimitsCompanion extends UpdateCompanion<AppLimit> {
+  final Value<String> packageName;
+  final Value<String> label;
+  final Value<int> dailyMinutes;
+  final Value<bool> enabled;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const AppLimitsCompanion({
+    this.packageName = const Value.absent(),
+    this.label = const Value.absent(),
+    this.dailyMinutes = const Value.absent(),
+    this.enabled = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AppLimitsCompanion.insert({
+    required String packageName,
+    required String label,
+    required int dailyMinutes,
+    this.enabled = const Value.absent(),
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : packageName = Value(packageName),
+       label = Value(label),
+       dailyMinutes = Value(dailyMinutes),
+       createdAt = Value(createdAt);
+  static Insertable<AppLimit> custom({
+    Expression<String>? packageName,
+    Expression<String>? label,
+    Expression<int>? dailyMinutes,
+    Expression<bool>? enabled,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (packageName != null) 'package_name': packageName,
+      if (label != null) 'label': label,
+      if (dailyMinutes != null) 'daily_minutes': dailyMinutes,
+      if (enabled != null) 'enabled': enabled,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AppLimitsCompanion copyWith({
+    Value<String>? packageName,
+    Value<String>? label,
+    Value<int>? dailyMinutes,
+    Value<bool>? enabled,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return AppLimitsCompanion(
+      packageName: packageName ?? this.packageName,
+      label: label ?? this.label,
+      dailyMinutes: dailyMinutes ?? this.dailyMinutes,
+      enabled: enabled ?? this.enabled,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (packageName.present) {
+      map['package_name'] = Variable<String>(packageName.value);
+    }
+    if (label.present) {
+      map['label'] = Variable<String>(label.value);
+    }
+    if (dailyMinutes.present) {
+      map['daily_minutes'] = Variable<int>(dailyMinutes.value);
+    }
+    if (enabled.present) {
+      map['enabled'] = Variable<bool>(enabled.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppLimitsCompanion(')
+          ..write('packageName: $packageName, ')
+          ..write('label: $label, ')
+          ..write('dailyMinutes: $dailyMinutes, ')
+          ..write('enabled: $enabled, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AppUsageDaysTable extends AppUsageDays
+    with TableInfo<$AppUsageDaysTable, AppUsageDay> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AppUsageDaysTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _dayMeta = const VerificationMeta('day');
+  @override
+  late final GeneratedColumn<String> day = GeneratedColumn<String>(
+    'day',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _packageNameMeta = const VerificationMeta(
+    'packageName',
+  );
+  @override
+  late final GeneratedColumn<String> packageName = GeneratedColumn<String>(
+    'package_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _labelMeta = const VerificationMeta('label');
+  @override
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+    'label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _minutesMeta = const VerificationMeta(
+    'minutes',
+  );
+  @override
+  late final GeneratedColumn<int> minutes = GeneratedColumn<int>(
+    'minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _limitMinutesMeta = const VerificationMeta(
+    'limitMinutes',
+  );
+  @override
+  late final GeneratedColumn<int> limitMinutes = GeneratedColumn<int>(
+    'limit_minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    day,
+    packageName,
+    label,
+    minutes,
+    limitMinutes,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'app_usage_days';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AppUsageDay> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('day')) {
+      context.handle(
+        _dayMeta,
+        day.isAcceptableOrUnknown(data['day']!, _dayMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dayMeta);
+    }
+    if (data.containsKey('package_name')) {
+      context.handle(
+        _packageNameMeta,
+        packageName.isAcceptableOrUnknown(
+          data['package_name']!,
+          _packageNameMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_packageNameMeta);
+    }
+    if (data.containsKey('label')) {
+      context.handle(
+        _labelMeta,
+        label.isAcceptableOrUnknown(data['label']!, _labelMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_labelMeta);
+    }
+    if (data.containsKey('minutes')) {
+      context.handle(
+        _minutesMeta,
+        minutes.isAcceptableOrUnknown(data['minutes']!, _minutesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_minutesMeta);
+    }
+    if (data.containsKey('limit_minutes')) {
+      context.handle(
+        _limitMinutesMeta,
+        limitMinutes.isAcceptableOrUnknown(
+          data['limit_minutes']!,
+          _limitMinutesMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_limitMinutesMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {day, packageName};
+  @override
+  AppUsageDay map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AppUsageDay(
+      day: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}day'],
+      )!,
+      packageName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}package_name'],
+      )!,
+      label: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}label'],
+      )!,
+      minutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}minutes'],
+      )!,
+      limitMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}limit_minutes'],
+      )!,
+    );
+  }
+
+  @override
+  $AppUsageDaysTable createAlias(String alias) {
+    return $AppUsageDaysTable(attachedDatabase, alias);
+  }
+}
+
+class AppUsageDay extends DataClass implements Insertable<AppUsageDay> {
+  /// Hari lokal, format `YYYY-MM-DD`.
+  final String day;
+  final String packageName;
+  final String label;
+  final int minutes;
+  final int limitMinutes;
+  const AppUsageDay({
+    required this.day,
+    required this.packageName,
+    required this.label,
+    required this.minutes,
+    required this.limitMinutes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['day'] = Variable<String>(day);
+    map['package_name'] = Variable<String>(packageName);
+    map['label'] = Variable<String>(label);
+    map['minutes'] = Variable<int>(minutes);
+    map['limit_minutes'] = Variable<int>(limitMinutes);
+    return map;
+  }
+
+  AppUsageDaysCompanion toCompanion(bool nullToAbsent) {
+    return AppUsageDaysCompanion(
+      day: Value(day),
+      packageName: Value(packageName),
+      label: Value(label),
+      minutes: Value(minutes),
+      limitMinutes: Value(limitMinutes),
+    );
+  }
+
+  factory AppUsageDay.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AppUsageDay(
+      day: serializer.fromJson<String>(json['day']),
+      packageName: serializer.fromJson<String>(json['packageName']),
+      label: serializer.fromJson<String>(json['label']),
+      minutes: serializer.fromJson<int>(json['minutes']),
+      limitMinutes: serializer.fromJson<int>(json['limitMinutes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'day': serializer.toJson<String>(day),
+      'packageName': serializer.toJson<String>(packageName),
+      'label': serializer.toJson<String>(label),
+      'minutes': serializer.toJson<int>(minutes),
+      'limitMinutes': serializer.toJson<int>(limitMinutes),
+    };
+  }
+
+  AppUsageDay copyWith({
+    String? day,
+    String? packageName,
+    String? label,
+    int? minutes,
+    int? limitMinutes,
+  }) => AppUsageDay(
+    day: day ?? this.day,
+    packageName: packageName ?? this.packageName,
+    label: label ?? this.label,
+    minutes: minutes ?? this.minutes,
+    limitMinutes: limitMinutes ?? this.limitMinutes,
+  );
+  AppUsageDay copyWithCompanion(AppUsageDaysCompanion data) {
+    return AppUsageDay(
+      day: data.day.present ? data.day.value : this.day,
+      packageName: data.packageName.present
+          ? data.packageName.value
+          : this.packageName,
+      label: data.label.present ? data.label.value : this.label,
+      minutes: data.minutes.present ? data.minutes.value : this.minutes,
+      limitMinutes: data.limitMinutes.present
+          ? data.limitMinutes.value
+          : this.limitMinutes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppUsageDay(')
+          ..write('day: $day, ')
+          ..write('packageName: $packageName, ')
+          ..write('label: $label, ')
+          ..write('minutes: $minutes, ')
+          ..write('limitMinutes: $limitMinutes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(day, packageName, label, minutes, limitMinutes);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AppUsageDay &&
+          other.day == this.day &&
+          other.packageName == this.packageName &&
+          other.label == this.label &&
+          other.minutes == this.minutes &&
+          other.limitMinutes == this.limitMinutes);
+}
+
+class AppUsageDaysCompanion extends UpdateCompanion<AppUsageDay> {
+  final Value<String> day;
+  final Value<String> packageName;
+  final Value<String> label;
+  final Value<int> minutes;
+  final Value<int> limitMinutes;
+  final Value<int> rowid;
+  const AppUsageDaysCompanion({
+    this.day = const Value.absent(),
+    this.packageName = const Value.absent(),
+    this.label = const Value.absent(),
+    this.minutes = const Value.absent(),
+    this.limitMinutes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AppUsageDaysCompanion.insert({
+    required String day,
+    required String packageName,
+    required String label,
+    required int minutes,
+    required int limitMinutes,
+    this.rowid = const Value.absent(),
+  }) : day = Value(day),
+       packageName = Value(packageName),
+       label = Value(label),
+       minutes = Value(minutes),
+       limitMinutes = Value(limitMinutes);
+  static Insertable<AppUsageDay> custom({
+    Expression<String>? day,
+    Expression<String>? packageName,
+    Expression<String>? label,
+    Expression<int>? minutes,
+    Expression<int>? limitMinutes,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (day != null) 'day': day,
+      if (packageName != null) 'package_name': packageName,
+      if (label != null) 'label': label,
+      if (minutes != null) 'minutes': minutes,
+      if (limitMinutes != null) 'limit_minutes': limitMinutes,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AppUsageDaysCompanion copyWith({
+    Value<String>? day,
+    Value<String>? packageName,
+    Value<String>? label,
+    Value<int>? minutes,
+    Value<int>? limitMinutes,
+    Value<int>? rowid,
+  }) {
+    return AppUsageDaysCompanion(
+      day: day ?? this.day,
+      packageName: packageName ?? this.packageName,
+      label: label ?? this.label,
+      minutes: minutes ?? this.minutes,
+      limitMinutes: limitMinutes ?? this.limitMinutes,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (day.present) {
+      map['day'] = Variable<String>(day.value);
+    }
+    if (packageName.present) {
+      map['package_name'] = Variable<String>(packageName.value);
+    }
+    if (label.present) {
+      map['label'] = Variable<String>(label.value);
+    }
+    if (minutes.present) {
+      map['minutes'] = Variable<int>(minutes.value);
+    }
+    if (limitMinutes.present) {
+      map['limit_minutes'] = Variable<int>(limitMinutes.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppUsageDaysCompanion(')
+          ..write('day: $day, ')
+          ..write('packageName: $packageName, ')
+          ..write('label: $label, ')
+          ..write('minutes: $minutes, ')
+          ..write('limitMinutes: $limitMinutes, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BodyCheckinsTable extends BodyCheckins
+    with TableInfo<$BodyCheckinsTable, BodyCheckin> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BodyCheckinsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _dayMeta = const VerificationMeta('day');
+  @override
+  late final GeneratedColumn<String> day = GeneratedColumn<String>(
+    'day',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _weightKgMeta = const VerificationMeta(
+    'weightKg',
+  );
+  @override
+  late final GeneratedColumn<double> weightKg = GeneratedColumn<double>(
+    'weight_kg',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _bodyFatPctMeta = const VerificationMeta(
+    'bodyFatPct',
+  );
+  @override
+  late final GeneratedColumn<double> bodyFatPct = GeneratedColumn<double>(
+    'body_fat_pct',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _waistCmMeta = const VerificationMeta(
+    'waistCm',
+  );
+  @override
+  late final GeneratedColumn<double> waistCm = GeneratedColumn<double>(
+    'waist_cm',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _chestCmMeta = const VerificationMeta(
+    'chestCm',
+  );
+  @override
+  late final GeneratedColumn<double> chestCm = GeneratedColumn<double>(
+    'chest_cm',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _armCmMeta = const VerificationMeta('armCm');
+  @override
+  late final GeneratedColumn<double> armCm = GeneratedColumn<double>(
+    'arm_cm',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    day,
+    weightKg,
+    bodyFatPct,
+    waistCm,
+    chestCm,
+    armCm,
+    note,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'body_checkins';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<BodyCheckin> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('day')) {
+      context.handle(
+        _dayMeta,
+        day.isAcceptableOrUnknown(data['day']!, _dayMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dayMeta);
+    }
+    if (data.containsKey('weight_kg')) {
+      context.handle(
+        _weightKgMeta,
+        weightKg.isAcceptableOrUnknown(data['weight_kg']!, _weightKgMeta),
+      );
+    }
+    if (data.containsKey('body_fat_pct')) {
+      context.handle(
+        _bodyFatPctMeta,
+        bodyFatPct.isAcceptableOrUnknown(
+          data['body_fat_pct']!,
+          _bodyFatPctMeta,
+        ),
+      );
+    }
+    if (data.containsKey('waist_cm')) {
+      context.handle(
+        _waistCmMeta,
+        waistCm.isAcceptableOrUnknown(data['waist_cm']!, _waistCmMeta),
+      );
+    }
+    if (data.containsKey('chest_cm')) {
+      context.handle(
+        _chestCmMeta,
+        chestCm.isAcceptableOrUnknown(data['chest_cm']!, _chestCmMeta),
+      );
+    }
+    if (data.containsKey('arm_cm')) {
+      context.handle(
+        _armCmMeta,
+        armCm.isAcceptableOrUnknown(data['arm_cm']!, _armCmMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {day},
+  ];
+  @override
+  BodyCheckin map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return BodyCheckin(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      day: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}day'],
+      )!,
+      weightKg: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}weight_kg'],
+      ),
+      bodyFatPct: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}body_fat_pct'],
+      ),
+      waistCm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}waist_cm'],
+      ),
+      chestCm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}chest_cm'],
+      ),
+      armCm: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}arm_cm'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $BodyCheckinsTable createAlias(String alias) {
+    return $BodyCheckinsTable(attachedDatabase, alias);
+  }
+}
+
+class BodyCheckin extends DataClass implements Insertable<BodyCheckin> {
+  final String id;
+
+  /// Hari lokal, format `YYYY-MM-DD`.
+  final String day;
+  final double? weightKg;
+  final double? bodyFatPct;
+  final double? waistCm;
+  final double? chestCm;
+  final double? armCm;
+  final String? note;
+  final DateTime createdAt;
+  const BodyCheckin({
+    required this.id,
+    required this.day,
+    this.weightKg,
+    this.bodyFatPct,
+    this.waistCm,
+    this.chestCm,
+    this.armCm,
+    this.note,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['day'] = Variable<String>(day);
+    if (!nullToAbsent || weightKg != null) {
+      map['weight_kg'] = Variable<double>(weightKg);
+    }
+    if (!nullToAbsent || bodyFatPct != null) {
+      map['body_fat_pct'] = Variable<double>(bodyFatPct);
+    }
+    if (!nullToAbsent || waistCm != null) {
+      map['waist_cm'] = Variable<double>(waistCm);
+    }
+    if (!nullToAbsent || chestCm != null) {
+      map['chest_cm'] = Variable<double>(chestCm);
+    }
+    if (!nullToAbsent || armCm != null) {
+      map['arm_cm'] = Variable<double>(armCm);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  BodyCheckinsCompanion toCompanion(bool nullToAbsent) {
+    return BodyCheckinsCompanion(
+      id: Value(id),
+      day: Value(day),
+      weightKg: weightKg == null && nullToAbsent
+          ? const Value.absent()
+          : Value(weightKg),
+      bodyFatPct: bodyFatPct == null && nullToAbsent
+          ? const Value.absent()
+          : Value(bodyFatPct),
+      waistCm: waistCm == null && nullToAbsent
+          ? const Value.absent()
+          : Value(waistCm),
+      chestCm: chestCm == null && nullToAbsent
+          ? const Value.absent()
+          : Value(chestCm),
+      armCm: armCm == null && nullToAbsent
+          ? const Value.absent()
+          : Value(armCm),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory BodyCheckin.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BodyCheckin(
+      id: serializer.fromJson<String>(json['id']),
+      day: serializer.fromJson<String>(json['day']),
+      weightKg: serializer.fromJson<double?>(json['weightKg']),
+      bodyFatPct: serializer.fromJson<double?>(json['bodyFatPct']),
+      waistCm: serializer.fromJson<double?>(json['waistCm']),
+      chestCm: serializer.fromJson<double?>(json['chestCm']),
+      armCm: serializer.fromJson<double?>(json['armCm']),
+      note: serializer.fromJson<String?>(json['note']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'day': serializer.toJson<String>(day),
+      'weightKg': serializer.toJson<double?>(weightKg),
+      'bodyFatPct': serializer.toJson<double?>(bodyFatPct),
+      'waistCm': serializer.toJson<double?>(waistCm),
+      'chestCm': serializer.toJson<double?>(chestCm),
+      'armCm': serializer.toJson<double?>(armCm),
+      'note': serializer.toJson<String?>(note),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  BodyCheckin copyWith({
+    String? id,
+    String? day,
+    Value<double?> weightKg = const Value.absent(),
+    Value<double?> bodyFatPct = const Value.absent(),
+    Value<double?> waistCm = const Value.absent(),
+    Value<double?> chestCm = const Value.absent(),
+    Value<double?> armCm = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+    DateTime? createdAt,
+  }) => BodyCheckin(
+    id: id ?? this.id,
+    day: day ?? this.day,
+    weightKg: weightKg.present ? weightKg.value : this.weightKg,
+    bodyFatPct: bodyFatPct.present ? bodyFatPct.value : this.bodyFatPct,
+    waistCm: waistCm.present ? waistCm.value : this.waistCm,
+    chestCm: chestCm.present ? chestCm.value : this.chestCm,
+    armCm: armCm.present ? armCm.value : this.armCm,
+    note: note.present ? note.value : this.note,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  BodyCheckin copyWithCompanion(BodyCheckinsCompanion data) {
+    return BodyCheckin(
+      id: data.id.present ? data.id.value : this.id,
+      day: data.day.present ? data.day.value : this.day,
+      weightKg: data.weightKg.present ? data.weightKg.value : this.weightKg,
+      bodyFatPct: data.bodyFatPct.present
+          ? data.bodyFatPct.value
+          : this.bodyFatPct,
+      waistCm: data.waistCm.present ? data.waistCm.value : this.waistCm,
+      chestCm: data.chestCm.present ? data.chestCm.value : this.chestCm,
+      armCm: data.armCm.present ? data.armCm.value : this.armCm,
+      note: data.note.present ? data.note.value : this.note,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BodyCheckin(')
+          ..write('id: $id, ')
+          ..write('day: $day, ')
+          ..write('weightKg: $weightKg, ')
+          ..write('bodyFatPct: $bodyFatPct, ')
+          ..write('waistCm: $waistCm, ')
+          ..write('chestCm: $chestCm, ')
+          ..write('armCm: $armCm, ')
+          ..write('note: $note, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    day,
+    weightKg,
+    bodyFatPct,
+    waistCm,
+    chestCm,
+    armCm,
+    note,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BodyCheckin &&
+          other.id == this.id &&
+          other.day == this.day &&
+          other.weightKg == this.weightKg &&
+          other.bodyFatPct == this.bodyFatPct &&
+          other.waistCm == this.waistCm &&
+          other.chestCm == this.chestCm &&
+          other.armCm == this.armCm &&
+          other.note == this.note &&
+          other.createdAt == this.createdAt);
+}
+
+class BodyCheckinsCompanion extends UpdateCompanion<BodyCheckin> {
+  final Value<String> id;
+  final Value<String> day;
+  final Value<double?> weightKg;
+  final Value<double?> bodyFatPct;
+  final Value<double?> waistCm;
+  final Value<double?> chestCm;
+  final Value<double?> armCm;
+  final Value<String?> note;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const BodyCheckinsCompanion({
+    this.id = const Value.absent(),
+    this.day = const Value.absent(),
+    this.weightKg = const Value.absent(),
+    this.bodyFatPct = const Value.absent(),
+    this.waistCm = const Value.absent(),
+    this.chestCm = const Value.absent(),
+    this.armCm = const Value.absent(),
+    this.note = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  BodyCheckinsCompanion.insert({
+    required String id,
+    required String day,
+    this.weightKg = const Value.absent(),
+    this.bodyFatPct = const Value.absent(),
+    this.waistCm = const Value.absent(),
+    this.chestCm = const Value.absent(),
+    this.armCm = const Value.absent(),
+    this.note = const Value.absent(),
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       day = Value(day),
+       createdAt = Value(createdAt);
+  static Insertable<BodyCheckin> custom({
+    Expression<String>? id,
+    Expression<String>? day,
+    Expression<double>? weightKg,
+    Expression<double>? bodyFatPct,
+    Expression<double>? waistCm,
+    Expression<double>? chestCm,
+    Expression<double>? armCm,
+    Expression<String>? note,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (day != null) 'day': day,
+      if (weightKg != null) 'weight_kg': weightKg,
+      if (bodyFatPct != null) 'body_fat_pct': bodyFatPct,
+      if (waistCm != null) 'waist_cm': waistCm,
+      if (chestCm != null) 'chest_cm': chestCm,
+      if (armCm != null) 'arm_cm': armCm,
+      if (note != null) 'note': note,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  BodyCheckinsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? day,
+    Value<double?>? weightKg,
+    Value<double?>? bodyFatPct,
+    Value<double?>? waistCm,
+    Value<double?>? chestCm,
+    Value<double?>? armCm,
+    Value<String?>? note,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return BodyCheckinsCompanion(
+      id: id ?? this.id,
+      day: day ?? this.day,
+      weightKg: weightKg ?? this.weightKg,
+      bodyFatPct: bodyFatPct ?? this.bodyFatPct,
+      waistCm: waistCm ?? this.waistCm,
+      chestCm: chestCm ?? this.chestCm,
+      armCm: armCm ?? this.armCm,
+      note: note ?? this.note,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (day.present) {
+      map['day'] = Variable<String>(day.value);
+    }
+    if (weightKg.present) {
+      map['weight_kg'] = Variable<double>(weightKg.value);
+    }
+    if (bodyFatPct.present) {
+      map['body_fat_pct'] = Variable<double>(bodyFatPct.value);
+    }
+    if (waistCm.present) {
+      map['waist_cm'] = Variable<double>(waistCm.value);
+    }
+    if (chestCm.present) {
+      map['chest_cm'] = Variable<double>(chestCm.value);
+    }
+    if (armCm.present) {
+      map['arm_cm'] = Variable<double>(armCm.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BodyCheckinsCompanion(')
+          ..write('id: $id, ')
+          ..write('day: $day, ')
+          ..write('weightKg: $weightKg, ')
+          ..write('bodyFatPct: $bodyFatPct, ')
+          ..write('waistCm: $waistCm, ')
+          ..write('chestCm: $chestCm, ')
+          ..write('armCm: $armCm, ')
+          ..write('note: $note, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BodyPhotosTable extends BodyPhotos
+    with TableInfo<$BodyPhotosTable, BodyPhoto> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BodyPhotosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _checkinIdMeta = const VerificationMeta(
+    'checkinId',
+  );
+  @override
+  late final GeneratedColumn<String> checkinId = GeneratedColumn<String>(
+    'checkin_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES body_checkins (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _poseMeta = const VerificationMeta('pose');
+  @override
+  late final GeneratedColumn<String> pose = GeneratedColumn<String>(
+    'pose',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _filePathMeta = const VerificationMeta(
+    'filePath',
+  );
+  @override
+  late final GeneratedColumn<String> filePath = GeneratedColumn<String>(
+    'file_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    checkinId,
+    pose,
+    filePath,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'body_photos';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<BodyPhoto> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('checkin_id')) {
+      context.handle(
+        _checkinIdMeta,
+        checkinId.isAcceptableOrUnknown(data['checkin_id']!, _checkinIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_checkinIdMeta);
+    }
+    if (data.containsKey('pose')) {
+      context.handle(
+        _poseMeta,
+        pose.isAcceptableOrUnknown(data['pose']!, _poseMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_poseMeta);
+    }
+    if (data.containsKey('file_path')) {
+      context.handle(
+        _filePathMeta,
+        filePath.isAcceptableOrUnknown(data['file_path']!, _filePathMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_filePathMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {checkinId, pose},
+  ];
+  @override
+  BodyPhoto map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return BodyPhoto(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      checkinId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}checkin_id'],
+      )!,
+      pose: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pose'],
+      )!,
+      filePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}file_path'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $BodyPhotosTable createAlias(String alias) {
+    return $BodyPhotosTable(attachedDatabase, alias);
+  }
+}
+
+class BodyPhoto extends DataClass implements Insertable<BodyPhoto> {
+  final String id;
+  final String checkinId;
+
+  /// Nama enum `BodyPose`: `front`, `side`, atau `back`.
+  final String pose;
+
+  /// Relatif terhadap folder dokumen aplikasi, supaya tetap benar setelah
+  /// backup dipulihkan di perangkat lain.
+  final String filePath;
+  final DateTime createdAt;
+  const BodyPhoto({
+    required this.id,
+    required this.checkinId,
+    required this.pose,
+    required this.filePath,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['checkin_id'] = Variable<String>(checkinId);
+    map['pose'] = Variable<String>(pose);
+    map['file_path'] = Variable<String>(filePath);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  BodyPhotosCompanion toCompanion(bool nullToAbsent) {
+    return BodyPhotosCompanion(
+      id: Value(id),
+      checkinId: Value(checkinId),
+      pose: Value(pose),
+      filePath: Value(filePath),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory BodyPhoto.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BodyPhoto(
+      id: serializer.fromJson<String>(json['id']),
+      checkinId: serializer.fromJson<String>(json['checkinId']),
+      pose: serializer.fromJson<String>(json['pose']),
+      filePath: serializer.fromJson<String>(json['filePath']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'checkinId': serializer.toJson<String>(checkinId),
+      'pose': serializer.toJson<String>(pose),
+      'filePath': serializer.toJson<String>(filePath),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  BodyPhoto copyWith({
+    String? id,
+    String? checkinId,
+    String? pose,
+    String? filePath,
+    DateTime? createdAt,
+  }) => BodyPhoto(
+    id: id ?? this.id,
+    checkinId: checkinId ?? this.checkinId,
+    pose: pose ?? this.pose,
+    filePath: filePath ?? this.filePath,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  BodyPhoto copyWithCompanion(BodyPhotosCompanion data) {
+    return BodyPhoto(
+      id: data.id.present ? data.id.value : this.id,
+      checkinId: data.checkinId.present ? data.checkinId.value : this.checkinId,
+      pose: data.pose.present ? data.pose.value : this.pose,
+      filePath: data.filePath.present ? data.filePath.value : this.filePath,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BodyPhoto(')
+          ..write('id: $id, ')
+          ..write('checkinId: $checkinId, ')
+          ..write('pose: $pose, ')
+          ..write('filePath: $filePath, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, checkinId, pose, filePath, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BodyPhoto &&
+          other.id == this.id &&
+          other.checkinId == this.checkinId &&
+          other.pose == this.pose &&
+          other.filePath == this.filePath &&
+          other.createdAt == this.createdAt);
+}
+
+class BodyPhotosCompanion extends UpdateCompanion<BodyPhoto> {
+  final Value<String> id;
+  final Value<String> checkinId;
+  final Value<String> pose;
+  final Value<String> filePath;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const BodyPhotosCompanion({
+    this.id = const Value.absent(),
+    this.checkinId = const Value.absent(),
+    this.pose = const Value.absent(),
+    this.filePath = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  BodyPhotosCompanion.insert({
+    required String id,
+    required String checkinId,
+    required String pose,
+    required String filePath,
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       checkinId = Value(checkinId),
+       pose = Value(pose),
+       filePath = Value(filePath),
+       createdAt = Value(createdAt);
+  static Insertable<BodyPhoto> custom({
+    Expression<String>? id,
+    Expression<String>? checkinId,
+    Expression<String>? pose,
+    Expression<String>? filePath,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (checkinId != null) 'checkin_id': checkinId,
+      if (pose != null) 'pose': pose,
+      if (filePath != null) 'file_path': filePath,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  BodyPhotosCompanion copyWith({
+    Value<String>? id,
+    Value<String>? checkinId,
+    Value<String>? pose,
+    Value<String>? filePath,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return BodyPhotosCompanion(
+      id: id ?? this.id,
+      checkinId: checkinId ?? this.checkinId,
+      pose: pose ?? this.pose,
+      filePath: filePath ?? this.filePath,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (checkinId.present) {
+      map['checkin_id'] = Variable<String>(checkinId.value);
+    }
+    if (pose.present) {
+      map['pose'] = Variable<String>(pose.value);
+    }
+    if (filePath.present) {
+      map['file_path'] = Variable<String>(filePath.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BodyPhotosCompanion(')
+          ..write('id: $id, ')
+          ..write('checkinId: $checkinId, ')
+          ..write('pose: $pose, ')
+          ..write('filePath: $filePath, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -7886,6 +9581,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $WorkoutTemplateItemsTable workoutTemplateItems =
       $WorkoutTemplateItemsTable(this);
   late final $TasksTable tasks = $TasksTable(this);
+  late final $AppLimitsTable appLimits = $AppLimitsTable(this);
+  late final $AppUsageDaysTable appUsageDays = $AppUsageDaysTable(this);
+  late final $BodyCheckinsTable bodyCheckins = $BodyCheckinsTable(this);
+  late final $BodyPhotosTable bodyPhotos = $BodyPhotosTable(this);
   late final ActivitiesDao activitiesDao = ActivitiesDao(this as AppDatabase);
   late final TrackPointsDao trackPointsDao = TrackPointsDao(
     this as AppDatabase,
@@ -7896,6 +9595,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final GearsDao gearsDao = GearsDao(this as AppDatabase);
   late final GymDao gymDao = GymDao(this as AppDatabase);
   late final TasksDao tasksDao = TasksDao(this as AppDatabase);
+  late final FocusDao focusDao = FocusDao(this as AppDatabase);
+  late final BodyDao bodyDao = BodyDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -7914,6 +9615,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     workoutTemplates,
     workoutTemplateItems,
     tasks,
+    appLimits,
+    appUsageDays,
+    bodyCheckins,
+    bodyPhotos,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -7951,6 +9656,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('workout_template_items', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'body_checkins',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('body_photos', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -13300,6 +15012,1105 @@ typedef $$TasksTableProcessedTableManager =
       Task,
       PrefetchHooks Function()
     >;
+typedef $$AppLimitsTableCreateCompanionBuilder =
+    AppLimitsCompanion Function({
+      required String packageName,
+      required String label,
+      required int dailyMinutes,
+      Value<bool> enabled,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$AppLimitsTableUpdateCompanionBuilder =
+    AppLimitsCompanion Function({
+      Value<String> packageName,
+      Value<String> label,
+      Value<int> dailyMinutes,
+      Value<bool> enabled,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+class $$AppLimitsTableFilterComposer
+    extends Composer<_$AppDatabase, $AppLimitsTable> {
+  $$AppLimitsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get packageName => $composableBuilder(
+    column: $table.packageName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get dailyMinutes => $composableBuilder(
+    column: $table.dailyMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get enabled => $composableBuilder(
+    column: $table.enabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$AppLimitsTableOrderingComposer
+    extends Composer<_$AppDatabase, $AppLimitsTable> {
+  $$AppLimitsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get packageName => $composableBuilder(
+    column: $table.packageName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get dailyMinutes => $composableBuilder(
+    column: $table.dailyMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get enabled => $composableBuilder(
+    column: $table.enabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$AppLimitsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AppLimitsTable> {
+  $$AppLimitsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get packageName => $composableBuilder(
+    column: $table.packageName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<int> get dailyMinutes => $composableBuilder(
+    column: $table.dailyMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get enabled =>
+      $composableBuilder(column: $table.enabled, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$AppLimitsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AppLimitsTable,
+          AppLimit,
+          $$AppLimitsTableFilterComposer,
+          $$AppLimitsTableOrderingComposer,
+          $$AppLimitsTableAnnotationComposer,
+          $$AppLimitsTableCreateCompanionBuilder,
+          $$AppLimitsTableUpdateCompanionBuilder,
+          (AppLimit, BaseReferences<_$AppDatabase, $AppLimitsTable, AppLimit>),
+          AppLimit,
+          PrefetchHooks Function()
+        > {
+  $$AppLimitsTableTableManager(_$AppDatabase db, $AppLimitsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AppLimitsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AppLimitsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AppLimitsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> packageName = const Value.absent(),
+                Value<String> label = const Value.absent(),
+                Value<int> dailyMinutes = const Value.absent(),
+                Value<bool> enabled = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AppLimitsCompanion(
+                packageName: packageName,
+                label: label,
+                dailyMinutes: dailyMinutes,
+                enabled: enabled,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String packageName,
+                required String label,
+                required int dailyMinutes,
+                Value<bool> enabled = const Value.absent(),
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => AppLimitsCompanion.insert(
+                packageName: packageName,
+                label: label,
+                dailyMinutes: dailyMinutes,
+                enabled: enabled,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$AppLimitsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AppLimitsTable,
+      AppLimit,
+      $$AppLimitsTableFilterComposer,
+      $$AppLimitsTableOrderingComposer,
+      $$AppLimitsTableAnnotationComposer,
+      $$AppLimitsTableCreateCompanionBuilder,
+      $$AppLimitsTableUpdateCompanionBuilder,
+      (AppLimit, BaseReferences<_$AppDatabase, $AppLimitsTable, AppLimit>),
+      AppLimit,
+      PrefetchHooks Function()
+    >;
+typedef $$AppUsageDaysTableCreateCompanionBuilder =
+    AppUsageDaysCompanion Function({
+      required String day,
+      required String packageName,
+      required String label,
+      required int minutes,
+      required int limitMinutes,
+      Value<int> rowid,
+    });
+typedef $$AppUsageDaysTableUpdateCompanionBuilder =
+    AppUsageDaysCompanion Function({
+      Value<String> day,
+      Value<String> packageName,
+      Value<String> label,
+      Value<int> minutes,
+      Value<int> limitMinutes,
+      Value<int> rowid,
+    });
+
+class $$AppUsageDaysTableFilterComposer
+    extends Composer<_$AppDatabase, $AppUsageDaysTable> {
+  $$AppUsageDaysTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get day => $composableBuilder(
+    column: $table.day,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get packageName => $composableBuilder(
+    column: $table.packageName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get minutes => $composableBuilder(
+    column: $table.minutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get limitMinutes => $composableBuilder(
+    column: $table.limitMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$AppUsageDaysTableOrderingComposer
+    extends Composer<_$AppDatabase, $AppUsageDaysTable> {
+  $$AppUsageDaysTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get day => $composableBuilder(
+    column: $table.day,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get packageName => $composableBuilder(
+    column: $table.packageName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get minutes => $composableBuilder(
+    column: $table.minutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get limitMinutes => $composableBuilder(
+    column: $table.limitMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$AppUsageDaysTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AppUsageDaysTable> {
+  $$AppUsageDaysTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get day =>
+      $composableBuilder(column: $table.day, builder: (column) => column);
+
+  GeneratedColumn<String> get packageName => $composableBuilder(
+    column: $table.packageName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<int> get minutes =>
+      $composableBuilder(column: $table.minutes, builder: (column) => column);
+
+  GeneratedColumn<int> get limitMinutes => $composableBuilder(
+    column: $table.limitMinutes,
+    builder: (column) => column,
+  );
+}
+
+class $$AppUsageDaysTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AppUsageDaysTable,
+          AppUsageDay,
+          $$AppUsageDaysTableFilterComposer,
+          $$AppUsageDaysTableOrderingComposer,
+          $$AppUsageDaysTableAnnotationComposer,
+          $$AppUsageDaysTableCreateCompanionBuilder,
+          $$AppUsageDaysTableUpdateCompanionBuilder,
+          (
+            AppUsageDay,
+            BaseReferences<_$AppDatabase, $AppUsageDaysTable, AppUsageDay>,
+          ),
+          AppUsageDay,
+          PrefetchHooks Function()
+        > {
+  $$AppUsageDaysTableTableManager(_$AppDatabase db, $AppUsageDaysTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AppUsageDaysTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AppUsageDaysTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AppUsageDaysTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> day = const Value.absent(),
+                Value<String> packageName = const Value.absent(),
+                Value<String> label = const Value.absent(),
+                Value<int> minutes = const Value.absent(),
+                Value<int> limitMinutes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AppUsageDaysCompanion(
+                day: day,
+                packageName: packageName,
+                label: label,
+                minutes: minutes,
+                limitMinutes: limitMinutes,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String day,
+                required String packageName,
+                required String label,
+                required int minutes,
+                required int limitMinutes,
+                Value<int> rowid = const Value.absent(),
+              }) => AppUsageDaysCompanion.insert(
+                day: day,
+                packageName: packageName,
+                label: label,
+                minutes: minutes,
+                limitMinutes: limitMinutes,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$AppUsageDaysTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AppUsageDaysTable,
+      AppUsageDay,
+      $$AppUsageDaysTableFilterComposer,
+      $$AppUsageDaysTableOrderingComposer,
+      $$AppUsageDaysTableAnnotationComposer,
+      $$AppUsageDaysTableCreateCompanionBuilder,
+      $$AppUsageDaysTableUpdateCompanionBuilder,
+      (
+        AppUsageDay,
+        BaseReferences<_$AppDatabase, $AppUsageDaysTable, AppUsageDay>,
+      ),
+      AppUsageDay,
+      PrefetchHooks Function()
+    >;
+typedef $$BodyCheckinsTableCreateCompanionBuilder =
+    BodyCheckinsCompanion Function({
+      required String id,
+      required String day,
+      Value<double?> weightKg,
+      Value<double?> bodyFatPct,
+      Value<double?> waistCm,
+      Value<double?> chestCm,
+      Value<double?> armCm,
+      Value<String?> note,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$BodyCheckinsTableUpdateCompanionBuilder =
+    BodyCheckinsCompanion Function({
+      Value<String> id,
+      Value<String> day,
+      Value<double?> weightKg,
+      Value<double?> bodyFatPct,
+      Value<double?> waistCm,
+      Value<double?> chestCm,
+      Value<double?> armCm,
+      Value<String?> note,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$BodyCheckinsTableReferences
+    extends BaseReferences<_$AppDatabase, $BodyCheckinsTable, BodyCheckin> {
+  $$BodyCheckinsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$BodyPhotosTable, List<BodyPhoto>>
+  _bodyPhotosRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.bodyPhotos,
+    aliasName: $_aliasNameGenerator(
+      db.bodyCheckins.id,
+      db.bodyPhotos.checkinId,
+    ),
+  );
+
+  $$BodyPhotosTableProcessedTableManager get bodyPhotosRefs {
+    final manager = $$BodyPhotosTableTableManager(
+      $_db,
+      $_db.bodyPhotos,
+    ).filter((f) => f.checkinId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_bodyPhotosRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$BodyCheckinsTableFilterComposer
+    extends Composer<_$AppDatabase, $BodyCheckinsTable> {
+  $$BodyCheckinsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get day => $composableBuilder(
+    column: $table.day,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get weightKg => $composableBuilder(
+    column: $table.weightKg,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get bodyFatPct => $composableBuilder(
+    column: $table.bodyFatPct,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get waistCm => $composableBuilder(
+    column: $table.waistCm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get chestCm => $composableBuilder(
+    column: $table.chestCm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get armCm => $composableBuilder(
+    column: $table.armCm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> bodyPhotosRefs(
+    Expression<bool> Function($$BodyPhotosTableFilterComposer f) f,
+  ) {
+    final $$BodyPhotosTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.bodyPhotos,
+      getReferencedColumn: (t) => t.checkinId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BodyPhotosTableFilterComposer(
+            $db: $db,
+            $table: $db.bodyPhotos,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$BodyCheckinsTableOrderingComposer
+    extends Composer<_$AppDatabase, $BodyCheckinsTable> {
+  $$BodyCheckinsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get day => $composableBuilder(
+    column: $table.day,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get weightKg => $composableBuilder(
+    column: $table.weightKg,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get bodyFatPct => $composableBuilder(
+    column: $table.bodyFatPct,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get waistCm => $composableBuilder(
+    column: $table.waistCm,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get chestCm => $composableBuilder(
+    column: $table.chestCm,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get armCm => $composableBuilder(
+    column: $table.armCm,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$BodyCheckinsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BodyCheckinsTable> {
+  $$BodyCheckinsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get day =>
+      $composableBuilder(column: $table.day, builder: (column) => column);
+
+  GeneratedColumn<double> get weightKg =>
+      $composableBuilder(column: $table.weightKg, builder: (column) => column);
+
+  GeneratedColumn<double> get bodyFatPct => $composableBuilder(
+    column: $table.bodyFatPct,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get waistCm =>
+      $composableBuilder(column: $table.waistCm, builder: (column) => column);
+
+  GeneratedColumn<double> get chestCm =>
+      $composableBuilder(column: $table.chestCm, builder: (column) => column);
+
+  GeneratedColumn<double> get armCm =>
+      $composableBuilder(column: $table.armCm, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  Expression<T> bodyPhotosRefs<T extends Object>(
+    Expression<T> Function($$BodyPhotosTableAnnotationComposer a) f,
+  ) {
+    final $$BodyPhotosTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.bodyPhotos,
+      getReferencedColumn: (t) => t.checkinId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BodyPhotosTableAnnotationComposer(
+            $db: $db,
+            $table: $db.bodyPhotos,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$BodyCheckinsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $BodyCheckinsTable,
+          BodyCheckin,
+          $$BodyCheckinsTableFilterComposer,
+          $$BodyCheckinsTableOrderingComposer,
+          $$BodyCheckinsTableAnnotationComposer,
+          $$BodyCheckinsTableCreateCompanionBuilder,
+          $$BodyCheckinsTableUpdateCompanionBuilder,
+          (BodyCheckin, $$BodyCheckinsTableReferences),
+          BodyCheckin,
+          PrefetchHooks Function({bool bodyPhotosRefs})
+        > {
+  $$BodyCheckinsTableTableManager(_$AppDatabase db, $BodyCheckinsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BodyCheckinsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BodyCheckinsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BodyCheckinsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> day = const Value.absent(),
+                Value<double?> weightKg = const Value.absent(),
+                Value<double?> bodyFatPct = const Value.absent(),
+                Value<double?> waistCm = const Value.absent(),
+                Value<double?> chestCm = const Value.absent(),
+                Value<double?> armCm = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => BodyCheckinsCompanion(
+                id: id,
+                day: day,
+                weightKg: weightKg,
+                bodyFatPct: bodyFatPct,
+                waistCm: waistCm,
+                chestCm: chestCm,
+                armCm: armCm,
+                note: note,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String day,
+                Value<double?> weightKg = const Value.absent(),
+                Value<double?> bodyFatPct = const Value.absent(),
+                Value<double?> waistCm = const Value.absent(),
+                Value<double?> chestCm = const Value.absent(),
+                Value<double?> armCm = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => BodyCheckinsCompanion.insert(
+                id: id,
+                day: day,
+                weightKg: weightKg,
+                bodyFatPct: bodyFatPct,
+                waistCm: waistCm,
+                chestCm: chestCm,
+                armCm: armCm,
+                note: note,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$BodyCheckinsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({bodyPhotosRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (bodyPhotosRefs) db.bodyPhotos],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (bodyPhotosRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$BodyCheckinsTableReferences
+                          ._bodyPhotosRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$BodyCheckinsTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).bodyPhotosRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.checkinId == item.id),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$BodyCheckinsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $BodyCheckinsTable,
+      BodyCheckin,
+      $$BodyCheckinsTableFilterComposer,
+      $$BodyCheckinsTableOrderingComposer,
+      $$BodyCheckinsTableAnnotationComposer,
+      $$BodyCheckinsTableCreateCompanionBuilder,
+      $$BodyCheckinsTableUpdateCompanionBuilder,
+      (BodyCheckin, $$BodyCheckinsTableReferences),
+      BodyCheckin,
+      PrefetchHooks Function({bool bodyPhotosRefs})
+    >;
+typedef $$BodyPhotosTableCreateCompanionBuilder =
+    BodyPhotosCompanion Function({
+      required String id,
+      required String checkinId,
+      required String pose,
+      required String filePath,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$BodyPhotosTableUpdateCompanionBuilder =
+    BodyPhotosCompanion Function({
+      Value<String> id,
+      Value<String> checkinId,
+      Value<String> pose,
+      Value<String> filePath,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$BodyPhotosTableReferences
+    extends BaseReferences<_$AppDatabase, $BodyPhotosTable, BodyPhoto> {
+  $$BodyPhotosTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $BodyCheckinsTable _checkinIdTable(_$AppDatabase db) =>
+      db.bodyCheckins.createAlias(
+        $_aliasNameGenerator(db.bodyPhotos.checkinId, db.bodyCheckins.id),
+      );
+
+  $$BodyCheckinsTableProcessedTableManager get checkinId {
+    final $_column = $_itemColumn<String>('checkin_id')!;
+
+    final manager = $$BodyCheckinsTableTableManager(
+      $_db,
+      $_db.bodyCheckins,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_checkinIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$BodyPhotosTableFilterComposer
+    extends Composer<_$AppDatabase, $BodyPhotosTable> {
+  $$BodyPhotosTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get pose => $composableBuilder(
+    column: $table.pose,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get filePath => $composableBuilder(
+    column: $table.filePath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$BodyCheckinsTableFilterComposer get checkinId {
+    final $$BodyCheckinsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.checkinId,
+      referencedTable: $db.bodyCheckins,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BodyCheckinsTableFilterComposer(
+            $db: $db,
+            $table: $db.bodyCheckins,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$BodyPhotosTableOrderingComposer
+    extends Composer<_$AppDatabase, $BodyPhotosTable> {
+  $$BodyPhotosTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get pose => $composableBuilder(
+    column: $table.pose,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get filePath => $composableBuilder(
+    column: $table.filePath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$BodyCheckinsTableOrderingComposer get checkinId {
+    final $$BodyCheckinsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.checkinId,
+      referencedTable: $db.bodyCheckins,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BodyCheckinsTableOrderingComposer(
+            $db: $db,
+            $table: $db.bodyCheckins,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$BodyPhotosTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BodyPhotosTable> {
+  $$BodyPhotosTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get pose =>
+      $composableBuilder(column: $table.pose, builder: (column) => column);
+
+  GeneratedColumn<String> get filePath =>
+      $composableBuilder(column: $table.filePath, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$BodyCheckinsTableAnnotationComposer get checkinId {
+    final $$BodyCheckinsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.checkinId,
+      referencedTable: $db.bodyCheckins,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$BodyCheckinsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.bodyCheckins,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$BodyPhotosTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $BodyPhotosTable,
+          BodyPhoto,
+          $$BodyPhotosTableFilterComposer,
+          $$BodyPhotosTableOrderingComposer,
+          $$BodyPhotosTableAnnotationComposer,
+          $$BodyPhotosTableCreateCompanionBuilder,
+          $$BodyPhotosTableUpdateCompanionBuilder,
+          (BodyPhoto, $$BodyPhotosTableReferences),
+          BodyPhoto,
+          PrefetchHooks Function({bool checkinId})
+        > {
+  $$BodyPhotosTableTableManager(_$AppDatabase db, $BodyPhotosTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BodyPhotosTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BodyPhotosTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BodyPhotosTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> checkinId = const Value.absent(),
+                Value<String> pose = const Value.absent(),
+                Value<String> filePath = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => BodyPhotosCompanion(
+                id: id,
+                checkinId: checkinId,
+                pose: pose,
+                filePath: filePath,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String checkinId,
+                required String pose,
+                required String filePath,
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => BodyPhotosCompanion.insert(
+                id: id,
+                checkinId: checkinId,
+                pose: pose,
+                filePath: filePath,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$BodyPhotosTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({checkinId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (checkinId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.checkinId,
+                                referencedTable: $$BodyPhotosTableReferences
+                                    ._checkinIdTable(db),
+                                referencedColumn: $$BodyPhotosTableReferences
+                                    ._checkinIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$BodyPhotosTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $BodyPhotosTable,
+      BodyPhoto,
+      $$BodyPhotosTableFilterComposer,
+      $$BodyPhotosTableOrderingComposer,
+      $$BodyPhotosTableAnnotationComposer,
+      $$BodyPhotosTableCreateCompanionBuilder,
+      $$BodyPhotosTableUpdateCompanionBuilder,
+      (BodyPhoto, $$BodyPhotosTableReferences),
+      BodyPhoto,
+      PrefetchHooks Function({bool checkinId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -13330,4 +16141,12 @@ class $AppDatabaseManager {
       $$WorkoutTemplateItemsTableTableManager(_db, _db.workoutTemplateItems);
   $$TasksTableTableManager get tasks =>
       $$TasksTableTableManager(_db, _db.tasks);
+  $$AppLimitsTableTableManager get appLimits =>
+      $$AppLimitsTableTableManager(_db, _db.appLimits);
+  $$AppUsageDaysTableTableManager get appUsageDays =>
+      $$AppUsageDaysTableTableManager(_db, _db.appUsageDays);
+  $$BodyCheckinsTableTableManager get bodyCheckins =>
+      $$BodyCheckinsTableTableManager(_db, _db.bodyCheckins);
+  $$BodyPhotosTableTableManager get bodyPhotos =>
+      $$BodyPhotosTableTableManager(_db, _db.bodyPhotos);
 }

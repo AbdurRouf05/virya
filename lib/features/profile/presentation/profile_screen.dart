@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/format.dart';
+import 'package:virya/app/integrations.dart';
 import 'package:virya/app/settings.dart';
 import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/activity_history/data/journal_providers.dart';
@@ -119,6 +120,21 @@ class ProfileScreen extends ConsumerWidget {
                       size: 26,
                     ),
                   ],
+                ),
+              ),
+              SectionHeader(number: sec.next(), title: 'Progres tubuh'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: InkButton(
+                  label: 'Foto & ukuran',
+                  icon: Icons.photo_camera_outlined,
+                  expand: true,
+                  onPressed: () {
+                    final screen = ref.read(integrationsProvider).bodyHome();
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(builder: (_) => screen),
+                    );
+                  },
                 ),
               ),
               SectionHeader(number: sec.next(), title: 'Garasi'),

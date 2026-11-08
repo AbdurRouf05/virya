@@ -34,6 +34,10 @@ void main() {
       ),
     );
     for (final t in [
+      'body_photos',
+      'body_checkins',
+      'app_limits',
+      'app_usage_days',
       'tasks',
       'workout_template_items',
       'workout_templates',
@@ -51,7 +55,7 @@ void main() {
         .customSelect('PRAGMA user_version')
         .map((r) => r.read<int>('user_version'))
         .getSingle();
-    expect(version, 4);
+    expect(version, 6);
 
     final tables = await db
         .customSelect("SELECT name FROM sqlite_master WHERE type = 'table'")

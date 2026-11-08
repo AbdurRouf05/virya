@@ -149,7 +149,7 @@ class _StartButton extends StatelessWidget {
       child: Text(
         'MULAI →',
         style: FN
-            .label(size: 11, color: FN.ink)
+            .label(size: 11, color: FN.onAccent)
             .copyWith(fontWeight: FontWeight.w700),
       ),
     ),
@@ -178,10 +178,10 @@ class _StreakPanel extends StatelessWidget {
         FittedBox(
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerLeft,
-          child: Text('$days', style: FN.bigNumber(56, color: FN.paper)),
+          child: Text('$days', style: FN.bigNumber(56, color: FN.onNight)),
         ),
         const SizedBox(height: 4),
-        Text('HARI', style: FN.label(size: 11, color: FN.paper)),
+        Text('HARI', style: FN.label(size: 11, color: FN.onNight)),
       ],
     ),
   );

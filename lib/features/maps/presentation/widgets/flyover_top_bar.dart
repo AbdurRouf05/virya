@@ -29,7 +29,7 @@ class FlyoverTopBar extends StatelessWidget {
             child: Row(
               children: [
                 BackButton(
-                  color: FN.paper,
+                  color: FN.onNight,
                   onPressed: busy ? null : () => Navigator.maybePop(context),
                 ),
                 Expanded(
@@ -44,7 +44,7 @@ class FlyoverTopBar extends StatelessWidget {
                         title.toUpperCase(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: FN.bigNumber(22, color: FN.paper),
+                        style: FN.bigNumber(22, color: FN.onNight),
                       ),
                     ],
                   ),

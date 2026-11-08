@@ -223,7 +223,7 @@ class _Check extends StatelessWidget {
           color: done ? FN.ok : null,
           border: Border.all(color: FN.ink, width: 2),
         ),
-        child: done ? Icon(Icons.check, color: FN.paper, size: 22) : null,
+        child: done ? Icon(Icons.check, color: FN.onNight, size: 22) : null,
       ),
     ),
   );

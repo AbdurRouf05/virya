@@ -75,7 +75,7 @@ class _TileView extends StatelessWidget {
           Text(tile.label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: FN.label(size: 9, color: FN.paperLine)),
+              style: FN.label(size: 9, color: FN.onNightMuted)),
           const SizedBox(height: 2),
           FittedBox(
             fit: BoxFit.scaleDown,
@@ -84,10 +84,10 @@ class _TileView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               children: [
-                Text(tile.value, style: FN.bigNumber(30, color: FN.paper)),
+                Text(tile.value, style: FN.bigNumber(30, color: FN.onNight)),
                 if (tile.unit.isNotEmpty) ...[
                   const SizedBox(width: 3),
-                  Text(tile.unit, style: FN.label(size: 9, color: FN.paperLine)),
+                  Text(tile.unit, style: FN.label(size: 9, color: FN.onNightMuted)),
                 ],
               ],
             ),

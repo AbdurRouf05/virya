@@ -65,11 +65,11 @@ class FlyoverControls extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  Text('DURASI: ', style: FN.label(size: 9, color: FN.paperLine)),
+                  Text('DURASI: ', style: FN.label(size: 9, color: FN.onNightMuted)),
                   for (final l in RecapLength.values)
                     _chip(l.label, exportLength == l, () => onLength(l)),
                   const SizedBox(width: 8),
-                  Text('RESOLUSI: ', style: FN.label(size: 9, color: FN.paperLine)),
+                  Text('RESOLUSI: ', style: FN.label(size: 9, color: FN.onNightMuted)),
                   _chip('720P', !exportHd, () => onHd(false)),
                   _chip('1080P', exportHd, () => onHd(true)),
                 ],

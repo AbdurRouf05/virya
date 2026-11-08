@@ -20,7 +20,7 @@ class MarkLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fg = filled
-        ? (color.computeLuminance() > 0.35 ? FN.ink : FN.paper)
+        ? (color.computeLuminance() > 0.35 ? FN.onAccent : FN.onNight)
         : color;
     return Container(
       padding: EdgeInsets.symmetric(

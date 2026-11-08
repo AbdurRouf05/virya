@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 
-/// Anton poster numeral that shrinks to fit. [color] defaults to `FN.ink`.
+/// Anton poster numeral that shrinks to fit. [color] defaults to `FNExport.ink`.
 class PosterNumber extends StatelessWidget {
   final String text;
   final double size;
@@ -24,8 +24,8 @@ class PosterNumber extends StatelessWidget {
     child: Text(
       text,
       maxLines: 1,
-      style: FN
-          .bigNumber(size, color: color ?? FN.ink)
+      style: FNExport
+          .bigNumber(size, color: color ?? FNExport.ink)
           .copyWith(height: 0.9, shadows: shadows),
     ),
   );

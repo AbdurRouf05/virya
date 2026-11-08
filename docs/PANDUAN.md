@@ -35,14 +35,14 @@ Fase dikerjakan berurutan. Status terbaru selalu ada di papan status `docs/PROGR
 | 3 | Logo, layar Hari Ini, navigasi baru, kalender, peta gabungan | Selesai |
 | 4 | Gym: gerakan, set, template, PR | Selesai |
 | 5 | Tugas, widget layar utama, catat cepat dari notifikasi | Selesai |
-| 6 | Fokus: batas waktu harian per aplikasi (khusus Android) | **Sedang dikerjakan** |
-| 7 | Progres tubuh: foto berkala, perbandingan, timelapse | Belum |
-| 8 | Mode style: pilihan tampilan | Belum |
+| 6 | Fokus: batas waktu harian per aplikasi (khusus Android) | Selesai |
+| 7 | Progres tubuh: foto berkala, perbandingan, timelapse | Selesai |
+| 8 | Mode style: pilihan tampilan | Selesai |
 | Wave 2 | Segmen live + ghost pacer, heatmap pribadi, sensor detak jantung BLE | Belum |
 
 Di log lama ada kode seperti "Modul A–E", "v2.1", dan "T1–T8". Itu nama tahap pengerjaan Fondasi.
 
-Fase 1–5 sudah lulus tes otomatis, tetapi **banyak fitur Android belum diuji di HP sungguhan**.
+Fase 1–8 sudah lulus tes otomatis, tetapi **banyak fitur Android belum diuji di HP sungguhan**.
 Daftarnya ada di bagian 8, dan ini tempat yang bagus untuk mulai membantu.
 
 ## 4. Menjalankan proyek
@@ -138,6 +138,30 @@ Centang di PR atau catat di `docs/PROGRESS.md` kalau sudah dicoba.
 - [ ] Balas lewat notifikasi catat cepat saat aplikasi tertutup, lalu buka aplikasi: tugas masuk sekali
 - [ ] Ubin Quick Settings "Catat tugas" dan pintasan tekan lama ikon membuka lembar catat cepat
 - [ ] Restart HP: notifikasi catat cepat muncul lagi
+
+**Fokus**
+- [ ] Izin Akses Penggunaan dan Aksesibilitas terdeteksi setelah kembali dari Pengaturan. APK di luar
+  Play Store perlu "Izinkan setelan terbatas" di Info aplikasi (Android 13+)
+- [ ] Aplikasi tertutup tepat saat kuota habis, baik saat sedang dipakai maupun saat baru dibuka
+- [ ] Layar "Waktu habis" muncul di atas layar utama, termasuk di Xiaomi, Oppo, Infinix
+- [ ] "Tambah 5 menit" hanya bisa sekali per aplikasi per hari
+- [ ] Jumlah menit cocok dengan Digital Wellbeing, termasuk sesi yang melewati tengah malam
+
+**Progres tubuh**
+- [ ] Izin kamera diminta saat pertama, dan layar pesan muncul kalau izin ditolak
+- [ ] Pratinjau tidak gepeng di kotak 3:4, dan foto hasil sama dengan pratinjau
+- [ ] Bayangan foto lama sejajar dengan pratinjau; orientasi foto benar
+- [ ] Ganti kamera depan/belakang; keluar dan masuk aplikasi saat kamera terbuka; HP dimiringkan
+- [ ] Geser slider sebelum/sesudah terasa lancar
+- [ ] Video timelapse jadi, bisa dibatalkan, dan bisa dibagikan
+- [ ] Foto tidak muncul di galeri, dan kembali utuh setelah backup lalu restore
+
+**Mode style**
+- [ ] Ganti style di Pengaturan → Tampilan: seluruh aplikasi berubah dan pilihan tetap setelah aplikasi ditutup
+- [ ] Style Malam: buka semua tab, layar rekam, gym, kalender, izin; tidak ada teks yang hilang
+- [ ] Ikon status bar terang di Malam dan gelap di style terang
+- [ ] Kartu dan video share tetap Field Notes di style apa pun
+- [ ] Ganti style saat sesi gym berjalan: sesinya tidak hilang
 
 **Gym**
 - [ ] Sesi penuh sampai selesai, timer istirahat berjalan

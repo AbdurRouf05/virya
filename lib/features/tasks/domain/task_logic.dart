@@ -1,20 +1,13 @@
+import 'package:virya/core/time/day_key.dart';
 import 'package:virya/features/tasks/domain/task_models.dart';
 
 const maxTaskTitleLength = 200;
 
 /// Hari lokal → `YYYY-MM-DD`.
-String taskDayKey(DateTime d) =>
-    '${d.year.toString().padLeft(4, '0')}-'
-    '${d.month.toString().padLeft(2, '0')}-'
-    '${d.day.toString().padLeft(2, '0')}';
+String taskDayKey(DateTime d) => dayKeyOf(d);
 
 /// `YYYY-MM-DD` → tengah malam lokal. Null bila kosong atau tidak valid.
-DateTime? parseTaskDay(String? key) {
-  if (key == null) return null;
-  final m = RegExp(r'^(\d{4})-(\d{2})-(\d{2})$').firstMatch(key);
-  if (m == null) return null;
-  return DateTime(int.parse(m[1]!), int.parse(m[2]!), int.parse(m[3]!));
-}
+DateTime? parseTaskDay(String? key) => dayFromKey(key);
 
 /// Rapikan judul: spasi & baris baru dipadatkan, panjang dibatasi.
 /// Null bila kosong.

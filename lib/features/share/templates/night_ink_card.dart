@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_data.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/domain/share_options.dart';
@@ -17,7 +17,7 @@ class NightInkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final f = options.format;
     final accent = options.accent == AccentChoice.signal
-        ? FN
+        ? FNExport
               .acid // night default
         : options.accent.resolve(dark: true);
     final compact = f == CardFormat.square;
@@ -29,7 +29,7 @@ class NightInkCard extends StatelessWidget {
     const muted = Color(0xFF8C887D);
 
     return Container(
-      color: FN.night,
+      color: FNExport.night,
       child: Stack(
         children: [
           Positioned.fill(
@@ -66,7 +66,7 @@ class NightInkCard extends StatelessWidget {
                     Expanded(
                       child: MonoLabel(
                         'NIGHT INK · ${SF.entryNo(data)}',
-                        color: FN.paper,
+                        color: FNExport.paper,
                         weight: FontWeight.w700,
                       ),
                     ),
@@ -75,7 +75,7 @@ class NightInkCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 5),
-                HairRule(color: FN.nightLine, thickness: 1),
+                HairRule(color: FNExport.nightLine, thickness: 1),
                 const SizedBox(height: 6),
                 Row(
                   children: [
@@ -85,11 +85,11 @@ class NightInkCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontFamily: FN.sans,
+                          fontFamily: FNExport.sans,
                           fontWeight: FontWeight.w600,
                           fontSize: 11,
                           letterSpacing: 0.6,
-                          color: FN.paper,
+                          color: FNExport.paper,
                         ),
                       ),
                     ),
@@ -108,7 +108,7 @@ class NightInkCard extends StatelessWidget {
                       child: PosterNumber(
                         SF.km(data.distanceM),
                         size: big,
-                        color: FN.paper,
+                        color: FNExport.paper,
                       ),
                     ),
                     const SizedBox(width: 6),
@@ -116,23 +116,23 @@ class NightInkCard extends StatelessWidget {
                       padding: EdgeInsets.only(bottom: big * 0.1),
                       child: Text(
                         'KM',
-                        style: FN.bigNumber(big * 0.22, color: accent),
+                        style: FNExport.bigNumber(big * 0.22, color: accent),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                HairRule(color: FN.nightLine),
+                HairRule(color: FNExport.nightLine),
                 const SizedBox(height: 7),
                 StatStrip(
                   stats: statValues(data, options.stats),
-                  ink: FN.paper,
+                  ink: FNExport.paper,
                   muted: muted,
-                  rule: FN.nightLine,
+                  rule: FNExport.nightLine,
                   valueSize: compact ? 18 : 22,
                 ),
                 const SizedBox(height: 7),
-                HairRule(color: FN.nightLine),
+                HairRule(color: FNExport.nightLine),
                 const SizedBox(height: 6),
                 Row(
                   children: [

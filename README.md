@@ -15,12 +15,13 @@ Aplikasi pribadi untuk membangun konsistensi: olahraga, latihan, fokus, dan tuga
 - **Gym**: gerakan, set, repetisi, beban, PR.
 - **Kalender konsistensi** per kategori (sepeda / lari / jalan / gym).
 - **Tugas**: catat cepat dari notifikasi dan widget layar utama.
+- **Fokus**: batas waktu harian untuk aplikasi tertentu (Android).
+- **Progres tubuh**: foto berkala, perbandingan, timelapse.
+- **Mode tampilan**: Field Notes, Malam, Cetak Biru, Hutan.
 
 ## Peta jalan
 
-- **Fokus**: batas waktu harian untuk aplikasi tertentu (Android)
-- **Progres tubuh**: foto berkala, perbandingan, timelapse
-- **Mode tampilan** yang bisa dipilih
+- Segmen live, heatmap pribadi, sensor detak jantung BLE
 
 ## Teknologi
 

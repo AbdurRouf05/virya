@@ -80,7 +80,7 @@ class GymSessionHeader extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('DURASI', style: FN.label(size: 9, color: FN.acid)),
+                      Text('DURASI', style: FN.label(size: 9, color: FN.onInk(FN.acid))),
                       Text(hms, style: FN.bigNumber(34, color: FN.paper)),
                     ],
                   ),

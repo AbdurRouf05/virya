@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_data.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/domain/share_options.dart';
@@ -21,8 +21,8 @@ class StickerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final f = options.format;
     final accent = options.accent.resolve(dark: true);
-    final routeColor = options.accent == AccentChoice.ink ? FN.ink : FN.paper;
-    final outline = routeColor == FN.ink ? FN.paper : FN.ink;
+    final routeColor = options.accent == AccentChoice.ink ? FNExport.ink : FNExport.paper;
+    final outline = routeColor == FNExport.ink ? FNExport.paper : FNExport.ink;
     final rest = statValues(data, options.stats).take(2).toList();
     final stats = [StatValue('JARAK', SF.km(data.distanceM), 'KM'), ...rest];
     final valueSize = f == CardFormat.square ? 34.0 : 40.0;
@@ -66,14 +66,14 @@ class StickerCard extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text: s.value,
-                                style: FN
+                                style: FNExport
                                     .bigNumber(valueSize, color: routeColor)
                                     .copyWith(shadows: _shadows),
                               ),
                               if (s.unit.isNotEmpty)
                                 TextSpan(
                                   text: ' ${s.unit}',
-                                  style: FN
+                                  style: FNExport
                                       .label(size: 9, color: accent)
                                       .copyWith(
                                         fontWeight: FontWeight.w700,
@@ -88,7 +88,7 @@ class StickerCard extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(
                         s.label,
-                        style: FN
+                        style: FNExport
                             .label(size: 8, color: routeColor)
                             .copyWith(
                               fontWeight: FontWeight.w700,
@@ -103,7 +103,7 @@ class StickerCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'VIRYA · ${SF.sport(data.sport)} · ${SF.date(data.start)}',
-            style: FN
+            style: FNExport
                 .label(size: 7, color: routeColor)
                 .copyWith(letterSpacing: 2, shadows: _shadows),
           ),

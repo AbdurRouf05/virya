@@ -50,6 +50,27 @@ abstract class Integrations {
   /// Pembungkus shell: sinkron widget & notifikasi tugas.
   Widget taskHost({required Widget child});
 
+  /// Kartu "FOKUS" untuk layar Hari Ini.
+  Widget todayFocusCard();
+
+  /// Pemakaian aplikasi pada [day], untuk detail hari di kalender.
+  Widget focusDayUsage(DateTime day);
+
+  /// Pembungkus shell: sinkron batas & pemakaian aplikasi.
+  Widget focusHost({required Widget child});
+
+  /// Layar "PROGRES TUBUH".
+  Widget bodyHome();
+
+  /// Buka check-in foto tubuh hari ini.
+  Future<void> startBodyCheckin(BuildContext context);
+
+  /// Pengingat check-in untuk layar Hari Ini.
+  Widget todayBodyCard();
+
+  /// Check-in pada [day], untuk detail hari di kalender.
+  Widget bodyOnDay(DateTime day);
+
   Future<List<String>> importFile(AppDatabase db, String path);
   Future<File> exportGpx(AppDatabase db, String activityId);
   Future<File> exportTcx(AppDatabase db, String activityId);
@@ -118,6 +139,22 @@ class PlaceholderIntegrations extends Integrations {
   Future<void> showQuickTask(BuildContext context) async {}
   @override
   Widget taskHost({required Widget child}) => child;
+
+  @override
+  Widget todayFocusCard() => const SizedBox.shrink();
+  @override
+  Widget focusDayUsage(DateTime day) => const SizedBox.shrink();
+  @override
+  Widget focusHost({required Widget child}) => child;
+
+  @override
+  Widget bodyHome() => _missing('PROGRES TUBUH');
+  @override
+  Future<void> startBodyCheckin(BuildContext context) async {}
+  @override
+  Widget todayBodyCard() => const SizedBox.shrink();
+  @override
+  Widget bodyOnDay(DateTime day) => const SizedBox.shrink();
 
   Never _unavailable() =>
       throw UnsupportedError('Modul impor/ekspor belum terpasang');
