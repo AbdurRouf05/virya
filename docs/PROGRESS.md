@@ -1,6 +1,6 @@
 # Virya — Progress Log
 
-Newest entries on top. Contract & ownership: [BUILD_CONTRACT_V2.md](BUILD_CONTRACT_V2.md).
+Newest entries on top. Baru bergabung? Mulai dari [PANDUAN.md](PANDUAN.md). Aturan kode: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Status board
 
@@ -17,9 +17,22 @@ Newest entries on top. Contract & ownership: [BUILD_CONTRACT_V2.md](BUILD_CONTRA
 | F2 | Virya: rename, arsitektur modular, token tema | — | ✅ Done |
 | F3 | Logo + splash, Hari Ini, navigasi baru, kalender, peta gabungan | — | ✅ Done |
 | F4 | Gym (gerakan, set, template, PR) | — | ✅ Done (22 tes gym) — uji perangkat pending |
+| F5 | Tugas, widget layar utama, catat cepat dari notifikasi | — | ✅ Done (38 tes tugas) — uji perangkat pending |
+| F6 | Fokus: batas waktu harian per aplikasi (Android) | — | 🚧 Sedang dikerjakan |
+| F7 | Progres tubuh: foto berkala, perbandingan, timelapse | — | 🔜 Planned |
+| F8 | Mode style tambahan | — | 🔜 Planned |
 | 2 | Wave 2: live segments + ghost pacer, personal heatmap, BLE HR, polish | — | 🔜 Planned |
 
 ## Log
+
+### 2026-11-08 — Fase 5: Tugas ✅
+- **Skema DB v4**: tabel `tasks` + indeks `done_at`, migrasi 3→4, `TasksDao`. Jatuh tempo disimpan sebagai teks `YYYY-MM-DD` agar tidak bergeser saat zona waktu berubah.
+- `features/tasks`: layar TUGAS (kolom ketik di atas, seksi Hari ini · Nanti · Selesai), lembar catat cepat, lembar edit (catatan, tanggal, penting, pin, hapus), centang dengan BATAL. Tugas di-pin selalu tampil di Hari Ini dan widget; tugas terlambat tetap di Hari ini.
+- Titik masuk: kartu tugas di atas LATIHAN HARI INI, tombol TUGAS BARU di lembar "MAU NGAPAIN?", dan tugas selesai di detail hari kalender. `TodayCard` pindah ke `core/widgets/`.
+- Android (`kotlin/.../tasks/`, channel `virya/tasks`): widget layar utama yang bisa dicentang, notifikasi permanen dengan kolom balas (aktif lewat toggle, muncul lagi setelah reboot), ubin Quick Settings "Catat tugas", pintasan ikon aplikasi.
+- **Sinkronisasi**: native tidak menulis ke SQLite. Perubahan masuk antrean SharedPreferences, lalu `TaskInboxSync` membaca → menerapkan → mengonfirmasi saat aplikasi aktif; penerapan idempoten sehingga tidak ada tugas ganda. Widget menampilkan snapshot − selesai tertunda + tangkapan tertunda.
+- Belum dikerjakan dari rancangan: `task_reminders` (pengingat) dan gelembung mengambang (opsional).
+- `flutter analyze` bersih, 305 tes lulus, `flutter build apk --debug` berhasil. Fitur Android belum diuji di perangkat: widget, balas notifikasi, ubin, pintasan, reboot.
 
 ### 2026-11-08 — Fase 4: Gym ✅
 - **Skema DB v3**: tabel `exercises`, `workout_sets` (cascade dari `activities`), `workout_templates`, `workout_template_items` (cascade dari template) + indeks; migrasi 2→3 membuat tabel & men-seed 44 gerakan bawaan (`core/database/seed/exercise_library.dart`). `GymDao` di `core/database/daos/gym_dao.dart`. Backup tetap menyalin file sqlite utuh, jadi tabel baru ikut otomatis.

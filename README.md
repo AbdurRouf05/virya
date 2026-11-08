@@ -11,13 +11,13 @@ Aplikasi pribadi untuk membangun konsistensi: olahraga, latihan, fokus, dan tuga
 - **Peta & flyover 3D**: MapLibre dengan paket peta offline PMTiles atau peta online cadangan.
 - **Share studio**: kartu story, stiker PNG, video recap MP4 yang dirender di perangkat.
 - **Impor / ekspor**: GPX, TCX, FIT, ZIP ekspor Strava, serta backup lokal.
+- Layar **Hari Ini** sebagai pusat semua modul.
+- **Gym**: gerakan, set, repetisi, beban, PR.
+- **Kalender konsistensi** per kategori (sepeda / lari / jalan / gym).
+- **Tugas**: catat cepat dari notifikasi dan widget layar utama.
 
 ## Peta jalan
 
-- Layar **Hari Ini** sebagai pusat semua modul
-- **Gym**: gerakan, set, repetisi, beban, PR
-- **Kalender konsistensi** per kategori (sepeda / lari / gym / campuran)
-- **Tugas & catatan cepat** dari notifikasi dan widget layar utama
 - **Fokus**: batas waktu harian untuk aplikasi tertentu (Android)
 - **Progres tubuh**: foto berkala, perbandingan, timelapse
 - **Mode tampilan** yang bisa dipilih
@@ -26,11 +26,14 @@ Aplikasi pribadi untuk membangun konsistensi: olahraga, latihan, fokus, dan tuga
 
 Flutter · Riverpod · Drift (SQLite) · MapLibre GL · PMTiles · MediaCodec (encoder video native)
 
+## Ikut mengerjakan
+
+Mulai dari [docs/PANDUAN.md](docs/PANDUAN.md): status fase, cara menjalankan, alur kerja, dan aturan kode.
+
 ## Menjalankan
 
 ```bash
 flutter pub get
-dart run build_runner build --delete-conflicting-outputs
 flutter run
 ```
 

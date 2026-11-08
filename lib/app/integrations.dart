@@ -38,6 +38,18 @@ abstract class Integrations {
   /// Isi detail aktivitas gym (set per gerakan) di halaman aktivitas.
   Widget gymSessionDetail(String activityId);
 
+  /// Kartu "TUGAS HARI INI" untuk layar Hari Ini.
+  Widget todayTasksCard();
+
+  /// Tugas yang selesai pada [day], untuk detail hari di kalender.
+  Widget tasksDoneOn(DateTime day);
+
+  /// Buka lembar catat tugas cepat.
+  Future<void> showQuickTask(BuildContext context);
+
+  /// Pembungkus shell: sinkron widget & notifikasi tugas.
+  Widget taskHost({required Widget child});
+
   Future<List<String>> importFile(AppDatabase db, String path);
   Future<File> exportGpx(AppDatabase db, String activityId);
   Future<File> exportTcx(AppDatabase db, String activityId);
@@ -97,6 +109,15 @@ class PlaceholderIntegrations extends Integrations {
   Future<void> startGym(BuildContext context, WidgetRef ref) async {}
   @override
   Widget gymSessionDetail(String activityId) => const SizedBox.shrink();
+
+  @override
+  Widget todayTasksCard() => const SizedBox.shrink();
+  @override
+  Widget tasksDoneOn(DateTime day) => const SizedBox.shrink();
+  @override
+  Future<void> showQuickTask(BuildContext context) async {}
+  @override
+  Widget taskHost({required Widget child}) => child;
 
   Never _unavailable() =>
       throw UnsupportedError('Modul impor/ekspor belum terpasang');

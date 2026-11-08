@@ -7,6 +7,7 @@ Future<void> showStartSheet(
   BuildContext context, {
   required VoidCallback onRecordGps,
   VoidCallback? onStartGym,
+  VoidCallback? onNewTask,
 }) {
   return showModalBottomSheet<void>(
     context: context,
@@ -24,16 +25,28 @@ Future<void> showStartSheet(
               Navigator.of(sheet).pop();
               onStartGym();
             },
+      onNewTask: onNewTask == null
+          ? null
+          : () {
+              Navigator.of(sheet).pop();
+              onNewTask();
+            },
     ),
   );
 }
 
-/// Lembar mulai cepat: 2×2 pilihan. REKAM GPS dan MULAI GYM aktif;
-/// sisanya ditandai "SEGERA" sampai modulnya ada.
+/// Lembar mulai cepat: 2×2 pilihan. Pilihan tanpa callback ditandai "SEGERA"
+/// sampai modulnya ada.
 class StartSheet extends StatelessWidget {
   final VoidCallback onRecordGps;
   final VoidCallback? onStartGym;
-  const StartSheet({super.key, required this.onRecordGps, this.onStartGym});
+  final VoidCallback? onNewTask;
+  const StartSheet({
+    super.key,
+    required this.onRecordGps,
+    this.onStartGym,
+    this.onNewTask,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +101,11 @@ class StartSheet extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             _row(
-              const _StartTile(
+              _StartTile(
                 icon: Icons.add_task,
                 title: 'TUGAS BARU',
                 subtitle: 'CATAT CEPAT',
+                onTap: onNewTask,
               ),
               const _StartTile(
                 icon: Icons.photo_camera_outlined,

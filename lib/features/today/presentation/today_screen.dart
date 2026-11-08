@@ -10,8 +10,8 @@ import 'package:virya/features/today/presentation/widgets/today_last_card.dart';
 import 'package:virya/features/today/presentation/widgets/today_training_card.dart';
 import 'package:virya/features/today/presentation/widgets/today_week_strip.dart';
 
-/// "HARI INI": sapaan + tanggal, latihan hari ini & streak, minggu ini,
-/// dan aktivitas terakhir. Kartu modul lain (tugas, fokus, tubuh) menyusul.
+/// "HARI INI": sapaan + tanggal, tugas, latihan hari ini & streak, minggu ini,
+/// dan aktivitas terakhir. Kartu modul lain (fokus, tubuh) menyusul.
 class TodayScreen extends ConsumerWidget {
   /// Dipanggil tombol "MULAI" bila hari ini belum ada latihan.
   final VoidCallback? onStart;
@@ -52,6 +52,7 @@ class TodayScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              ref.read(integrationsProvider).todayTasksCard(),
               TodayTrainingCard(summary: s, fmt: fmt, onStart: onStart),
               gap,
               TodayWeekStrip(week: s.week),

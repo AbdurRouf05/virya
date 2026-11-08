@@ -20,7 +20,7 @@ void main() {
     if (dir.existsSync()) dir.deleteSync(recursive: true);
   });
 
-  test('database v2 naik ke v3 dengan tabel gym + seed', () async {
+  test('database v2 naik ke versi terbaru dengan tabel gym + seed', () async {
     // 1. Buat database terbaru lalu turunkan ke bentuk v2.
     var db = AppDatabase.forTesting(NativeDatabase(file));
     await db.activitiesDao.insertActivity(
@@ -34,6 +34,7 @@ void main() {
       ),
     );
     for (final t in [
+      'tasks',
       'workout_template_items',
       'workout_templates',
       'workout_sets',
@@ -50,7 +51,7 @@ void main() {
         .customSelect('PRAGMA user_version')
         .map((r) => r.read<int>('user_version'))
         .getSingle();
-    expect(version, 3);
+    expect(version, 4);
 
     final tables = await db
         .customSelect("SELECT name FROM sqlite_master WHERE type = 'table'")

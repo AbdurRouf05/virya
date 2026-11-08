@@ -1,6 +1,7 @@
 # Rancangan Virya: Modul, Data, dan UX
 
-Status: **rancangan**, untuk ditinjau sebelum fase 4–8 dikerjakan.
+Rancangan tiap modul. Fase 2–5 sudah dikerjakan; status terbaru ada di papan status
+[PROGRESS.md](PROGRESS.md).
 
 ## 1. Prinsip
 

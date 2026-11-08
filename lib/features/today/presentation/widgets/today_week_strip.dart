@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:virya/app/format.dart';
 import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/core/widgets/today_card.dart';
 import 'package:virya/features/today/domain/today_models.dart';
-import 'package:virya/features/today/presentation/widgets/today_card.dart';
 
 /// "MINGGU INI": tujuh kotak Senin–Minggu, diwarnai per kategori olahraga.
 class TodayWeekStrip extends StatelessWidget {

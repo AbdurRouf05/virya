@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="task_paper">#EFE9DC</color>
+    <color name="task_ink">#141414</color>
+    <color name="task_warn">#D9481B</color>
+    <color name="task_muted">#77736A</color>
+</resources>

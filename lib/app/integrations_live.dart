@@ -15,6 +15,10 @@ import 'package:virya/features/maps/widgets/route_map_view.dart';
 import 'package:virya/features/recording/presentation/recording_screen.dart';
 import 'package:virya/features/recording/presentation/recovery_prompt.dart';
 import 'package:virya/features/share/presentation/share_studio_screen.dart';
+import 'package:virya/features/tasks/presentation/task_host.dart';
+import 'package:virya/features/tasks/presentation/widgets/task_quick_add_sheet.dart';
+import 'package:virya/features/tasks/presentation/widgets/tasks_done_day.dart';
+import 'package:virya/features/tasks/presentation/widgets/today_tasks_card.dart';
 import 'package:virya/services/export_import/activity_exporter.dart';
 import 'package:virya/services/export_import/activity_importer.dart';
 
@@ -60,6 +64,15 @@ class LiveIntegrations extends Integrations {
   @override
   Widget gymSessionDetail(String activityId) =>
       GymSessionDetail(activityId: activityId);
+
+  @override
+  Widget todayTasksCard() => const TodayTasksCard();
+  @override
+  Widget tasksDoneOn(DateTime day) => TasksDoneDay(day: day);
+  @override
+  Future<void> showQuickTask(BuildContext context) => showQuickAddTask(context);
+  @override
+  Widget taskHost({required Widget child}) => TaskHost(child: child);
 
   @override
   Future<List<String>> importFile(AppDatabase db, String path) =>

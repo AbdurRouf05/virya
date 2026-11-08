@@ -108,6 +108,7 @@ class _CalendarBody extends ConsumerWidget {
             entries: selEntries,
             onOpen: (id) => _open(context, ref, id),
           ),
+          ref.read(integrationsProvider).tasksDoneOn(sel),
         ],
       ],
     );
