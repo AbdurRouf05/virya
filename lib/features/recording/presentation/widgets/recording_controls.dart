@@ -196,7 +196,7 @@ class _SimToggle extends StatelessWidget {
           child: Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: FN.acid,
+            activeThumbColor: FN.acid,
             inactiveThumbColor: FN.inkMuted,
             inactiveTrackColor: FN.nightSurface,
           ),
