@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:virya/app/theme/palette.dart';
 import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/constants/sport_category.dart';
 
 /// "Field Notes / Topo Brutalist": cream paper, black ink, one loud
 /// safety-orange accent, condensed poster numerals, mono labels.
@@ -28,6 +29,12 @@ const fieldNotesStyle = Palette(
     SurfaceType.dirt: Color(0xFF7A4E2D),
     SurfaceType.cobblestone: Color(0xFF8A7F72),
     SurfaceType.unknown: Color(0xFFA9A49A),
+  },
+  category: {
+    SportCategory.cycling: Color(0xFFFF4F00),
+    SportCategory.running: Color(0xFF141414),
+    SportCategory.walking: Color(0xFF2F7D4F),
+    SportCategory.strength: Color(0xFF3B5BDB),
   },
   gradeRamp: [
     Color(0xFF3A3A36),

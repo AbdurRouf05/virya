@@ -18,7 +18,9 @@ export 'package:virya/features/activity_history/presentation/widgets/journal_ent
 
 /// "JURNAL" — activity history as notebook entries grouped by month.
 class JournalScreen extends ConsumerStatefulWidget {
-  const JournalScreen({super.key});
+  /// `true` saat tampil di dalam tab LATIHAN (judul besar disembunyikan).
+  final bool embedded;
+  const JournalScreen({super.key, this.embedded = false});
 
   @override
   ConsumerState<JournalScreen> createState() => _JournalScreenState();
@@ -58,7 +60,7 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
                   SliverToBoxAdapter(
                     child: Masthead(
                       kicker: 'Buku catatan lapangan',
-                      title: 'Jurnal',
+                      title: widget.embedded ? null : 'Jurnal',
                       subtitle:
                           '${list.length} entri · ${fmt.distanceFull(total, decimals: 0)} tercatat',
                       actions: [

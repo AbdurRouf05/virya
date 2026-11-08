@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:virya/app/theme/field_notes.dart';
 import 'package:virya/features/home/presentation/widgets/record_button.dart';
 
-/// Bottom bar: JURNAL · STATISTIK · [record] · PETA · PROFIL.
+/// Bottom bar: HARI INI · KALENDER · [REKAM] · LATIHAN · PROFIL.
+///
+/// [onRecord] is called by the centre button (the shell opens the
+/// quick-start sheet with it).
 ///
 /// The widget is [_raise] px taller than the visible bar so the round record
 /// button can rise above the bar edge and still receive taps.
@@ -18,7 +21,7 @@ class FieldNotesNavBar extends StatelessWidget {
     required this.onRecord,
   });
 
-  static const _tabs = ['JURNAL', 'STATISTIK', 'PETA', 'PROFIL'];
+  static const _tabs = ['HARI INI', 'KALENDER', 'LATIHAN', 'PROFIL'];
   static const _barHeight = 64.0;
   static const _raise = 14.0;
   static const _centerWidth = 84.0;
@@ -27,13 +30,13 @@ class FieldNotesNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final bottom = MediaQuery.paddingOf(context).bottom;
     Widget tab(int i) => Expanded(
-          child: _NavTab(
-            number: (i + 1).toString().padLeft(2, '0'),
-            label: _tabs[i],
-            selected: index == i,
-            onTap: () => onTab(i),
-          ),
-        );
+      child: _NavTab(
+        number: (i + 1).toString().padLeft(2, '0'),
+        label: _tabs[i],
+        selected: index == i,
+        onTap: () => onTab(i),
+      ),
+    );
     return SizedBox(
       height: _raise + _barHeight + bottom,
       child: Stack(
@@ -107,15 +110,22 @@ class _NavTab extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(number,
-                  style: FN.label(
-                      size: 9, color: selected ? FN.signal : FN.inkMuted)),
+              Text(
+                number,
+                style: FN.label(
+                  size: 9,
+                  color: selected ? FN.signal : FN.inkMuted,
+                ),
+              ),
               const SizedBox(height: 2),
               FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text(label,
-                    style: FN.label(size: 10.5, color: fg)
-                        .copyWith(fontWeight: FontWeight.w700)),
+                child: Text(
+                  label,
+                  style: FN
+                      .label(size: 10.5, color: fg)
+                      .copyWith(fontWeight: FontWeight.w700),
+                ),
               ),
             ],
           ),

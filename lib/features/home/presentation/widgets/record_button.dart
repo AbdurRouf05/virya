@@ -50,7 +50,8 @@ class _RecordButtonState extends State<RecordButton> {
               const SizedBox(height: 4),
               Text(
                 'REKAM',
-                style: FN.label(size: 9.5, color: FN.ink)
+                style: FN
+                    .label(size: 9.5, color: FN.ink)
                     .copyWith(fontWeight: FontWeight.w700),
               ),
             ],

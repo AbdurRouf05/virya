@@ -1,7 +1,8 @@
 // Virya - Shared Enums
 // Enum domain bersama untuk seluruh modul.
 
-/// Jenis aktivitas olahraga luar ruangan yang didukung Virya
+/// Jenis aktivitas olahraga yang didukung Virya. Semua GPS kecuali [strength]
+/// (sesi gym; data set ada di tabel `workout_sets`).
 enum SportType {
   gravelCycling,
   roadCycling,
@@ -9,7 +10,12 @@ enum SportType {
   roadRunning,
   trailRunning,
   hiking,
-  walking;
+  walking,
+  strength;
+
+  /// Olahraga yang direkam lewat GPS (semua kecuali gym).
+  static List<SportType> get gps =>
+      values.where((s) => s.isGps).toList(growable: false);
 
   String get displayName {
     switch (this) {
@@ -27,6 +33,8 @@ enum SportType {
         return 'Hike';
       case SportType.walking:
         return 'Walk';
+      case SportType.strength:
+        return 'Gym';
     }
   }
 
@@ -36,6 +44,9 @@ enum SportType {
       this == mountainBiking;
 
   bool get isRunning => this == roadRunning || this == trailRunning;
+
+  /// `false` untuk gym: tanpa rute, jarak, atau peta.
+  bool get isGps => this != strength;
 }
 
 /// Klasifikasi getaran permukaan jalan (Deteksi Accelerometer & Sensor Fusion)

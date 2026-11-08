@@ -73,7 +73,7 @@ class SettingsScreen extends ConsumerWidget {
                     Text('OLAHRAGA DEFAULT', style: FN.label(size: 10)),
                     const SizedBox(height: 6),
                     chips([
-                      for (final t in SportType.values) (t.name, t.label),
+                      for (final t in SportType.gps) (t.name, t.label),
                     ], SettingKeys.defaultSport),
                   ],
                 ),
@@ -174,7 +174,7 @@ class SettingsScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 10),
                     InkButton(
-                      label: 'Paket peta offline',
+                      label: 'Peta offline',
                       icon: Icons.map_outlined,
                       style: InkButtonStyle.outline,
                       expand: true,

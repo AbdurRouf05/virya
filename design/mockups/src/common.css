@@ -1,0 +1,79 @@
+@font-face{font-family:"Anton";src:url("file:///D:/coding/flutter/stravo/assets/fonts/Anton-Regular.ttf");}
+@font-face{font-family:"Mono";font-weight:400;src:url("file:///D:/coding/flutter/stravo/assets/fonts/IBMPlexMono-Regular.ttf");}
+@font-face{font-family:"Mono";font-weight:500;src:url("file:///D:/coding/flutter/stravo/assets/fonts/IBMPlexMono-Medium.ttf");}
+@font-face{font-family:"Mono";font-weight:700;src:url("file:///D:/coding/flutter/stravo/assets/fonts/IBMPlexMono-Bold.ttf");}
+@font-face{font-family:"Sans";font-weight:400;src:url("file:///D:/coding/flutter/stravo/assets/fonts/IBMPlexSans-Regular.ttf");}
+@font-face{font-family:"Sans";font-weight:600;src:url("file:///D:/coding/flutter/stravo/assets/fonts/IBMPlexSans-SemiBold.ttf");}
+
+:root{
+  --paper:#EFE9DC;--paper2:#E3DBC9;--line:#CFC6B2;
+  --ink:#141414;--ink2:#3A3A36;--mute:#77736A;
+  --or:#FF4F00;--acid:#C6FF00;--ok:#2F7D4F;--cau:#E8B23A;
+  --bike:#FF4F00;--run:#141414;--walk:#2F7D4F;--gym:#3B5BDB;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html.x2{zoom:2}
+body{background:#D8CFBC;font-family:"Sans",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
+.stage{display:flex;gap:32px;padding:24px;align-items:flex-start}
+
+/* device */
+.device{width:414px;height:868px;background:#141414;border-radius:48px;padding:12px;position:relative;flex:none;
+  box-shadow:0 0 0 1px #000,0 22px 40px rgba(20,20,20,.28)}
+.device:before{content:"";position:absolute;left:50%;top:22px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#000;z-index:20;box-shadow:0 0 0 2px #2a2a2a}
+.screen{width:390px;height:844px;border-radius:36px;overflow:hidden;position:relative;background-color:var(--paper);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='390' height='460'><g fill='none' stroke='%23CFC6B2' stroke-width='1' opacity='.75'><path d='M-20 70 C 60 30 130 110 210 70 S 360 20 420 90'/><path d='M-20 95 C 60 58 130 136 210 98 S 360 50 420 116'/><path d='M-20 122 C 70 88 140 160 215 126 S 360 82 420 142'/><path d='M-20 300 C 40 260 120 330 190 300 S 330 250 420 310'/><path d='M-20 326 C 44 290 124 356 194 326 S 334 278 420 336'/><path d='M-20 352 C 50 318 128 382 200 352 S 340 306 420 362'/><path d='M260 200 c 40 -30 110 -10 120 30 c 10 40 -60 60 -100 40 c -40 -20 -50 -50 -20 -70z'/><path d='M276 210 c 30 -18 80 -6 88 20 c 6 26 -42 40 -70 26 c -28 -12 -36 -32 -18 -46z'/></g></svg>"),
+   linear-gradient(rgba(207,198,178,.28) 1px,transparent 1px),linear-gradient(90deg,rgba(207,198,178,.28) 1px,transparent 1px);
+  background-size:390px 460px,24px 24px,24px 24px}
+.screen.dark{background:#141414;color:var(--paper)}
+
+/* status bar */
+.status{height:34px;display:flex;justify-content:space-between;align-items:center;padding:4px 26px 0;font-family:"Sans";font-weight:600;font-size:13px;position:relative;z-index:5}
+.status .ic{display:flex;gap:6px;align-items:center}
+.status svg{display:block}
+
+.content{position:absolute;top:34px;left:0;right:0;bottom:84px;padding:6px 16px 0;overflow:hidden}
+.content.full{bottom:0}
+
+/* type */
+.anton{font-family:"Anton";font-weight:400;letter-spacing:.01em;line-height:.95}
+.lbl{font-family:"Mono";font-weight:500;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.lbl.b{font-weight:700;color:var(--ink)}
+.mono{font-family:"Mono"}
+.mute{color:var(--mute)}
+.sb{font-weight:600}
+
+/* cards */
+.card{border:2px solid var(--ink);background:var(--paper);margin-bottom:10px}
+.card .hd{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1.5px solid var(--ink);
+  font-family:"Mono";font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.card .hd .r{font-weight:500;color:var(--ink2)}
+.row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+
+.cb{width:17px;height:17px;border:2px solid var(--ink);flex:none;display:flex;align-items:center;justify-content:center;background:var(--paper)}
+.cb.on{background:var(--ink)}
+.done{text-decoration:line-through;color:var(--mute)}
+
+.bar{height:9px;border:1.5px solid var(--ink);background:var(--paper2);position:relative}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--ink)}
+
+.tag{font-family:"Mono";font-weight:700;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 6px;border:1.5px solid var(--ink);line-height:1.2;white-space:nowrap}
+.btn{font-family:"Mono";font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn.or{background:var(--or);color:var(--ink)}
+.btn.ink{background:var(--ink);color:var(--paper)}
+
+/* bottom nav */
+.nav{position:absolute;left:0;right:0;bottom:0;height:84px;background:var(--paper);border-top:2px solid var(--ink);z-index:10}
+.nav .tabs{display:grid;grid-template-columns:1fr 1fr 86px 1fr 1fr;height:62px}
+.nav .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-family:"Mono";font-weight:700;font-size:9px;letter-spacing:.12em;color:var(--ink)}
+.nav .tab.on{background:var(--ink);color:var(--paper)}
+.nav .mid{position:relative}
+.nav .fab{position:absolute;left:50%;top:-16px;margin-left:-29px;width:58px;height:58px;border-radius:50%;background:var(--or);
+  box-shadow:0 0 0 2px var(--ink);display:flex;align-items:center;justify-content:center}
+.nav .fab.close{background:var(--ink)}
+.nav .fablbl{position:absolute;left:0;right:0;top:46px;text-align:center;font-family:"Mono";font-weight:700;font-size:9px;letter-spacing:.14em}
+.nav .gest{height:20px;display:flex;align-items:center;justify-content:center}
+.gest i{width:120px;height:4px;border-radius:2px;background:var(--ink);display:block}
+.gestfree{position:absolute;left:0;right:0;bottom:6px;display:flex;justify-content:center;z-index:12}
+
+.cap{font-family:"Mono";font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin-top:10px}

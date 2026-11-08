@@ -71,10 +71,12 @@ class ActivitiesDao extends DatabaseAccessor<AppDatabase>
     return query.get();
   }
 
-  /// Cari aktivitas yang belum selesai (Crash Recovery check)
+  /// Cari rekaman GPS yang belum selesai (Crash Recovery check).
+  /// Sesi gym yang berjalan punya pemulihan sendiri (lihat `GymDao`).
   Future<Activity?> getUnfinishedActivity() {
     return (select(activities)
           ..where((t) => t.status.equals('inProgress'))
+          ..where((t) => t.sportType.equals('strength').not())
           ..orderBy([(t) => OrderingTerm.desc(t.startTime)])
           ..limit(1))
         .getSingleOrNull();

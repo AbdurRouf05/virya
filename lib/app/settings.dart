@@ -74,7 +74,8 @@ extension SettingsMapX on Map<String, String> {
   bool flag(String key) => (this[key] ?? settingDefaults[key]) == 'true';
   double number(String key, double fallback) =>
       double.tryParse(this[key] ?? '') ?? fallback;
-  SportType get defaultSport => SportType.values.firstWhere(
+  /// Olahraga GPS bawaan untuk perekam (gym tidak pernah jadi bawaan).
+  SportType get defaultSport => SportType.gps.firstWhere(
     (s) => s.name == this[SettingKeys.defaultSport],
     orElse: () => SportType.gravelCycling,
   );

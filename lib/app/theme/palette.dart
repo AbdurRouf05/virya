@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/constants/sport_category.dart';
 
 /// All visual tokens of one style. A style = one [Palette] instance
 /// (see `styles/`). Widgets never read this directly; they use `FN.*`.
@@ -35,6 +36,9 @@ class Palette {
   /// Climb colors for grade buckets: <3, <5, <8, <11, <15, >=15 (%).
   final List<Color> gradeRamp;
 
+  /// Warna per kategori olahraga (kalender, filter, legenda).
+  final Map<SportCategory, Color> category;
+
   // Font families
   final String display;
   final String mono;
@@ -59,6 +63,7 @@ class Palette {
     required this.caution,
     required this.surface,
     required this.gradeRamp,
+    required this.category,
     required this.display,
     required this.mono,
     required this.sans,

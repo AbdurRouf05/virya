@@ -45,7 +45,7 @@ Future<SportType?> showRecordingSportPicker(
             child: Text('PILIH OLAHRAGA',
                 style: FN.label(size: 12, color: FN.signal)),
           ),
-          for (final s in SportType.values)
+          for (final s in SportType.gps)
             ListTile(
               minTileHeight: 56,
               leading: Icon(sportIcon(s),

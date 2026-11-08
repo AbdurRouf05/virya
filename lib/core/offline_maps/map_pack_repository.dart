@@ -21,22 +21,28 @@ class MapConfig {
   final Uri pageUrl;
   final String? basemapUrl; // pmtiles://http://127.0.0.1:port/packs/x.pmtiles
   final String? demUrl;
-  final bool onlineBasemap; // use OpenFreeMap when no pack
+
+  /// No PMTiles basemap → draw OpenFreeMap tiles through the local caching
+  /// proxy ([tilesUrl]); works offline for cached / downloaded areas.
+  final bool onlineBasemap;
+  final String? tilesUrl; // http://127.0.0.1:port/tiles/{z}/{x}/{y}.pbf
 
   const MapConfig({
     required this.pageUrl,
     this.basemapUrl,
     this.demUrl,
     this.onlineBasemap = false,
+    this.tilesUrl,
   });
 
   bool get hasDem => demUrl != null;
 
   Map<String, Object?> toJson() => {
-        'basemapUrl': basemapUrl,
-        'demUrl': demUrl,
-        'online': onlineBasemap,
-      };
+    'basemapUrl': basemapUrl,
+    'demUrl': demUrl,
+    'online': onlineBasemap,
+    'tilesUrl': tilesUrl,
+  };
 }
 
 class MapPacksState {
@@ -61,10 +67,10 @@ class MapPackRepository {
     required SetSetting setSetting,
     Future<Directory> Function()? mapsDir,
     LocalTileServer? server,
-  })  : _get = getSetting,
-        _set = setSetting,
-        _dir = mapsDir ?? defaultMapsDir,
-        _server = server ?? LocalTileServer.instance;
+  }) : _get = getSetting,
+       _set = setSetting,
+       _dir = mapsDir ?? defaultMapsDir,
+       _server = server ?? LocalTileServer.instance;
 
   final GetSetting _get;
   final SetSetting _set;
@@ -79,13 +85,15 @@ class MapPackRepository {
       final name = p.basename(e.path);
       if (!name.toLowerCase().endsWith('.pmtiles')) continue;
       final header = await readHeader(e);
-      out.add(MapPack(
-        fileName: name,
-        path: e.path,
-        sizeBytes: await e.length(),
-        type: detectPackType(name, header),
-        header: header,
-      ));
+      out.add(
+        MapPack(
+          fileName: name,
+          path: e.path,
+          sizeBytes: await e.length(),
+          type: detectPackType(name, header),
+          header: header,
+        ),
+      );
     }
     out.sort((a, b) => a.fileName.compareTo(b.fileName));
     return out;
@@ -175,7 +183,8 @@ class MapPackRepository {
 
   Future<void> setActiveBasemap(String? name) =>
       _set(MapSettingKeys.basemap, name ?? '');
-  Future<void> setActiveDem(String? name) => _set(MapSettingKeys.dem, name ?? '');
+  Future<void> setActiveDem(String? name) =>
+      _set(MapSettingKeys.dem, name ?? '');
   Future<void> setOnlineFallback(bool v) =>
       _set(MapSettingKeys.onlineFallback, v ? 'true' : 'false');
 
@@ -193,7 +202,9 @@ class MapPackRepository {
   }
 
   /// Resolves active packs (falls back to the first installed one of each
-  /// type), starts the local server and checks connectivity if needed.
+  /// type) and starts the local server. Without a PMTiles basemap the map
+  /// uses the online/cached tile proxy; [MapPacksState.onlineFallback] only
+  /// decides whether the proxy may fetch new tiles from the internet.
   Future<MapConfig> buildConfig() async {
     final base = await _server.start();
     final st = await loadState();
@@ -208,19 +219,24 @@ class MapPackRepository {
     final bm = pick(st.activeBasemap, MapPackType.basemap);
     final dem = pick(st.activeDem, MapPackType.dem);
     String url(String n) => 'pmtiles://$base/packs/${Uri.encodeComponent(n)}';
-    final online = bm == null && st.onlineFallback && await isOnline();
+    final proxy = _server.tiles;
+    proxy?.onlineEnabled = st.onlineFallback;
+    final online = bm == null && proxy != null;
     return MapConfig(
       pageUrl: base.replace(path: '/app/map.html'),
       basemapUrl: bm == null ? null : url(bm),
       demUrl: dem == null ? null : url(dem),
       onlineBasemap: online,
+      tilesUrl: online ? '$base/tiles/{z}/{x}/{y}.pbf' : null,
     );
   }
 
+  /// Quick DNS check used for the status line.
   static Future<bool> isOnline() async {
     try {
-      final r = await InternetAddress.lookup('tiles.openfreemap.org')
-          .timeout(const Duration(seconds: 2));
+      final r = await InternetAddress.lookup(
+        'tiles.openfreemap.org',
+      ).timeout(const Duration(seconds: 2));
       return r.isNotEmpty && r.first.rawAddress.isNotEmpty;
     } catch (_) {
       return false;
@@ -230,7 +246,10 @@ class MapPackRepository {
 
 final mapPackRepositoryProvider = Provider<MapPackRepository>((ref) {
   final db = ref.watch(databaseProvider);
-  return MapPackRepository(getSetting: db.getSetting, setSetting: db.setSetting);
+  return MapPackRepository(
+    getSetting: db.getSetting,
+    setSetting: db.setSetting,
+  );
 });
 
 final mapPacksStateProvider = FutureProvider<MapPacksState>(

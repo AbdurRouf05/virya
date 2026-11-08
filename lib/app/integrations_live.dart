@@ -5,6 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/integrations.dart';
 import 'package:virya/core/backup/backup_service.dart';
 import 'package:virya/core/database/app_database.dart';
+import 'package:virya/features/activity_history/presentation/activity_detail_screen.dart';
+import 'package:virya/features/gym/presentation/gym_home_screen.dart';
+import 'package:virya/features/gym/presentation/gym_launcher.dart';
+import 'package:virya/features/gym/presentation/gym_session_detail.dart';
 import 'package:virya/features/maps/presentation/flyover_screen.dart';
 import 'package:virya/features/maps/presentation/map_packs_screen.dart';
 import 'package:virya/features/maps/widgets/route_map_view.dart';
@@ -14,7 +18,7 @@ import 'package:virya/features/share/presentation/share_studio_screen.dart';
 import 'package:virya/services/export_import/activity_exporter.dart';
 import 'package:virya/services/export_import/activity_importer.dart';
 
-/// Real wiring to the recording, share, maps and IO modules.
+/// Real wiring to the recording, share, maps, gym and IO modules.
 class LiveIntegrations extends Integrations {
   const LiveIntegrations();
 
@@ -27,6 +31,9 @@ class LiveIntegrations extends Integrations {
   Widget flyover(String activityId) => FlyoverScreen(activityId: activityId);
   @override
   Widget mapPacks() => const MapPacksScreen();
+  @override
+  Widget activityDetail(String activityId) =>
+      ActivityDetailScreen(activityId: activityId);
   @override
   Widget routeMap({
     required List<(double, double)> points,
@@ -44,6 +51,15 @@ class LiveIntegrations extends Integrations {
   @override
   Future<void> checkRecovery(BuildContext context, WidgetRef ref) =>
       checkAndOfferRecovery(context, ref);
+
+  @override
+  Widget gymHome() => const GymHomeScreen();
+  @override
+  Future<void> startGym(BuildContext context, WidgetRef ref) =>
+      startGymFlow(context, ref);
+  @override
+  Widget gymSessionDetail(String activityId) =>
+      GymSessionDetail(activityId: activityId);
 
   @override
   Future<List<String>> importFile(AppDatabase db, String path) =>

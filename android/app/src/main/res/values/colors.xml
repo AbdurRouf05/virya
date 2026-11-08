@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Virya brand: paper background for launcher icon and splash. -->
+    <color name="virya_paper">#EFE9DC</color>
+    <color name="ic_launcher_background">#EFE9DC</color>
+</resources>

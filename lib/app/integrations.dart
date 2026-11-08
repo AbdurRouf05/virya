@@ -17,6 +17,9 @@ abstract class Integrations {
   Widget shareStudio(String activityId);
   Widget flyover(String activityId);
   Widget mapPacks();
+
+  /// Full detail page of one saved activity (journal module).
+  Widget activityDetail(String activityId);
   Widget routeMap({
     required List<(double lat, double lon)> points,
     List<double>? values,
@@ -25,6 +28,15 @@ abstract class Integrations {
   });
 
   Future<void> checkRecovery(BuildContext context, WidgetRef ref);
+
+  /// Beranda gym (tab LATIHAN → GYM).
+  Widget gymHome();
+
+  /// "MULAI GYM": lanjutkan sesi aktif atau pilih template lalu mulai.
+  Future<void> startGym(BuildContext context, WidgetRef ref);
+
+  /// Isi detail aktivitas gym (set per gerakan) di halaman aktivitas.
+  Widget gymSessionDetail(String activityId);
 
   Future<List<String>> importFile(AppDatabase db, String path);
   Future<File> exportGpx(AppDatabase db, String activityId);
@@ -60,6 +72,8 @@ class PlaceholderIntegrations extends Integrations {
   @override
   Widget mapPacks() => _missing('PETA');
   @override
+  Widget activityDetail(String activityId) => _missing('AKTIVITAS');
+  @override
   Widget routeMap({
     required List<(double, double)> points,
     List<double>? values,
@@ -76,6 +90,13 @@ class PlaceholderIntegrations extends Integrations {
 
   @override
   Future<void> checkRecovery(BuildContext context, WidgetRef ref) async {}
+
+  @override
+  Widget gymHome() => const SizedBox.shrink();
+  @override
+  Future<void> startGym(BuildContext context, WidgetRef ref) async {}
+  @override
+  Widget gymSessionDetail(String activityId) => const SizedBox.shrink();
 
   Never _unavailable() =>
       throw UnsupportedError('Modul impor/ekspor belum terpasang');

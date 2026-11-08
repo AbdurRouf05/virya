@@ -1,121 +1,50 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/theme/field_notes.dart';
-import 'package:virya/core/offline_maps/map_pack.dart';
-import 'package:virya/core/offline_maps/map_pack_repository.dart';
-import 'package:virya/features/maps/presentation/widgets/map_packs_active_card.dart';
+import 'package:virya/core/offline_maps/map_pack.dart' show formatBytes;
+import 'package:virya/core/offline_maps/offline_region.dart';
+import 'package:virya/features/maps/application/region_download_controller.dart';
+import 'package:virya/features/maps/data/offline_map_providers.dart';
+import 'package:virya/features/maps/presentation/widgets/map_packs_advanced.dart';
 import 'package:virya/features/maps/presentation/widgets/map_packs_box.dart';
-import 'package:virya/features/maps/presentation/widgets/map_packs_guide.dart';
-import 'package:virya/features/maps/presentation/widgets/map_packs_import_button.dart';
-import 'package:virya/features/maps/presentation/widgets/map_packs_online_toggle.dart';
-import 'package:virya/features/maps/presentation/widgets/map_packs_pack_tile.dart';
+import 'package:virya/features/maps/presentation/widgets/map_packs_confirm.dart';
 import 'package:virya/features/maps/presentation/widgets/map_packs_section_title.dart';
+import 'package:virya/features/maps/presentation/widgets/offline_map_status_card.dart';
+import 'package:virya/features/maps/presentation/widgets/offline_region_tile.dart';
+import 'package:virya/features/maps/presentation/widgets/region_download_progress.dart';
+import 'package:virya/features/maps/presentation/widgets/region_download_sheet.dart';
 
-/// Manage offline PMTiles packs (vector basemap + terrain DEM).
-class MapPacksScreen extends ConsumerStatefulWidget {
+/// "Peta offline": online by default, cache status, downloaded regions,
+/// and the advanced PMTiles section.
+class MapPacksScreen extends ConsumerWidget {
   const MapPacksScreen({super.key});
 
-  @override
-  ConsumerState<MapPacksScreen> createState() => _MapPacksScreenState();
-}
-
-class _MapPacksScreenState extends ConsumerState<MapPacksScreen> {
-  double? _importProgress; // null = idle
-  String? _importName;
-
-  MapPackRepository get _repo => ref.read(mapPackRepositoryProvider);
-
-  void _refresh() {
-    ref.invalidate(mapPacksStateProvider);
-    ref.invalidate(mapConfigProvider);
+  Future<void> _download(BuildContext context, WidgetRef ref, [OfflineRegion? resume]) async {
+    final region = resume ?? await RegionDownloadSheet.show(context);
+    if (region == null) return;
+    final msg = await ref.read(regionDownloadProvider.notifier).start(region);
+    if (context.mounted) mapToast(context, msg);
   }
 
-  void _toast(String msg) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: FN.ink,
-      content: Text(msg, style: FN.label(size: 12, color: FN.paper)),
-    ));
+  Future<void> _delete(BuildContext context, WidgetRef ref, OfflineRegion r) async {
+    final ok = await confirmMapDelete(context,
+        title: 'HAPUS WILAYAH?',
+        body: '${r.name}\n${formatBytes(r.sizeBytes)} akan dihapus.');
+    if (ok) await ref.read(regionDownloadProvider.notifier).delete(r);
   }
 
-  Future<void> _import() async {
-    final List<PlatformFile> files;
-    try {
-      files = await FilePicker.pickFiles(dialogTitle: 'Pilih file .pmtiles');
-    } catch (e) {
-      _toast('Gagal membuka pemilih file: $e');
-      return;
-    }
-    if (files.isEmpty) return;
-    final f = files.first;
-    setState(() {
-      _importProgress = 0;
-      _importName = f.name;
-    });
-    try {
-      final total = f.lengthSync() ?? await f.length();
-      final pack = await _repo.importStream(
-        f.name,
-        f.readAsByteStream(),
-        totalBytes: total,
-        onProgress: (p) {
-          if (mounted) setState(() => _importProgress = p);
-        },
-      );
-      _toast('Terpasang: ${pack.fileName} (${mapPackTypeLabel(pack.type)})');
-    } on FormatException catch (e) {
-      _toast(e.message);
-    } catch (e) {
-      _toast('Impor gagal: $e');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _importProgress = null;
-          _importName = null;
-        });
-      }
-      _refresh();
-    }
-  }
-
-  Future<void> _delete(MapPack pack) async {
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (c) => AlertDialog(
-        backgroundColor: FN.paper,
-        shape: RoundedRectangleBorder(side: BorderSide(color: FN.ink, width: 2)),
-        title: Text('HAPUS PAKET?', style: FN.bigNumber(24)),
-        content: Text('${pack.fileName}\n${formatBytes(pack.sizeBytes)} akan dihapus.',
-            style: TextStyle(fontFamily: FN.sans, color: FN.inkSoft)),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(c, false),
-              child: Text('BATAL', style: FN.label(color: FN.ink))),
-          TextButton(
-              onPressed: () => Navigator.pop(c, true),
-              child: Text('HAPUS', style: FN.label(color: FN.warn))),
-        ],
-      ),
-    );
-    if (ok != true) return;
-    await _repo.delete(pack);
-    _refresh();
-  }
-
-  Future<void> _activate(MapPack pack, MapPacksState st) async {
-    if (pack.type == MapPackType.dem) {
-      await _repo.setActiveDem(st.activeDem == pack.fileName ? null : pack.fileName);
-    } else {
-      await _repo.setActiveBasemap(
-          st.activeBasemap == pack.fileName ? null : pack.fileName);
-    }
-    _refresh();
+  Future<void> _clearCache(BuildContext context, WidgetRef ref, int bytes) async {
+    final ok = await confirmMapDelete(context,
+        title: 'HAPUS CACHE?',
+        body: '${formatBytes(bytes)} peta yang pernah dilihat akan dihapus. '
+            'Wilayah yang diunduh tidak ikut terhapus.');
+    if (ok) await ref.read(regionDownloadProvider.notifier).clearCache();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final state = ref.watch(mapPacksStateProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final status = ref.watch(offlineMapStatusProvider);
+    final running = ref.watch(regionDownloadProvider);
     return Scaffold(
       backgroundColor: FN.paper,
       appBar: AppBar(
@@ -130,55 +59,69 @@ class _MapPacksScreenState extends ConsumerState<MapPacksScreen> {
               color: FN.ink, child: const SizedBox(height: 2, width: double.infinity)),
         ),
       ),
-      body: state.when(
-        loading: () => Center(child: CircularProgressIndicator(color: FN.ink)),
-        error: (e, _) => Center(
-            child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Text('Gagal memuat paket peta: $e', style: FN.label(color: FN.warn)),
-        )),
-        data: _content,
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
+        children: [
+          status.when(
+            loading: () => Center(child: CircularProgressIndicator(color: FN.ink)),
+            error: (e, _) => Text('Gagal memuat status peta: $e',
+                style: FN.label(color: FN.warn)),
+            data: (s) => OfflineMapStatusCard(
+              status: s,
+              onClearCache: () => _clearCache(context, ref, s.cacheBytes),
+            ),
+          ),
+          const SizedBox(height: 16),
+          if (running != null)
+            RegionDownloadProgressCard(
+              state: running,
+              onCancel: () => ref.read(regionDownloadProvider.notifier).cancel(),
+            )
+          else
+            _downloadButton(context, ref),
+          const SizedBox(height: 24),
+          ..._regions(context, ref, status.valueOrNull, running),
+          const SizedBox(height: 16),
+          const MapPacksAdvanced(),
+        ],
       ),
     );
   }
 
-  Widget _content(MapPacksState st) => ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
-        children: [
-          MapPacksActiveCard(state: st),
-          const SizedBox(height: 12),
-          MapPacksOnlineToggle(
-            value: st.onlineFallback,
-            onChanged: (v) async {
-              await _repo.setOnlineFallback(v);
-              _refresh();
-            },
+  Widget _downloadButton(BuildContext context, WidgetRef ref) => SizedBox(
+        height: 52,
+        child: FilledButton.icon(
+          style: FilledButton.styleFrom(
+            backgroundColor: FN.ink,
+            foregroundColor: FN.paper,
+            shape: const RoundedRectangleBorder(),
           ),
-          const SizedBox(height: 20),
-          MapPacksSectionTitle('PAKET TERPASANG', trailing: '${st.packs.length}'),
-          if (st.packs.isEmpty)
-            MapPacksBox(
-              child: Text(
-                'Belum ada paket. Tanpa paket, peta memakai latar kertas polos '
-                '(atau OpenFreeMap bila online & diizinkan).',
-                style: TextStyle(fontFamily: FN.sans, color: FN.inkSoft, height: 1.4),
-              ),
-            ),
-          for (final p in st.packs)
-            MapPacksPackTile(
-              pack: p,
-              active: p.fileName == st.activeBasemap || p.fileName == st.activeDem,
-              onActivate: () => _activate(p, st),
-              onDelete: _importProgress != null ? null : () => _delete(p),
-            ),
-          const SizedBox(height: 12),
-          MapPacksImportButton(
-            progress: _importProgress,
-            fileName: _importName,
-            onImport: _import,
-          ),
-          const SizedBox(height: 28),
-          const MapPacksGuide(),
-        ],
+          onPressed: () => _download(context, ref),
+          icon: const Icon(Icons.download_for_offline_outlined),
+          label: Text('UNDUH WILAYAH', style: FN.label(size: 13, color: FN.paper)),
+        ),
       );
+
+  List<Widget> _regions(BuildContext context, WidgetRef ref, OfflineMapStatus? s,
+      RegionDownloadState? running) {
+    final regions = s?.regions ?? const <OfflineRegion>[];
+    return [
+      MapPacksSectionTitle('WILAYAH TERUNDUH',
+          trailing: s == null ? null : formatBytes(s.regionBytes)),
+      if (regions.isEmpty)
+        MapPacksBox(
+          child: Text(
+            'Belum ada. Unduh wilayah sebelum ke tempat tanpa sinyal agar '
+            'peta tetap tampil.',
+            style: TextStyle(fontFamily: FN.sans, color: FN.inkSoft, height: 1.4),
+          ),
+        ),
+      for (final r in regions)
+        OfflineRegionTile(
+          region: r,
+          onResume: running != null ? null : () => _download(context, ref, r),
+          onDelete: running?.region.id == r.id ? null : () => _delete(context, ref, r),
+        ),
+    ];
+  }
 }

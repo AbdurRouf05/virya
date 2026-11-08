@@ -14,7 +14,9 @@ export 'package:virya/features/dashboard/application/fitness_timeline_provider.d
 
 /// "STATISTIK" — totals, fitness & form, calendar, records.
 class StatsScreen extends ConsumerStatefulWidget {
-  const StatsScreen({super.key});
+  /// `true` saat tampil di dalam tab LATIHAN (judul besar disembunyikan).
+  final bool embedded;
+  const StatsScreen({super.key, this.embedded = false});
 
   @override
   ConsumerState<StatsScreen> createState() => _StatsScreenState();
@@ -38,7 +40,7 @@ class _StatsScreenState extends ConsumerState<StatsScreen> {
             children: [
               Masthead(
                 kicker: 'Laporan lapangan',
-                title: 'Statistik',
+                title: widget.embedded ? null : 'Statistik',
                 subtitle:
                     '${list.length} aktivitas · ${Fmt.dateStamp(now, withTime: false)}',
               ),

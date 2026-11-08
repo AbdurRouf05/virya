@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:virya/app/theme/palette.dart';
 import 'package:virya/app/theme/styles/field_notes_style.dart';
 import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/constants/sport_category.dart';
 
 /// Design tokens used by every widget. Values come from the active
 /// [Palette] (see `styles/`), so tokens are NOT const — never use `FN.*`
@@ -36,6 +37,7 @@ class FN {
   static Color get ok => _p.ok;
   static Color get warn => _p.warn;
   static Color get caution => _p.caution;
+  static Color category(SportCategory c) => _p.category[c]!;
 
   static Map<SurfaceType, Color> get surface => _p.surface;
 

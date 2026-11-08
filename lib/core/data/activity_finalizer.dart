@@ -24,6 +24,8 @@ class ActivityFinalizer {
       (s) => s.name == activity.sportType,
       orElse: () => SportType.gravelCycling,
     );
+    // Sesi gym tidak punya titik GPS; ringkasannya ditulis modul gym.
+    if (!sport.isGps) return null;
     final profile = await db.select(db.userProfiles).getSingleOrNull();
     final athlete = profile == null
         ? const AthleteParams()

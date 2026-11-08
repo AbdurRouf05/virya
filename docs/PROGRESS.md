@@ -1,4 +1,4 @@
-# Stravo Pro — Progress Log
+# Virya — Progress Log
 
 Newest entries on top. Contract & ownership: [BUILD_CONTRACT_V2.md](BUILD_CONTRACT_V2.md).
 
@@ -14,9 +14,31 @@ Newest entries on top. Contract & ownership: [BUILD_CONTRACT_V2.md](BUILD_CONTRA
 | D | Share studio: story cards, sticker PNG, Topo-Ink renderer, MP4 encoder | Modul D | ✅ Done (30 tests) — device test pending |
 | E | Offline maps (PMTiles server), MapLibre WebView, 3D flyover + video | Modul E | ✅ Done (48 tests) — device test pending |
 | 2.1 | Perbaikan v2.1 (stempel, video cepat, durasi, flyover, lari, analitik) | Antigravity | ✅ Done (186 tests) |
+| F2 | Virya: rename, arsitektur modular, token tema | — | ✅ Done |
+| F3 | Logo + splash, Hari Ini, navigasi baru, kalender, peta gabungan | — | ✅ Done |
+| F4 | Gym (gerakan, set, template, PR) | — | ✅ Done (22 tes gym) — uji perangkat pending |
 | 2 | Wave 2: live segments + ghost pacer, personal heatmap, BLE HR, polish | — | 🔜 Planned |
 
 ## Log
+
+### 2026-11-08 — Fase 4: Gym ✅
+- **Skema DB v3**: tabel `exercises`, `workout_sets` (cascade dari `activities`), `workout_templates`, `workout_template_items` (cascade dari template) + indeks; migrasi 2→3 membuat tabel & men-seed 44 gerakan bawaan (`core/database/seed/exercise_library.dart`). `GymDao` di `core/database/daos/gym_dao.dart`. Backup tetap menyalin file sqlite utuh, jadi tabel baru ikut otomatis.
+- Sesi gym = baris `activities` dengan `sportType: strength` (jarak 0, durasi = mulai→selesai). `SportType.strength` (label GYM, kategori kekuatan); `isGps` / `SportType.gps` memisahkan olahraga GPS. Pemulihan rekaman GPS & finalizer mengabaikan gym.
+- `features/gym`: sesi berjalan (header durasi live, tabel set kg/reps/RPE opsional, "sblm 60×8", pemanasan, centang → timer istirahat 90 d −15/+15/lewati, SELESAI LATIHAN, buang sesi), draf tersimpan per perubahan sehingga selamat dari app ditutup paksa. Pemilih gerakan (cari + otot + gerakan kustom), template (buat/ubah/urutkan/hapus, simpan dari sesi selesai), riwayat & PR per gerakan (beban maks, e1RM Epley, set volume terbaik), volume mingguan, otot yang terlewat 7/14 hari.
+- Titik masuk: lembar "MAU NGAPAIN?" → MULAI GYM; tab LATIHAN → GYM. Detail aktivitas gym (tanpa peta/ekspor) lewat `Integrations.gymSessionDetail`; jurnal punya filter GYM dan menampilkan durasi untuk gym.
+- `build.yaml` baru: drift_dev hanya untuk `lib/core/database/**` (analyzer drift_dev 2.24 gagal membaca dot-shorthand di `win32 6.4.0`).
+- Tes: `test/gym/` (matematika, DAO in-memory, migrasi 2→3) — 22/22 lulus.
+
+### 2026-11-08 — Fase 3: logo, Hari Ini, kalender, navigasi ✅
+- Logo **Streak Sel** (sel heatmap membentuk V, sel terakhir oranye). Kit di `assets/branding/`, generator `design/logo/build_kit.py`. Ikon Android adaptif + bulat + monokrom (Android 13), splash Android 12+/lama, ikon & launch screen iOS. Widget `ViryaMark` (`lib/core/widgets/virya_mark.dart`).
+- Navigasi baru: HARI INI · KALENDER · [REKAM] · LATIHAN · PROFIL. Tombol tengah membuka lembar "MAU NGAPAIN?" (Rekam GPS aktif; Gym/Tugas/Foto tubuh menyusul). Tab PETA dihapus; peta offline pindah ke Pengaturan.
+- `features/today`: tanggal, latihan hari ini + streak, strip 7 hari per kategori, aktivitas terakhir.
+- `features/calendar`: heatmap tahun + grid bulan, warna per kategori, hari campuran terbelah, filter, streak, % hari aktif, detail hari. Provider publik `calendarDaysProvider`, `calendarStatsProvider(filter)`.
+- `features/training`: tab LATIHAN = JURNAL · STATISTIK (layar tertanam tanpa judul ganda, `Masthead.title` kini opsional).
+- Kategori olahraga bersama: `core/constants/sport_category.dart` + `FN.category(cat)` (warna di `Palette.category`).
+- `core/time/current_day.dart`: `currentDayProvider` berganti saat tengah malam / app dibuka lagi.
+- `Integrations.activityDetail(id)` untuk membuka detail aktivitas dari modul lain.
+- **Peta gabungan**: peta online (OpenFreeMap) langsung jalan tanpa setup lewat server lokal `/tiles/` (urutan: wilayah terunduh → cache → internet). Cache tile 500 MB (LRU). "Unduh wilayah" di aplikasi: kotak 10–100 km di sekitar posisi GPS, zoom 5–14, estimasi ukuran, maks 30.000 tile, bisa dilanjutkan. Impor .pmtiles + panduan dipindah ke "Lanjutan". Layar bernama "PETA OFFLINE", dibuka dari Pengaturan.
 
 ### 2026-11-08 — Fase 2: Virya, arsitektur modular ✅
 - Rename Stravo → **Virya** (package `virya`, Android `com.abdurrouf.virya`, channel `virya/*`). Backup lama (`app: stravo`) tetap bisa di-restore.

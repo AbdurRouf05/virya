@@ -116,42 +116,45 @@ class _EditActivitySheetState extends ConsumerState<EditActivitySheet> {
               textCapitalization: TextCapitalization.sentences,
               decoration: const InputDecoration(labelText: 'CATATAN'),
             ),
-            const SizedBox(height: 18),
-            Text('OLAHRAGA', style: FN.label(size: 10)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (final s in SportType.values)
+            // Gym (tanpa GPS): olahraga & perlengkapan tidak bisa diubah.
+            if (_sport.isGps) ...[
+              const SizedBox(height: 18),
+              Text('OLAHRAGA', style: FN.label(size: 10)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final s in SportType.gps)
+                    StampChip(
+                      text: s.label,
+                      icon: s.icon,
+                      selected: _sport == s,
+                      onTap: () => setState(() => _sport = s),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Text('PERLENGKAPAN', style: FN.label(size: 10)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
                   StampChip(
-                    text: s.label,
-                    icon: s.icon,
-                    selected: _sport == s,
-                    onTap: () => setState(() => _sport = s),
+                    text: 'TANPA',
+                    selected: _gearId == null,
+                    onTap: () => setState(() => _gearId = null),
                   ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            Text('PERLENGKAPAN', style: FN.label(size: 10)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                StampChip(
-                  text: 'TANPA',
-                  selected: _gearId == null,
-                  onTap: () => setState(() => _gearId = null),
-                ),
-                for (final g in usable)
-                  StampChip(
-                    text: g.name,
-                    selected: _gearId == g.id,
-                    onTap: () => setState(() => _gearId = g.id),
-                  ),
-              ],
-            ),
+                  for (final g in usable)
+                    StampChip(
+                      text: g.name,
+                      selected: _gearId == g.id,
+                      onTap: () => setState(() => _gearId = g.id),
+                    ),
+                ],
+              ),
+            ],
             const SizedBox(height: 24),
             InkButton(
               label: 'Simpan & hitung ulang',

@@ -8,10 +8,13 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:virya/core/database/daos/activities_dao.dart';
 import 'package:virya/core/database/daos/gears_dao.dart';
+import 'package:virya/core/database/daos/gym_dao.dart';
 import 'package:virya/core/database/daos/track_points_dao.dart';
 import 'package:virya/core/database/daos/waypoint_photos_dao.dart';
 import 'package:virya/core/database/tables/activities_table.dart';
+import 'package:virya/core/database/seed/exercise_library.dart';
 import 'package:virya/core/database/tables/gears_table.dart';
+import 'package:virya/core/database/tables/gym_tables.dart';
 import 'package:virya/core/database/tables/segments_table.dart';
 import 'package:virya/core/database/tables/track_points_table.dart';
 import 'package:virya/core/database/tables/user_profile_table.dart';
@@ -29,8 +32,12 @@ part 'app_database.g.dart';
     Segments,
     SegmentEfforts,
     AppSettings,
+    Exercises,
+    WorkoutSets,
+    WorkoutTemplates,
+    WorkoutTemplateItems,
   ],
-  daos: [ActivitiesDao, TrackPointsDao, WaypointPhotosDao, GearsDao],
+  daos: [ActivitiesDao, TrackPointsDao, WaypointPhotosDao, GearsDao, GymDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -46,7 +53,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -62,6 +69,8 @@ class AppDatabase extends _$AppDatabase {
             'CREATE INDEX IF NOT EXISTS idx_activities_sport_status '
             'ON activities (sport_type, status);',
           );
+          await _createGymIndexes();
+          await seedExerciseLibrary(this);
         },
         onUpgrade: (Migrator m, int from, int to) async {
           if (from < 2) {
@@ -73,12 +82,31 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(segmentEfforts);
             await m.createTable(appSettings);
           }
+          if (from < 3) {
+            await m.createTable(exercises);
+            await m.createTable(workoutSets);
+            await m.createTable(workoutTemplates);
+            await m.createTable(workoutTemplateItems);
+            await _createGymIndexes();
+            await seedExerciseLibrary(this);
+          }
         },
         beforeOpen: (details) async {
           // Aktifkan Foreign Keys di SQLite
           await customStatement('PRAGMA foreign_keys = ON');
         },
       );
+
+  Future<void> _createGymIndexes() async {
+    await customStatement(
+      'CREATE INDEX IF NOT EXISTS idx_workout_sets_activity '
+      'ON workout_sets (activity_id, exercise_order, set_index);',
+    );
+    await customStatement(
+      'CREATE INDEX IF NOT EXISTS idx_workout_sets_exercise '
+      'ON workout_sets (exercise_id);',
+    );
+  }
 }
 
 /// Fungsi pembuka koneksi file database lokal di storage internal ponsel
@@ -108,6 +136,10 @@ final trackPointsDaoProvider = Provider<TrackPointsDao>((ref) {
 
 final waypointPhotosDaoProvider = Provider<WaypointPhotosDao>((ref) {
   return ref.watch(databaseProvider).waypointPhotosDao;
+});
+
+final gymDaoProvider = Provider<GymDao>((ref) {
+  return ref.watch(databaseProvider).gymDao;
 });
 
 final gearsDaoProvider = Provider<GearsDao>((ref) {

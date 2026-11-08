@@ -1,0 +1,50 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face { font-family: Anton; src: url(../../assets/fonts/Anton-Regular.ttf); }
+body { margin:0; background:#e2dccb; font-family: monospace; color:#141414; }
+.wrap { padding:40px; }
+h1 { font-family: Anton; font-size:56px; margin:0 0 4px; letter-spacing:1px; }
+.sub { font-size:12px; letter-spacing:1px; color:#6b6457; margin-bottom:28px; }
+.panel { background:#EFE9DC; border:2px solid #141414; padding:24px; margin-bottom:24px; display:flex; gap:28px; flex-wrap:nowrap; }
+.col { display:flex; flex-direction:column; gap:12px; }
+.lbl { font-size:11px; letter-spacing:2px; color:#6b6457; text-transform:uppercase; }
+.row { display:flex; gap:20px; align-items:center; }
+.ai { position:relative; overflow:hidden; flex:none; }
+.ai img { position:absolute; width:150%; height:150%; left:-25%; top:-25%; }
+.strip { background:#5a6472; padding:14px 16px; }
+.circle { border-radius:50%; }
+.squircle { border-radius:32%; }
+.rsq { border-radius:16%; }
+.teardrop { border-radius:50% 50% 50% 12%; }
+.phone { width:260px; height:520px; border-radius:26px; padding:22px 16px; box-sizing:border-box; }
+.home { background:linear-gradient(160deg,#55606f,#2d343d); display:flex; gap:10px; align-content:flex-start; flex-wrap:wrap; }
+.app { width:60px; display:flex; flex-direction:column; align-items:center; gap:6px; color:#fff; font:12px sans-serif; }
+.splash { background:#EFE9DC; border:8px solid #141414; display:flex; align-items:center; justify-content:center; }
+
+.sm { display:flex; flex-direction:column; align-items:center; gap:6px; font-size:10px; }
+.dark { background:#141414; padding:12px 16px; color:#ccc; }
+</style></head><body><div class="wrap">
+<h1>VIRYA - LOGO FINAL (STREAK SEL)</h1>
+<div class="sub">sel 40 . celah 4 . pitch 44 . tanda 216x128 dalam kotak 256 . kertas #EFE9DC . tinta #141414 . sinyal #FF4F00</div>
+
+<div class="panel">
+  <div class="col"><div class="lbl">Tanda</div><img src="../../assets/branding/virya_mark_512.png" width="220" style="background:#EFE9DC;border:1px solid #d6cfbe"></div>
+  <div class="col"><div class="lbl">Wordmark</div><img src="../../assets/branding/virya_wordmark.svg" height="90"><div class="lbl" style="margin-top:20px">Mono / putih</div>
+    <div class="row"><img src="../../assets/branding/virya_mark_mono.svg" width="110"><div style="background:#141414;padding:8px"><img src="../../assets/branding/virya_mark_white.svg" width="96"></div><div style="background:#FF4F00;padding:8px"><img src="../../assets/branding/virya_mark_white.svg" width="96"></div></div></div>
+</div>
+
+<div class="panel">
+  <div class="col"><div class="lbl">Adaptive icon - bentuk mask</div>
+    <div class="row strip"><div class="ai circle" style="width:96px;height:96px;background:#EFE9DC"><img src="../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png"></div><div class="ai squircle" style="width:96px;height:96px;background:#EFE9DC"><img src="../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png"></div><div class="ai rsq" style="width:96px;height:96px;background:#EFE9DC"><img src="../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png"></div><div class="ai teardrop" style="width:96px;height:96px;background:#EFE9DC"><img src="../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png"></div></div>
+    <div class="lbl" style="margin-top:12px">Themed icon (Android 13, monokrom)</div>
+    <div class="row strip"><div class="ai circle" style="width:96px;height:96px;background:#24362f"><img src="small/themed_fg.png"></div><div class="ai squircle" style="width:96px;height:96px;background:#24362f"><img src="small/themed_fg.png"></div></div>
+    <div class="lbl" style="margin-top:12px">iOS / legacy</div>
+    <div class="row strip"><img src="../../ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png" width="96" style="border-radius:22%"><img src="../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="96"><img src="../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" width="96"></div>
+    <div class="lbl" style="margin-top:12px">Ukuran kecil (1:1 dan diperbesar)</div>
+    <div class="row strip" style="color:#fff"><div class="sm"><img src="small/icon_16.png" width="16" height="16"><span>16px</span></div><div class="sm"><img src="small/icon_24.png" width="24" height="24"><span>24px</span></div><div class="sm"><img src="small/icon_32.png" width="32" height="32"><span>32px</span></div><div class="sm"><img src="small/icon_48.png" width="48" height="48"><span>48px</span></div><div class="sm"><img src="small/icon_16.png" width="64" height="64" style="image-rendering:pixelated"><span>16px x4</span></div><div class="sm"><img src="small/icon_24.png" width="96" height="96" style="image-rendering:pixelated"><span>24px x4</span></div></div>
+    <div class="row dark"><div class="sm"><img src="small/mark_16.png" width="16" height="16"><span>16px</span></div><div class="sm"><img src="small/mark_24.png" width="24" height="24"><span>24px</span></div><div class="sm"><img src="small/mark_32.png" width="32" height="32"><span>32px</span></div></div>
+  </div>
+  <div class="col"><div class="lbl">Layar utama</div><div class="phone home"><div class="app"><div class="ai circle" style="width:64px;height:64px;background:#3fa45f"></div><span>Kamera</span></div><div class="app"><div class="ai circle" style="width:64px;height:64px;background:#5878c8"></div><span>Pesan</span></div><div class="app"><div class="ai circle" style="width:64px;height:64px;background:#EFE9DC"><img src="../../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png"></div><span>Virya</span></div><div class="app"><div class="ai circle" style="width:64px;height:64px;background:#dd8a4a"></div><span>Galeri</span></div></div></div>
+  <div class="col"><div class="lbl">Themed</div><div class="phone home" style="background:linear-gradient(160deg,#1b2a24,#0e1512)"><div class="app"><div class="ai circle" style="width:64px;height:64px;background:#24362f"></div><span>Kamera</span></div><div class="app"><div class="ai circle" style="width:64px;height:64px;background:#24362f"></div><span>Pesan</span></div><div class="app"><div class="ai circle" style="width:64px;height:64px;background:#24362f"><img src="small/themed_fg.png"></div><span>Virya</span></div><div class="app"><div class="ai circle" style="width:64px;height:64px;background:#24362f"></div><span>Galeri</span></div></div></div>
+  <div class="col"><div class="lbl">Splash</div><div class="phone splash"><img src="../../android/app/src/main/res/drawable-xxxhdpi/launch_mark.png" style="width:128px"></div></div>
+</div>
+</div></body></html>
