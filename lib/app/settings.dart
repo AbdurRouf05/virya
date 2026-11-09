@@ -25,6 +25,12 @@ class SettingKeys {
 
   /// Per-gear service reminder: "intervalKm|lastServiceKm".
   static String gearService(String gearId) => 'gear_service_$gearId';
+
+  /// URL sumber pembaruan aplikasi (GitHub Gist raw atau endpoint JSON).
+  static const updateUrl = 'update_url';
+
+  /// Periksa pembaruan secara otomatis saat aplikasi dibuka.
+  static const autoCheckUpdate = 'auto_check_update';
 }
 
 const Map<String, String> settingDefaults = {
@@ -37,6 +43,8 @@ const Map<String, String> settingDefaults = {
   SettingKeys.defaultSport: 'gravelCycling',
   SettingKeys.keepScreenOn: 'true',
   SettingKeys.useSimulatedGps: 'false',
+  SettingKeys.updateUrl: '',
+  SettingKeys.autoCheckUpdate: 'true',
 };
 
 /// In-memory mirror of the AppSettings table; writes go through to SQLite.

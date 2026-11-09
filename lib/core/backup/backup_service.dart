@@ -142,7 +142,7 @@ class BackupService {
           final testDb = sqlite3.open(stagedDb.path);
           try {
             final res = testDb.select('PRAGMA integrity_check(1);');
-            final status = res.firstOrNull?[0] as String?;
+            final status = res.firstOrNull?.values[0] as String?;
             if (status != null && status != 'ok') {
               throw FormatException('Backup: database file corrupted ($status)');
             }

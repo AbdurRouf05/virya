@@ -145,3 +145,4 @@ class MediaSaverChannel(
         channel.setMethodCallHandler(null)
     }
 }
+

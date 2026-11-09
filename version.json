@@ -1,0 +1,8 @@
+{
+  "versionCode": 2,
+  "versionName": "1.0.1",
+  "downloadUrl": "https://github.com/AbdurRouf05/virya/releases/download/v1.0.1/app-release.apk",
+  "changelog": "• Fitur Simpan Gambar & Video langsung ke Galeri HP (Pictures/Virya & Movies/Virya)\n• Perbaikan tampilan video terbalik pada GPU Mali (Infinix Note 40 Pro)\n• Optimasi baterai background tracking (XOS / Infinix)\n• Fitur In-App Auto-Update otomatis via GitHub Gist / Releases",
+  "mandatory": false,
+  "releaseDate": "2026-11-09"
+}

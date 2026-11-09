@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/settings.dart';
+import 'package:virya/core/updater/update_banner.dart';
 import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/app/integrations.dart';
 import 'package:virya/features/today/application/today_controller.dart';
@@ -46,6 +47,7 @@ class TodayScreen extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.only(bottom: 32),
       children: [
+        const UpdateBanner(),
         TodayHeader(now: s.now),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/integrations.dart';
 import 'package:virya/app/theme/app_theme.dart';
+import 'package:virya/core/updater/update_provider.dart';
 import 'package:virya/features/calendar/presentation/calendar_screen.dart';
 import 'package:virya/features/home/presentation/widgets/home_nav_bar.dart';
 import 'package:virya/features/home/presentation/widgets/start_sheet.dart';
@@ -32,6 +33,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           ref.read(integrationsProvider).checkRecovery(context, ref);
+          ref.read(updateProvider.notifier).checkOnStartup();
         }
       });
     }
