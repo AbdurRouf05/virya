@@ -119,3 +119,4 @@ class AppUpdaterChannel(
         channel.setMethodCallHandler(null)
     }
 }
+

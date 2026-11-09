@@ -64,3 +64,4 @@ class UpdateNotifier extends StateNotifier<AppUpdateInfo?> {
 final updateProvider = StateNotifierProvider<UpdateNotifier, AppUpdateInfo?>(
   (ref) => UpdateNotifier(ref),
 );
+
