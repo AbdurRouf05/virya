@@ -1,8 +1,9 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -11,6 +12,8 @@ import 'package:share_plus/share_plus.dart';
 /// Capture / save / share helpers for share cards and recap videos.
 class ShareExport {
   ShareExport._();
+
+  static const _mediaChannel = MethodChannel('virya/media_saver');
 
   static Future<Directory> docsSubdir(String name) async {
     final docs = await getApplicationDocumentsDirectory();
@@ -48,6 +51,38 @@ class ShareExport {
     final f = File(p.join(d.path, 'virya_${name}_${_stamp()}.png'));
     await f.writeAsBytes(bytes, flush: true);
     return f;
+  }
+
+  /// Exports a local PNG file to the public Gallery (Pictures/Virya).
+  static Future<String> exportImageToGallery(File file, String name) async {
+    if (!kIsWeb && Platform.isAndroid) {
+      try {
+        final res = await _mediaChannel.invokeMethod<String>('saveImageToGallery', {
+          'path': file.path,
+          'name': 'virya_${name}_${_stamp()}.png',
+        });
+        if (res != null && res.isNotEmpty) return res;
+      } catch (e) {
+        debugPrint('MediaSaver saveImage error: $e');
+      }
+    }
+    return file.path;
+  }
+
+  /// Exports a local MP4 video file to the public Gallery (Movies/Virya).
+  static Future<String> exportVideoToGallery(String videoPath) async {
+    if (!kIsWeb && Platform.isAndroid) {
+      try {
+        final res = await _mediaChannel.invokeMethod<String>('saveVideoToGallery', {
+          'path': videoPath,
+          'name': 'virya_recap_${_stamp()}.mp4',
+        });
+        if (res != null && res.isNotEmpty) return res;
+      } catch (e) {
+        debugPrint('MediaSaver saveVideo error: $e');
+      }
+    }
+    return videoPath;
   }
 
   /// New output path in documents/videos/.

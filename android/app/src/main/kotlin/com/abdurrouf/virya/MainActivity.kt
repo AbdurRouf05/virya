@@ -8,6 +8,7 @@ import io.flutter.embedding.engine.FlutterEngine
 
 class MainActivity : FlutterActivity() {
     private var videoEncoder: VideoEncoderChannel? = null
+    private var mediaSaver: MediaSaverChannel? = null
     private var tasks: TaskChannel? = null
     private var focus: FocusChannel? = null
     private var style: StyleChannel? = null
@@ -16,6 +17,7 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         val messenger = flutterEngine.dartExecutor.binaryMessenger
         videoEncoder = VideoEncoderChannel(messenger)
+        mediaSaver = MediaSaverChannel(this, messenger)
         tasks = TaskChannel(this, messenger).also { it.handleIntent(intent) }
         focus = FocusChannel(this, messenger)
         style = StyleChannel(this, messenger)
@@ -30,6 +32,8 @@ class MainActivity : FlutterActivity() {
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
         videoEncoder?.dispose()
         videoEncoder = null
+        mediaSaver?.dispose()
+        mediaSaver = null
         tasks?.dispose()
         tasks = null
         focus?.dispose()
