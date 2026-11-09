@@ -31,12 +31,30 @@ class FocusPermissionPanel extends ConsumerWidget {
               purpose: 'Untuk membaca berapa lama aplikasi dipakai.',
               onOpen: bridge.openUsageSettings,
             ),
-          if (!permissions.accessibility)
+          if (!permissions.accessibility) ...[
             _Row(
               title: 'Aksesibilitas',
               purpose: 'Untuk menutup aplikasi saat waktunya habis.',
               onOpen: bridge.openAccessibilitySettings,
             ),
+            const SizedBox(height: 6),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                border: Border(left: BorderSide(color: FN.signal, width: 3)),
+                color: FN.paperDeep,
+              ),
+              child: Text(
+                'Pemberitahuan m-Banking: Di Android, aplikasi bank (seperti SeaBank, BCA, dll.) otomatis memblokir login jika mendeteksi izin Aksesibilitas aktif pada aplikasi di luar Play Store. Nonaktifkan izin ini bila Anda hendak mengakses m-Banking.',
+                style: TextStyle(
+                  fontFamily: FN.sans,
+                  fontSize: 10.5,
+                  color: FN.inkSoft,
+                  height: 1.35,
+                ),
+              ),
+            ),
+          ],
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(10),

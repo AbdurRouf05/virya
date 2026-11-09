@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:archive/archive_io.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:sqlite3/sqlite3.dart';
 import 'package:virya/core/database/app_database.dart';
 
 /// Full local backup: zip of the SQLite file, `photos/` and `manifest.json`.
@@ -123,9 +124,36 @@ class BackupService {
           continue;
         }
         await target.parent.create(recursive: true);
-        final bytes = f.readBytes();
-        if (bytes != null) await target.writeAsBytes(bytes, flush: true);
+        final outStream = OutputFileStream(target.path);
+        try {
+          f.writeContent(outStream);
+        } finally {
+          await outStream.close();
+        }
       }
+
+      // Validasi integritas SQLite jika ukuran database realistis (>= 512 bytes)
+      final stagedDb = File(p.join(tmp.path, dbFileName));
+      if (!stagedDb.existsSync()) {
+        throw const FormatException('Backup: database missing after extraction');
+      }
+      if (stagedDb.lengthSync() >= 512) {
+        try {
+          final testDb = sqlite3.open(stagedDb.path);
+          try {
+            final res = testDb.select('PRAGMA integrity_check(1);');
+            final status = res.firstOrNull?[0] as String?;
+            if (status != null && status != 'ok') {
+              throw FormatException('Backup: database file corrupted ($status)');
+            }
+          } finally {
+            testDb.dispose();
+          }
+        } on SqliteException catch (e) {
+          throw FormatException('Backup: database integrity check failed (${e.message})');
+        }
+      }
+
       await File(p.join(tmp.path, readyMarker)).writeAsString('1', flush: true);
       final pending = Directory(p.join(base.path, pendingDir));
       if (pending.existsSync()) await pending.delete(recursive: true);
@@ -178,6 +206,45 @@ class BackupService {
       await stagedPhotos.rename(livePhotos.path);
     }
     await pending.delete(recursive: true);
+
+    // Tulis ulang file_path foto di database agar sesuai dengan path storage perangkat saat ini
+    if (live.lengthSync() >= 512) {
+      try {
+        final fixDb = sqlite3.open(live.path);
+        try {
+          final photosDirPrefix = p.join(base.path, photosDir);
+          final rows = fixDb.select(
+              'SELECT id, file_path FROM waypoint_photos WHERE file_path IS NOT NULL');
+          for (final row in rows) {
+            final id = row['id'] as String;
+            final oldPath = row['file_path'] as String;
+            final filename = p.basename(oldPath);
+            final newPath = p.join(photosDirPrefix, filename);
+            if (oldPath != newPath && File(newPath).existsSync()) {
+              fixDb.execute(
+                  'UPDATE waypoint_photos SET file_path = ? WHERE id = ?',
+                  [newPath, id]);
+            }
+          }
+          final actRows = fixDb.select(
+              'SELECT id, primary_photo_path FROM activities WHERE primary_photo_path IS NOT NULL');
+          for (final row in actRows) {
+            final id = row['id'] as String;
+            final oldPath = row['primary_photo_path'] as String;
+            final filename = p.basename(oldPath);
+            final newPath = p.join(photosDirPrefix, filename);
+            if (oldPath != newPath && File(newPath).existsSync()) {
+              fixDb.execute(
+                  'UPDATE activities SET primary_photo_path = ? WHERE id = ?',
+                  [newPath, id]);
+            }
+          }
+        } finally {
+          fixDb.dispose();
+        }
+      } catch (_) {}
+    }
+
     return true;
   }
 

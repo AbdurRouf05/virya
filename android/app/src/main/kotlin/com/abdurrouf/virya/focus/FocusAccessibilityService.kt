@@ -90,8 +90,8 @@ class FocusAccessibilityService : AccessibilityService() {
     private companion object {
         const val SYSTEM_UI = "com.android.systemui"
         const val MILLIS_PER_MINUTE = 60_000L
-        const val MAX_RECHECK_MS = 60_000L
-        const val MARGIN_MS = 500L
+        const val MAX_RECHECK_MS = 20_000L
+        const val MARGIN_MS = 250L
         const val DUPLICATE_WINDOW_MS = 2_000L
         const val HOME_SETTLE_MS = 250L
     }

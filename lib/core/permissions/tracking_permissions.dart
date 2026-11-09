@@ -159,6 +159,11 @@ Future<void> showBatteryOptimizationSheet(BuildContext context) {
               'mati. Izinkan Virya berjalan tanpa pembatasan baterai.',
             ),
             const SizedBox(height: 14),
+            const _Tip('INFINIX / TECNO / XOS / HiOS',
+                'Phone Master → Manajemen Aplikasi → Mulai Otomatis → '
+                    'Aktifkan Virya. Di Penghemat Baterai / Power Marathon '
+                    'pilih "Jangan optimalkan". Di Recent Apps, kunci aplikasi '
+                    'Virya dengan ikon gembok agar RAM tidak dibersihkan saat layar mati.'),
             const _Tip('XIAOMI / MIUI / HyperOS',
                 'Setelan → Aplikasi → Virya → Penghemat baterai → "Tanpa '
                     'batasan". Aktifkan juga "Mulai otomatis". Di Recent Apps, '
