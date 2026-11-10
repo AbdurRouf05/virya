@@ -4,7 +4,7 @@ import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/focus/data/focus_bridge.dart';
 import 'package:virya/features/focus/domain/focus_models.dart';
 
-/// Menjelaskan izin yang belum diberikan dan membuka layar Pengaturan-nya.
+/// Menjelaskan izin utama yang belum diberikan dan membuka layar Pengaturan-nya.
 class FocusPermissionPanel extends ConsumerWidget {
   final FocusPermissions permissions;
   const FocusPermissionPanel({super.key, required this.permissions});
@@ -20,24 +20,19 @@ class FocusPermissionPanel extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'IZIN YANG DIBUTUHKAN',
+            'IZIN UTAMA DIBUTUHKAN',
             style: FN
                 .label(size: 11, color: FN.ink)
                 .copyWith(fontWeight: FontWeight.w700),
           ),
-          if (!permissions.usageAccess)
+          if (!permissions.usageAccess) ...[
             _Row(
               title: 'Akses penggunaan',
-              purpose: 'Untuk membaca berapa lama aplikasi dipakai.',
+              purpose:
+                  'Untuk membaca berapa lama aplikasi dipakai & menghitung sisa waktu.',
               onOpen: bridge.openUsageSettings,
             ),
-          if (!permissions.accessibility) ...[
-            _Row(
-              title: 'Aksesibilitas',
-              purpose: 'Untuk menutup aplikasi saat waktunya habis.',
-              onOpen: bridge.openAccessibilitySettings,
-            ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
@@ -45,10 +40,10 @@ class FocusPermissionPanel extends ConsumerWidget {
                 color: FN.paperDeep,
               ),
               child: Text(
-                'Pemberitahuan m-Banking: Di Android, aplikasi bank (seperti SeaBank, BCA, dll.) otomatis memblokir login jika mendeteksi izin Aksesibilitas aktif pada aplikasi di luar Play Store. Nonaktifkan izin ini bila Anda hendak mengakses m-Banking.',
+                'Aman untuk m-Banking: Izin Akses Penggunaan adalah izin resmi Android yang 100% aman dan TIDAK PERNAH diblokir oleh SeaBank, BCA, atau bank lainnya.',
                 style: TextStyle(
                   fontFamily: FN.sans,
-                  fontSize: 10.5,
+                  fontSize: 11,
                   color: FN.inkSoft,
                   height: 1.35,
                 ),
@@ -98,6 +93,97 @@ class FocusPermissionPanel extends ConsumerWidget {
                   onPressed: bridge.openAppSettings,
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Banner status mode penegakan batas (Mode Ramah Bank vs Mode Tutup Paksa).
+class FocusModeBanner extends ConsumerWidget {
+  final FocusPermissions permissions;
+  const FocusModeBanner({super.key, required this.permissions});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bridge = ref.read(focusBridgeProvider);
+    final isBankSafe = permissions.isBankSafe;
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: FN.paperDeep,
+        border: Border(
+          left: BorderSide(
+            color: isBankSafe ? FN.signal : FN.warn,
+            width: 3,
+          ),
+          top: BorderSide(color: FN.paperLine),
+          right: BorderSide(color: FN.paperLine),
+          bottom: BorderSide(color: FN.paperLine),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Icon(
+                isBankSafe ? Icons.shield_outlined : Icons.lock_clock_outlined,
+                size: 16,
+                color: isBankSafe ? FN.signal : FN.warn,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  isBankSafe
+                      ? 'MODE RAMAH M-BANKING AKTIF'
+                      : 'MODE TUTUP PAKSA (AKSESIBILITAS)',
+                  style: FN
+                      .label(size: 10, color: FN.ink)
+                      .copyWith(fontWeight: FontWeight.w700),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            isBankSafe
+                ? 'Layanan Aksesibilitas nonaktif. Aplikasi perbankan (SeaBank, BCA, dll.) aman dibuka tanpa risiko diblokir. Peringatan batas waktu dikirim lewat notifikasi layar.'
+                : 'Aksesibilitas aktif untuk menutup aplikasi secara otomatis saat waktu habis. Perhatian: Matikan izin ini jika hendak membuka m-Banking (SeaBank/BCA).',
+            style: TextStyle(
+              fontFamily: FN.sans,
+              fontSize: 11,
+              color: FN.inkMuted,
+              height: 1.35,
+            ),
+          ),
+          const SizedBox(height: 8),
+          InkWell(
+            onTap: bridge.openAccessibilitySettings,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      isBankSafe
+                          ? 'Ingin tutup aplikasi otomatis paksa? (Buka Aksesibilitas) →'
+                          : 'Matikan Aksesibilitas untuk buka m-Banking →',
+                      style: TextStyle(
+                        fontFamily: FN.sans,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: isBankSafe ? FN.ink : FN.warn,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

@@ -104,6 +104,8 @@ class FocusScreen extends ConsumerWidget {
               const Masthead(kicker: 'Batas waktu harian', title: 'Fokus'),
               if (perms != null && !perms.ready)
                 FocusPermissionPanel(permissions: perms),
+              if (perms != null && perms.ready)
+                FocusModeBanner(permissions: perms),
               SectionHeader(
                 title: 'Aplikasi',
                 trailing: limits.isEmpty

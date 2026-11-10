@@ -66,15 +66,23 @@ void main() {
     });
   });
 
-  test('FocusPermissions.ready butuh kedua izin', () {
+  test('FocusPermissions.ready hanya butuh Akses Penggunaan (Mode Ramah Bank)', () {
     expect(FocusPermissions.none.ready, isFalse);
     expect(
       const FocusPermissions(usageAccess: true, accessibility: false).ready,
-      isFalse,
+      isTrue,
+    );
+    expect(
+      const FocusPermissions(usageAccess: true, accessibility: false).isBankSafe,
+      isTrue,
     );
     expect(
       const FocusPermissions(usageAccess: true, accessibility: true).ready,
       isTrue,
+    );
+    expect(
+      const FocusPermissions(usageAccess: true, accessibility: true).isBankSafe,
+      isFalse,
     );
   });
 

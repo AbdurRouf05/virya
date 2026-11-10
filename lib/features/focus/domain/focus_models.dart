@@ -52,7 +52,11 @@ class FocusPermissions {
     accessibility: false,
   );
 
-  bool get ready => usageAccess && accessibility;
+  /// Cukup Akses Penggunaan agar fitur melacak waktu dan Mode Ramah Bank bisa berjalan.
+  bool get ready => usageAccess;
+
+  /// Mode Ramah Bank aktif bila Aksesibilitas nonaktif (mencegah SeaBank/BCA memblokir).
+  bool get isBankSafe => !accessibility;
 }
 
 /// Menit pemakaian satu aplikasi pada satu hari, hasil baca dari Android.

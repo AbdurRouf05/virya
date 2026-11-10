@@ -42,7 +42,7 @@ class TodayFocusCard extends ConsumerWidget {
                   children: [
                     if (perms != null && !perms.ready) ...[
                       Text(
-                        'Izin belum lengkap, batas belum berjalan',
+                        'Izin Akses Penggunaan dibutuhkan',
                         style: TextStyle(
                           fontFamily: FN.sans,
                           fontSize: 13,

@@ -122,6 +122,7 @@ class FocusChannel(
     private fun readUsage(days: Int): String {
         val packages = FocusStore.limitedPackages(appContext)
         val rows = JSONArray()
+        val todayKey = FocusStore.dayKey()
         for ((day, perPackage) in FocusUsage.readDays(appContext, packages, days)) {
             for ((packageName, millis) in perPackage) {
                 val minutes = millis / MILLIS_PER_MINUTE
@@ -132,6 +133,20 @@ class FocusChannel(
                         .put("packageName", packageName)
                         .put("minutes", minutes),
                 )
+                if (day == todayKey) {
+                    val limit = FocusStore.limitFor(appContext, packageName)
+                    if (limit != null && limit.enabled) {
+                        val allowedMs = (limit.dailyMinutes + FocusStore.bonusMinutes(appContext, packageName)) * MILLIS_PER_MINUTE
+                        if (millis >= allowedMs) {
+                            FocusNotification.notifyLimitReached(
+                                appContext,
+                                packageName,
+                                limit.label,
+                                limit.dailyMinutes,
+                            )
+                        }
+                    }
+                }
             }
         }
         return JSONObject()
