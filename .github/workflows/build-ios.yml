@@ -9,6 +9,8 @@ on:
         default: "preview"
         type: string
   push:
+    branches:
+      - main
     tags:
       - "v*.*.*"
 
