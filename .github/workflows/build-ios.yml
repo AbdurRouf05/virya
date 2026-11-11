@@ -45,7 +45,7 @@ jobs:
       - name: Upload IPA as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: virya-ios-${{ github.ref_name || inputs.tag || 'preview' }}
+          name: virya-ios-ipa
           path: dist/virya-ios.ipa
           retention-days: 14
 
