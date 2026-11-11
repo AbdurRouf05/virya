@@ -45,5 +45,20 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Permissions -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Virya memerlukan akses lokasi untuk melacak rute dan kecepatan aktivitas.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Virya memerlukan akses lokasi di latar belakang untuk merekam rute olahraga Anda secara akurat.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Virya memerlukan akses kamera untuk fitur foto aktivitas dan scan.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Virya memerlukan akses mikrofon saat perekaman media.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Virya memerlukan Bluetooth untuk terhubung ke sensor detak jantung (Heart Rate Monitor).</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Virya memerlukan Bluetooth untuk terhubung ke perangkat sensor eksternal.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Virya memerlukan akses galeri foto untuk memilih gambar.</string>
 </dict>
 </plist>
