@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,8 +11,10 @@ import 'package:virya/core/database/app_database.dart';
 import 'package:virya/core/permissions/tracking_permissions.dart';
 import 'package:virya/features/activity_history/presentation/activity_detail_screen.dart';
 import 'package:virya/features/recording/application/recording_controller.dart';
+import 'package:virya/features/recording/domain/recording_settings.dart';
 import 'package:virya/features/recording/domain/recording_state.dart';
 import 'package:virya/features/recording/presentation/recording_format.dart';
+import 'package:virya/features/recording/presentation/widgets/amoled_hud_panel.dart';
 import 'package:virya/features/recording/presentation/widgets/recording_controls.dart';
 import 'package:virya/features/recording/presentation/widgets/recording_dialogs.dart';
 import 'package:virya/features/recording/presentation/widgets/recording_map_panel.dart';
@@ -33,6 +37,11 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
       ref.read(recordingControllerProvider.notifier);
   bool _busy = false;
 
+  bool _amoledMode = false;
+  bool _isPeeking = false;
+  int _peekSecondsRemaining = 15;
+  Timer? _peekTimer;
+
   @override
   void initState() {
     super.initState();
@@ -44,19 +53,75 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
       await _ctrl.loadSettings();
     }
     if (!mounted) return;
+    final db = ref.read(databaseProvider);
+    final amoledSetting = await db.getSetting(RecordingSettings.keyAmoledHud);
+    if (mounted && amoledSetting != null) {
+      setState(() => _amoledMode = amoledSetting == 'true');
+    }
+    if (!mounted) return;
     final s = ref.read(recordingControllerProvider);
     if (s.phase != RecordingPhase.idle || s.simulated) return;
     final ok = await TrackingPermissions.ensureForRecording(
       context,
-      db: ref.read(databaseProvider),
+      db: db,
     );
     if (ok && mounted) await _ctrl.warmUp();
   }
 
   @override
   void dispose() {
+    _peekTimer?.cancel();
     _ctrl.coolDown();
     super.dispose();
+  }
+
+  void _peekMap() {
+    _peekTimer?.cancel();
+    setState(() {
+      _isPeeking = true;
+      _peekSecondsRemaining = 15;
+    });
+    _peekTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      if (_peekSecondsRemaining <= 1) {
+        timer.cancel();
+        setState(() {
+          _isPeeking = false;
+          _peekSecondsRemaining = 15;
+        });
+      } else {
+        setState(() {
+          _peekSecondsRemaining--;
+        });
+      }
+    });
+  }
+
+  void _stopPeeking() {
+    _peekTimer?.cancel();
+    if (mounted) {
+      setState(() {
+        _isPeeking = false;
+        _peekSecondsRemaining = 15;
+      });
+    }
+  }
+
+  void _toggleAmoled() {
+    setState(() {
+      _amoledMode = !_amoledMode;
+      if (!_amoledMode) {
+        _stopPeeking();
+      }
+    });
+    final db = ref.read(databaseProvider);
+    unawaited(db.setSetting(RecordingSettings.keyAmoledHud, _amoledMode.toString()));
+    _snack(_amoledMode
+        ? 'Mode Layar Hemat (AMOLED HUD) aktif. Sentuh layar untuk intip peta.'
+        : 'Mode Peta normal aktif.');
   }
 
   Future<void> _start() async {
@@ -145,9 +210,11 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
         }
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
+        value: SystemUiOverlayStyle.light.copyWith(
+          statusBarColor: _amoledMode ? Colors.black : Colors.transparent,
+        ),
         child: Scaffold(
-          backgroundColor: FN.night,
+          backgroundColor: _amoledMode ? Colors.black : FN.night,
           body: SafeArea(
             child: Stack(
               children: [
@@ -157,11 +224,40 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
                       state: s,
                       onClose: () => Navigator.of(context).maybePop(),
                       onSport: () => _pickSport(s.sport),
+                      amoledMode: _amoledMode,
+                      onToggleAmoled: _toggleAmoled,
                     ),
                     ref.watch(integrationsProvider).recordingSegmentHud(),
-                    Expanded(flex: 5, child: RecordingMapPanel(state: s)),
-                    RecordingPrimaryMetric(state: s, fmt: fmt),
-                    RecordingMetricGrid(state: s, fmt: fmt),
+                    if (_amoledMode && !_isPeeking)
+                      Expanded(
+                        child: AmoledHudPanel(
+                          state: s,
+                          fmt: fmt,
+                          onPeek: _peekMap,
+                        ),
+                      )
+                    else ...[
+                      Expanded(
+                        flex: 5,
+                        child: Stack(
+                          children: [
+                            RecordingMapPanel(state: s),
+                            if (_amoledMode && _isPeeking)
+                              Positioned(
+                                top: 10,
+                                left: 20,
+                                right: 20,
+                                child: _PeekCountdownBanner(
+                                  secondsRemaining: _peekSecondsRemaining,
+                                  onCancelPeek: _stopPeeking,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      RecordingPrimaryMetric(state: s, fmt: fmt),
+                      RecordingMetricGrid(state: s, fmt: fmt),
+                    ],
                     const SizedBox(height: 10),
                     if (s.phase == RecordingPhase.idle)
                       RecordingSportStrip(
@@ -185,6 +281,76 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PeekCountdownBanner extends StatelessWidget {
+  final int secondsRemaining;
+  final VoidCallback onCancelPeek;
+
+  const _PeekCountdownBanner({
+    required this.secondsRemaining,
+    required this.onCancelPeek,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.92),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: FN.acid, width: 1.5),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black87,
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.visibility, size: 16, color: FN.acid),
+            const SizedBox(width: 8),
+            Text(
+              'INTIP PETA: ${secondsRemaining}S',
+              style: FN.label(size: 11, color: FN.acid).copyWith(
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.1,
+              ),
+            ),
+            const Spacer(),
+            InkWell(
+              onTap: onCancelPeek,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF222222),
+                  borderRadius: BorderRadius.circular(2),
+                  border: Border.all(color: Colors.white24),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'TUTUP',
+                      style: FN.label(size: 10, color: Colors.white).copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.close, size: 12, color: Colors.white),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

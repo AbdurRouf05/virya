@@ -14,6 +14,7 @@ class RecordingSettings {
   final bool keepScreenOn;
   final bool simulated;
   final double simSpeedUp;
+  final bool amoledHud;
 
   const RecordingSettings({
     this.imperial = false,
@@ -26,6 +27,7 @@ class RecordingSettings {
     this.keepScreenOn = true,
     this.simulated = false,
     this.simSpeedUp = 10,
+    this.amoledHud = false,
   });
 
   static const keyUnits = 'units';
@@ -38,6 +40,7 @@ class RecordingSettings {
   static const keyKeepScreenOn = 'keep_screen_on';
   static const keyUseSimulatedGps = 'use_simulated_gps';
   static const keySimSpeedUp = 'sim_speedup';
+  static const keyAmoledHud = 'amoled_hud';
 
   static Future<RecordingSettings> load(AppDatabase db) async {
     Future<String?> g(String k) async {
@@ -69,6 +72,7 @@ class RecordingSettings {
       keepScreenOn: flag(await g(keyKeepScreenOn), true),
       simulated: flag(await g(keyUseSimulatedGps), false),
       simSpeedUp: num(await g(keySimSpeedUp), 10),
+      amoledHud: flag(await g(keyAmoledHud), false),
     );
   }
 }

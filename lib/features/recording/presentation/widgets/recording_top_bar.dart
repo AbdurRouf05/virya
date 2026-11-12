@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:virya/app/theme/field_notes.dart';
 import 'package:virya/features/recording/domain/recording_state.dart';
 import 'package:virya/features/recording/presentation/widgets/recording_sport_icon.dart';
 
-/// Close button, current sport (tap to change while idle) and GPS chip.
+/// Close button, current sport (tap to change while idle), AMOLED toggle and GPS chip.
 class RecordingTopBar extends StatelessWidget {
   final RecordingState state;
   final VoidCallback onClose;
   final VoidCallback onSport;
+  final bool amoledMode;
+  final VoidCallback onToggleAmoled;
 
   const RecordingTopBar({
     super.key,
     required this.state,
     required this.onClose,
     required this.onSport,
+    this.amoledMode = false,
+    required this.onToggleAmoled,
   });
 
   @override
@@ -54,9 +59,59 @@ class RecordingTopBar extends StatelessWidget {
               ),
             ),
           ),
+          _AmoledChip(active: amoledMode, onToggle: onToggleAmoled),
+          const SizedBox(width: 8),
           _GpsChip(status: state.gps, accuracy: state.snapshot.accuracyMeters),
           const SizedBox(width: 12),
         ],
+      ),
+    );
+  }
+}
+
+class _AmoledChip extends StatelessWidget {
+  final bool active;
+  final VoidCallback onToggle;
+
+  const _AmoledChip({required this.active, required this.onToggle});
+
+  @override
+  Widget build(BuildContext context) {
+    final color = active ? FN.acid : FN.onNightMuted;
+    final bg = active ? Colors.black : FN.nightSurface;
+    final border = active ? FN.acid : FN.nightLine;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onToggle();
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+          decoration: BoxDecoration(
+            color: bg,
+            border: Border.all(color: border, width: active ? 1.5 : 1),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                active ? Icons.battery_saver : Icons.dark_mode_outlined,
+                size: 13,
+                color: color,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                'AMOLED',
+                style: FN.label(size: 10, color: color).copyWith(
+                  fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
