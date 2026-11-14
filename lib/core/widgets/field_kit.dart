@@ -18,4 +18,3 @@ export 'package:virya/core/widgets/star_rating.dart';
 export 'package:virya/core/widgets/stat_block.dart';
 export 'package:virya/core/widgets/surface_bar.dart';
 export 'package:virya/core/widgets/masthead.dart';
-export 'package:virya/core/widgets/radar_loading_indicator.dart';
