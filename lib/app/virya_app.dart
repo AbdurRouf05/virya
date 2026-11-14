@@ -6,12 +6,12 @@ import 'package:virya/app/theme/app_theme.dart';
 import 'package:virya/app/theme/field_notes.dart';
 import 'package:virya/app/theme/native_style.dart';
 import 'package:virya/app/theme/styles/styles.dart';
-import 'package:virya/features/home/presentation/home_shell.dart';
+import 'package:virya/features/splash/presentation/entry_loading_screen.dart';
 
 class ViryaApp extends ConsumerWidget {
   final Widget home;
 
-  const ViryaApp({super.key, this.home = const HomeShell()});
+  const ViryaApp({super.key, this.home = const EntryLoadingScreen()});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

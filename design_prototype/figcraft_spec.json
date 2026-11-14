@@ -1,0 +1,33 @@
+{
+  "name": "Virya Entry Loading - Field Notes Technical Spec",
+  "version": "1.0.3",
+  "designSystem": "Virya Field Notes (Technical Outdoor Cartography)",
+  "tokens": {
+    "colors": {
+      "ground": "#101211",
+      "surface": "#171A18",
+      "gridLines": "#242926",
+      "primaryText": "#F4F2EC",
+      "mutedText": "#8E948F",
+      "signalOrange": "#FF4D00",
+      "acidLime": "#D4F728"
+    },
+    "typography": {
+      "brandLogo": "Anton Regular (uppercase, tight tracking)",
+      "telemetryLabels": "IBM Plex Mono Medium (tabular numbers)",
+      "body": "IBM Plex Sans"
+    },
+    "timings": {
+      "step1_db_connect": "350ms (fill 35%)",
+      "step2_tiles_verify": "1100ms (fill 75%)",
+      "step3_instrument_ready": "1800ms (fill 100%)",
+      "transition_exit": "2400ms (ease-out-cubic 600ms)"
+    }
+  },
+  "states": [
+    { "id": "init", "label": "Technical Header Stamp + Grid 32px" },
+    { "id": "brand", "label": "Big Display Title 'VIRYA' with Field Icon" },
+    { "id": "console_steps", "label": "Drift DB -> PMTiles -> Sensor 50Hz" },
+    { "id": "target_home", "label": "Smooth fade-out and slide-in to Main Dashboard" }
+  ]
+}

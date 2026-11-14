@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virya Field Notes - Entry Loading Prototype (FigCraft)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fn-night: #101211;
+      --fn-night-surface: #171A18;
+      --fn-night-line: #242926;
+      --fn-on-night: #F4F2EC;
+      --fn-on-night-muted: #8E948F;
+      --fn-signal: #FF4F00;
+      --fn-acid: #D4F728;
+      --fn-ink: #1B1E1C;
+      --font-display: 'Anton', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --font-sans: 'IBM Plex Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: #080908;
+      color: var(--fn-on-night);
+      font-family: var(--font-sans);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Top Dev Banner */
+    .dev-hud {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(23, 26, 24, 0.88);
+      border: 1px solid var(--fn-night-line);
+      backdrop-filter: blur(10px);
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--fn-on-night-muted);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .dev-hud span {
+      color: var(--fn-acid);
+      font-weight: 600;
+    }
+
+    .btn-replay {
+      background: transparent;
+      border: 1px solid var(--fn-signal);
+      color: var(--fn-signal);
+      padding: 3px 8px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+
+    .btn-replay:hover {
+      background: var(--fn-signal);
+      color: #fff;
+    }
+
+    /* Device Mockup Wrapper */
+    .phone-container {
+      width: 380px;
+      height: 780px;
+      background: var(--fn-night);
+      border-radius: 44px;
+      border: 3px solid #282C29;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.05);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Technical Grid 32px Canvas Pattern */
+    .grid-background {
+      position: absolute;
+      inset: 0;
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(36, 41, 38, 0.45) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(36, 41, 38, 0.45) 1px, transparent 1px);
+      pointer-events: none;
+    }
+
+    /* Dynamic Island / Notch */
+    .notch {
+      width: 120px;
+      height: 28px;
+      background: #000;
+      border-radius: 20px;
+      margin: 10px auto 0;
+      z-index: 10;
+    }
+
+    /* Stage 1: Loading Screen */
+    .screen-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 36px 28px 40px;
+      z-index: 5;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .screen-loading.hidden {
+      opacity: 0;
+      transform: scale(0.97);
+      pointer-events: none;
+    }
+
+    /* Header Coordinates */
+    .loading-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 18px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1.2px;
+      color: var(--fn-on-night-muted);
+    }
+
+    .coord-tag {
+      border: 1px solid var(--fn-night-line);
+      padding: 3px 6px;
+      background: rgba(23, 26, 24, 0.5);
+    }
+
+    .stamp-badge {
+      display: inline-block;
+      border: 1.5px solid var(--fn-signal);
+      color: var(--fn-signal);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      letter-spacing: 1.5px;
+      transform: rotate(-3deg);
+    }
+
+    /* Center Brand Area with Official Virya Mark */
+    .brand-section {
+      text-align: center;
+      margin: auto 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Official 5-Block Stepped Chevron Logo */
+    .virya-logo-stepped {
+      width: 128px;
+      height: 72px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      filter: drop-shadow(0 4px 12px rgba(255, 79, 0, 0.25));
+      animation: logoGlow 2.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes logoGlow {
+      0% {
+        transform: translateY(0);
+        filter: drop-shadow(0 2px 8px rgba(255, 79, 0, 0.2));
+      }
+      100% {
+        transform: translateY(-2px);
+        filter: drop-shadow(0 6px 18px rgba(255, 79, 0, 0.45));
+      }
+    }
+
+    /* Stepped SVG block entrance */
+    .virya-logo-stepped svg rect {
+      transform-origin: center;
+      transition: transform 0.3s ease-out;
+    }
+
+    .virya-logo-stepped svg rect:hover {
+      transform: scale(1.1);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 58px;
+      line-height: 0.9;
+      letter-spacing: 2px;
+      color: var(--fn-on-night);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .brand-subtitle {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 2.5px;
+      color: var(--fn-on-night-muted);
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    /* Progress & Technical Checklist */
+    .loading-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Thin High-Precision Progress Bar */
+    .progress-bar-rail {
+      width: 100%;
+      height: 3px;
+      background: var(--fn-night-line);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--fn-acid);
+      box-shadow: 0 0 10px rgba(212, 247, 40, 0.4);
+      transition: width 0.15s ease-out;
+    }
+
+    /* Checklist Console Output */
+    .checklist-terminal {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--fn-on-night-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-height: 75px;
+    }
+
+    .log-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: all 0.25s ease-out;
+    }
+
+    .log-item.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .log-item .tag {
+      color: var(--fn-acid);
+      font-weight: 700;
+    }
+
+    .tap-hint {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 1.5px;
+      color: var(--fn-on-night-muted);
+      opacity: 0.6;
+      margin-top: 6px;
+      cursor: pointer;
+    }
+
+    /* Stage 2: Main Home Screen (Transition Target) */
+    .screen-home {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 36px 20px 24px;
+      background: var(--fn-night);
+      opacity: 0;
+      transform: scale(1.03);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .screen-home.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    .home-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      margin-bottom: 24px;
+    }
+
+    .home-app-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      letter-spacing: 1px;
+    }
+
+    .home-card {
+      background: var(--fn-night-surface);
+      border: 1px solid var(--fn-night-line);
+      border-left: 4px solid var(--fn-acid);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .home-card-header {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--fn-on-night-muted);
+      letter-spacing: 1.2px;
+      margin-bottom: 6px;
+    }
+
+    .home-card-metric {
+      font-family: var(--font-display);
+      font-size: 44px;
+      line-height: 1;
+      color: var(--fn-on-night);
+    }
+
+    .home-card-sub {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--fn-acid);
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Controller HUD -->
+  <div class="dev-hud">
+    <div>FIGCRAFT PROTOTYPE: <span>VIRYA OFFICIAL BRANDING</span></div>
+    <div>PORT: <span>localhost:3000</span></div>
+    <button class="btn-replay" onclick="startLoadingCycle()">REPLAY ANIMASI</button>
+  </div>
+
+  <!-- Mobile Viewport Mockup -->
+  <div class="phone-container" onclick="handleContainerTap()">
+    <div class="grid-background"></div>
+    <div class="notch"></div>
+
+    <!-- ENTRY LOADING SCREEN -->
+    <div class="screen-loading" id="loadingScreen">
+      <!-- Top Technical Meta -->
+      <div class="loading-header">
+        <div class="coord-tag">SYS//INIT 1.0.3</div>
+        <div class="stamp-badge">OFFLINE-FIRST</div>
+        <div class="coord-tag">50Hz SENSORS</div>
+      </div>
+
+      <!-- Center Logo & Brand Identity (Official Virya Stepped Mark) -->
+      <div class="brand-section">
+        <div class="virya-logo-stepped">
+          <!-- Official 5-block stepped chevron logo from assets/branding/virya_mark.svg -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
+            <!-- 4 white step blocks on dark ground -->
+            <rect x="20" y="68" width="40" height="40" fill="#F4F2EC"/>
+            <rect x="64" y="112" width="40" height="40" fill="#F4F2EC"/>
+            <rect x="108" y="156" width="40" height="40" fill="#F4F2EC"/>
+            <rect x="152" y="112" width="40" height="40" fill="#F4F2EC"/>
+            <!-- 5th accent block in Signal Orange (#FF4F00) -->
+            <rect x="196" y="68" width="40" height="40" fill="#FF4F00"/>
+          </svg>
+        </div>
+        <h1 class="brand-title">VIRYA</h1>
+        <p class="brand-subtitle">PERSONAL FIELD TRACKER</p>
+      </div>
+
+      <!-- Bottom Progress & Checklist -->
+      <div class="loading-footer">
+        <div class="progress-bar-rail">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+
+        <div class="checklist-terminal" id="terminalLog">
+          <div class="log-item" id="log1">
+            <span class="tag">[OK]</span>
+            <span>MENGHUBUNGKAN SQLITE DRIFT...</span>
+          </div>
+          <div class="log-item" id="log2">
+            <span class="tag">[OK]</span>
+            <span>VERIFIKASI PMTILES VECTOR MAP...</span>
+          </div>
+          <div class="log-item" id="log3">
+            <span class="tag">[READY]</span>
+            <span>MEMASUKI INSTRUMEN LAPANGAN</span>
+          </div>
+        </div>
+
+        <div class="tap-hint">[ SENTUH UNTUK LEWATI ]</div>
+      </div>
+    </div>
+
+    <!-- TARGET HOME DASHBOARD -->
+    <div class="screen-home" id="homeScreen">
+      <div class="home-top-bar">
+        <div class="home-app-title">HARI INI</div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--fn-signal);">
+          ● SIAP REKAM
+        </div>
+      </div>
+
+      <div class="home-card">
+        <div class="home-card-header">KILOMETER MINGGU INI</div>
+        <div class="home-card-metric">142.8 <span style="font-size: 18px; font-family: var(--font-mono); color: var(--fn-on-night-muted);">KM</span></div>
+        <div class="home-card-sub">▲ 18% LEBIH TINGGI DARI MINGGU LALU</div>
+      </div>
+
+      <div class="home-card" style="border-left-color: var(--fn-signal);">
+        <div class="home-card-header">REKAP TERAKHIR</div>
+        <div class="home-card-metric">48.2 <span style="font-size: 18px; font-family: var(--font-mono); color: var(--fn-on-night-muted);">KM</span></div>
+        <div class="home-card-sub" style="color: var(--fn-signal);">GRAVEL EXPEDITION • 02:14:09</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 0;
+    let timer = null;
+
+    function startLoadingCycle() {
+      clearTimeout(timer);
+      const loadingScreen = document.getElementById('loadingScreen');
+      const homeScreen = document.getElementById('homeScreen');
+      const progress = document.getElementById('progressFill');
+      const log1 = document.getElementById('log1');
+      const log2 = document.getElementById('log2');
+      const log3 = document.getElementById('log3');
+
+      // Reset
+      homeScreen.classList.remove('active');
+      loadingScreen.classList.remove('hidden');
+      progress.style.width = '0%';
+      log1.classList.remove('active');
+      log2.classList.remove('active');
+      log3.classList.remove('active');
+
+      // Step 1 (0.4s)
+      setTimeout(() => {
+        progress.style.width = '35%';
+        log1.classList.add('active');
+      }, 350);
+
+      // Step 2 (1.1s)
+      setTimeout(() => {
+        progress.style.width = '75%';
+        log2.classList.add('active');
+      }, 1100);
+
+      // Step 3 (1.8s)
+      setTimeout(() => {
+        progress.style.width = '100%';
+        log3.classList.add('active');
+      }, 1800);
+
+      // Transition to Home (2.4s)
+      timer = setTimeout(() => {
+        transitionToHome();
+      }, 2400);
+    }
+
+    function transitionToHome() {
+      document.getElementById('loadingScreen').classList.add('hidden');
+      document.getElementById('homeScreen').classList.add('active');
+    }
+
+    function handleContainerTap() {
+      const loadingScreen = document.getElementById('loadingScreen');
+      if (!loadingScreen.classList.contains('hidden')) {
+        clearTimeout(timer);
+        transitionToHome();
+      }
+    }
+
+    // Auto start on load
+    window.onload = startLoadingCycle;
+  </script>
+</body>
+</html>
