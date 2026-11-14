@@ -324,7 +324,7 @@ class _GridPattern extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: _GridPatternPainter(FN.nightLine.withValues(alpha: 0.45)),
+      painter: _GridPatternPainter(FN.nightLine),
     );
   }
 }
@@ -336,7 +336,7 @@ class _GridPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final p = Paint()
-      ..color = color
+      ..color = color.withValues(alpha: 0.45)
       ..strokeWidth = 1;
     const step = 32.0;
     for (double x = 0; x <= size.width; x += step) {

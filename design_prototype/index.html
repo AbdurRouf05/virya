@@ -8,18 +8,52 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* 4 Official Virya Styles Theme Variables */
     :root {
-      --fn-night: #101211;
-      --fn-night-surface: #171A18;
-      --fn-night-line: #242926;
-      --fn-on-night: #F4F2EC;
-      --fn-on-night-muted: #8E948F;
+      /* Default: Field Notes */
+      --fn-night: #0E0E0C;
+      --fn-night-surface: #1A1A17;
+      --fn-night-line: #2E2E29;
+      --fn-on-night: #EFE9DC;
+      --fn-on-night-muted: #CFC6B2;
       --fn-signal: #FF4F00;
-      --fn-acid: #D4F728;
-      --fn-ink: #1B1E1C;
+      --fn-acid: #C6FF00;
       --font-display: 'Anton', sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
       --font-sans: 'IBM Plex Sans', sans-serif;
+    }
+
+    [data-theme="blueprint"] {
+      /* Cetak Biru */
+      --fn-night: #0B1622;
+      --fn-night-surface: #14212F;
+      --fn-night-line: #26384A;
+      --fn-on-night: #E8EEF2;
+      --fn-on-night-muted: #BCC9D4;
+      --fn-signal: #E8432E;
+      --fn-acid: #7DF9FF;
+    }
+
+    [data-theme="forest"] {
+      /* Hutan */
+      --fn-night: #0F1710;
+      --fn-night-surface: #1A241B;
+      --fn-night-line: #2D3A2E;
+      --fn-on-night: #E9EADB;
+      --fn-on-night-muted: #C2C6AC;
+      --fn-signal: #D4601F;
+      --fn-acid: #D9F05A;
+    }
+
+    [data-theme="night"] {
+      /* Malam */
+      --fn-night: #0B0A08;
+      --fn-night-surface: #1A1914;
+      --fn-night-line: #2E2C25;
+      --fn-on-night: #EFE9DC;
+      --fn-on-night-muted: #CFC6B2;
+      --fn-signal: #FF5A14;
+      --fn-acid: #C6FF00;
     }
 
     * {
@@ -31,7 +65,7 @@
     }
 
     body {
-      background-color: #080908;
+      background-color: #060706;
       color: var(--fn-on-night);
       font-family: var(--font-sans);
       display: flex;
@@ -40,19 +74,20 @@
       justify-content: center;
       min-height: 100vh;
       overflow: hidden;
+      transition: background-color 0.3s ease;
     }
 
-    /* Top Dev Banner */
+    /* Top Dev Banner & Theme Switcher */
     .dev-hud {
       position: fixed;
       top: 14px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(23, 26, 24, 0.88);
+      background: rgba(23, 26, 24, 0.90);
       border: 1px solid var(--fn-night-line);
-      backdrop-filter: blur(10px);
-      padding: 6px 14px;
-      border-radius: 4px;
+      backdrop-filter: blur(12px);
+      padding: 8px 18px;
+      border-radius: 6px;
       font-family: var(--font-mono);
       font-size: 11px;
       letter-spacing: 1px;
@@ -61,6 +96,7 @@
       gap: 16px;
       align-items: center;
       z-index: 100;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
 
     .dev-hud span {
@@ -68,16 +104,28 @@
       font-weight: 600;
     }
 
+    .theme-select {
+      background: var(--fn-night);
+      border: 1px solid var(--fn-night-line);
+      color: var(--fn-on-night);
+      padding: 4px 8px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
     .btn-replay {
       background: transparent;
-      border: 1px solid var(--fn-signal);
+      border: 1.5px solid var(--fn-signal);
       color: var(--fn-signal);
-      padding: 3px 8px;
+      padding: 4px 10px;
       font-family: var(--font-mono);
       font-size: 10px;
       cursor: pointer;
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 1px;
       transition: all 0.2s;
     }
@@ -99,6 +147,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      transition: background-color 0.35s ease;
     }
 
     /* Technical Grid 32px Canvas Pattern */
@@ -107,8 +156,8 @@
       inset: 0;
       background-size: 32px 32px;
       background-image: 
-        linear-gradient(to right, rgba(36, 41, 38, 0.45) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(36, 41, 38, 0.45) 1px, transparent 1px);
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
       pointer-events: none;
     }
 
@@ -155,7 +204,8 @@
     .coord-tag {
       border: 1px solid var(--fn-night-line);
       padding: 3px 6px;
-      background: rgba(23, 26, 24, 0.5);
+      background: var(--fn-night-surface);
+      color: var(--fn-on-night-muted);
     }
 
     .stamp-badge {
@@ -168,6 +218,7 @@
       padding: 2px 6px;
       letter-spacing: 1.5px;
       transform: rotate(-3deg);
+      transition: border-color 0.3s, color 0.3s;
     }
 
     /* Center Brand Area with Official Virya Mark */
@@ -187,29 +238,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      filter: drop-shadow(0 4px 12px rgba(255, 79, 0, 0.25));
       animation: logoGlow 2.5s infinite alternate ease-in-out;
     }
 
     @keyframes logoGlow {
       0% {
         transform: translateY(0);
-        filter: drop-shadow(0 2px 8px rgba(255, 79, 0, 0.2));
       }
       100% {
         transform: translateY(-2px);
-        filter: drop-shadow(0 6px 18px rgba(255, 79, 0, 0.45));
       }
-    }
-
-    /* Stepped SVG block entrance */
-    .virya-logo-stepped svg rect {
-      transform-origin: center;
-      transition: transform 0.3s ease-out;
-    }
-
-    .virya-logo-stepped svg rect:hover {
-      transform: scale(1.1);
     }
 
     .brand-title {
@@ -220,6 +258,7 @@
       color: var(--fn-on-night);
       margin-bottom: 8px;
       text-transform: uppercase;
+      transition: color 0.3s;
     }
 
     .brand-subtitle {
@@ -238,7 +277,6 @@
       gap: 14px;
     }
 
-    /* Thin High-Precision Progress Bar */
     .progress-bar-rail {
       width: 100%;
       height: 3px;
@@ -254,11 +292,10 @@
       height: 100%;
       width: 0%;
       background: var(--fn-acid);
-      box-shadow: 0 0 10px rgba(212, 247, 40, 0.4);
-      transition: width 0.15s ease-out;
+      box-shadow: 0 0 10px rgba(198, 255, 0, 0.4);
+      transition: width 0.15s ease-out, background 0.3s;
     }
 
-    /* Checklist Console Output */
     .checklist-terminal {
       font-family: var(--font-mono);
       font-size: 10.5px;
@@ -286,6 +323,7 @@
     .log-item .tag {
       color: var(--fn-acid);
       font-weight: 700;
+      transition: color 0.3s;
     }
 
     .tap-hint {
@@ -367,11 +405,16 @@
 </head>
 <body>
 
-  <!-- Top Controller HUD -->
+  <!-- Top Controller HUD with Theme Selector -->
   <div class="dev-hud">
-    <div>FIGCRAFT PROTOTYPE: <span>VIRYA OFFICIAL BRANDING</span></div>
-    <div>PORT: <span>localhost:3000</span></div>
-    <button class="btn-replay" onclick="startLoadingCycle()">REPLAY ANIMASI</button>
+    <div>TEMA AKTIF:</div>
+    <select class="theme-select" id="themeSelect" onchange="changeTheme(this.value)">
+      <option value="field_notes">Field Notes (Default - Oranye/Krem)</option>
+      <option value="blueprint">Cetak Biru (Blueprint - Cyan/Navy)</option>
+      <option value="forest">Hutan (Forest - Hijau/Karat)</option>
+      <option value="night">Malam (Night - Oranye/Deep Black)</option>
+    </select>
+    <button class="btn-replay" onclick="startLoadingCycle()">REPLAY</button>
   </div>
 
   <!-- Mobile Viewport Mockup -->
@@ -391,15 +434,15 @@
       <!-- Center Logo & Brand Identity (Official Virya Stepped Mark) -->
       <div class="brand-section">
         <div class="virya-logo-stepped">
-          <!-- Official 5-block stepped chevron logo from assets/branding/virya_mark.svg -->
+          <!-- Official 5-block stepped chevron logo with CSS Variables for auto-theming -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
-            <!-- 4 white step blocks on dark ground -->
-            <rect x="20" y="68" width="40" height="40" fill="#F4F2EC"/>
-            <rect x="64" y="112" width="40" height="40" fill="#F4F2EC"/>
-            <rect x="108" y="156" width="40" height="40" fill="#F4F2EC"/>
-            <rect x="152" y="112" width="40" height="40" fill="#F4F2EC"/>
-            <!-- 5th accent block in Signal Orange (#FF4F00) -->
-            <rect x="196" y="68" width="40" height="40" fill="#FF4F00"/>
+            <!-- 4 step blocks adapt to onNight of current theme -->
+            <rect x="20" y="68" width="40" height="40" fill="var(--fn-on-night)" style="transition: fill 0.3s;"/>
+            <rect x="64" y="112" width="40" height="40" fill="var(--fn-on-night)" style="transition: fill 0.3s;"/>
+            <rect x="108" y="156" width="40" height="40" fill="var(--fn-on-night)" style="transition: fill 0.3s;"/>
+            <rect x="152" y="112" width="40" height="40" fill="var(--fn-on-night)" style="transition: fill 0.3s;"/>
+            <!-- 5th accent block adapts to signal color of current theme -->
+            <rect x="196" y="68" width="40" height="40" fill="var(--fn-signal)" style="transition: fill 0.3s;"/>
           </svg>
         </div>
         <h1 class="brand-title">VIRYA</h1>
@@ -457,6 +500,15 @@
   <script>
     let currentStep = 0;
     let timer = null;
+
+    function changeTheme(theme) {
+      if (theme === 'field_notes') {
+        document.documentElement.removeAttribute('data-theme');
+      } else {
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+      startLoadingCycle();
+    }
 
     function startLoadingCycle() {
       clearTimeout(timer);
