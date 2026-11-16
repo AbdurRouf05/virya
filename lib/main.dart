@@ -22,8 +22,15 @@ Future<void> main() async {
   // Style dibaca sebelum frame pertama supaya tidak berkedip.
   final db = AppDatabase();
   String? styleId;
+  var look = const InitialLook();
   try {
     styleId = await db.getSetting(SettingKeys.styleId);
+    look = InitialLook(
+      styleId: styleId,
+      gaya: await db.getSetting(SettingKeys.uiGaya),
+      bersihMode: await db.getSetting(SettingKeys.bersihMode),
+      lookChosen: await db.getSetting(SettingKeys.lookChosen),
+    );
   } catch (e) {
     debugPrint('Gagal membaca style: $e');
   }
@@ -34,6 +41,7 @@ Future<void> main() async {
         return db;
       }),
       initialStyleIdProvider.overrideWithValue(styleId),
+      initialLookProvider.overrideWithValue(look),
       integrationsProvider.overrideWithValue(const LiveIntegrations()),
     ],
     child: const ViryaApp(),

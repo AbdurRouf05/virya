@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/format.dart';
+import 'package:virya/app/theme/gaya.dart';
 import 'package:virya/core/constants/enums.dart';
 import 'package:virya/core/database/app_database.dart';
 
@@ -19,6 +20,16 @@ class SettingKeys {
   /// Id style tampilan. Sengaja tidak ada di [settingDefaults]; lihat
   /// [styleIdProvider].
   static const styleId = 'style_id';
+
+  /// Gaya tampilan: `tegas` atau `bersih` ([UiGaya.name]). Seperti
+  /// [styleId], dibaca sebelum `runApp`.
+  static const uiGaya = 'ui_gaya';
+
+  /// Kecerahan gaya Bersih: `terang`, `gelap`, `sistem` ([BersihMode.name]).
+  static const bersihMode = 'bersih_mode';
+
+  /// `true` setelah pengguna menekan "Lanjut" di layar pilih gaya pertama.
+  static const lookChosen = 'look_chosen';
 
   /// Jarak pengingat foto tubuh dalam hari, `0` berarti mati.
   static const bodyCheckinDays = 'body_checkin_days';
@@ -87,6 +98,60 @@ final styleIdProvider = Provider<String?>(
       ref.watch(settingsProvider)[SettingKeys.styleId] ??
       ref.watch(initialStyleIdProvider),
 );
+
+/// Nilai pengaturan tampilan yang dibaca sebelum `runApp` (`main.dart`).
+class InitialLook {
+  final String? styleId;
+  final String? gaya;
+  final String? bersihMode;
+  final String? lookChosen;
+  const InitialLook({
+    this.styleId,
+    this.gaya,
+    this.bersihMode,
+    this.lookChosen,
+  });
+
+  /// Pengguna sudah pernah memilih tampilan: sudah menekan "Lanjut" di
+  /// layar pilih gaya, atau pengguna lama yang menyimpan style.
+  bool get chosen => lookChosen == 'true' || styleId != null;
+}
+
+final initialLookProvider = Provider<InitialLook>((ref) => const InitialLook());
+
+/// Gaya aktif, dengan nilai awal dari [initialLookProvider] supaya tidak
+/// berkedip saat aplikasi dibuka.
+final uiGayaProvider = Provider<UiGaya>(
+  (ref) => UiGaya.fromId(
+    ref.watch(settingsProvider)[SettingKeys.uiGaya] ??
+        ref.watch(initialLookProvider).gaya,
+  ),
+);
+
+final bersihModeProvider = Provider<BersihMode>(
+  (ref) => BersihMode.fromId(
+    ref.watch(settingsProvider)[SettingKeys.bersihMode] ??
+        ref.watch(initialLookProvider).bersihMode,
+  ),
+);
+
+/// `true` bila pengguna belum pernah memilih tampilan (pemasangan baru).
+/// Pengguna lama yang sudah punya [SettingKeys.styleId] dianggap sudah
+/// memilih Tegas.
+final needsLookChoiceProvider = Provider<bool>((ref) {
+  final s = ref.watch(settingsProvider);
+  if (s[SettingKeys.lookChosen] == 'true' ||
+      s.containsKey(SettingKeys.styleId)) {
+    return false;
+  }
+  return !ref.watch(initialLookProvider).chosen &&
+      ref.watch(initialStyleIdProvider) == null;
+});
+
+/// `true` setelah layar pilih gaya mengganti gaya secara langsung. Mengganti
+/// gaya membangun ulang aplikasi; dengan ini aplikasi kembali ke layar pilih
+/// gaya / Beranda tanpa memutar layar pembuka lagi.
+final skipEntryProvider = StateProvider<bool>((ref) => false);
 
 final unitsProvider = Provider<Units>(
   (ref) => ref.watch(settingsProvider)[SettingKeys.units] == 'imperial'

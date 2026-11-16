@@ -10,7 +10,7 @@ import java.util.Date
 import java.util.Locale
 
 /**
- * Salinan batas aplikasi dari Dart dan tambahan menit hari ini. Sumber data
+ * Salinan batas aplikasi dari Dart dan berapa kali tiap aplikasi dibuka lagi hari ini. Sumber data
  * batas tetap SQLite; native hanya menyimpan apa yang perlu untuk menegakkannya.
  */
 object FocusStore {
@@ -27,6 +27,8 @@ object FocusStore {
     private const val KEY_LIMITS = "limits"
     private const val KEY_BONUS_DAY = "bonus_day"
     private const val KEY_BONUS_PACKAGES = "bonus_packages"
+    private const val KEY_UNLOCKS = "unlocks"
+    private val WAIT_SECONDS = intArrayOf(10, 20, 40, 60)
 
     private var cachedRaw: String? = null
     private var cachedLimits: Map<String, Limit> = emptyMap()
@@ -78,35 +80,55 @@ object FocusStore {
 
     fun limitedPackages(context: Context): Set<String> = limits(context).keys
 
-    /** Paket yang sudah mengambil tambahan menit hari ini. */
-    private fun bonusPackages(p: SharedPreferences): Set<String> =
-        if (p.getString(KEY_BONUS_DAY, null) == dayKey()) {
-            p.getStringSet(KEY_BONUS_PACKAGES, null).orEmpty()
-        } else {
-            emptySet()
+    /**
+     * Berapa kali tiap paket dibuka lagi setelah waktunya habis, hari ini.
+     * Format lama (set paket, maks sekali) dibaca sebagai 1 kali.
+     */
+    private fun unlocks(p: SharedPreferences): Map<String, Int> {
+        if (p.getString(KEY_BONUS_DAY, null) != dayKey()) return emptyMap()
+        val out = HashMap<String, Int>()
+        p.getStringSet(KEY_BONUS_PACKAGES, null).orEmpty().forEach { out[it] = 1 }
+        val raw = p.getString(KEY_UNLOCKS, null) ?: return out
+        try {
+            val o = JSONObject(raw)
+            o.keys().forEach { out[it] = o.optInt(it) }
+        } catch (_: JSONException) {
         }
+        return out
+    }
 
     @Synchronized
+    fun unlockCount(context: Context, packageName: String): Int =
+        unlocks(prefs(context))[packageName] ?: 0
+
+    /** Menit tambahan hari ini: [BONUS_MINUTES] untuk tiap kali dibuka lagi. */
+    @Synchronized
     fun bonusMinutes(context: Context, packageName: String): Int =
-        if (packageName in bonusPackages(prefs(context))) BONUS_MINUTES else 0
+        unlockCount(context, packageName) * BONUS_MINUTES
 
     @Synchronized
     fun bonusJson(context: Context): JSONObject {
         val out = JSONObject()
-        bonusPackages(prefs(context)).forEach { out.put(it, BONUS_MINUTES) }
+        unlocks(prefs(context)).forEach { (pkg, n) -> out.put(pkg, n * BONUS_MINUTES) }
         return out
     }
 
-    /** Beri tambahan satu kali per aplikasi per hari. False bila sudah diambil. */
+    /** Detik tunggu sebelum tombol "Tetap buka" aktif. Makin sering, makin lama. */
+    fun waitSeconds(unlockCount: Int): Int =
+        WAIT_SECONDS[minOf(unlockCount, WAIT_SECONDS.lastIndex)]
+
+    /** Catat satu kali buka lagi (+[BONUS_MINUTES] menit). Mengembalikan jumlah baru. */
     @Synchronized
-    fun grantBonus(context: Context, packageName: String): Boolean {
+    fun grantBonus(context: Context, packageName: String): Int {
         val p = prefs(context)
-        val taken = bonusPackages(p)
-        if (packageName in taken) return false
+        val next = unlocks(p) + (packageName to (unlocks(p)[packageName] ?: 0) + 1)
+        val json = JSONObject()
+        next.forEach { (pkg, n) -> json.put(pkg, n) }
         p.edit()
             .putString(KEY_BONUS_DAY, dayKey())
-            .putStringSet(KEY_BONUS_PACKAGES, taken + packageName)
+            .remove(KEY_BONUS_PACKAGES)
+            .putString(KEY_UNLOCKS, json.toString())
             .commit()
-        return true
+        return next.getValue(packageName)
     }
 }

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Preview Splash Virya</title>
+<style>
+  :root { --paper:#EFE9DC; --ink:#141414; --signal:#FF4F00; --night:#141414; --acid:#C6FF3D; --muted:#8a857a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#2a2a2a; font-family: ui-monospace, Consolas, monospace; color:#ddd; padding:32px; }
+  h1 { font-size:16px; letter-spacing:2px; margin-bottom:6px; }
+  p.lead { font-size:12px; color:#aaa; margin-bottom:28px; }
+  .row { display:flex; gap:40px; flex-wrap:wrap; justify-content:center; }
+  .col { display:flex; flex-direction:column; align-items:center; gap:12px; width:300px; }
+  .col h2 { font-size:13px; letter-spacing:1.5px; }
+  .col small { font-size:11px; color:#aaa; text-align:center; line-height:1.5; min-height:48px; }
+  button { background:var(--signal); color:#fff; border:0; padding:8px 16px; font-family:inherit; font-size:12px; letter-spacing:1px; cursor:pointer; }
+  .phone { width:270px; height:560px; border:10px solid #000; border-radius:34px; position:relative; overflow:hidden; background:var(--paper); }
+  .layer { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; transition:opacity .45s ease-out; }
+  .hidden { opacity:0; pointer-events:none; }
+  .timer { position:absolute; bottom:-26px; left:0; right:0; text-align:center; font-size:11px; color:#888; }
+  .wrap { position:relative; }
+
+  /* Logo: 5 kotak, geometri sama dengan ViryaMark (sel 40, pitch 44, 216x128) */
+  .mark { position:relative; width:120px; height:71.1px; }
+  .mark i { position:absolute; width:22.2px; height:22.2px; background:var(--ink); }
+  .mark i:nth-child(1){ left:0; top:0; }
+  .mark i:nth-child(2){ left:24.4px; top:24.4px; }
+  .mark i:nth-child(3){ left:48.9px; top:48.9px; }
+  .mark i:nth-child(4){ left:73.3px; top:24.4px; }
+  .mark i:nth-child(5){ left:97.8px; top:0; background:var(--signal); }
+  .mark.onnight i { background:#EFE9DC; }
+  .mark.onnight i:nth-child(5){ background:var(--signal); }
+
+  /* Beranda tiruan */
+  .home { background:var(--paper); flex-direction:column; align-items:stretch; justify-content:flex-start; padding:40px 18px; gap:12px; color:var(--ink); }
+  .home .bar { height:14px; background:#d9d1bf; width:60%; }
+  .home .card { height:90px; border:2px solid var(--ink); }
+  .home .card.s { height:60px; }
+  .home h3 { font-size:22px; letter-spacing:1px; }
+
+  /* Layar sekarang (EntryLoadingScreen) */
+  .cur { background:var(--night); flex-direction:column; justify-content:space-between; padding:30px 16px 20px;
+         background-image:linear-gradient(#2c2c2c 1px,transparent 1px),linear-gradient(90deg,#2c2c2c 1px,transparent 1px); background-size:32px 32px; }
+  .cur .tags { display:flex; justify-content:space-between; width:100%; font-size:7px; color:#888; }
+  .cur .tags span { border:1px solid #333; padding:2px 3px; }
+  .cur .tags .stamp { color:var(--signal); border:1.5px solid var(--signal); transform:rotate(-3deg); }
+  .cur .center { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .cur .center b { font-size:38px; color:#EFE9DC; letter-spacing:2px; font-family:Impact, sans-serif; }
+  .cur .center em { font-style:normal; font-size:8px; color:#888; letter-spacing:2px; }
+  .cur .bottom { width:100%; font-size:7.5px; color:#888; }
+  .cur .prog { height:3px; background:#333; margin-bottom:10px; }
+  .cur .prog div { height:100%; width:0; background:var(--acid); box-shadow:0 0 6px var(--acid); }
+  .cur .log { opacity:0; transition:opacity .2s; margin-bottom:4px; }
+  .cur .log b { color:var(--acid); }
+  .cur .skip { text-align:center; margin-top:10px; font-size:7px; }
+</style>
+</head>
+<body>
+<h1>PREVIEW SPLASH VIRYA</h1>
+<p class="lead">Tiap ponsel mulai dari splash Android (logo di latar kertas), lalu layar Flutter, lalu Beranda. Klik "PUTAR ULANG" untuk melihat lagi.</p>
+
+<div class="row">
+  <div class="col">
+    <h2>SEKARANG</h2>
+    <small>Splash terang → layar gelap penuh label, log dan loading selama 2,3 dtk → Beranda.</small>
+    <div class="wrap"><div class="phone" id="p0"></div><div class="timer" id="t0"></div></div>
+    <button onclick="play(0)">PUTAR ULANG</button>
+  </div>
+  <div class="col">
+    <h2>A · REKOMENDASI</h2>
+    <small>Hanya logo, posisi dan warna sama persis dengan splash Android (tanpa kedipan). Tahan sekitar 0,7 dtk lalu memudar ke Beranda.</small>
+    <div class="wrap"><div class="phone" id="p1"></div><div class="timer" id="t1"></div></div>
+    <button onclick="play(1)">PUTAR ULANG</button>
+  </div>
+  <div class="col">
+    <h2>B · MINIMAL</h2>
+    <small>Layar Flutter dihapus. Splash Android langsung berganti ke Beranda tanpa jeda dan tanpa efek pudar.</small>
+    <div class="wrap"><div class="phone" id="p2"></div><div class="timer" id="t2"></div></div>
+    <button onclick="play(2)">PUTAR ULANG</button>
+  </div>
+</div>
+
+<script>
+const MARK = cls => `<div class="mark ${cls||''}"><i></i><i></i><i></i><i></i><i></i></div>`;
+const HOME = `<div class="layer home"><h3>BERANDA</h3><div class="bar"></div><div class="card"></div><div class="card s"></div><div class="card s"></div></div>`;
+const NATIVE = `<div class="layer native" style="background:var(--paper)">${MARK()}</div>`;
+const CURRENT = `<div class="layer cur">
+  <div class="tags"><span>SYS//INIT 1.0.3</span><span class="stamp">OFFLINE-FIRST</span><span>50Hz SENSORS</span></div>
+  <div class="center">${MARK('onnight')}<b>VIRYA</b><em>PERSONAL FIELD TRACKER</em></div>
+  <div class="bottom"><div class="prog"><div></div></div>
+    <div class="log"><b>[OK]</b> MENGHUBUNGKAN SQLITE DRIFT...</div>
+    <div class="log"><b>[OK]</b> VERIFIKASI PMTILES VECTOR MAP...</div>
+    <div class="log"><b>[READY]</b> MEMASUKI INSTRUMEN LAPANGAN</div>
+    <div class="skip">[ SENTUH UNTUK LEWATI ]</div></div></div>`;
+const FLUTTER_LOGO = `<div class="layer flogo" style="background:var(--paper)">${MARK()}</div>`;
+
+const timers = [[],[],[]];
+const NATIVE_MS = 500; // perkiraan lama splash Android sebelum frame Flutter pertama
+
+function stage(i, ms, fn){ timers[i].push(setTimeout(fn, ms)); }
+function stamp(i, start){
+  const t = document.getElementById('t'+i);
+  const tick = () => { t.textContent = ((performance.now()-start)/1000).toFixed(1)+' dtk'; };
+  timers[i].push(setInterval(tick, 50));
+}
+
+function play(i){
+  timers[i].forEach(clearTimeout); timers[i].forEach(clearInterval); timers[i] = [];
+  const p = document.getElementById('p'+i);
+  const start = performance.now(); stamp(i, start);
+  const show = sel => p.querySelector(sel).classList.remove('hidden');
+  const hide = sel => p.querySelector(sel).classList.add('hidden');
+
+  if (i === 0) {
+    p.innerHTML = HOME + CURRENT + NATIVE;
+    p.querySelector('.home').classList.add('hidden');
+    p.querySelector('.native').style.transition = 'none';
+    stage(i, NATIVE_MS, () => {
+      hide('.native');
+      const bar = p.querySelector('.prog div');
+      bar.style.transition = 'width 2.3s cubic-bezier(.65,0,.35,1)';
+      requestAnimationFrame(() => bar.style.width = '100%');
+      const logs = p.querySelectorAll('.log');
+      [350,1100,1750].forEach((d,k) => stage(i, d, () => logs[k].style.opacity = 1));
+      stage(i, 2300, () => { hide('.cur'); show('.home'); });
+    });
+    stage(i, NATIVE_MS + 2300 + 500, () => timers[i].forEach(clearInterval));
+  }
+  if (i === 1) {
+    p.innerHTML = HOME + FLUTTER_LOGO + NATIVE;
+    p.querySelector('.native').style.transition = 'none';
+    stage(i, NATIVE_MS, () => hide('.native'));            // tidak terlihat: identik
+    stage(i, NATIVE_MS + 700, () => hide('.flogo'));        // pudar ke Beranda
+    stage(i, NATIVE_MS + 700 + 500, () => timers[i].forEach(clearInterval));
+  }
+  if (i === 2) {
+    p.innerHTML = HOME + NATIVE;
+    p.querySelector('.native').style.transition = 'none';
+    stage(i, NATIVE_MS, () => hide('.native'));
+    stage(i, NATIVE_MS + 100, () => timers[i].forEach(clearInterval));
+  }
+}
+[0,1,2].forEach(play);
+</script>
+</body>
+</html>

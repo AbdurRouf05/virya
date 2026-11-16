@@ -12,13 +12,13 @@ Future<bool> gymConfirm(
   final r = await showDialog<bool>(
     context: context,
     builder: (c) => AlertDialog(
-      shape: const RoundedRectangleBorder(),
-      title: Text(title.toUpperCase()),
+      shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
+      title: Text(FN.caps(title)),
       content: Text(body),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(c, false),
-          child: const Text('BATAL'),
+          child: Text(FN.caps('Batal')),
         ),
         TextButton(
           onPressed: () => Navigator.pop(c, true),
@@ -38,30 +38,30 @@ Future<String?> gymPrompt(
   BuildContext context, {
   required String title,
   String initial = '',
-  String label = 'NAMA',
-  String action = 'SIMPAN',
+  String label = 'Nama',
+  String action = 'Simpan',
 }) async {
   final c = TextEditingController(text: initial);
   final r = await showDialog<String>(
     context: context,
     builder: (d) => AlertDialog(
-      shape: const RoundedRectangleBorder(),
-      title: Text(title.toUpperCase()),
+      shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
+      title: Text(FN.caps(title)),
       content: TextField(
         controller: c,
         autofocus: true,
         textCapitalization: TextCapitalization.sentences,
-        decoration: InputDecoration(labelText: label),
+        decoration: InputDecoration(labelText: FN.caps(label)),
         onSubmitted: (v) => Navigator.pop(d, v),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(d),
-          child: const Text('BATAL'),
+          child: Text(FN.caps('Batal')),
         ),
         TextButton(
           onPressed: () => Navigator.pop(d, c.text),
-          child: Text(action),
+          child: Text(FN.caps(action)),
         ),
       ],
     ),

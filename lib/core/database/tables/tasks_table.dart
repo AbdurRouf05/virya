@@ -16,6 +16,14 @@ class Tasks extends Table {
   /// Di-pin: selalu tampil di Hari Ini dan widget layar utama.
   BoolColumn get pinned => boolean().withDefault(const Constant(false))();
 
+  /// Rutinitas harian: muncul lagi setiap hari setelah dicentang. Untuk
+  /// rutinitas, [doneAt] = waktu terakhir dicentang (selesai hari itu saja).
+  BoolColumn get repeatDaily => boolean().withDefault(const Constant(false))();
+
+  /// Jam pengingat rutinitas, menit sejak tengah malam lokal. Null = tanpa
+  /// pengingat.
+  IntColumn get remindMinute => integer().nullable()();
+
   /// Null = belum selesai.
   DateTimeColumn get doneAt => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime()();

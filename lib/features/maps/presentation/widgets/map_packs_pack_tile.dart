@@ -4,10 +4,10 @@ import 'package:virya/core/offline_maps/map_pack.dart';
 
 /// UI label for a pack type.
 String mapPackTypeLabel(MapPackType t) => switch (t) {
-      MapPackType.basemap => 'BASEMAP',
-      MapPackType.dem => 'TERRAIN',
-      MapPackType.unknown => 'TAK DIKENAL',
-    };
+  MapPackType.basemap => FN.caps('BASEMAP'),
+  MapPackType.dem => FN.caps('TERRAIN'),
+  MapPackType.unknown => FN.caps('TAK DIKENAL'),
+};
 
 /// One installed pack row: type badge, name/meta, activate + delete.
 class MapPacksPackTile extends StatelessWidget {
@@ -38,45 +38,68 @@ class MapPacksPackTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: active ? FN.ink : FN.paper,
-        border: Border.all(color: FN.ink, width: 1.5),
+        border: FN.frame(width: 1.5),
       ),
       padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
-      child: Row(children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-          color: p.type == MapPackType.dem
-              ? FN.ok
-              : p.type == MapPackType.basemap
-                  ? FN.signal
-                  : FN.inkMuted,
-          child: Text(mapPackTypeLabel(p.type), style: FN.label(size: 9, color: FN.paper)),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(p.fileName,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+            color:
+                p.type == MapPackType.dem
+                    ? FN.ok
+                    : p.type == MapPackType.basemap
+                    ? FN.signal
+                    : FN.inkMuted,
+            child: Text(
+              mapPackTypeLabel(p.type),
+              style: FN.label(size: 9, color: FN.paper),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  p.fileName,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
                     fontFamily: FN.mono,
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
-                    color: active ? FN.paper : FN.ink)),
-            const SizedBox(height: 2),
-            Text(meta, style: FN.label(size: 10, color: active ? FN.paperLine : FN.inkMuted)),
-          ]),
-        ),
-        if (p.type != MapPackType.unknown)
-          TextButton(
-            onPressed: onActivate,
-            child: Text(active ? 'AKTIF ✓' : 'AKTIFKAN',
-                style: FN.label(size: 10, color: active ? FN.onInk(FN.acid) : FN.ink)),
+                    color: active ? FN.paper : FN.ink,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  meta,
+                  style: FN.label(
+                    size: 10,
+                    color: active ? FN.paperLine : FN.inkMuted,
+                  ),
+                ),
+              ],
+            ),
           ),
-        IconButton(
-          tooltip: 'Hapus',
-          icon: Icon(Icons.delete_outline, color: active ? FN.paper : FN.ink),
-          onPressed: onDelete,
-        ),
-      ]),
+          if (p.type != MapPackType.unknown)
+            TextButton(
+              onPressed: onActivate,
+              child: Text(
+                active ? FN.caps('AKTIF ✓') : FN.caps('AKTIFKAN'),
+                style: FN.label(
+                  size: 10,
+                  color: active ? FN.onInk(FN.acid) : FN.ink,
+                ),
+              ),
+            ),
+          IconButton(
+            tooltip: 'Hapus',
+            icon: Icon(Icons.delete_outline, color: active ? FN.paper : FN.ink),
+            onPressed: onDelete,
+          ),
+        ],
+      ),
     );
   }
 }

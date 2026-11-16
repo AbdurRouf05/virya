@@ -130,8 +130,8 @@ class _TimelapseDialogState extends ConsumerState<_TimelapseDialog> {
     return PopScope(
       canPop: _stage != _Stage.rendering,
       child: Dialog(
-        backgroundColor: FN.paper,
-        shape: const RoundedRectangleBorder(),
+        backgroundColor: FN.cardFill,
+        shape: FN.isClean ? null : const RoundedRectangleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -164,7 +164,7 @@ class _TimelapseDialogState extends ConsumerState<_TimelapseDialog> {
   );
 
   Widget get _close => InkButton(
-    label: 'TUTUP',
+    label: FN.caps('Tutup'),
     expand: true,
     onPressed: () => Navigator.pop(context),
   );
@@ -207,7 +207,7 @@ class _TimelapseDialogState extends ConsumerState<_TimelapseDialog> {
       const SizedBox(height: 14),
       if (_error != null) _errorText,
       InkButton(
-        label: 'BUAT VIDEO',
+        label: FN.caps('Buat video'),
         style: InkButtonStyle.primary,
         expand: true,
         onPressed: enough && _supported ? () => _start(entries) : null,
@@ -230,7 +230,7 @@ class _TimelapseDialogState extends ConsumerState<_TimelapseDialog> {
     ),
     const SizedBox(height: 16),
     InkButton(
-      label: _cancel ? 'MEMBATALKAN' : 'BATAL',
+      label: _cancel ? FN.caps('Membatalkan') : FN.caps('Batal'),
       expand: true,
       onPressed: _cancel ? null : () => setState(() => _cancel = true),
     ),
@@ -245,7 +245,7 @@ class _TimelapseDialogState extends ConsumerState<_TimelapseDialog> {
     const SizedBox(height: 14),
     if (_error != null) _errorText,
     InkButton(
-      label: 'BAGIKAN',
+      label: FN.caps('Bagikan'),
       icon: Icons.ios_share,
       style: InkButtonStyle.primary,
       expand: true,

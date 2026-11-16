@@ -21,14 +21,14 @@ class FocusDayUsage extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 12),
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: FN.ink, width: 2)),
+        decoration: BoxDecoration(border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
               child: Text(
-                'FOKUS',
+                FN.caps('Fokus'),
                 style: FN
                     .label(size: 12, color: FN.ink)
                     .copyWith(fontWeight: FontWeight.w700),

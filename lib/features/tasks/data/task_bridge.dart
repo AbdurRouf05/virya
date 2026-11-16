@@ -31,6 +31,10 @@ class TaskBridge {
   Future<void> pushSnapshot(List<Map<String, Object?>> tasks) =>
       _call<void>('pushSnapshot', jsonEncode(tasks));
 
+  /// Rutinitas untuk pengingat, penghalang aplikasi, dan ringkasan notifikasi.
+  Future<void> pushRoutines(List<Map<String, Object?>> routines) =>
+      _call<void>('pushRoutines', jsonEncode(routines));
+
   /// Antrean perubahan; tetap tersimpan sampai [ackInbox] dipanggil.
   Future<List<TaskInboxOp>> peekInbox() async {
     final raw = await _call<String>('peekInbox');

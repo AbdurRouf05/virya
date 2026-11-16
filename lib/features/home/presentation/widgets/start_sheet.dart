@@ -12,8 +12,8 @@ Future<void> showStartSheet(
 }) {
   return showModalBottomSheet<void>(
     context: context,
-    backgroundColor: FN.paper,
-    shape: const RoundedRectangleBorder(),
+    backgroundColor: FN.cardFill,
+    shape: FN.isClean ? null : const RoundedRectangleBorder(),
     isScrollControlled: true,
     builder: (sheet) => StartSheet(
       onRecordGps: () {
@@ -71,19 +71,14 @@ class StartSheet extends StatelessWidget {
           children: [
             Center(child: Container(width: 44, height: 4, color: FN.ink)),
             const SizedBox(height: 18),
-            Text('MULAI CEPAT', style: FN.label(size: 11, color: FN.inkSoft)),
+            Text(FN.caps('Mulai cepat'), style: FN.label(size: 11, color: FN.inkSoft)),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
                   child: Text(
-                    'MAU NGAPAIN?',
-                    style: TextStyle(
-                      fontFamily: FN.display,
-                      fontSize: 40,
-                      height: 1.05,
-                      color: FN.ink,
-                    ),
+                    FN.caps('Mau ngapain?'),
+                    style: FN.title(40, color: FN.ink, height: 1.05),
                   ),
                 ),
                 Padding(
@@ -96,15 +91,15 @@ class StartSheet extends StatelessWidget {
             _row(
               _StartTile(
                 icon: Icons.gps_fixed,
-                title: 'REKAM GPS',
-                subtitle: 'SEPEDA · LARI · JALAN',
+                title: FN.caps('Rekam GPS'),
+                subtitle: FN.caps('Sepeda · lari · jalan'),
                 highlight: true,
                 onTap: onRecordGps,
               ),
               _StartTile(
                 icon: Icons.fitness_center,
-                title: 'MULAI GYM',
-                subtitle: 'SESI KEKUATAN',
+                title: FN.caps('Mulai gym'),
+                subtitle: FN.caps('Sesi kekuatan'),
                 onTap: onStartGym,
               ),
             ),
@@ -112,14 +107,14 @@ class StartSheet extends StatelessWidget {
             _row(
               _StartTile(
                 icon: Icons.add_task,
-                title: 'TUGAS BARU',
-                subtitle: 'CATAT CEPAT',
+                title: FN.caps('Tugas baru'),
+                subtitle: FN.caps('Catat cepat'),
                 onTap: onNewTask,
               ),
               _StartTile(
                 icon: Icons.photo_camera_outlined,
-                title: 'FOTO TUBUH',
-                subtitle: 'CHECK-IN MINGGUAN',
+                title: FN.caps('Foto tubuh'),
+                subtitle: FN.caps('Check-in mingguan'),
                 onTap: onBodyCheckin,
               ),
             ),
@@ -174,8 +169,7 @@ class _StartTile extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
           decoration: BoxDecoration(
             color: highlight ? FN.signal : FN.paper,
-            border: Border.all(color: enabled ? FN.ink : FN.inkMuted, width: 2),
-          ),
+            border: FN.frame(color: enabled ? FN.ink : FN.inkMuted, width: 2), borderRadius: FN.boxRadius,),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -186,7 +180,7 @@ class _StartTile extends StatelessWidget {
                   const Spacer(),
                   if (!enabled)
                     Text(
-                      'SEGERA',
+                      FN.caps('Segera'),
                       style: FN
                           .label(size: 10, color: FN.inkMuted)
                           .copyWith(fontWeight: FontWeight.w700),
@@ -199,12 +193,7 @@ class _StartTile extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   title,
-                  style: TextStyle(
-                    fontFamily: FN.display,
-                    fontSize: 30,
-                    height: 1.0,
-                    color: fg,
-                  ),
+                  style: FN.title(30, color: fg, height: 1.0),
                 ),
               ),
               const SizedBox(height: 4),

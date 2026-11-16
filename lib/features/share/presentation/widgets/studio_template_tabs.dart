@@ -29,10 +29,7 @@ class StudioTemplateTabs extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
                     border: Border(
-                      bottom: BorderSide(
-                        color: t == selected ? FN.signal : Colors.transparent,
-                        width: 2,
-                      ),
+                      bottom: FN.side(color: t == selected ? FN.signal : Colors.transparent, width: 2),
                     ),
                   ),
                   child: Text(

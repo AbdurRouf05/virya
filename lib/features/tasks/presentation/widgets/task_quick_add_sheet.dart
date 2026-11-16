@@ -4,13 +4,14 @@ import 'package:virya/core/time/current_day.dart';
 import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/tasks/data/task_repository.dart';
 import 'package:virya/features/tasks/presentation/widgets/task_due_chips.dart';
+import 'package:virya/features/tasks/presentation/widgets/task_remind_row.dart';
 
-/// Lembar catat cepat: ketik, pilih hari, simpan.
+/// Lembar catat cepat: ketik, pilih hari (atau TIAP HARI), simpan.
 Future<void> showQuickAddTask(BuildContext context) =>
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: FN.paper,
-      shape: const RoundedRectangleBorder(),
+      backgroundColor: FN.cardFill,
+      shape: FN.isClean ? null : const RoundedRectangleBorder(),
       isScrollControlled: true,
       builder: (_) => const TaskQuickAddSheet(),
     );
@@ -25,6 +26,8 @@ class TaskQuickAddSheet extends ConsumerStatefulWidget {
 class _State extends ConsumerState<TaskQuickAddSheet> {
   final _title = TextEditingController();
   late DateTime? _due = ref.read(currentDayProvider);
+  bool _repeat = false;
+  int? _remind;
   bool _saving = false;
 
   @override
@@ -38,7 +41,12 @@ class _State extends ConsumerState<TaskQuickAddSheet> {
     setState(() => _saving = true);
     final id = await ref
         .read(taskRepositoryProvider)
-        .add(_title.text, due: _due);
+        .add(
+          _title.text,
+          due: _repeat ? null : _due,
+          repeatDaily: _repeat,
+          remindMinute: _remind,
+        );
     if (!mounted) return;
     if (id == null) {
       setState(() => _saving = false);
@@ -61,13 +69,8 @@ class _State extends ConsumerState<TaskQuickAddSheet> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'TUGAS BARU',
-                style: TextStyle(
-                  fontFamily: FN.display,
-                  fontSize: 32,
-                  height: 1.05,
-                  color: FN.ink,
-                ),
+                FN.caps('Tugas baru'),
+                style: FN.title(32, color: FN.ink, height: 1.05),
               ),
               const SizedBox(height: 8),
               TextField(
@@ -87,7 +90,16 @@ class _State extends ConsumerState<TaskQuickAddSheet> {
                 value: _due,
                 today: today,
                 onChanged: (d) => setState(() => _due = d),
+                repeat: _repeat,
+                onRepeat: (v) => setState(() => _repeat = v),
               ),
+              if (_repeat) ...[
+                const SizedBox(height: 10),
+                TaskRemindRow(
+                  minute: _remind,
+                  onChanged: (m) => setState(() => _remind = m),
+                ),
+              ],
               const SizedBox(height: 14),
               InkButton(
                 label: 'Simpan',

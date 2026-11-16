@@ -18,7 +18,7 @@ class TasksDoneDay extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 12),
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: FN.ink, width: 2)),
+        decoration: BoxDecoration(border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -28,14 +28,14 @@ class TasksDoneDay extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      'TUGAS SELESAI',
+                      FN.caps('Tugas selesai'),
                       style: FN
                           .label(size: 12, color: FN.ink)
                           .copyWith(fontWeight: FontWeight.w700),
                     ),
                   ),
                   Text(
-                    '${tasks.length} TUGAS',
+                    FN.caps('${tasks.length} tugas'),
                     style: FN.label(size: 11, color: FN.ink),
                   ),
                 ],

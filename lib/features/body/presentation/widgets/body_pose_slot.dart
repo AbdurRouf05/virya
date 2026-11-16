@@ -50,7 +50,7 @@ class BodyPoseSlot extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              shot == null ? 'TAMBAH' : 'AMBIL ULANG',
+              shot == null ? FN.caps('Tambah') : FN.caps('Ambil ulang'),
               textAlign: TextAlign.center,
               style: FN.label(size: 9.5),
             ),

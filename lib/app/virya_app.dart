@@ -7,6 +7,7 @@ import 'package:virya/app/theme/field_notes.dart';
 import 'package:virya/app/theme/native_style.dart';
 import 'package:virya/app/theme/styles/styles.dart';
 import 'package:virya/features/splash/presentation/entry_loading_screen.dart';
+import 'package:virya/features/splash/presentation/look_gate.dart';
 
 class ViryaApp extends ConsumerWidget {
   final Widget home;
@@ -15,7 +16,12 @@ class ViryaApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final style = styleById(ref.watch(styleIdProvider));
+    final style = resolveStyle(
+      styleId: ref.watch(styleIdProvider),
+      gaya: ref.watch(uiGayaProvider),
+      mode: ref.watch(bersihModeProvider),
+      platform: MediaQuery.platformBrightnessOf(context),
+    );
     FN.use(style);
     pushNativeStyle(style);
     final icons = style.brightness == Brightness.dark
@@ -35,7 +41,9 @@ class ViryaApp extends ConsumerWidget {
         title: 'Virya',
         debugShowCheckedModeBanner: false,
         theme: FieldNotesTheme.paper,
-        home: home,
+        // Setelah gaya diganti dari layar pilih gaya, layar pembuka tidak
+        // diputar ulang.
+        home: ref.watch(skipEntryProvider) ? const LookGate() : home,
       ),
     );
   }

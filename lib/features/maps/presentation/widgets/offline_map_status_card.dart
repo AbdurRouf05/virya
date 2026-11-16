@@ -7,47 +7,70 @@ import 'package:virya/features/maps/presentation/widgets/map_packs_box.dart';
 
 /// "ONLINE · cache 120 MB" + clear-cache action + GPS reassurance.
 class OfflineMapStatusCard extends StatelessWidget {
-  const OfflineMapStatusCard({super.key, required this.status, required this.onClearCache});
+  const OfflineMapStatusCard({
+    super.key,
+    required this.status,
+    required this.onClearCache,
+  });
   final OfflineMapStatus status;
   final VoidCallback? onClearCache;
 
   @override
   Widget build(BuildContext context) {
     final cap = formatBytes(OfflineTiles.defaultCacheMaxBytes);
-    final small = TextStyle(fontFamily: FN.sans, fontSize: 12, color: FN.inkSoft, height: 1.35);
+    final small = TextStyle(
+      fontFamily: FN.sans,
+      fontSize: 12,
+      color: FN.inkSoft,
+      height: 1.35,
+    );
     return MapPacksBox(
       color: FN.paperDeep,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          Icon(status.online ? Icons.wifi : Icons.wifi_off, size: 18,
-              color: status.online ? FN.ok : FN.inkMuted),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              '${status.online ? 'ONLINE' : 'OFFLINE'} · CACHE ${formatBytes(status.cacheBytes)}',
-              style: FN.label(size: 13, color: FN.ink),
-            ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                status.online ? Icons.wifi : Icons.wifi_off,
+                size: 18,
+                color: status.online ? FN.ok : FN.inkMuted,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  '${status.online ? FN.caps('ONLINE') : FN.caps('OFFLINE')} · CACHE ${formatBytes(status.cacheBytes)}',
+                  style: FN.label(size: 13, color: FN.ink),
+                ),
+              ),
+              TextButton(
+                onPressed: status.cacheBytes > 0 ? onClearCache : null,
+                child: Text(
+                  FN.caps('HAPUS CACHE'),
+                  style: FN.label(
+                    size: 11,
+                    color: status.cacheBytes > 0 ? FN.warn : FN.inkMuted,
+                  ),
+                ),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: status.cacheBytes > 0 ? onClearCache : null,
-            child: Text('HAPUS CACHE',
-                style: FN.label(size: 11,
-                    color: status.cacheBytes > 0 ? FN.warn : FN.inkMuted)),
+          const SizedBox(height: 4),
+          Text(
+            status.online
+                ? 'Peta tampil otomatis dari internet. Area yang pernah dilihat '
+                    'disimpan (maks $cap) agar bisa dibuka lagi tanpa sinyal.'
+                : 'Tanpa internet: yang tampil hanya area yang pernah dilihat '
+                    'dan wilayah yang sudah diunduh.',
+            style: small,
           ),
-        ]),
-        const SizedBox(height: 4),
-        Text(
-          status.online
-              ? 'Peta tampil otomatis dari internet. Area yang pernah dilihat '
-                  'disimpan (maks $cap) agar bisa dibuka lagi tanpa sinyal.'
-              : 'Tanpa internet: yang tampil hanya area yang pernah dilihat '
-                  'dan wilayah yang sudah diunduh.',
-          style: small,
-        ),
-        const SizedBox(height: 6),
-        Text('Rekam GPS tetap jalan tanpa internet.',
-            style: small.copyWith(color: FN.ink, fontWeight: FontWeight.w600)),
-      ]),
+          const SizedBox(height: 6),
+          Text(
+            'Rekam GPS tetap jalan tanpa internet.',
+            style: small.copyWith(color: FN.ink, fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
     );
   }
 }

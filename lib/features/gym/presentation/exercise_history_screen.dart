@@ -29,7 +29,7 @@ class ExerciseHistoryScreen extends ConsumerWidget {
     final sessions = bySession.values.toList()
       ..sort((a, b) => b.first.sessionStart.compareTo(a.first.sessionStart));
     return Scaffold(
-      appBar: AppBar(title: Text(exercise.name.toUpperCase())),
+      appBar: AppBar(title: Text(FN.caps(exercise.name))),
       body: PaperBackground(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),

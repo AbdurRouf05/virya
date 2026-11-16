@@ -67,22 +67,18 @@ class _GymHomeScreenState extends ConsumerState<GymHomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '● SESI BERJALAN',
+                        FN.caps('● Sesi berjalan'),
                         style: FN.label(size: 10, color: FN.acid),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        active.title.toUpperCase(),
-                        style: TextStyle(
-                          fontFamily: FN.display,
-                          fontSize: 22,
-                          color: FN.onNight,
-                        ),
+                        FN.caps(active.title),
+                        style: FN.title(22, color: FN.onNight),
                       ),
                     ],
                   ),
                 ),
-                Text('LANJUTKAN →', style: FN.label(size: 11, color: FN.acid)),
+                Text(FN.caps('Lanjutkan →'), style: FN.label(size: 11, color: FN.acid)),
               ],
             ),
           ),
@@ -96,10 +92,10 @@ class _GymHomeScreenState extends ConsumerState<GymHomeScreen> {
           ),
         _section(
           '01',
-          'TEMPLATE',
+          FN.caps('Template'),
           trailing: GestureDetector(
             onTap: () => openTemplateEditor(context),
-            child: Text('+ BUAT', style: FN.label(size: 10.5, color: FN.ink)),
+            child: Text(FN.caps('+ Buat'), style: FN.label(size: 10.5, color: FN.ink)),
           ),
         ),
         if (templates.isEmpty)
@@ -108,7 +104,7 @@ class _GymHomeScreenState extends ConsumerState<GymHomeScreen> {
           GymListTile(
             title: t.name,
             subtitle: t.items.isEmpty
-                ? 'KOSONG'
+                ? FN.caps('Kosong')
                 : t.items
                       .map(
                         (i) =>
@@ -121,11 +117,11 @@ class _GymHomeScreenState extends ConsumerState<GymHomeScreen> {
                 ? () => openGymSession(context)
                 : () => startGymFlow(context, ref, template: t),
           ),
-        _section('02', 'VOLUME MINGGUAN'),
+        _section('02', FN.caps('Volume mingguan')),
         GymVolumeBars(weeks: weeks),
-        _section('03', 'OTOT · HARI SEJAK DILATIH'),
+        _section('03', FN.caps('Otot · hari sejak dilatih')),
         GymMuscleStatus(lastTrained: last, now: DateTime.now()),
-        _section('04', 'REKOR PRIBADI'),
+        _section('04', FN.caps('Rekor pribadi')),
         if (prList.isEmpty) _hint('PR muncul setelah sesi pertama selesai.'),
         for (final e in prList.take(8))
           GymListTile(
@@ -135,7 +131,7 @@ class _GymHomeScreenState extends ConsumerState<GymHomeScreen> {
                 'e1RM ${fmtKg(e.value.best1rm.roundToDouble())} KG',
             onTap: () => openExerciseHistory(context, lib[e.key]!),
           ),
-        _section('05', 'SESI TERAKHIR'),
+        _section('05', FN.caps('Sesi terakhir')),
         if (sessions.isEmpty) _hint('Belum ada sesi gym.'),
         for (final a in sessions)
           GymListTile(

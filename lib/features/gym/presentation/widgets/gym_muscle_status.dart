@@ -30,20 +30,20 @@ class GymMuscleStatus extends StatelessWidget {
         ? FN.caution
         : FN.ok;
     final text = days == null
-        ? 'BELUM'
+        ? FN.caps('Belum')
         : days == 0
-        ? 'HARI INI'
-        : '$days HARI';
+        ? FN.caps('Hari ini')
+        : FN.caps('$days hari');
     return Container(
       width: 104,
       padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
       decoration: BoxDecoration(
         color: FN.paper,
         border: Border(
-          left: BorderSide(color: c, width: 4),
-          top: BorderSide(color: FN.ink),
-          right: BorderSide(color: FN.ink),
-          bottom: BorderSide(color: FN.ink),
+          left: FN.stripe(c, width: 4),
+          top: FN.side(color: FN.ink),
+          right: FN.side(color: FN.ink),
+          bottom: FN.side(color: FN.ink),
         ),
       ),
       child: Column(

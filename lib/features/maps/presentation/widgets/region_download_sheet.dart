@@ -56,7 +56,9 @@ class _RegionDownloadSheetState extends State<RegionDownloadSheet> {
 
   GeoBounds? get _bounds {
     final pos = _pos;
-    return pos == null ? null : boundsAround(pos.$1, pos.$2, _radius.toDouble());
+    return pos == null
+        ? null
+        : boundsAround(pos.$1, pos.$2, _radius.toDouble());
   }
 
   int get _tiles {
@@ -89,57 +91,89 @@ class _RegionDownloadSheetState extends State<RegionDownloadSheet> {
   Widget build(BuildContext context) {
     final tiles = _tiles;
     final tooMany = tiles > RegionDownloader.maxTiles;
-    final body = TextStyle(fontFamily: FN.sans, fontSize: 13, color: FN.inkSoft, height: 1.4);
+    final body = TextStyle(
+      fontFamily: FN.sans,
+      fontSize: 13,
+      color: FN.inkSoft,
+      height: 1.4,
+    );
     return Padding(
       padding: EdgeInsets.fromLTRB(
-          16, 16, 16, 16 + MediaQuery.of(context).viewInsets.bottom),
-      child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('UNDUH WILAYAH', style: FN.bigNumber(26)),
-        const SizedBox(height: 4),
-        Text('Area persegi di sekitar posisi kamu sekarang, detail sampai '
-            'tingkat jalan setapak.', style: body),
-        const SizedBox(height: 14),
-        Text('JARAK DARI POSISI', style: FN.label(size: 11, color: FN.ink)),
-        const SizedBox(height: 6),
-        Wrap(spacing: 8, children: [
-          for (final r in _radii)
-            ChoiceChip(
-              label: Text('$r km', style: FN.label(size: 12,
-                  color: r == _radius ? FN.paper : FN.ink)),
-              selected: r == _radius,
-              showCheckmark: false,
-              selectedColor: FN.ink,
-              backgroundColor: FN.paper,
-              shape: RoundedRectangleBorder(side: BorderSide(color: FN.ink)),
-              onSelected: (_) => setState(() => _radius = r),
+        16,
+        16,
+        16,
+        16 + MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(FN.caps('UNDUH WILAYAH'), style: FN.bigNumber(26)),
+          const SizedBox(height: 4),
+          Text(
+            'Area persegi di sekitar posisi kamu sekarang, detail sampai '
+            'tingkat jalan setapak.',
+            style: body,
+          ),
+          const SizedBox(height: 14),
+          Text(
+            FN.caps('JARAK DARI POSISI'),
+            style: FN.label(size: 11, color: FN.ink),
+          ),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 8,
+            children: [
+              for (final r in _radii)
+                ChoiceChip(
+                  label: Text(
+                    '$r km',
+                    style: FN.label(
+                      size: 12,
+                      color: r == _radius ? FN.paper : FN.ink,
+                    ),
+                  ),
+                  selected: r == _radius,
+                  showCheckmark: false,
+                  selectedColor: FN.ink,
+                  backgroundColor: FN.paper,
+                  shape: RoundedRectangleBorder(side: FN.side()),
+                  onSelected: (_) => setState(() => _radius = r),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _name,
+            style: TextStyle(fontFamily: FN.sans, color: FN.ink),
+            decoration: InputDecoration(
+              labelText: 'Nama wilayah (opsional)',
+              hintText: 'Sekitar posisi · $_radius km',
+              border: const OutlineInputBorder(borderRadius: BorderRadius.zero),
             ),
-        ]),
-        const SizedBox(height: 12),
-        TextField(
-          controller: _name,
-          style: TextStyle(fontFamily: FN.sans, color: FN.ink),
-          decoration: InputDecoration(
-            labelText: 'Nama wilayah (opsional)',
-            hintText: 'Sekitar posisi · $_radius km',
-            border: const OutlineInputBorder(borderRadius: BorderRadius.zero),
           ),
-        ),
-        const SizedBox(height: 12),
-        _estimate(tiles, tooMany, body),
-        const SizedBox(height: 14),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: FilledButton.icon(
-            style: FilledButton.styleFrom(
-                backgroundColor: FN.ink, foregroundColor: FN.paper,
-                shape: const RoundedRectangleBorder()),
-            onPressed: _pos == null || tooMany ? null : _submit,
-            icon: const Icon(Icons.download),
-            label: Text('MULAI UNDUH', style: FN.label(size: 13, color: FN.paper)),
+          const SizedBox(height: 12),
+          _estimate(tiles, tooMany, body),
+          const SizedBox(height: 14),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: FN.ink,
+                foregroundColor: FN.paper,
+                shape: const RoundedRectangleBorder(),
+              ),
+              onPressed: _pos == null || tooMany ? null : _submit,
+              icon: const Icon(Icons.download),
+              label: Text(
+                FN.caps('MULAI UNDUH'),
+                style: FN.label(size: 13, color: FN.paper),
+              ),
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 
@@ -148,16 +182,24 @@ class _RegionDownloadSheetState extends State<RegionDownloadSheet> {
       return Text(_error!, style: body.copyWith(color: FN.warn));
     }
     if (_pos == null) {
-      return Row(children: [
-        SizedBox(width: 16, height: 16,
-            child: CircularProgressIndicator(strokeWidth: 2, color: FN.ink)),
-        const SizedBox(width: 10),
-        Text('Mencari posisi GPS…', style: body),
-      ]);
+      return Row(
+        children: [
+          SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator(strokeWidth: 2, color: FN.ink),
+          ),
+          const SizedBox(width: 10),
+          Text('Mencari posisi GPS…', style: body),
+        ],
+      );
     }
     if (tooMany) {
-      return Text('Terlalu besar ($tiles ubin, maks ${RegionDownloader.maxTiles}). '
-          'Pilih jarak lebih kecil.', style: body.copyWith(color: FN.warn));
+      return Text(
+        'Terlalu besar ($tiles ubin, maks ${RegionDownloader.maxTiles}). '
+        'Pilih jarak lebih kecil.',
+        style: body.copyWith(color: FN.warn),
+      );
     }
     return Text(
       '± $tiles ubin · perkiraan ${formatBytes(estimateBytes(tiles))}. '

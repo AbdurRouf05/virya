@@ -18,8 +18,7 @@ class StudioButton extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: primary ? FN.signal : Colors.transparent,
-              border: Border.all(color: primary ? FN.signal : FN.onNight, width: 1.4),
-            ),
+              border: FN.frame(color: primary ? FN.signal : FN.onNight, width: 1.4), borderRadius: FN.boxRadius,),
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Padding(
@@ -27,7 +26,7 @@ class StudioButton extends StatelessWidget {
                 child: Text(
                   label,
                   style: FN.label(size: 11, color: primary ? FN.onAccent : FN.onNight)
-                      .copyWith(fontWeight: FontWeight.w700, letterSpacing: 1.6),
+                      .copyWith(fontWeight: FontWeight.w700, letterSpacing: FN.track(1.6)),
                 ),
               ),
             ),

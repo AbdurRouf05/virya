@@ -57,7 +57,7 @@ class SegmentTile extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text('REKOR', style: FN.label(size: 9)),
+              Text(FN.caps('REKOR'), style: FN.label(size: 9)),
               Text(
                 best == null ? '-' : Fmt.duration(best),
                 style: FN.label(size: 16, color: FN.ink),

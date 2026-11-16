@@ -105,7 +105,7 @@ class _BodyCompareScreenState extends ConsumerState<BodyCompareScreen> {
           children: [
             Expanded(
               child: _DayPicker(
-                title: 'SEBELUM',
+                title: FN.caps('Sebelum'),
                 selected: before,
                 options: list.sublist(0, a),
                 onChanged: (id) => setState(() {
@@ -117,7 +117,7 @@ class _BodyCompareScreenState extends ConsumerState<BodyCompareScreen> {
             const SizedBox(width: 12),
             Expanded(
               child: _DayPicker(
-                title: 'SESUDAH',
+                title: FN.caps('Sesudah'),
                 selected: after,
                 options: list.sublist(b + 1),
                 onChanged: (id) => setState(() {
@@ -141,7 +141,7 @@ class _BodyCompareScreenState extends ConsumerState<BodyCompareScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'SELISIH BERAT · ${bodyDaysBetween(before.day, after.day)} HARI',
+                FN.caps('Selisih berat · ${bodyDaysBetween(before.day, after.day)} hari'),
                 style: FN.label(size: 11),
               ),
               Text(

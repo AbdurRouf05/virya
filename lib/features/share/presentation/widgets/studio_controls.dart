@@ -66,7 +66,7 @@ class StudioControls extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: StudioButton(
-                  label: 'BAGIKAN GAMBAR',
+                  label: FN.caps('Bagikan gambar'),
                   primary: true,
                   onTap: busy ? null : onShare,
                 ),
@@ -74,12 +74,12 @@ class StudioControls extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 flex: 2,
-                child: StudioButton(label: 'SIMPAN', onTap: busy ? null : onSave),
+                child: StudioButton(label: FN.caps('Simpan'), onTap: busy ? null : onSave),
               ),
               const SizedBox(width: 8),
               Expanded(
                 flex: 2,
-                child: StudioButton(label: 'BUAT VIDEO', onTap: busy ? null : onVideo),
+                child: StudioButton(label: FN.caps('Buat video'), onTap: busy ? null : onVideo),
               ),
             ]),
           ],
@@ -89,7 +89,7 @@ class StudioControls extends StatelessWidget {
   }
 
   List<Widget> _optionRows() => [
-        StudioRow(label: 'FORMAT', children: [
+        StudioRow(label: FN.caps('Format'), children: [
           for (final f in CardFormat.values)
             StudioChip(
               label: f.label,
@@ -97,7 +97,7 @@ class StudioControls extends StatelessWidget {
               onTap: () => onOpts(opts.copyWith(format: f)),
             ),
         ]),
-        StudioRow(label: 'DATA', children: [
+        StudioRow(label: FN.caps('Data'), children: [
           for (final s in ShareStat.values)
             StudioChip(
               label: s.label,
@@ -109,7 +109,7 @@ class StudioControls extends StatelessWidget {
               },
             ),
         ]),
-        StudioRow(label: 'AKSEN', children: [
+        StudioRow(label: FN.caps('Aksen'), children: [
           for (final a in AccentChoice.values)
             StudioChip(
               label: a.label,
@@ -118,11 +118,11 @@ class StudioControls extends StatelessWidget {
               onTap: () => onOpts(opts.copyWith(accent: a)),
             ),
         ]),
-        StudioRow(label: 'VIDEO', children: [
+        StudioRow(label: FN.caps('Video'), children: [
           StudioChip(label: '720P', selected: !hd, onTap: () => onHd(false)),
           StudioChip(label: '1080P', selected: hd, onTap: () => onHd(true)),
         ]),
-        StudioRow(label: 'DURASI', children: [
+        StudioRow(label: FN.caps('Durasi'), children: [
           for (final l in RecapLength.values)
             StudioChip(
               label: l.label,
@@ -132,19 +132,15 @@ class StudioControls extends StatelessWidget {
         ]),
       ];
 
-  Widget _photoRow() => StudioRow(label: 'FOTO', children: [
-        StudioChip(label: '+ GALERI', selected: false, onTap: onPickPhoto),
+  Widget _photoRow() => StudioRow(label: FN.caps('Foto'), children: [
+        StudioChip(label: FN.caps('+ Galeri'), selected: false, onTap: onPickPhoto),
         for (final p in photos)
           GestureDetector(
             onTap: () => onPhoto(p),
             child: Container(
               margin: const EdgeInsets.only(right: 6),
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: p == selectedPhoto ? FN.signal : FN.nightLine,
-                  width: 2,
-                ),
-              ),
+                border: FN.frame(color: p == selectedPhoto ? FN.signal : FN.nightLine, width: 2), borderRadius: FN.boxRadius,),
               child: Image.file(File(p),
                   width: 34,
                   height: 34,
@@ -175,7 +171,7 @@ class _DurationHint extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 52, bottom: 6),
       child: Text(
-        '$totalDtk DTK · 1 DTK $speedText',
+        FN.caps('$totalDtk dtk · 1 dtk $speedText'),
         style: FN.label(size: 8.5, color: FN.inkMuted),
       ),
     );

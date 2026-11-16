@@ -167,7 +167,7 @@ class _ShareStudioBodyState extends State<ShareStudioBody> {
       await showModalBottomSheet<void>(
         context: context,
         backgroundColor: FN.nightSurface,
-        shape: const RoundedRectangleBorder(),
+        shape: FN.isClean ? null : const RoundedRectangleBorder(),
         builder: (ctx) => SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
@@ -180,7 +180,7 @@ class _ShareStudioBodyState extends State<ShareStudioBody> {
                     Icon(Icons.check_circle_outline, color: FN.signal, size: 20),
                     const SizedBox(width: 8),
                     Text(
-                      'VIDEO RECAP SELESAI',
+                      FN.caps('Video recap selesai'),
                       style: FN
                           .label(size: 13, color: FN.onNight)
                           .copyWith(fontWeight: FontWeight.w700),
@@ -197,12 +197,12 @@ class _ShareStudioBodyState extends State<ShareStudioBody> {
                   style: FilledButton.styleFrom(
                     backgroundColor: FN.acid,
                     foregroundColor: FN.night,
-                    shape: const RoundedRectangleBorder(),
+                    shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   icon: const Icon(Icons.download_rounded),
                   label: Text(
-                    'SIMPAN KE GALERI',
+                    FN.caps('Simpan ke galeri'),
                     style: FN.label(size: 12, color: FN.night).copyWith(fontWeight: FontWeight.w700),
                   ),
                   onPressed: () async {
@@ -215,12 +215,12 @@ class _ShareStudioBodyState extends State<ShareStudioBody> {
                 OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                     foregroundColor: FN.onNight,
-                    side: BorderSide(color: FN.onNightMuted),
-                    shape: const RoundedRectangleBorder(),
+                    side: FN.side(color: FN.onNightMuted),
+                    shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   icon: const Icon(Icons.share_rounded),
-                  label: Text('BAGIKAN VIDEO', style: FN.label(size: 12, color: FN.onNight)),
+                  label: Text(FN.caps('Bagikan video'), style: FN.label(size: 12, color: FN.onNight)),
                   onPressed: () async {
                     Navigator.pop(ctx);
                     await ShareExport.shareFile(path, mime: 'video/mp4');

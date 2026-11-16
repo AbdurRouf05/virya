@@ -23,9 +23,8 @@ class HeatmapNote extends StatelessWidget {
         margin: const EdgeInsets.all(24),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: FN.paper,
-          border: Border.all(color: FN.ink, width: 1.5),
-        ),
+          color: FN.cardFill,
+          border: FN.frame(color: FN.ink, width: 1.5), borderRadius: FN.boxRadius,),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

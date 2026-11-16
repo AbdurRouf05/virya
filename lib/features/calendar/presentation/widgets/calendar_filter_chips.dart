@@ -21,7 +21,7 @@ class CalendarFilterChips extends StatelessWidget {
       child: Row(
         children: [
           _Chip(
-            text: 'SEMUA',
+            text: FN.caps('Semua'),
             on: selected == null,
             onTap: () => onSelect(null),
           ),
@@ -65,8 +65,7 @@ class _Chip extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               color: on ? FN.ink : null,
-              border: Border.all(color: FN.ink, width: 1.5),
-            ),
+              border: FN.frame(color: FN.ink, width: 1.5), borderRadius: FN.boxRadius,),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -76,7 +75,7 @@ class _Chip extends StatelessWidget {
                     height: 10,
                     decoration: BoxDecoration(
                       color: swatch,
-                      border: on ? Border.all(color: FN.paper) : null,
+                      border: on ? FN.frame(color: FN.paper, width: 1) : null,
                     ),
                   ),
                   const SizedBox(width: 7),

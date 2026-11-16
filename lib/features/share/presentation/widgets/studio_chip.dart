@@ -24,8 +24,7 @@ class StudioChip extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: selected ? FN.onNight : Colors.transparent,
-            border: Border.all(color: selected ? FN.onNight : FN.nightLine),
-          ),
+            border: FN.frame(color: selected ? FN.onNight : FN.nightLine, width: 1), borderRadius: FN.boxRadius,),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
             if (swatch != null) ...[
               Container(
@@ -33,8 +32,7 @@ class StudioChip extends StatelessWidget {
                 height: 10,
                 decoration: BoxDecoration(
                   color: swatch,
-                  border: Border.all(color: FN.inkMuted, width: 0.5),
-                ),
+                  border: FN.frame(color: FN.inkMuted, width: 0.5), borderRadius: FN.boxRadius,),
               ),
               const SizedBox(width: 5),
             ],

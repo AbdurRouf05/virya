@@ -11,10 +11,12 @@ class MapPacksBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-            color: color ?? FN.paper, border: Border.all(color: FN.ink, width: 1.5)),
-        child: child,
-      );
+    width: double.infinity,
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: color ?? FN.paper,
+      border: FN.frame(width: 1.5),
+    ),
+    child: child,
+  );
 }

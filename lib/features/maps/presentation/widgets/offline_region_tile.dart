@@ -22,39 +22,52 @@ class OfflineRegionTile extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
-      decoration: BoxDecoration(
-          color: FN.paper, border: Border.all(color: FN.ink, width: 1.5)),
-      child: Row(children: [
-        Icon(region.complete ? Icons.download_done : Icons.downloading,
-            color: region.complete ? FN.ink : FN.caution),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(region.name,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontFamily: FN.sans, fontWeight: FontWeight.w600, color: FN.ink)),
-            const SizedBox(height: 2),
-            Text(
-              '${formatBytes(region.sizeBytes)} · $date'
-              '${region.complete ? '' : ' · BELUM LENGKAP'}',
-              style: FN.label(size: 10,
-                  color: region.complete ? FN.inkMuted : FN.caution),
-            ),
-          ]),
-        ),
-        if (!region.complete)
-          IconButton(
-            tooltip: 'Lanjutkan unduhan',
-            onPressed: onResume,
-            icon: Icon(Icons.play_arrow, color: FN.ink),
+      decoration: BoxDecoration(color: FN.paper, border: FN.frame(width: 1.5)),
+      child: Row(
+        children: [
+          Icon(
+            region.complete ? Icons.download_done : Icons.downloading,
+            color: region.complete ? FN.ink : FN.caution,
           ),
-        IconButton(
-          tooltip: 'Hapus wilayah',
-          onPressed: onDelete,
-          icon: Icon(Icons.delete_outline, color: FN.warn),
-        ),
-      ]),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  region.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: FN.sans,
+                    fontWeight: FontWeight.w600,
+                    color: FN.ink,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '${formatBytes(region.sizeBytes)} · $date'
+                  '${region.complete ? '' : FN.caps(' · BELUM LENGKAP')}',
+                  style: FN.label(
+                    size: 10,
+                    color: region.complete ? FN.inkMuted : FN.caution,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (!region.complete)
+            IconButton(
+              tooltip: 'Lanjutkan unduhan',
+              onPressed: onResume,
+              icon: Icon(Icons.play_arrow, color: FN.ink),
+            ),
+          IconButton(
+            tooltip: 'Hapus wilayah',
+            onPressed: onDelete,
+            icon: Icon(Icons.delete_outline, color: FN.warn),
+          ),
+        ],
+      ),
     );
   }
 }

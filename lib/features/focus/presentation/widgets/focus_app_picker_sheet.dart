@@ -4,18 +4,22 @@ import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/focus/data/focus_providers.dart';
 import 'package:virya/features/focus/domain/focus_models.dart';
 
-/// Pilih satu aplikasi yang belum dibatasi. Null bila dibatalkan.
-Future<FocusInstalledApp?> showFocusAppPicker(BuildContext context) =>
-    showModalBottomSheet<FocusInstalledApp>(
-      context: context,
-      backgroundColor: FN.paper,
-      shape: const RoundedRectangleBorder(),
-      isScrollControlled: true,
-      builder: (_) => const FocusAppPickerSheet(),
-    );
+/// Pilih satu aplikasi. Tanpa [exclude], yang sudah dibatasi disembunyikan.
+/// Null bila dibatalkan.
+Future<FocusInstalledApp?> showFocusAppPicker(
+  BuildContext context, {
+  Set<String>? exclude,
+}) => showModalBottomSheet<FocusInstalledApp>(
+  context: context,
+  backgroundColor: FN.cardFill,
+  shape: FN.isClean ? null : const RoundedRectangleBorder(),
+  isScrollControlled: true,
+  builder: (_) => FocusAppPickerSheet(exclude: exclude),
+);
 
 class FocusAppPickerSheet extends ConsumerStatefulWidget {
-  const FocusAppPickerSheet({super.key});
+  final Set<String>? exclude;
+  const FocusAppPickerSheet({super.key, this.exclude});
 
   @override
   ConsumerState<FocusAppPickerSheet> createState() => _State();
@@ -36,10 +40,13 @@ class _State extends ConsumerState<FocusAppPickerSheet> {
   );
 
   Widget _list(List<FocusInstalledApp> apps) {
-    final limited = {
-      for (final l in ref.watch(focusLimitsProvider).valueOrNull ?? const [])
-        l.packageName,
-    };
+    final limited =
+        widget.exclude ??
+        {
+          for (final l
+              in ref.watch(focusLimitsProvider).valueOrNull ?? const [])
+            l.packageName,
+        };
     final available = apps.where((a) => !limited.contains(a.packageName));
     if (available.isEmpty) return _message('Tidak ada aplikasi yang bisa dipilih.');
     final q = _query.trim().toLowerCase();
@@ -81,13 +88,8 @@ class _State extends ConsumerState<FocusAppPickerSheet> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Text(
-                  'PILIH APLIKASI',
-                  style: TextStyle(
-                    fontFamily: FN.display,
-                    fontSize: 32,
-                    height: 1.05,
-                    color: FN.ink,
-                  ),
+                  FN.caps('Pilih aplikasi'),
+                  style: FN.title(32, color: FN.ink, height: 1.05),
                 ),
               ),
               Padding(

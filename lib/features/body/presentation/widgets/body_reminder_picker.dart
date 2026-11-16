@@ -20,7 +20,7 @@ class BodyReminderPicker extends ConsumerWidget {
         children: [
           for (final days in bodyCheckinIntervalChoices)
             _Option(
-              label: days == 0 ? 'MATI' : '$days HARI',
+              label: days == 0 ? FN.caps('Mati') : FN.caps('$days hari'),
               selected: days == current,
               onTap: () => ref
                   .read(settingsProvider.notifier)
@@ -56,8 +56,7 @@ class _Option extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
           color: selected ? FN.ink : null,
-          border: Border.all(color: FN.ink, width: 2),
-        ),
+          border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
         child: Text(
           label,
           style: FN

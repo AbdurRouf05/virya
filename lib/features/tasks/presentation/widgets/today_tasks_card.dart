@@ -32,8 +32,8 @@ class TodayTasksCard extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: TodayCard(
-        title: 'TUGAS HARI INI',
-        trailing: tasks.isEmpty ? 'SEMUA →' : '${tasks.length} TERSISA →',
+        title: FN.caps('Tugas hari ini'),
+        trailing: tasks.isEmpty ? FN.caps('Semua →') : FN.caps('${tasks.length} tersisa →'),
         onTap: () => _openAll(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -79,7 +79,7 @@ class _Footer extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 14),
           child: hidden > 0
-              ? Text('$hidden LAGI', style: FN.label(size: 10.5))
+              ? Text(FN.caps('$hidden lagi'), style: FN.label(size: 10.5))
               : const SizedBox.shrink(),
         ),
       ),
@@ -92,7 +92,7 @@ class _Footer extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
             child: Text(
-              '+ TAMBAH',
+              FN.caps('+ Tambah'),
               style: FN
                   .label(size: 11, color: FN.ink)
                   .copyWith(fontWeight: FontWeight.w700),

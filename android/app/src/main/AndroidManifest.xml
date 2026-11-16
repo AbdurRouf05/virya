@@ -9,6 +9,11 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Pengingat rutinitas tepat waktu -->
+    <uses-permission
+        android:name="android.permission.SCHEDULE_EXACT_ALARM"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <!-- Pembaruan aplikasi dalam aplikasi (In-App Auto-Update) -->
@@ -21,6 +26,11 @@
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
+
+    <!-- Fokus (Mode Ramah Bank): layar "Waktu habis" tampil di atas aplikasi lain,
+         dijaga layanan latar depan yang membaca aplikasi aktif dari Akses Penggunaan -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <!-- Waypoint photos -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -88,6 +98,8 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
 
@@ -132,8 +144,26 @@
                 android:resource="@xml/focus_accessibility" />
         </service>
 
+        <service
+            android:name=".focus.FocusGuardService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Menegakkan batas waktu harian aplikasi yang dipilih pengguna (fitur Fokus)." />
+        </service>
+
         <activity
             android:name=".focus.FocusBlockActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@style/FocusBlockTheme" />
+
+        <activity
+            android:name=".focus.RoutineGateActivity"
             android:exported="false"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"

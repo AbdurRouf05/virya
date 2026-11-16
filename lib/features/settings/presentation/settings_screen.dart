@@ -69,9 +69,9 @@ class SettingsScreen extends ConsumerWidget {
               _pad(const StylePicker()),
               SectionHeader(number: sec.next(), title: 'Satuan'),
               _pad(
-                chips(const [
-                  ('metric', 'METRIK · KM'),
-                  ('imperial', 'IMPERIAL · MIL'),
+                chips([
+                  ('metric', FN.caps('Metrik · km')),
+                  ('imperial', FN.caps('Imperial · mil')),
                 ], SettingKeys.units),
               ),
               SectionHeader(number: sec.next(), title: 'Perekaman'),
@@ -79,7 +79,7 @@ class SettingsScreen extends ConsumerWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('OLAHRAGA DEFAULT', style: FN.label(size: 10)),
+                    Text(FN.caps('Olahraga default'), style: FN.label(size: 10)),
                     const SizedBox(height: 6),
                     chips([
                       for (final t in SportType.gps) (t.name, t.label),
@@ -110,9 +110,9 @@ class SettingsScreen extends ConsumerWidget {
               SettingRow(
                 title: 'Posisi ponsel',
                 note: 'Memengaruhi klasifikasi permukaan dari getaran',
-                below: chips(const [
-                  ('handlebar', 'STANG'),
-                  ('pocket', 'SAKU / TAS'),
+                below: chips([
+                  ('handlebar', FN.caps('Stang')),
+                  ('pocket', FN.caps('Saku / tas')),
                 ], SettingKeys.phoneMount),
               ),
               SettingRow(
@@ -229,7 +229,7 @@ class SettingsScreen extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('VERSI TERPASANG', style: FN.label(size: 10)),
+                          Text(FN.caps('Versi terpasang'), style: FN.label(size: 10)),
                           Text(
                             'v$currentVer (Build $currentBuild)',
                             style: FN.monoStyle(size: 11, weight: FontWeight.bold),
@@ -279,7 +279,7 @@ class SettingsScreen extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('VIRYA', style: FN.bigNumber(30)),
+                          Text(FN.caps('Virya'), style: FN.bigNumber(30)),
                           Text(
                             'v$currentVer',
                             style: FN.monoStyle(size: 11, color: FN.inkMuted),
@@ -345,7 +345,7 @@ class SettingsScreen extends ConsumerWidget {
     await showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('SUMBER PEMBARUAN', style: FN.label(size: 14)),
+        title: Text(FN.caps('Sumber pembaruan'), style: FN.label(size: 14)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,18 +373,18 @@ class SettingsScreen extends ConsumerWidget {
               ctl.set(SettingKeys.updateUrl, '');
               Navigator.pop(ctx);
             },
-            child: const Text('RESET BAWAAN'),
+            child: Text(FN.caps('Reset bawaan')),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('BATAL'),
+            child: Text(FN.caps('Batal')),
           ),
           ElevatedButton(
             onPressed: () {
               ctl.set(SettingKeys.updateUrl, controller.text.trim());
               Navigator.pop(ctx);
             },
-            child: const Text('SIMPAN'),
+            child: Text(FN.caps('Simpan')),
           ),
         ],
       ),

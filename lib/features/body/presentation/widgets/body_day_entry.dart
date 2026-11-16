@@ -24,8 +24,7 @@ class BodyDayEntry extends ConsumerWidget {
         onTap: () => openBodyCheckin(context, entry.day),
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: FN.ink, width: 2),
-          ),
+            border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -35,7 +34,7 @@ class BodyDayEntry extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'FOTO TUBUH',
+                        FN.caps('Foto tubuh'),
                         style: FN
                             .label(size: 12, color: FN.ink)
                             .copyWith(fontWeight: FontWeight.w700),

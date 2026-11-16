@@ -37,7 +37,7 @@ class SplitsTable extends StatelessWidget {
               SizedBox(
                 width: 56,
                 child: Text(
-                  sport.isCycling ? fmt.speedUnit : 'TEMPO',
+                  sport.isCycling ? fmt.speedUnit : FN.caps('Tempo'),
                   style: detailTh(),
                 ),
               ),
@@ -45,7 +45,7 @@ class SplitsTable extends StatelessWidget {
               SizedBox(
                 width: 50,
                 child: Text(
-                  'ELEV',
+                  FN.caps('Elev'),
                   style: detailTh(),
                   textAlign: TextAlign.right,
                 ),

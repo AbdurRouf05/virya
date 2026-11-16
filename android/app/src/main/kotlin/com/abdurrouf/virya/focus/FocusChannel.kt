@@ -1,7 +1,6 @@
 package com.abdurrouf.virya.focus
 
 import android.content.ActivityNotFoundException
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -31,12 +30,21 @@ class FocusChannel(
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "getPermissions" -> result.success(
-                hashMapOf(
-                    "usageAccess" to FocusUsage.hasUsageAccess(appContext),
-                    "accessibility" to isAccessibilityEnabled(),
-                ),
-            )
+            "getPermissions" -> {
+                // Dipanggil tiap Virya kembali aktif: saat yang tepat menyalakan penjaga.
+                FocusGuardService.sync(appContext)
+                result.success(
+                    hashMapOf(
+                        "usageAccess" to FocusUsage.hasUsageAccess(appContext),
+                        "accessibility" to FocusGuard.isAccessibilityEnabled(appContext),
+                        "overlay" to FocusGuard.canDrawOverlays(appContext),
+                    ),
+                )
+            }
+            "openOverlaySettings" -> {
+                openOverlaySettings()
+                result.success(null)
+            }
             "openUsageSettings" -> {
                 openSettings(Settings.ACTION_USAGE_ACCESS_SETTINGS)
                 result.success(null)
@@ -52,6 +60,13 @@ class FocusChannel(
             "installedApps" -> inBackground(result) { installedApps() }
             "pushLimits" -> {
                 FocusStore.setLimits(appContext, call.arguments as? String ?: "[]")
+                FocusGuardService.sync(appContext)
+                result.success(null)
+            }
+            "getGateApps" -> result.success(FocusGate.appsJson(appContext))
+            "setGateApps" -> {
+                FocusGate.setAppsJson(appContext, call.arguments as? String ?: "[]")
+                FocusGuardService.sync(appContext)
                 result.success(null)
             }
             "readUsage" -> {
@@ -73,13 +88,17 @@ class FocusChannel(
         }
     }
 
-    private fun isAccessibilityEnabled(): Boolean {
-        val raw = Settings.Secure.getString(
-            appContext.contentResolver,
-            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
-        ) ?: return false
-        val service = ComponentName(appContext, FocusAccessibilityService::class.java)
-        return raw.split(':').any { ComponentName.unflattenFromString(it) == service }
+    private fun openOverlaySettings() {
+        try {
+            appContext.startActivity(
+                Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.fromParts("package", appContext.packageName, null),
+                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            )
+        } catch (_: ActivityNotFoundException) {
+            openAppSettings()
+        }
     }
 
     private fun openSettings(action: String) {
@@ -122,7 +141,6 @@ class FocusChannel(
     private fun readUsage(days: Int): String {
         val packages = FocusStore.limitedPackages(appContext)
         val rows = JSONArray()
-        val todayKey = FocusStore.dayKey()
         for ((day, perPackage) in FocusUsage.readDays(appContext, packages, days)) {
             for ((packageName, millis) in perPackage) {
                 val minutes = millis / MILLIS_PER_MINUTE
@@ -133,20 +151,6 @@ class FocusChannel(
                         .put("packageName", packageName)
                         .put("minutes", minutes),
                 )
-                if (day == todayKey) {
-                    val limit = FocusStore.limitFor(appContext, packageName)
-                    if (limit != null && limit.enabled) {
-                        val allowedMs = (limit.dailyMinutes + FocusStore.bonusMinutes(appContext, packageName)) * MILLIS_PER_MINUTE
-                        if (millis >= allowedMs) {
-                            FocusNotification.notifyLimitReached(
-                                appContext,
-                                packageName,
-                                limit.label,
-                                limit.dailyMinutes,
-                            )
-                        }
-                    }
-                }
             }
         }
         return JSONObject()

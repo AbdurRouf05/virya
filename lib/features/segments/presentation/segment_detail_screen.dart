@@ -25,7 +25,7 @@ class SegmentDetailScreen extends ConsumerWidget {
       body:
           '"${s.name}" dan riwayat upayanya akan dihapus. '
           'Aktivitasnya tetap ada.',
-      action: 'HAPUS',
+      action: FN.caps('HAPUS'),
       danger: true,
     );
     if (!ok || !context.mounted) return;
@@ -56,66 +56,69 @@ class SegmentDetailScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(segment?.name ?? 'Segmen')),
       body: PaperBackground(
-        child: segment == null
-            ? const SizedBox.shrink()
-            : ListView(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 48),
-                children: [
-                  SizedBox(
-                    height: 220,
-                    child: integ.routeMap(
-                      points: segment.polyline,
-                      interactive: false,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      _stat(
-                        'JARAK',
-                        fmt.distanceFull(segment.distanceM, decimals: 2),
-                      ),
-                      _stat(
-                        'REKOR',
-                        segment.bestS == null
-                            ? '-'
-                            : Fmt.duration(segment.bestS!),
-                      ),
-                      _stat('UPAYA', '${segment.effortCount}'),
-                    ],
-                  ),
-                  SectionHeader(
-                    title: 'Riwayat upaya',
-                    padding: const EdgeInsets.only(top: 24, bottom: 6),
-                  ),
-                  if (efforts.isEmpty)
-                    Text(
-                      'Belum ada upaya. Lewati segmen ini saat merekam.',
-                      style: TextStyle(
-                        fontFamily: FN.sans,
-                        fontSize: 14,
-                        color: FN.inkMuted,
+        child:
+            segment == null
+                ? const SizedBox.shrink()
+                : ListView(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 48),
+                  children: [
+                    SizedBox(
+                      height: 220,
+                      child: integ.routeMap(
+                        points: segment.polyline,
+                        interactive: false,
                       ),
                     ),
-                  for (final e in efforts)
-                    SegmentEffortTile.effort(
-                      e,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) => integ.activityDetail(e.activityId),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        _stat(
+                          FN.caps('JARAK'),
+                          fmt.distanceFull(segment.distanceM, decimals: 2),
+                        ),
+                        _stat(
+                          FN.caps('REKOR'),
+                          segment.bestS == null
+                              ? '-'
+                              : Fmt.duration(segment.bestS!),
+                        ),
+                        _stat(FN.caps('UPAYA'), '${segment.effortCount}'),
+                      ],
+                    ),
+                    SectionHeader(
+                      title: 'Riwayat upaya',
+                      padding: const EdgeInsets.only(top: 24, bottom: 6),
+                    ),
+                    if (efforts.isEmpty)
+                      Text(
+                        'Belum ada upaya. Lewati segmen ini saat merekam.',
+                        style: TextStyle(
+                          fontFamily: FN.sans,
+                          fontSize: 14,
+                          color: FN.inkMuted,
                         ),
                       ),
+                    for (final e in efforts)
+                      SegmentEffortTile.effort(
+                        e,
+                        onTap:
+                            () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder:
+                                    (_) => integ.activityDetail(e.activityId),
+                              ),
+                            ),
+                      ),
+                    const SizedBox(height: 24),
+                    InkButton(
+                      label: FN.caps('HAPUS SEGMEN'),
+                      icon: Icons.delete_outline,
+                      style: InkButtonStyle.danger,
+                      expand: true,
+                      onPressed: () => _delete(context, ref, segment),
                     ),
-                  const SizedBox(height: 24),
-                  InkButton(
-                    label: 'HAPUS SEGMEN',
-                    icon: Icons.delete_outline,
-                    style: InkButtonStyle.danger,
-                    expand: true,
-                    onPressed: () => _delete(context, ref, segment),
-                  ),
-                ],
-              ),
+                  ],
+                ),
       ),
     );
   }

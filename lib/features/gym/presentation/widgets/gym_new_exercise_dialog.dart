@@ -67,8 +67,8 @@ class _State extends ConsumerState<GymNewExerciseDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: const RoundedRectangleBorder(),
-      title: const Text('GERAKAN BARU'),
+      shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
+      title: Text(FN.caps('Gerakan baru')),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -78,10 +78,10 @@ class _State extends ConsumerState<GymNewExerciseDialog> {
               controller: _name,
               autofocus: true,
               textCapitalization: TextCapitalization.words,
-              decoration: const InputDecoration(labelText: 'NAMA'),
+              decoration: InputDecoration(labelText: FN.caps('Nama')),
             ),
             const SizedBox(height: 14),
-            Text('OTOT', style: FN.label(size: 10)),
+            Text(FN.caps('Otot'), style: FN.label(size: 10)),
             const SizedBox(height: 6),
             _chips(
               MuscleGroup.values,
@@ -90,7 +90,7 @@ class _State extends ConsumerState<GymNewExerciseDialog> {
               (m) => setState(() => _muscle = m),
             ),
             const SizedBox(height: 14),
-            Text('ALAT', style: FN.label(size: 10)),
+            Text(FN.caps('Alat'), style: FN.label(size: 10)),
             const SizedBox(height: 6),
             _chips(
               Equipment.values,
@@ -104,7 +104,7 @@ class _State extends ConsumerState<GymNewExerciseDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('BATAL'),
+          child: Text(FN.caps('Batal')),
         ),
         InkButton(
           label: 'Simpan',

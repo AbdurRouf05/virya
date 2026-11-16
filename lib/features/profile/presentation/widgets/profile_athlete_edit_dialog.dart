@@ -80,22 +80,22 @@ class _AthleteEditDialogState extends ConsumerState<AthleteEditDialog> {
   Widget build(BuildContext context) {
     final digits = [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))];
     return AlertDialog(
-      title: const Text('DATA ATLET'),
+      title: Text(FN.caps('Data atlet')),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: _name,
-              decoration: const InputDecoration(labelText: 'NAMA'),
+              decoration: InputDecoration(labelText: FN.caps('Nama')),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _weight,
               keyboardType: TextInputType.number,
               inputFormatters: digits,
-              decoration: const InputDecoration(
-                labelText: 'BERAT (KG)',
+              decoration: InputDecoration(
+                labelText: FN.caps('Berat (kg)'),
                 suffixText: 'kg',
               ),
             ),
@@ -104,8 +104,8 @@ class _AthleteEditDialogState extends ConsumerState<AthleteEditDialog> {
               controller: _hr,
               keyboardType: TextInputType.number,
               inputFormatters: digits,
-              decoration: const InputDecoration(
-                labelText: 'DETAK JANTUNG MAKS',
+              decoration: InputDecoration(
+                labelText: FN.caps('Detak jantung maks'),
                 suffixText: 'bpm',
               ),
             ),
@@ -114,8 +114,8 @@ class _AthleteEditDialogState extends ConsumerState<AthleteEditDialog> {
               controller: _ftp,
               keyboardType: TextInputType.number,
               inputFormatters: digits,
-              decoration: const InputDecoration(
-                labelText: 'FTP (OPSIONAL)',
+              decoration: InputDecoration(
+                labelText: FN.caps('FTP (opsional)'),
                 suffixText: 'W',
               ),
             ),
@@ -131,12 +131,12 @@ class _AthleteEditDialogState extends ConsumerState<AthleteEditDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('BATAL'),
+          child: Text(FN.caps('Batal')),
         ),
         TextButton(
           onPressed: _save,
           style: TextButton.styleFrom(foregroundColor: FN.signal),
-          child: const Text('SIMPAN'),
+          child: Text(FN.caps('Simpan')),
         ),
       ],
     );

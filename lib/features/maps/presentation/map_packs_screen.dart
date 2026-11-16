@@ -19,25 +19,42 @@ import 'package:virya/features/maps/presentation/widgets/region_download_sheet.d
 class MapPacksScreen extends ConsumerWidget {
   const MapPacksScreen({super.key});
 
-  Future<void> _download(BuildContext context, WidgetRef ref, [OfflineRegion? resume]) async {
+  Future<void> _download(
+    BuildContext context,
+    WidgetRef ref, [
+    OfflineRegion? resume,
+  ]) async {
     final region = resume ?? await RegionDownloadSheet.show(context);
     if (region == null) return;
     final msg = await ref.read(regionDownloadProvider.notifier).start(region);
     if (context.mounted) mapToast(context, msg);
   }
 
-  Future<void> _delete(BuildContext context, WidgetRef ref, OfflineRegion r) async {
-    final ok = await confirmMapDelete(context,
-        title: 'HAPUS WILAYAH?',
-        body: '${r.name}\n${formatBytes(r.sizeBytes)} akan dihapus.');
+  Future<void> _delete(
+    BuildContext context,
+    WidgetRef ref,
+    OfflineRegion r,
+  ) async {
+    final ok = await confirmMapDelete(
+      context,
+      title: FN.caps('HAPUS WILAYAH?'),
+      body: '${r.name}\n${formatBytes(r.sizeBytes)} akan dihapus.',
+    );
     if (ok) await ref.read(regionDownloadProvider.notifier).delete(r);
   }
 
-  Future<void> _clearCache(BuildContext context, WidgetRef ref, int bytes) async {
-    final ok = await confirmMapDelete(context,
-        title: 'HAPUS CACHE?',
-        body: '${formatBytes(bytes)} peta yang pernah dilihat akan dihapus. '
-            'Wilayah yang diunduh tidak ikut terhapus.');
+  Future<void> _clearCache(
+    BuildContext context,
+    WidgetRef ref,
+    int bytes,
+  ) async {
+    final ok = await confirmMapDelete(
+      context,
+      title: FN.caps('HAPUS CACHE?'),
+      body:
+          '${formatBytes(bytes)} peta yang pernah dilihat akan dihapus. '
+          'Wilayah yang diunduh tidak ikut terhapus.',
+    );
     if (ok) await ref.read(regionDownloadProvider.notifier).clearCache();
   }
 
@@ -52,30 +69,38 @@ class MapPacksScreen extends ConsumerWidget {
         foregroundColor: FN.ink,
         elevation: 0,
         scrolledUnderElevation: 0,
-        title: Text('PETA OFFLINE', style: FN.bigNumber(26)),
+        title: Text(FN.caps('PETA OFFLINE'), style: FN.bigNumber(26)),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(2),
           child: ColoredBox(
-              color: FN.ink, child: const SizedBox(height: 2, width: double.infinity)),
+            color: FN.ink,
+            child: const SizedBox(height: 2, width: double.infinity),
+          ),
         ),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
         children: [
           status.when(
-            loading: () => Center(child: CircularProgressIndicator(color: FN.ink)),
-            error: (e, _) => Text('Gagal memuat status peta: $e',
-                style: FN.label(color: FN.warn)),
-            data: (s) => OfflineMapStatusCard(
-              status: s,
-              onClearCache: () => _clearCache(context, ref, s.cacheBytes),
-            ),
+            loading:
+                () => Center(child: CircularProgressIndicator(color: FN.ink)),
+            error:
+                (e, _) => Text(
+                  'Gagal memuat status peta: $e',
+                  style: FN.label(color: FN.warn),
+                ),
+            data:
+                (s) => OfflineMapStatusCard(
+                  status: s,
+                  onClearCache: () => _clearCache(context, ref, s.cacheBytes),
+                ),
           ),
           const SizedBox(height: 16),
           if (running != null)
             RegionDownloadProgressCard(
               state: running,
-              onCancel: () => ref.read(regionDownloadProvider.notifier).cancel(),
+              onCancel:
+                  () => ref.read(regionDownloadProvider.notifier).cancel(),
             )
           else
             _downloadButton(context, ref),
@@ -89,38 +114,54 @@ class MapPacksScreen extends ConsumerWidget {
   }
 
   Widget _downloadButton(BuildContext context, WidgetRef ref) => SizedBox(
-        height: 52,
-        child: FilledButton.icon(
-          style: FilledButton.styleFrom(
-            backgroundColor: FN.ink,
-            foregroundColor: FN.paper,
-            shape: const RoundedRectangleBorder(),
-          ),
-          onPressed: () => _download(context, ref),
-          icon: const Icon(Icons.download_for_offline_outlined),
-          label: Text('UNDUH WILAYAH', style: FN.label(size: 13, color: FN.paper)),
-        ),
-      );
+    height: 52,
+    child: FilledButton.icon(
+      style: FilledButton.styleFrom(
+        backgroundColor: FN.ink,
+        foregroundColor: FN.paper,
+        shape: const RoundedRectangleBorder(),
+      ),
+      onPressed: () => _download(context, ref),
+      icon: const Icon(Icons.download_for_offline_outlined),
+      label: Text(
+        FN.caps('UNDUH WILAYAH'),
+        style: FN.label(size: 13, color: FN.paper),
+      ),
+    ),
+  );
 
-  List<Widget> _regions(BuildContext context, WidgetRef ref, OfflineMapStatus? s,
-      RegionDownloadState? running) {
+  List<Widget> _regions(
+    BuildContext context,
+    WidgetRef ref,
+    OfflineMapStatus? s,
+    RegionDownloadState? running,
+  ) {
     final regions = s?.regions ?? const <OfflineRegion>[];
     return [
-      MapPacksSectionTitle('WILAYAH TERUNDUH',
-          trailing: s == null ? null : formatBytes(s.regionBytes)),
+      MapPacksSectionTitle(
+        FN.caps('WILAYAH TERUNDUH'),
+        trailing: s == null ? null : formatBytes(s.regionBytes),
+      ),
       if (regions.isEmpty)
         MapPacksBox(
           child: Text(
             'Belum ada. Unduh wilayah sebelum ke tempat tanpa sinyal agar '
             'peta tetap tampil.',
-            style: TextStyle(fontFamily: FN.sans, color: FN.inkSoft, height: 1.4),
+            style: TextStyle(
+              fontFamily: FN.sans,
+              color: FN.inkSoft,
+              height: 1.4,
+            ),
           ),
         ),
       for (final r in regions)
         OfflineRegionTile(
           region: r,
           onResume: running != null ? null : () => _download(context, ref, r),
-          onDelete: running?.region.id == r.id ? null : () => _delete(context, ref, r),
+          onDelete:
+              running?.region.id == r.id
+                  ? null
+                  : () => _delete(context, ref, r),
         ),
     ];
   }

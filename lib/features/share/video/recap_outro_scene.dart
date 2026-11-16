@@ -21,7 +21,7 @@ void paintRecapOutro(Canvas c, RecapStage s, double t, double sceneS) {
   recapTextR(c, SF.date(data.start), 338, 40, size: 9, color: ink);
   c.drawRect(const Rect.fromLTWH(22, 56, 316, 1.6), Paint()..color = ink);
 
-  final box = Rect.fromLTWH(22, 70, 316, h * 0.42);
+  final box = Rect.fromLTWH(22, 70, 316, h * 0.36);
   if (data.hasRoute) {
     final pts = RouteProjection.fitPoints(data.lat, data.lon, box, padding: 16);
     paintRoute(c, pts, color: ink, width: 2.4);
@@ -47,12 +47,13 @@ void paintRecapOutro(Canvas c, RecapStage s, double t, double sceneS) {
     ShareStat.time,
     ShareStat.elevation,
     ShareStat.speed,
+    ShareStat.topSpeed,
     ShareStat.grit,
   });
-  for (var k = 0; k < cells.length && k < 4; k++) {
-    final x = 22 + (k % 2) * 160.0, yy = gy + 10 + (k ~/ 2) * 52.0;
+  for (var k = 0; k < cells.length && k < 6; k++) {
+    final x = 22 + (k % 2) * 160.0, yy = gy + 8 + (k ~/ 2) * 44.0;
     recapText(c, cells[k].label, x, yy, mono: true, size: 7, color: FNExport.inkMuted);
-    recapText(c, '${cells[k].value} ${cells[k].unit}'.trim(), x, yy + 10, size: 28, color: ink);
+    recapText(c, '${cells[k].value} ${cells[k].unit}'.trim(), x, yy + 10, size: 24, color: ink);
   }
   if (sceneS > 0.45) {
     final k = recapEase(((sceneS - 0.45) / 0.25).clamp(0.0, 1.0));

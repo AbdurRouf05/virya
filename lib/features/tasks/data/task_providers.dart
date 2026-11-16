@@ -5,11 +5,21 @@ import 'package:virya/features/tasks/data/task_repository.dart';
 import 'package:virya/features/tasks/domain/task_logic.dart';
 import 'package:virya/features/tasks/domain/task_models.dart';
 
-/// Semua tugas yang belum selesai (belum terurut).
-final openTasksProvider = StreamProvider<List<TaskItem>>(
-  (ref) => ref
+/// Semua tugas yang terbuka hari ini (belum terurut), termasuk rutinitas
+/// yang belum dicentang hari ini. Dihitung ulang saat hari berganti.
+final openTasksProvider = StreamProvider<List<TaskItem>>((ref) {
+  final today = ref.watch(currentDayProvider);
+  return ref
       .watch(tasksDaoProvider)
       .watchOpen()
+      .map((rows) => openTasksOn(rows.map(taskItemOf), today));
+});
+
+/// Semua rutinitas harian, beserta waktu terakhir dicentang.
+final routinesProvider = StreamProvider<List<TaskItem>>(
+  (ref) => ref
+      .watch(tasksDaoProvider)
+      .watchRoutines()
       .map((rows) => rows.map(taskItemOf).toList()),
 );
 

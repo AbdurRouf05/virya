@@ -75,9 +75,8 @@ class GearCard extends ConsumerWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          color: FN.paper,
-          border: Border.all(color: FN.ink, width: gear.isDefault ? 2 : 1),
-        ),
+          color: FN.cardFill,
+          border: FN.frame(color: FN.ink, width: gear.isDefault ? 2 : 1), borderRadius: FN.boxRadius,),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -94,9 +93,11 @@ class GearCard extends ConsumerWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      '${gearTypes[gear.gearType] ?? gear.gearType.toUpperCase()}'
-                      '${gear.isDefault ? ' · DEFAULT' : ''}'
-                      '${gear.isRetired ? ' · PENSIUN' : ''}',
+                      FN.caps(
+                        '${gearTypes[gear.gearType] ?? gear.gearType}'
+                        '${gear.isDefault ? ' · default' : ''}'
+                        '${gear.isRetired ? ' · pensiun' : ''}',
+                      ),
                       style: FN.label(
                         size: 9.5,
                         color: gear.isDefault ? FN.signal : FN.inkMuted,
@@ -109,23 +110,23 @@ class GearCard extends ConsumerWidget {
                         _onMenu(context, ref, v, reminder, totalKm),
                     itemBuilder: (_) => [
                       if (!gear.isDefault && !gear.isRetired)
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'default',
-                          child: Text('JADIKAN DEFAULT'),
+                          child: Text(FN.caps('Jadikan default')),
                         ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'service',
-                        child: Text('ATUR PENGINGAT SERVIS'),
+                        child: Text(FN.caps('Atur pengingat servis')),
                       ),
                       if (reminder != null)
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'serviced',
-                          child: Text('TANDAI SUDAH SERVIS'),
+                          child: Text(FN.caps('Tandai sudah servis')),
                         ),
                       PopupMenuItem(
                         value: 'retire',
                         child: Text(
-                          gear.isRetired ? 'AKTIFKAN LAGI' : 'PENSIUNKAN',
+                          gear.isRetired ? FN.caps('Aktifkan lagi') : FN.caps('Pensiunkan'),
                         ),
                       ),
                     ],
@@ -143,13 +144,8 @@ class GearCard extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          gear.name.toUpperCase(),
-                          style: TextStyle(
-                            fontFamily: FN.display,
-                            fontSize: 24,
-                            height: 1.05,
-                            color: FN.ink,
-                          ),
+                          FN.caps(gear.name),
+                          style: FN.title(24, color: FN.ink, height: 1.05),
                         ),
                         if ((gear.brandModel ?? '').isNotEmpty)
                           Text(gear.brandModel!, style: FN.label(size: 10)),
@@ -186,7 +182,7 @@ class _ServiceStrip extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
       decoration: BoxDecoration(
         color: remaining <= 0 ? FN.signal : FN.paperDeep,
-        border: Border(top: BorderSide(color: FN.ink)),
+        border: Border(top: FN.side(color: FN.ink)),
       ),
       child: Row(
         children: [
@@ -199,8 +195,8 @@ class _ServiceStrip extends StatelessWidget {
           Expanded(
             child: Text(
               remaining <= 0
-                  ? 'WAKTUNYA SERVIS · LEWAT ${(-remaining).round()} KM'
-                  : 'SERVIS DALAM ${remaining.round()} KM',
+                  ? FN.caps('Waktunya servis · lewat ${(-remaining).round()} km')
+                  : FN.caps('Servis dalam ${remaining.round()} km'),
               style: FN
                   .label(size: 10, color: remaining <= 0 ? FN.onAccent : FN.ink)
                   .copyWith(fontWeight: FontWeight.w700),

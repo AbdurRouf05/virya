@@ -9,8 +9,8 @@ Future<int?> showFocusMinutesSheet(
   int initial = 30,
 }) => showModalBottomSheet<int>(
   context: context,
-  backgroundColor: FN.paper,
-  shape: const RoundedRectangleBorder(),
+  backgroundColor: FN.cardFill,
+  shape: FN.isClean ? null : const RoundedRectangleBorder(),
   isScrollControlled: true,
   builder: (_) => FocusMinutesSheet(label: label, initial: initial),
 );
@@ -50,14 +50,9 @@ class _State extends State<FocusMinutesSheet> {
             widget.label,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontFamily: FN.display,
-              fontSize: 32,
-              height: 1.05,
-              color: FN.ink,
-            ),
+            style: FN.title(32, color: FN.ink, height: 1.05),
           ),
-          Text('BATAS PER HARI', style: FN.label(size: 11)),
+          Text(FN.caps('Batas per hari'), style: FN.label(size: 11)),
           const SizedBox(height: 14),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -94,7 +89,7 @@ class _State extends State<FocusMinutesSheet> {
             children: [
               for (final m in _presets)
                 StampChip(
-                  text: '$m MNT',
+                  text: FN.caps('$m mnt'),
                   fontSize: 10,
                   selected: _minutes == m,
                   onTap: () => _set(m),

@@ -40,7 +40,7 @@ class GymRestBar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      ['ISTIRAHAT', if (label != null) label!].join(' · '),
+                      [FN.caps('Istirahat'), if (label != null) label!].join(' · '),
                       overflow: TextOverflow.ellipsis,
                       style: FN
                           .label(size: 10.5, color: FN.acid)
@@ -70,7 +70,7 @@ class GymRestBar extends StatelessWidget {
               const SizedBox(width: 8),
               _btn('+15 D', onPlus, FN.onNight),
               const SizedBox(width: 8),
-              _btn('LEWATI', onSkip, FN.acid),
+              _btn(FN.caps('Lewati'), onSkip, FN.acid),
             ],
           ),
         ],
@@ -85,7 +85,7 @@ class GymRestBar extends StatelessWidget {
       child: Container(
         height: 36,
         alignment: Alignment.center,
-        decoration: BoxDecoration(border: Border.all(color: c, width: 2)),
+        decoration: BoxDecoration(border: FN.frame(color: c, width: 2), borderRadius: FN.boxRadius,),
         child: Text(
           t,
           style: FN

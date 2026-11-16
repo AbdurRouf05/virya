@@ -28,7 +28,7 @@ class CalendarDayDetail extends StatelessWidget {
         '${Fmt.daysLong[date.weekday - 1]}, ${date.day} '
         '${Fmt.monthsShort[date.month - 1]}';
     return Container(
-      decoration: BoxDecoration(border: Border.all(color: FN.ink, width: 2)),
+      decoration: BoxDecoration(border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -38,14 +38,14 @@ class CalendarDayDetail extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    title.toUpperCase(),
+                    FN.caps(title),
                     style: FN
                         .label(size: 12, color: FN.ink)
                         .copyWith(fontWeight: FontWeight.w700),
                   ),
                 ),
                 Text(
-                  '${entries.length} AKTIVITAS',
+                  FN.caps('${entries.length} aktivitas'),
                   style: FN.label(size: 11, color: FN.ink),
                 ),
               ],

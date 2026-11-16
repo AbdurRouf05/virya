@@ -21,7 +21,7 @@ class SettingRow extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: FN.paperLine)),
+        border: Border(bottom: FN.side(color: FN.paperLine)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

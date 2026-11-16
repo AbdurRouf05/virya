@@ -61,7 +61,7 @@ class _ActivityDetailScreenState extends ConsumerState<ActivityDetailScreen> {
                     'dihapus permanen.'
               : '"${b.activity.title}" beserta semua set latihannya akan '
                     'dihapus permanen.',
-          action: 'HAPUS',
+          action: FN.caps('Hapus'),
           danger: true,
         );
         if (!ok || !mounted) return;
@@ -219,7 +219,7 @@ class _ActivityDetailScreenState extends ConsumerState<ActivityDetailScreen> {
               ],
             ),
             trailing: Text(
-              '${a.gravelSectors.length} SEKTOR',
+              FN.caps('${a.gravelSectors.length} sektor'),
               style: trailStyle,
             ),
           ),
@@ -241,7 +241,7 @@ class _ActivityDetailScreenState extends ConsumerState<ActivityDetailScreen> {
               ],
             ),
             trailing: Text(
-              'GRAVEL ${a.gravelPct.round()}%',
+              FN.caps('Gravel ${a.gravelPct.round()}%'),
               style: trailStyle.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
@@ -279,7 +279,7 @@ class _ActivityDetailScreenState extends ConsumerState<ActivityDetailScreen> {
             onExportTcx: () => _menu('tcx', b),
             onDelete: () => _menu('delete', b),
             caption:
-                'ID ${act.id.substring(0, 8)} · ${b.samples.length} TITIK · ${act.source.toUpperCase()}',
+                FN.caps('ID ${act.id.substring(0, 8)} · ${b.samples.length} titik · ${act.source.toUpperCase()}'),
           ),
         ),
       ],

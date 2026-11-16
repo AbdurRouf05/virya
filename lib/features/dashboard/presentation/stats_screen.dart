@@ -62,7 +62,7 @@ class _StatsScreenState extends ConsumerState<StatsScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: InkButton(
-                  label: 'BUKA HEATMAP',
+                  label: FN.caps('Buka heatmap'),
                   icon: Icons.map_outlined,
                   expand: true,
                   onPressed: () => Navigator.of(context).push(

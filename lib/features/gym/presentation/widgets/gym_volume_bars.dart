@@ -27,7 +27,7 @@ class GymVolumeBars extends StatelessWidget {
                   size: 28,
                 ),
               ),
-              Text('${weeks.length} MINGGU', style: FN.label(size: 9.5)),
+              Text(FN.caps('${weeks.length} minggu'), style: FN.label(size: 9.5)),
             ],
           ),
           const SizedBox(height: 12),

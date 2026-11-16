@@ -24,8 +24,8 @@ class TodayBodyCard extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 14),
       child: TodayCard(
-        title: 'FOTO TUBUH',
-        trailing: 'CHECK-IN →',
+        title: FN.caps('Foto tubuh'),
+        trailing: FN.caps('Check-in →'),
         onTap: () => openBodyCheckin(context, today),
         child: Padding(
           padding: const EdgeInsets.all(14),

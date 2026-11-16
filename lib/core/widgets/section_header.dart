@@ -19,6 +19,23 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fg = Theme.of(context).colorScheme.onSurface;
+    if (FN.isClean) {
+      // Bersih: judul kecil abu-abu, tanpa nomor dan tanpa garis.
+      return Padding(
+        padding: padding,
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                FN.caps(title),
+                style: FN.label(size: 12, color: FN.inkMuted),
+              ),
+            ),
+            if (trailing != null) ...[const SizedBox(width: 10), trailing!],
+          ],
+        ),
+      );
+    }
     return Padding(
       padding: padding,
       child: Row(
@@ -34,7 +51,7 @@ class SectionHeader extends StatelessWidget {
             Text(' / ', style: FN.label(size: 12, color: fg)),
           ],
           Text(
-            title.toUpperCase(),
+            FN.caps(title),
             style: FN
                 .label(size: 12, color: fg)
                 .copyWith(fontWeight: FontWeight.w700, letterSpacing: 2),

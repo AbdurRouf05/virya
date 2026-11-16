@@ -83,9 +83,11 @@ class _MapPacksAdvancedState extends ConsumerState<MapPacksAdvanced> {
   }
 
   Future<void> _delete(MapPack pack) async {
-    final ok = await confirmMapDelete(context,
-        title: 'HAPUS PAKET?',
-        body: '${pack.fileName}\n${formatBytes(pack.sizeBytes)} akan dihapus.');
+    final ok = await confirmMapDelete(
+      context,
+      title: FN.caps('HAPUS PAKET?'),
+      body: '${pack.fileName}\n${formatBytes(pack.sizeBytes)} akan dihapus.',
+    );
     if (!ok) return;
     await _repo.delete(pack);
     _refresh();
@@ -93,10 +95,13 @@ class _MapPacksAdvancedState extends ConsumerState<MapPacksAdvanced> {
 
   Future<void> _activate(MapPack pack, MapPacksState st) async {
     if (pack.type == MapPackType.dem) {
-      await _repo.setActiveDem(st.activeDem == pack.fileName ? null : pack.fileName);
+      await _repo.setActiveDem(
+        st.activeDem == pack.fileName ? null : pack.fileName,
+      );
     } else {
       await _repo.setActiveBasemap(
-          st.activeBasemap == pack.fileName ? null : pack.fileName);
+        st.activeBasemap == pack.fileName ? null : pack.fileName,
+      );
     }
     _refresh();
   }
@@ -105,23 +110,34 @@ class _MapPacksAdvancedState extends ConsumerState<MapPacksAdvanced> {
   Widget build(BuildContext context) {
     final state = ref.watch(mapPacksStateProvider);
     return Theme(
-      data: Theme.of(context).copyWith(dividerColor: FN.paper.withValues(alpha: 0)),
+      data: Theme.of(
+        context,
+      ).copyWith(dividerColor: FN.paper.withValues(alpha: 0)),
       child: ExpansionTile(
         tilePadding: EdgeInsets.zero,
         childrenPadding: const EdgeInsets.only(top: 4),
         iconColor: FN.ink,
         collapsedIconColor: FN.ink,
-        title: Text('LANJUTAN', style: FN.label(size: 12, color: FN.ink)),
-        subtitle: Text('Mode data internet & file .pmtiles sendiri',
-            style: FN.label(size: 10)),
+        title: Text(
+          FN.caps('LANJUTAN'),
+          style: FN.label(size: 12, color: FN.ink),
+        ),
+        subtitle: Text(
+          'Mode data internet & file .pmtiles sendiri',
+          style: FN.label(size: 10),
+        ),
         children: [
           state.when(
-            loading: () => Padding(
-              padding: const EdgeInsets.all(16),
-              child: CircularProgressIndicator(color: FN.ink),
-            ),
-            error: (e, _) =>
-                Text('Gagal memuat paket peta: $e', style: FN.label(color: FN.warn)),
+            loading:
+                () => Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: CircularProgressIndicator(color: FN.ink),
+                ),
+            error:
+                (e, _) => Text(
+                  'Gagal memuat paket peta: $e',
+                  style: FN.label(color: FN.warn),
+                ),
             data: _content,
           ),
         ],
@@ -130,43 +146,50 @@ class _MapPacksAdvancedState extends ConsumerState<MapPacksAdvanced> {
   }
 
   Widget _content(MapPacksState st) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MapPacksOnlineToggle(
-            value: st.onlineFallback,
-            onChanged: (v) async {
-              await _repo.setOnlineFallback(v);
-              _refresh();
-            },
-          ),
-          const SizedBox(height: 20),
-          MapPacksSectionTitle('PAKET .PMTILES', trailing: '${st.packs.length}'),
-          if (st.packs.isEmpty)
-            MapPacksBox(
-              child: Text(
-                'Opsional. Paket PMTiles (Protomaps) menggantikan peta online, '
-                'dan paket .dem.pmtiles menambah terrain 3D untuk flyover.',
-                style: TextStyle(fontFamily: FN.sans, color: FN.inkSoft, height: 1.4),
-              ),
-            )
-          else
-            MapPacksActiveCard(state: st),
-          const SizedBox(height: 8),
-          for (final p in st.packs)
-            MapPacksPackTile(
-              pack: p,
-              active: p.fileName == st.activeBasemap || p.fileName == st.activeDem,
-              onActivate: () => _activate(p, st),
-              onDelete: _importProgress != null ? null : () => _delete(p),
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      MapPacksOnlineToggle(
+        value: st.onlineFallback,
+        onChanged: (v) async {
+          await _repo.setOnlineFallback(v);
+          _refresh();
+        },
+      ),
+      const SizedBox(height: 20),
+      MapPacksSectionTitle(
+        FN.caps('PAKET .PMTILES'),
+        trailing: '${st.packs.length}',
+      ),
+      if (st.packs.isEmpty)
+        MapPacksBox(
+          child: Text(
+            'Opsional. Paket PMTiles (Protomaps) menggantikan peta online, '
+            'dan paket .dem.pmtiles menambah terrain 3D untuk flyover.',
+            style: TextStyle(
+              fontFamily: FN.sans,
+              color: FN.inkSoft,
+              height: 1.4,
             ),
-          const SizedBox(height: 12),
-          MapPacksImportButton(
-            progress: _importProgress,
-            fileName: _importName,
-            onImport: _import,
           ),
-          const SizedBox(height: 28),
-          const MapPacksGuide(),
-        ],
-      );
+        )
+      else
+        MapPacksActiveCard(state: st),
+      const SizedBox(height: 8),
+      for (final p in st.packs)
+        MapPacksPackTile(
+          pack: p,
+          active: p.fileName == st.activeBasemap || p.fileName == st.activeDem,
+          onActivate: () => _activate(p, st),
+          onDelete: _importProgress != null ? null : () => _delete(p),
+        ),
+      const SizedBox(height: 12),
+      MapPacksImportButton(
+        progress: _importProgress,
+        fileName: _importName,
+        onImport: _import,
+      ),
+      const SizedBox(height: 28),
+      const MapPacksGuide(),
+    ],
+  );
 }

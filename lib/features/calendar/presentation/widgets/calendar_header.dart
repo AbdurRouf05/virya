@@ -25,18 +25,13 @@ class CalendarHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'KONSISTENSI · $year',
+                FN.caps('Konsistensi · $year'),
                 style: FN.label(size: 11, color: FN.inkSoft),
               ),
               const SizedBox(height: 2),
               Text(
-                'KALENDER',
-                style: TextStyle(
-                  fontFamily: FN.display,
-                  fontSize: 48,
-                  height: 1.0,
-                  color: FN.ink,
-                ),
+                FN.caps('Kalender'),
+                style: FN.title(48, color: FN.ink, height: 1.0),
               ),
             ],
           ),
@@ -44,18 +39,17 @@ class CalendarHeader extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(bottom: 6),
           decoration: BoxDecoration(
-            border: Border.all(color: FN.ink, width: 2),
-          ),
+            border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               _Seg(
-                text: 'TAHUN',
+                text: FN.caps('Tahun'),
                 on: view == CalendarView.year,
                 onTap: () => onView(CalendarView.year),
               ),
               _Seg(
-                text: 'BULAN',
+                text: FN.caps('Bulan'),
                 on: view == CalendarView.month,
                 onTap: () => onView(CalendarView.month),
               ),

@@ -20,9 +20,9 @@ class ShareStudioScreen extends ConsumerWidget {
         backgroundColor: FN.night,
         foregroundColor: FN.onNight,
         elevation: 0,
-        title: Text('STUDIO BAGIKAN',
+        title: Text(FN.caps('Studio bagikan'),
             style: FN.label(size: 13, color: FN.onNight)
-                .copyWith(fontWeight: FontWeight.w700, letterSpacing: 2)),
+                .copyWith(fontWeight: FontWeight.w700, letterSpacing: FN.track(2))),
       ),
       body: async.when(
         loading: () => Center(

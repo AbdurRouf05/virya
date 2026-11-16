@@ -26,6 +26,7 @@ class FocusBridge {
     return FocusPermissions(
       usageAccess: m['usageAccess'] == true,
       accessibility: m['accessibility'] == true,
+      overlay: m['overlay'] == true,
     );
   }
 
@@ -36,6 +37,8 @@ class FocusBridge {
 
   Future<void> openAppSettings() => _call<void>('openAppSettings');
 
+  Future<void> openOverlaySettings() => _call<void>('openOverlaySettings');
+
   /// Aplikasi yang punya ikon peluncur, tanpa Virya sendiri.
   Future<List<FocusInstalledApp>> installedApps() async {
     final raw = await _call<String>('installedApps');
@@ -45,6 +48,21 @@ class FocusBridge {
         FocusInstalledApp.fromJson(e as Map<String, dynamic>),
     ];
   }
+
+  /// Aplikasi yang memunculkan penghalang rutinitas saat dibuka.
+  Future<List<FocusInstalledApp>> gateApps() async {
+    final raw = await _call<String>('getGateApps');
+    if (raw == null) return const [];
+    return [
+      for (final e in jsonDecode(raw) as List<dynamic>)
+        FocusInstalledApp.fromJson(e as Map<String, dynamic>),
+    ];
+  }
+
+  Future<void> setGateApps(List<FocusInstalledApp> apps) => _call<void>(
+    'setGateApps',
+    jsonEncode([for (final a in apps) a.toJson()]),
+  );
 
   Future<void> pushLimits(List<FocusLimit> limits) => _call<void>(
     'pushLimits',

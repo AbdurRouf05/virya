@@ -141,7 +141,9 @@ Centang di PR atau catat di `docs/PROGRESS.md` kalau sudah dicoba.
 
 **Fokus**
 - [ ] Izin Akses Penggunaan dan Aksesibilitas terdeteksi setelah kembali dari Pengaturan. APK di luar
-  Play Store perlu "Izinkan setelan terbatas" di Info aplikasi (Android 13+)
+  Play Store terkunci "Restricted Setting" di Android 13+. Cara membukanya, termasuk lewat ADB untuk
+  HP yang tidak punya menu "Izinkan setelan terbatas" (contoh: Infinix X6853), ada di README
+  bagian Cara Pasang, Langkah 4
 - [ ] Aplikasi tertutup tepat saat kuota habis, baik saat sedang dipakai maupun saat baru dibuka
 - [ ] Layar "Waktu habis" muncul di atas layar utama, termasuk di Xiaomi, Oppo, Infinix
 - [ ] "Tambah 5 menit" hanya bisa sekali per aplikasi per hari

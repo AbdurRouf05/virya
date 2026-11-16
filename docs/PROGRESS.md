@@ -18,6 +18,36 @@ Newest entries on top. Baru bergabung? Mulai dari [PANDUAN.md](PANDUAN.md). Atur
 
 ## Log
 
+### 2026-11-16 — Buat Rute (otomatis + manual) & rekam mengikuti rute ✅
+- Fitur baru `lib/features/routes/`. Alurnya Atur → 3 pilihan → Detail. Atur: titik mulai dari lokasi sekarang atau sentuh peta, olahraga Lari/Sepeda/Jalan, jarak lewat slider atau angka pas, bentuk Keliling/Pergi-pulang/A → B, medan Datar/Bebas/Cari tanjakan, "Utamakan jalan baru", "Hindari jalan raya". Tiga pilihan tampil di peta (yang dipilih tebal, sisanya samar) dengan jarak, naik, perkiraan waktu, dan ciri ("72% jalan baru", "Paling datar", "Banyak tanjakan"). Ada tombol "Acak lagi".
+- Routing memakai server publik BRouter (profil trekking/safety untuk sepeda, shortest/hiking-mountain untuk lari dan jalan). Kalau BRouter gagal, cadangannya OSRM routing.openstreetmap.de. User-Agent "Virya/1.0". Internet hanya dipakai saat membuat rute; pesan offline dan galat dalam bahasa Indonesia.
+- Keliling: 2–4 titik bantu di lingkaran yang melewati titik mulai, dengan 4 arah dan jari-jari diskalakan ulang maks. 3× sampai jarak ±10% dari target. Lalu dipilih 3 yang beragam (duplikat dengan tumpang tindih >90% dibuang). "Jalan baru" dihitung dari kisi jejak lama (~20 m).
+- Detail: peta, jarak, naik, perkiraan waktu dari kecepatan rata-rata sendiri (atau bawaan), tanjakan maks., grafik ketinggian. Tombol Edit / Simpan / "Mulai rekam dengan rute ini". Mode manual: sentuh titik, garis menempel ke jalan, ada Urungkan / Balik ke awal / Putar arah, bisa juga dari nol.
+- Rute tersimpan (offline, tabel `planned_routes`, skema v8): daftar dengan peta mini, ganti nama, hapus, ekspor GPX. Masuk lewat tombol "Rute" di Jurnal.
+- Saat merekam, rute tergambar di bawah jejak dan ada panel sisa jarak. Kalau keluar rute (>50 m selama 10 detik), HP bergetar dan suara "Kamu keluar dari rute" diputar; saat kembali terdengar "Kembali di rute".
+- Tes baru: domain rute, parser + generator dengan routing palsu, migrasi v8; total 600 tes lulus.
+
+### 2026-11-16 — Gaya tampilan Tegas / Bersih + layar pilih gaya ✅
+- Gaya baru **Bersih** di samping tampilan lama, yang kini bernama **Tegas** (piksel sama seperti sebelumnya). Bersih: latar #F7F6F3, kartu putih bergaris rambut #ECEAE5, sudut 14/10, tanpa bayangan, judul Plex Sans SemiBold kapital kalimat, angka besar Plex Sans tabular, kontrol segmen pil putih, centang bulat, strip minggu berupa titik, garis warna samping dihilangkan. Ada varian gelap (Terang / Gelap / Ikuti sistem).
+- Token baru di `FN`: `isClean`, `stroke`, `line()`, `cardLine`, `divider`, `cardFill`, `fill`, `radius`/`radiusSmall`/`cardRadius`/`smallRadius`/`boxRadius`, `hardShadow()`, `frame()`, `side()`, `stripe()`, `card()`, `caps()`, `track()`, `title()`, `labelStrong()`. Gaya dibawa oleh `Palette.gaya`; palet lama tetap pilihan warna Tegas; `bersihStyle` + `bersihDarkStyle`; `resolveStyle()`.
+- Pengaturan → Tampilan: segmen "Gaya: Tegas / Bersih", lalu warna (Tegas) atau kecerahan (Bersih), disimpan lewat "Terapkan" (`ui_gaya`, `bersih_mode`, dibaca sebelum `runApp`). Widget umum baru `SegmentedPick`.
+- Pertama kali dibuka: splash → **Pilih gaya** (dua kartu dengan contoh mini, sentuh = gaya langsung berganti, "Lanjut") → Beranda. Disimpan di `look_chosen`; pengguna lama dengan `style_id` tersimpan langsung ke Beranda.
+- Layar peta, rekam, segmen, rute belum disesuaikan (masih Tegas). Tes baru: token Tegas/Bersih, simpan gaya, layar pilih gaya; total 600 tes lulus.
+
+### 2026-11-16 — Splash hanya logo ✅
+- `EntryLoadingScreen` disederhanakan: hanya `ViryaMark` 120dp di tengah, latar `FN.paper`, sama dengan splash Android, jadi perpindahannya tidak terasa. Label atas, stempel miring, grid, bar loading, log palsu, dan teks "sentuh untuk lewati" dihapus. Logo ditahan 0,7 detik lalu memudar ke Beranda dalam 450 ms; sentuh untuk langsung lanjut. Waktu sampai Beranda turun dari sekitar 2,8 detik menjadi sekitar 1,2 detik.
+- Batasan: splash Android selalu memakai warna kertas Field Notes (#EFE9DC). Pada gaya lain, terutama Malam, warna latarnya berganti saat masuk layar Flutter.
+- Preview pilihan desain: `design_prototype/splash_preview.html`. Tes splash ditulis ulang (4 tes); total 560 tes lulus.
+
+### 2026-11-16 — Top speed, penjaga Fokus, rutinitas harian ✅
+- **Top speed** di kartu share dan video recap (`ShareStat.topSpeed`). Lari menampilkan pace tercepat, olahraga lain km/j. Hanya muncul bila `maxSpeedMps > 0`.
+- **Penjaga Fokus tanpa Aksesibilitas** (`FocusGuardService`, foreground `specialUse`): membaca aplikasi di depan dari UsageEvents tiap 3 detik dan menampilkan "Waktu habis" lewat izin tampil di atas aplikasi lain. Sebelumnya Mode Ramah Bank hanya mencatat waktu. "Tetap buka 5 menit" baru aktif setelah jeda 10/20/40/60 detik, makin lama tiap dibuka lagi di hari yang sama. Ada peringatan sisa 1 menit.
+- Panduan izin terkunci "Restricted Setting" (Android 13+) di README Langkah 4 dan di panel izin Fokus: menu ⋮ di info aplikasi, atau pasang ulang lewat ADB plus `appops`.
+- **Rutinitas harian**: kolom `repeat_daily` dan `remind_minute` di tabel `tasks` (skema v7; migrasi memeriksa kolom yang sudah ada, karena tabel yang dibuat di langkah v4 sudah punya kolomnya). Untuk rutinitas, `doneAt` = terakhir dicentang; terbuka lagi bila tanggal lokalnya bukan hari ini (`openTasksOn`). Centang dari luar hanya diterapkan sekali per hari (`markDoneIfOpen` dengan `dayStart`). Riwayat rutinitas hanya menyimpan centang terakhir.
+- Native (`tasks/RoutineStore`, `RoutineReminder`): satu alarm exact (`USE_EXACT_ALARM`) untuk pengingat terdekat, diulang tiap jam sampai 22.00, tunda 30 menit, dipasang ulang saat boot/update/ganti jam. Notifikasi catat cepat menampilkan ringkasan rutinitas. Widget ikut menampilkan rutinitas yang belum dicentang.
+- **Penghalang rutinitas** (`focus/FocusGate`, `RoutineGateActivity`): aplikasi dipilih di layar Fokus → "Ingatkan rutinitas". Muncul saat aplikasi itu dibuka dan masih ada rutinitas terbuka; maksimal sekali per 30 menit per aplikasi; "Lanjut" aktif setelah 5 detik. Berjalan di kedua penjaga (overlay dan Aksesibilitas). Tidak muncul bila jatah aplikasi itu sudah habis.
+- Verifikasi: analyze bersih (kecuali info/warning lama), 558 tes lulus, APK rilis per ABI berhasil, arm64 terpasang di Infinix X6853 lewat ADB dan aplikasi terbuka tanpa crash. Pengingat, penghalang, dan penjaga Fokus belum dicoba langsung dengan TikTok.
+
 ### 2026-11-08 — Wave 2 dan sisa kecil ✅
 - **Segmen live + ghost** (`features/segments`): buat segmen dari rute di detail aktivitas, upaya lama langsung dicari, upaya baru dicocokkan tiap aktivitas selesai direkam, diimpor, atau dihitung ulang. HUD dan suara di layar rekam (mendekat, dimulai, selisih ghost tiap 30 detik, hasil akhir). Masuk dari ikon bendera di Jurnal dan bagian Segmen di detail aktivitas. HUD dan suara selalu memakai meter walau setelan imperial aktif.
 - **Heatmap pribadi** (`features/heatmap`): layer `heat` di MapLibre, filter Semua/Sepeda/Lari/Jalan, dihitung di luar UI thread, maksimal 40.000 titik. Masuk dari tab Statistik. Hanya 2D; versi 3D dari PRD tidak dibuat.

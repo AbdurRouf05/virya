@@ -77,6 +77,18 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
                           ),
                         ),
                         InkIconButton(
+                          icon: Icons.route,
+                          tooltip: 'Rute',
+                          size: 36,
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              settings: const RouteSettings(name: '/routes'),
+                              builder: (_) =>
+                                  ref.read(integrationsProvider).routesHome(),
+                            ),
+                          ),
+                        ),
+                        InkIconButton(
                           icon: Icons.upload_file,
                           tooltip: 'Impor riwayat (GPX/TCX/FIT/ZIP Strava)',
                           size: 36,
@@ -145,8 +157,9 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
           child: SectionHeader(
             title: Fmt.monthYear(e.key),
             trailing: Text(
-              '${e.value.length} · ${fmt.distanceFull(dist, decimals: 0)}'
-                  .toUpperCase(),
+              FN.caps(
+                '${e.value.length} · ${fmt.distanceFull(dist, decimals: 0)}',
+              ),
               style: FN.label(size: 10),
             ),
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 4),
@@ -177,7 +190,7 @@ class _InkSpinner extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
     children: [
-      Text('MEMBUKA JURNAL…', style: FN.label(size: 11, color: FN.ink)),
+      Text(FN.caps('Membuka jurnal…'), style: FN.label(size: 11, color: FN.ink)),
       const SizedBox(height: 10),
       const SizedBox(width: 120, child: LinearProgressIndicator()),
     ],

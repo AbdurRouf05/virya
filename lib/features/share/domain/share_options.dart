@@ -41,6 +41,7 @@ enum ShareStat {
   time('WAKTU'),
   elevation('ELEV'),
   speed('RATA2'),
+  topSpeed('TOP'),
   grit('GRIT'),
   heartRate('HR');
 
@@ -107,6 +108,7 @@ class ShareOptions {
       ShareStat.time,
       ShareStat.elevation,
       ShareStat.speed,
+      ShareStat.topSpeed,
       ShareStat.grit,
     },
     this.photo,

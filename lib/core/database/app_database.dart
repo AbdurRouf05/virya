@@ -11,6 +11,7 @@ import 'package:virya/core/database/daos/body_dao.dart';
 import 'package:virya/core/database/daos/focus_dao.dart';
 import 'package:virya/core/database/daos/gears_dao.dart';
 import 'package:virya/core/database/daos/gym_dao.dart';
+import 'package:virya/core/database/daos/planned_routes_dao.dart';
 import 'package:virya/core/database/daos/segments_dao.dart';
 import 'package:virya/core/database/daos/tasks_dao.dart';
 import 'package:virya/core/database/daos/track_points_dao.dart';
@@ -21,6 +22,7 @@ import 'package:virya/core/database/tables/body_tables.dart';
 import 'package:virya/core/database/tables/focus_tables.dart';
 import 'package:virya/core/database/tables/gears_table.dart';
 import 'package:virya/core/database/tables/gym_tables.dart';
+import 'package:virya/core/database/tables/planned_routes_table.dart';
 import 'package:virya/core/database/tables/segments_table.dart';
 import 'package:virya/core/database/tables/tasks_table.dart';
 import 'package:virya/core/database/tables/track_points_table.dart';
@@ -48,6 +50,7 @@ part 'app_database.g.dart';
     AppUsageDays,
     BodyCheckins,
     BodyPhotos,
+    PlannedRoutes,
   ],
   daos: [
     ActivitiesDao,
@@ -59,6 +62,7 @@ part 'app_database.g.dart';
     FocusDao,
     BodyDao,
     SegmentsDao,
+    PlannedRoutesDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -75,7 +79,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -129,6 +133,19 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(bodyCheckins);
             await m.createTable(bodyPhotos);
           }
+          if (from < 7) {
+            // Tabel tasks yang baru dibuat di langkah v4 sudah punya kolomnya.
+            final have = await _columnsOf('tasks');
+            if (!have.contains('repeat_daily')) {
+              await m.addColumn(tasks, tasks.repeatDaily);
+            }
+            if (!have.contains('remind_minute')) {
+              await m.addColumn(tasks, tasks.remindMinute);
+            }
+          }
+          if (from < 8) {
+            await m.createTable(plannedRoutes);
+          }
         },
         beforeOpen: (details) async {
           // Aktifkan Foreign Keys di SQLite
@@ -150,6 +167,11 @@ class AppDatabase extends _$AppDatabase {
       'ON workout_sets (exercise_id);',
     );
   }
+
+  Future<Set<String>> _columnsOf(String table) async => {
+    for (final r in await customSelect('PRAGMA table_info($table)').get())
+      r.read<String>('name'),
+  };
 
   Future<void> _createTaskIndexes() => customStatement(
     'CREATE INDEX IF NOT EXISTS idx_tasks_done_at ON tasks (done_at);',
@@ -199,6 +221,10 @@ final focusDaoProvider = Provider<FocusDao>((ref) {
 
 final bodyDaoProvider = Provider<BodyDao>((ref) {
   return ref.watch(databaseProvider).bodyDao;
+});
+
+final plannedRoutesDaoProvider = Provider<PlannedRoutesDao>((ref) {
+  return ref.watch(databaseProvider).plannedRoutesDao;
 });
 
 final gearsDaoProvider = Provider<GearsDao>((ref) {

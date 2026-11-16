@@ -64,30 +64,30 @@ class _Cell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: FN.label(size: 9, color: FN.inkMuted)),
-            const SizedBox(height: 2),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: Text.rich(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: FN.label(size: 9, color: FN.inkMuted)),
+        const SizedBox(height: 2),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text.rich(
+            TextSpan(
+              children: [
                 TextSpan(
-                  children: [
-                    TextSpan(
-                      text: value,
-                      style: FN.bigNumber(30, color: color ?? FN.onNight),
-                    ),
-                    TextSpan(
-                      text: ' $unit',
-                      style: FN.label(size: 10, color: FN.onNightMuted),
-                    ),
-                  ],
+                  text: value,
+                  style: FN.bigNumber(30, color: color ?? FN.onNight),
                 ),
-              ),
+                TextSpan(
+                  text: ' $unit',
+                  style: FN.label(size: 10, color: FN.onNightMuted),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      );
+      ],
+    ),
+  );
 }

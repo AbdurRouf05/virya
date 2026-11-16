@@ -45,7 +45,7 @@ void main() {
         .customSelect('PRAGMA user_version')
         .map((r) => r.read<int>('user_version'))
         .getSingle();
-    expect(version, 6);
+    expect(version, db.schemaVersion);
 
     final objects = await db
         .customSelect('SELECT name FROM sqlite_master')

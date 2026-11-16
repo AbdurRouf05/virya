@@ -228,6 +228,7 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
                       onToggleAmoled: _toggleAmoled,
                     ),
                     ref.watch(integrationsProvider).recordingSegmentHud(),
+                    ref.watch(integrationsProvider).recordingRouteHud(),
                     if (_amoledMode && !_isPeeking)
                       Expanded(
                         child: AmoledHudPanel(

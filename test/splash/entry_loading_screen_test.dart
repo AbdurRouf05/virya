@@ -8,95 +8,58 @@ import 'package:virya/app/theme/styles/night_style.dart';
 import 'package:virya/core/widgets/virya_mark.dart';
 import 'package:virya/features/splash/presentation/entry_loading_screen.dart';
 
+const _home = Scaffold(body: Text('HOMEPAGE'));
+
+Widget _app({Duration hold = const Duration(milliseconds: 700)}) =>
+    MaterialApp(home: EntryLoadingScreen(target: _home, hold: hold));
+
 void main() {
-  group('EntryLoadingScreen Dynamic Theme & Style Tests', () {
-    testWidgets('adapts colors to current active style palette', (tester) async {
-      // 1. Test with default Field Notes Style
-      FN.use(fieldNotesStyle);
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: EntryLoadingScreen(
-            totalDuration: Duration(milliseconds: 2000),
-          ),
-        ),
-      );
+  tearDown(() => FN.use(fieldNotesStyle));
 
-      final scaffold1 = tester.widget<Scaffold>(find.byType(Scaffold));
-      expect(scaffold1.backgroundColor, fieldNotesStyle.night);
+  testWidgets('hanya menampilkan logo, tanpa teks atau loading', (tester) async {
+    await tester.pumpWidget(_app());
 
-      final viryaMark1 = tester.widget<ViryaMark>(find.byType(ViryaMark));
-      expect(viryaMark1.ink, fieldNotesStyle.onNight);
-      expect(viryaMark1.accent, fieldNotesStyle.signal);
+    expect(find.byType(ViryaMark), findsOneWidget);
+    expect(find.byType(Text), findsNothing);
+    expect(find.byType(ProgressIndicator), findsNothing);
+    final mark = tester.widget<ViryaMark>(find.byType(ViryaMark));
+    expect(mark.size, EntryLoadingScreen.markSize);
 
-      // 2. Switch to Blueprint Style (Cetak Biru)
-      FN.use(blueprintStyle);
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: EntryLoadingScreen(
-            totalDuration: Duration(milliseconds: 2000),
-          ),
-        ),
-      );
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+  });
 
-      final scaffold2 = tester.widget<Scaffold>(find.byType(Scaffold));
-      expect(scaffold2.backgroundColor, blueprintStyle.night);
+  testWidgets('warna mengikuti gaya yang aktif', (tester) async {
+    for (final style in [fieldNotesStyle, blueprintStyle, forestStyle, nightStyle]) {
+      FN.use(style);
+      await tester.pumpWidget(_app(hold: const Duration(days: 1)));
 
-      final viryaMark2 = tester.widget<ViryaMark>(find.byType(ViryaMark));
-      expect(viryaMark2.ink, blueprintStyle.onNight);
-      expect(viryaMark2.accent, blueprintStyle.signal);
+      final scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
+      expect(scaffold.backgroundColor, style.paper);
+      final mark = tester.widget<ViryaMark>(find.byType(ViryaMark));
+      expect(mark.ink, style.ink);
+      expect(mark.accent, style.signal);
+    }
+    await tester.pumpWidget(const SizedBox());
+  });
 
-      // 3. Switch to Forest Style (Hutan)
-      FN.use(forestStyle);
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: EntryLoadingScreen(
-            totalDuration: Duration(milliseconds: 2000),
-          ),
-        ),
-      );
+  testWidgets('pindah ke Beranda setelah jeda', (tester) async {
+    await tester.pumpWidget(_app());
 
-      final scaffold3 = tester.widget<Scaffold>(find.byType(Scaffold));
-      expect(scaffold3.backgroundColor, forestStyle.night);
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(find.text('HOMEPAGE'), findsNothing);
 
-      // 4. Switch to Night Style (Malam)
-      FN.use(nightStyle);
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: EntryLoadingScreen(
-            totalDuration: Duration(milliseconds: 2000),
-          ),
-        ),
-      );
+    await tester.pump(const Duration(milliseconds: 200));
+    await tester.pumpAndSettle();
+    expect(find.text('HOMEPAGE'), findsOneWidget);
+    expect(find.byType(EntryLoadingScreen), findsNothing);
+  });
 
-      final scaffold4 = tester.widget<Scaffold>(find.byType(Scaffold));
-      expect(scaffold4.backgroundColor, nightStyle.night);
+  testWidgets('sentuh untuk langsung lanjut', (tester) async {
+    await tester.pumpWidget(_app(hold: const Duration(days: 1)));
 
-      // Reset back to field notes
-      FN.use(fieldNotesStyle);
-    });
-
-    testWidgets('tap to skip works across styles', (tester) async {
-      var skipped = false;
-      FN.use(fieldNotesStyle);
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: EntryLoadingScreen(
-            target: Scaffold(
-              body: TextButton(
-                onPressed: () => skipped = true,
-                child: const Text('HOMEPAGE'),
-              ),
-            ),
-            totalDuration: const Duration(milliseconds: 2000),
-          ),
-        ),
-      );
-
-      await tester.tap(find.byType(EntryLoadingScreen));
-      await tester.pumpAndSettle();
-
-      expect(find.text('HOMEPAGE'), findsOneWidget);
-    });
+    await tester.tap(find.byType(EntryLoadingScreen));
+    await tester.pumpAndSettle();
+    expect(find.text('HOMEPAGE'), findsOneWidget);
   });
 }

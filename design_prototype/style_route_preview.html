@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Preview Gaya &amp; Buat Rute</title>
+<style>
+  @font-face { font-family:Anton; src:url(../assets/fonts/Anton-Regular.ttf); }
+  @font-face { font-family:PlexMono; src:url(../assets/fonts/IBMPlexMono-Medium.ttf); font-weight:500; }
+  @font-face { font-family:PlexMono; src:url(../assets/fonts/IBMPlexMono-Bold.ttf); font-weight:700; }
+  @font-face { font-family:PlexSans; src:url(../assets/fonts/IBMPlexSans-Regular.ttf); font-weight:400; }
+  @font-face { font-family:PlexSans; src:url(../assets/fonts/IBMPlexSans-SemiBold.ttf); font-weight:600; }
+
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#262624; color:#ddd; font-family:PlexSans, sans-serif; padding:28px 24px 60px; }
+  .sec { max-width:1400px; margin:0 auto 56px; }
+  .sec > h1 { font-family:PlexMono; font-size:15px; letter-spacing:2px; margin-bottom:4px; }
+  .sec > p { font-size:13px; color:#aaa; margin-bottom:18px; max-width:860px; line-height:1.5; }
+  .tabs { display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap; }
+  .tabs button { font-family:PlexMono; font-size:12px; letter-spacing:1px; padding:8px 14px; border:1px solid #555; background:transparent; color:#ddd; cursor:pointer; }
+  .tabs button.on { background:#FF4F00; border-color:#FF4F00; color:#fff; }
+  .row { display:flex; gap:36px; justify-content:center; flex-wrap:wrap; }
+  .col { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .col h2 { font-family:PlexMono; font-size:12px; letter-spacing:1.5px; color:#bbb; }
+  .phone { width:300px; height:620px; border:10px solid #000; border-radius:36px; overflow:hidden; position:relative; }
+  .screen { position:absolute; inset:0; overflow-y:auto; scrollbar-width:none; }
+  .screen::-webkit-scrollbar { display:none; }
+  .nav { position:absolute; left:0; right:0; bottom:0; height:56px; display:flex; justify-content:space-around; align-items:center; }
+
+  /* ================= TEGAS (sama dengan app sekarang) ================= */
+  .t { background:#EFE9DC; color:#141414; font-family:PlexSans; }
+  .t .scr { padding:0 14px 80px; }
+  .t .hdr { padding:20px 2px 14px; }
+  .t .hdr small { font-family:PlexMono; font-size:10px; letter-spacing:1.3px; color:#77736A; }
+  .t .hdr b { display:block; font-family:Anton; font-size:40px; line-height:.95; letter-spacing:.5px; margin-top:4px; }
+  .t .card { border:2px solid #141414; background:#EFE9DC; margin-bottom:12px; position:relative; }
+  .t .card.sh { box-shadow:4px 4px 0 #141414; }
+  .t .lbl { font-family:PlexMono; font-size:10px; letter-spacing:1.2px; color:#3A3A36; text-transform:uppercase; }
+  .t .pad { padding:10px 12px 12px; }
+  .t .big { font-family:Anton; font-size:46px; line-height:.95; }
+  .t .unit { font-family:PlexMono; font-size:11px; color:#77736A; margin-left:3px; }
+  .t .btn { display:block; text-align:center; background:#141414; color:#EFE9DC; font-family:PlexMono; font-weight:700; font-size:12px; letter-spacing:1.5px; padding:11px; margin-top:10px; }
+  .t .btn.sig { background:#FF4F00; color:#141414; border:2px solid #141414; }
+  .t .task { display:flex; gap:9px; align-items:center; padding:7px 0; border-top:1px dashed #CFC6B2; font-size:13px; }
+  .t .box { width:15px; height:15px; border:2px solid #141414; flex:none; }
+  .t .chip { font-family:PlexMono; font-size:9px; letter-spacing:1px; border:1.5px solid #141414; padding:1px 4px; margin-left:auto; }
+  .t .week { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-top:8px; }
+  .t .week i { height:30px; border:2px solid #141414; display:flex; align-items:flex-end; justify-content:center; font-family:PlexMono; font-size:9px; font-style:normal; padding-bottom:2px; }
+  .t .week i.on { background:#FF4F00; } .t .week i.run { background:#141414; color:#EFE9DC; }
+  .t .stripe { position:absolute; left:0; top:0; bottom:0; width:10px; background:#FF4F00; }
+  .t .grid2 { display:grid; grid-template-columns:1fr 1fr; border-top:2px solid #141414; }
+  .t .grid2 div { padding:8px 10px; border-right:2px solid #141414; border-bottom:2px solid #141414; }
+  .t .grid2 div:nth-child(2n) { border-right:0; }
+  .t .grid2 b { display:block; font-family:Anton; font-size:26px; }
+  .t .set { display:flex; justify-content:space-between; align-items:center; padding:11px 12px; border-top:2px solid #141414; font-size:13px; }
+  .t .set:first-of-type { border-top:0; }
+  .t .set em { font-style:normal; font-family:PlexMono; font-size:10px; color:#77736A; }
+  .t .seg { display:flex; border:2px solid #141414; margin:0 12px 12px; }
+  .t .seg span { flex:1; text-align:center; font-family:PlexMono; font-size:10px; letter-spacing:1px; padding:8px 0; }
+  .t .seg span.on { background:#141414; color:#EFE9DC; }
+  .t .nav { background:#EFE9DC; border-top:2px solid #141414; font-family:PlexMono; font-size:9px; letter-spacing:1px; }
+  .t .nav span.on { color:#FF4F00; font-weight:700; }
+  .t .sec-t { font-family:PlexMono; font-size:10px; letter-spacing:1.5px; color:#77736A; margin:16px 2px 6px; }
+  .t .map { height:190px; border-bottom:2px solid #141414; }
+  .t .slider { height:6px; background:#141414; position:relative; margin:18px 4px 8px; }
+  .t .slider::after { content:''; position:absolute; left:42%; top:-7px; width:18px; height:18px; background:#FF4F00; border:2px solid #141414; }
+  .t .opt { border:2px solid #141414; margin-bottom:10px; display:flex; }
+  .t .opt.sel { box-shadow:4px 4px 0 #FF4F00; }
+  .t .opt .thumb { width:84px; border-right:2px solid #141414; }
+  .t .opt .info { padding:8px 10px; flex:1; }
+  .t .opt .info b { font-family:Anton; font-size:24px; }
+
+  /* ================= BERSIH (baru) ================= */
+  .c { background:#F7F6F3; color:#1B1B1A; font-family:PlexSans; }
+  .c .scr { padding:0 16px 84px; }
+  .c .hdr { padding:26px 2px 18px; }
+  .c .hdr small { font-size:13px; color:#8A8780; }
+  .c .hdr b { display:block; font-size:26px; font-weight:600; letter-spacing:-.4px; margin-top:2px; }
+  .c .card { background:#fff; border:1px solid #ECEAE5; border-radius:14px; margin-bottom:12px; position:relative; overflow:hidden; }
+  .c .card.sh { }
+  .c .lbl { font-size:12px; color:#8A8780; }
+  .c .pad { padding:14px 16px 16px; }
+  .c .big { font-size:40px; font-weight:600; letter-spacing:-1.2px; line-height:1; font-variant-numeric:tabular-nums; }
+  .c .unit { font-size:14px; color:#8A8780; margin-left:4px; font-weight:400; letter-spacing:0; }
+  .c .btn { display:block; text-align:center; background:#1B1B1A; color:#fff; font-weight:600; font-size:14px; padding:12px; margin-top:14px; border-radius:10px; }
+  .c .btn.sig { background:#FF4F00; color:#fff; }
+  .c .task { display:flex; gap:11px; align-items:center; padding:9px 0; font-size:14px; }
+  .c .task + .task { border-top:1px solid #F0EEEA; }
+  .c .box { width:18px; height:18px; border:1.5px solid #C9C6BF; border-radius:50%; flex:none; }
+  .c .chip { font-size:11px; color:#8A8780; margin-left:auto; }
+  .c .week { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-top:12px; text-align:center; font-size:11px; color:#8A8780; }
+  .c .week i { display:flex; flex-direction:column; align-items:center; gap:6px; font-style:normal; }
+  .c .week i::before { content:''; width:8px; height:8px; border-radius:50%; background:#E4E2DD; }
+  .c .week i.on::before { background:#FF4F00; } .c .week i.run::before { background:#1B1B1A; }
+  .c .stripe { display:none; }
+  .c .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px 10px; padding:4px 16px 16px; }
+  .c .grid2 b { display:block; font-size:22px; font-weight:600; letter-spacing:-.5px; }
+  .c .set { display:flex; justify-content:space-between; align-items:center; padding:14px 16px; font-size:14px; }
+  .c .set + .set { border-top:1px solid #F0EEEA; }
+  .c .set em { font-style:normal; font-size:13px; color:#8A8780; }
+  .c .seg { display:flex; background:#F0EEEA; border-radius:10px; padding:3px; margin:0 16px 14px; }
+  .c .seg span { flex:1; text-align:center; font-size:13px; padding:7px 0; color:#6B6862; border-radius:8px; }
+  .c .seg span.on { background:#fff; color:#1B1B1A; font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.06); }
+  .c .nav { background:#F7F6F3; border-top:1px solid #ECEAE5; font-size:11px; color:#8A8780; }
+  .c .nav span.on { color:#1B1B1A; font-weight:600; }
+  .c .sec-t { font-size:13px; color:#8A8780; margin:20px 4px 8px; }
+  .c .map { height:200px; }
+  .c .slider { height:4px; background:#E4E2DD; border-radius:2px; position:relative; margin:20px 4px 10px; }
+  .c .slider::before { content:''; position:absolute; left:0; top:0; bottom:0; width:42%; background:#1B1B1A; border-radius:2px; }
+  .c .slider::after { content:''; position:absolute; left:42%; top:-8px; width:20px; height:20px; background:#fff; border-radius:50%; box-shadow:0 1px 4px rgba(0,0,0,.25); transform:translateX(-50%); }
+  .c .opt { background:#fff; border:1px solid #ECEAE5; border-radius:14px; margin-bottom:10px; display:flex; overflow:hidden; }
+  .c .opt.sel { border:1.5px solid #1B1B1A; }
+  .c .opt .thumb { width:84px; }
+  .c .opt .info { padding:10px 12px; flex:1; }
+  .c .opt .info b { font-size:20px; font-weight:600; letter-spacing:-.4px; }
+
+  /* Umum */
+  .between { display:flex; justify-content:space-between; align-items:baseline; }
+  .muted { opacity:.7; }
+  .note { font-size:11px; color:#888; text-align:center; max-width:300px; line-height:1.45; }
+</style>
+</head>
+<body>
+
+<section class="sec">
+  <h1>1 · GAYA TAMPILAN: TEGAS vs BERSIH</h1>
+  <p>Kiri: mode Tegas (tampilan sekarang, tidak diubah). Kanan: mode Bersih. Isi dan data sama, hanya gaya yang berbeda. Layar bisa digulir.</p>
+  <div class="tabs" id="tabsA">
+    <button class="on" data-s="today">HARI INI</button>
+    <button data-s="detail">DETAIL AKTIVITAS</button>
+    <button data-s="settings">PENGATURAN</button>
+  </div>
+  <div class="row">
+    <div class="col"><h2>TEGAS (SEKARANG)</h2><div class="phone t" id="pa1"></div></div>
+    <div class="col"><h2>BERSIH (BARU)</h2><div class="phone c" id="pa2"></div></div>
+  </div>
+</section>
+
+<section class="sec">
+  <h1>2 · BUAT RUTE OTOMATIS</h1>
+  <p>Alur: atur (titik mulai, olahraga, jarak, bentuk) → app membuat 3 pilihan rute → detail rute (ketinggian, perkiraan waktu, simpan / mulai rekam). Tukar gayanya dengan tombol di bawah.</p>
+  <div class="tabs" id="tabsB">
+    <button class="on" data-m="c">GAYA BERSIH</button>
+    <button data-m="t">GAYA TEGAS</button>
+  </div>
+  <div class="row">
+    <div class="col"><h2>1 · ATUR</h2><div class="phone c rt" id="pb1"></div></div>
+    <div class="col"><h2>2 · PILIH DARI 3 RUTE</h2><div class="phone c rt" id="pb2"></div></div>
+    <div class="col"><h2>3 · DETAIL RUTE</h2><div class="phone c rt" id="pb3"></div></div>
+  </div>
+</section>
+
+<script>
+/* ---------- Peta tiruan (SVG) ---------- */
+const STREETS = `
+  <rect width="300" height="220" fill="var(--mapbg)"/>
+  <path d="M-10 40 L310 70 M-10 120 L310 105 M-10 185 L310 200 M60 -10 L80 230 M150 -10 L140 230 M235 -10 L250 230 M20 230 L120 -10 M180 230 L300 20"
+        stroke="var(--street)" stroke-width="5" fill="none"/>
+  <path d="M-10 80 L310 85 M100 -10 L110 230 M195 -10 L200 230 M-10 155 L310 150" stroke="var(--street2)" stroke-width="2.5" fill="none"/>
+  <path d="M210 160 q30 -20 70 -10 l0 60 l-80 0 z" fill="var(--park)"/>
+  <path d="M-10 10 q60 20 110 -20" stroke="var(--water)" stroke-width="10" fill="none"/>`;
+const LOOPS = [
+  'M140 150 L145 105 L195 88 L240 72 L250 120 L248 175 L200 190 L142 188 Z',
+  'M140 150 L110 152 L80 150 L70 85 L110 78 L150 70 L146 105 Z',
+  'M140 150 L142 190 L80 186 L64 120 L110 112 L200 100 L198 150 Z'];
+function map(h, loopIdx, opts={}) {
+  const loop = loopIdx == null ? '' :
+    `<path d="${LOOPS[loopIdx]}" stroke="var(--route)" stroke-width="${opts.thin?4:5}" fill="none" stroke-linejoin="round"/>`;
+  const others = opts.ghost ? LOOPS.map((d,i)=> i===loopIdx?'':`<path d="${d}" stroke="var(--ghost)" stroke-width="3" fill="none"/>`).join('') : '';
+  return `<svg viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice" style="width:100%;height:${h}px;display:block">
+    ${STREETS}${others}${loop}
+    <circle cx="140" cy="150" r="7" fill="var(--pin)" stroke="var(--pinring)" stroke-width="3"/></svg>`;
+}
+const thumb = i => `<svg viewBox="40 50 240 160" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block">${STREETS}<path d="${LOOPS[i]}" stroke="var(--route)" stroke-width="7" fill="none" stroke-linejoin="round"/></svg>`;
+function elev(mode) {
+  const pts = [0,30,22,48,70,64,40,55,85,60,35,20,28,10,0].map((y,i)=>`${i*20},${100-y}`).join(' ');
+  const s = mode==='t' ? '#141414' : '#1B1B1A';
+  const f = mode==='t' ? '#FF4F00' : 'rgba(255,79,0,.14)';
+  return `<svg viewBox="0 0 280 100" preserveAspectRatio="none" style="width:100%;height:70px;display:block">
+    <polygon points="0,100 ${pts} 280,100" fill="${f}"/><polyline points="${pts}" fill="none" stroke="${s}" stroke-width="${mode==='t'?2.5:1.8}"/></svg>`;
+}
+
+/* ---------- Bagian 1: layar ---------- */
+const NAV = `<div class="nav"><span class="on">HARI INI</span><span>JURNAL</span><span>REKAM</span><span>LATIHAN</span><span>PROFIL</span></div>`;
+const NAVc = `<div class="nav"><span class="on">Hari ini</span><span>Jurnal</span><span>Rekam</span><span>Latihan</span><span>Profil</span></div>`;
+
+function today(m) {
+  const T = m==='t';
+  return `<div class="screen"><div class="scr">
+    <div class="hdr"><small>${T?'SENIN · 16 NOV 2026':'Senin, 16 November'}</small><b>${T?'PAGI, ROUF':'Pagi, Rouf'}</b></div>
+    <div class="card"><div class="pad">
+      <div class="between"><span class="lbl">${T?'TUGAS HARI INI':'Tugas hari ini'}</span><span class="lbl">2/5</span></div>
+      <div style="margin-top:8px">
+        <div class="task"><span class="box"></span>Push GitHub<span class="chip">${T?'TIAP HARI 09:00':'Setiap hari · 09.00'}</span></div>
+        <div class="task"><span class="box"></span>Live TikTok<span class="chip">${T?'TIAP HARI 19:00':'Setiap hari · 19.00'}</span></div>
+        <div class="task"><span class="box"></span>Servis rem sepeda</div>
+      </div></div></div>
+    <div class="card sh"><div class="pad">
+      <span class="lbl">${T?'LATIHAN HARI INI':'Latihan hari ini'}</span>
+      <div style="margin-top:6px"><span class="big">8,0</span><span class="unit">km</span></div>
+      <div class="lbl" style="margin-top:4px">${T?'LARI SANTAI · ZONA 2 · STREAK 6 HARI':'Lari santai · Zona 2 · 6 hari beruntun'}</div>
+      <span class="btn sig">${T?'MULAI':'Mulai latihan'}</span>
+    </div></div>
+    <div class="card"><div class="pad">
+      <div class="between"><span class="lbl">${T?'MINGGU INI':'Minggu ini'}</span><span class="lbl">${T?'42,6 KM':'42,6 km'}</span></div>
+      <div class="week"><i class="run">S</i><i>S</i><i class="on">R</i><i class="run">K</i><i>J</i><i class="on">S</i><i>M</i></div>
+    </div></div>
+    <div class="card"><span class="stripe"></span><div class="pad" style="padding-left:${T?24:16}px">
+      <span class="lbl">${T?'TERAKHIR · MIN 15 NOV':'Terakhir · Min, 15 Nov'}</span>
+      <div style="font-weight:600;font-size:16px;margin-top:3px">Gowes pagi Kaliurang</div>
+      <div class="lbl" style="margin-top:2px">${T?'SEPEDA · 52,4 KM · 2J 14M':'Sepeda · 52,4 km · 2j 14m'}</div>
+    </div></div>
+  </div>${T?NAV:NAVc}</div>`;
+}
+
+function detail(m) {
+  const T = m==='t';
+  const L = (a,b) => T?a:b;
+  return `<div class="screen"><div class="map">${map(T?190:200, 0)}</div><div class="scr" style="padding-top:14px">
+    <span class="lbl">${L('SEPEDA · MIN 15 NOV · 06:12','Sepeda · Min, 15 Nov · 06.12')}</span>
+    <div style="font-weight:600;font-size:${T?20:22}px;margin:2px 0 12px;${T?'font-family:Anton;font-weight:400;font-size:28px;letter-spacing:.4px':''}">${L('GOWES PAGI KALIURANG','Gowes pagi Kaliurang')}</div>
+    <div class="card">
+      <div class="pad" style="padding-bottom:8px"><span class="lbl">${L('JARAK','Jarak')}</span><div><span class="big">52,4</span><span class="unit">km</span></div></div>
+      <div class="grid2">
+        <div><span class="lbl">${L('WAKTU','Waktu gerak')}</span><b>2:14:08</b></div>
+        <div><span class="lbl">${L('RATA-RATA','Rata-rata')}</span><b>23,5</b></div>
+        <div><span class="lbl">${L('TOP SPEED','Kecepatan puncak')}</span><b>48,2</b></div>
+        <div><span class="lbl">${L('NAIK','Total naik')}</span><b>612 m</b></div>
+      </div>
+    </div>
+    <div class="card"><div class="pad"><span class="lbl">${L('KETINGGIAN','Ketinggian')}</span><div style="margin-top:8px">${elev(m)}</div></div></div>
+  </div></div>`;
+}
+
+function settings(m) {
+  const T = m==='t';
+  const L = (a,b) => T?a:b;
+  return `<div class="screen"><div class="scr">
+    <div class="hdr"><b>${L('PENGATURAN','Pengaturan')}</b></div>
+    <div class="sec-t">${L('TAMPILAN','Tampilan')}</div>
+    <div class="card">
+      <div class="pad" style="padding-bottom:10px"><span style="font-weight:600;font-size:14px">${L('Gaya','Gaya')}</span>
+        <div class="lbl" style="margin-top:2px">${L('TEGAS: GARIS TEBAL, POSTER','Tegas penuh karakter, Bersih lebih tenang')}</div></div>
+      <div class="seg"><span class="${T?'on':''}">${L('TEGAS','Tegas')}</span><span class="${T?'':'on'}">${L('BERSIH','Bersih')}</span></div>
+      <div class="set"><span>${L('Warna','Warna')}</span><em>${L('FIELD NOTES ›','Field Notes ›')}</em></div>
+      <div class="set"><span>${L('Mode gelap','Mode gelap')}</span><em>${L('IKUTI SISTEM ›','Ikuti sistem ›')}</em></div>
+    </div>
+    <div class="sec-t">${L('SATUAN & DATA','Satuan & data')}</div>
+    <div class="card">
+      <div class="set"><span>Satuan</span><em>${L('KM ›','Kilometer ›')}</em></div>
+      <div class="set"><span>${L('Ekspor GPX','Ekspor GPX')}</span><em>›</em></div>
+      <div class="set"><span>${L('Cadangan','Cadangan')}</span><em>${L('3 HARI LALU ›','3 hari lalu ›')}</em></div>
+    </div>
+  </div></div>`;
+}
+
+const SCREENS = { today, detail, settings };
+function renderA(s) {
+  document.getElementById('pa1').innerHTML = SCREENS[s]('t');
+  document.getElementById('pa2').innerHTML = SCREENS[s]('c');
+}
+document.querySelectorAll('#tabsA button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#tabsA button').forEach(x => x.classList.toggle('on', x===b));
+  renderA(b.dataset.s);
+});
+renderA('today');
+
+/* ---------- Bagian 2: Buat Rute ---------- */
+function setup(m) {
+  const T = m==='t'; const L=(a,b)=>T?a:b;
+  return `<div class="screen"><div class="map">${map(T?190:200, null)}</div><div class="scr" style="padding-top:12px">
+    <div style="font-weight:600;font-size:${T?14:20}px;${T?'font-family:Anton;font-weight:400;font-size:26px':''}">${L('BUAT RUTE','Buat rute')}</div>
+    <div class="lbl" style="margin:2px 0 12px">${L('MULAI: LOKASI SAAT INI','Mulai dari lokasi saat ini')}</div>
+    <div class="seg" style="margin:0 0 12px"><span>${L('LARI','Lari')}</span><span class="on">${L('SEPEDA','Sepeda')}</span><span>${L('JALAN','Jalan')}</span></div>
+    <div class="card"><div class="pad">
+      <div class="between"><span class="lbl">${L('JARAK','Jarak')}</span><span><span class="big" style="font-size:${T?34:30}px">50</span><span class="unit">km</span></span></div>
+      <div class="slider"></div>
+      <div class="between lbl"><span>5</span><span>100</span><span>200</span></div>
+    </div></div>
+    <div class="seg" style="margin:0 0 12px"><span class="on">${L('KELILING','Keliling')}</span><span>${L('PERGI-PULANG','Pergi-pulang')}</span><span>${L('A → B','A → B')}</span></div>
+    <div class="card">
+      <div class="set"><span>Medan</span><em>${L('BEBAS ›','Bebas ›')}</em></div>
+      <div class="set"><span>${L('Jalan baru','Utamakan jalan baru')}</span><em>${L('[x]','●')}</em></div>
+      <div class="set"><span>${L('Hindari jalan raya','Hindari jalan raya')}</span><em>${L('[ ]','○')}</em></div>
+    </div>
+    <span class="btn ${T?'sig':''}">${L('BUAT 3 RUTE','Buat rute')}</span>
+  </div></div>`;
+}
+function options(m) {
+  const T = m==='t'; const L=(a,b)=>T?a:b;
+  const data = [['50,8','540 m','2j 10m', L('72% JALAN BARU','72% jalan baru')],
+                ['49,3','310 m','2j 02m', L('DATAR','Paling datar')],
+                ['51,6','780 m','2j 25m', L('BANYAK TANJAKAN','Banyak tanjakan')]];
+  return `<div class="screen"><div class="map">${map(T?190:200, 0, {ghost:true})}</div><div class="scr" style="padding-top:12px">
+    <div class="between" style="margin-bottom:10px"><span style="font-weight:600;font-size:${T?13:16}px">${L('3 PILIHAN · KELILING 50 KM','3 pilihan · keliling 50 km')}</span><span class="lbl">${L('ACAK LAGI ↻','Acak lagi ↻')}</span></div>
+    ${data.map((d,i)=>`<div class="opt ${i===0?'sel':''}"><div class="thumb">${thumb(i)}</div><div class="info">
+      <div><b>${d[0]}</b><span class="unit">km</span></div>
+      <div class="lbl" style="margin-top:2px">↑ ${d[1]} · ± ${d[2]}</div>
+      <div class="lbl" style="margin-top:2px;color:${i===0?'#FF4F00':''}">${d[3]}</div></div></div>`).join('')}
+    <div class="note" style="margin:6px auto 0;color:#8A8780">${L('PERKIRAAN WAKTU DARI RATA-RATA 23,5 KM/J KAMU','Perkiraan waktu dari kecepatan rata-ratamu (23,5 km/j)')}</div>
+  </div></div>`;
+}
+function routeDetail(m) {
+  const T = m==='t'; const L=(a,b)=>T?a:b;
+  return `<div class="screen"><div class="map">${map(T?190:200, 0)}</div><div class="scr" style="padding-top:12px">
+    <div style="font-weight:600;font-size:${T?14:20}px;${T?'font-family:Anton;font-weight:400;font-size:26px':''}">${L('KELILING UTARA','Keliling utara')}</div>
+    <div class="lbl" style="margin:2px 0 12px">${L('SEPEDA · 72% JALAN BARU','Sepeda · 72% jalan baru')}</div>
+    <div class="card"><div class="grid2" style="${T?'border-top:0':''}">
+      <div><span class="lbl">${L('JARAK','Jarak')}</span><b>50,8 km</b></div>
+      <div><span class="lbl">${L('NAIK','Total naik')}</span><b>540 m</b></div>
+      <div><span class="lbl">${L('PERKIRAAN','Perkiraan')}</span><b>2j 10m</b></div>
+      <div><span class="lbl">${L('TANJAKAN MAKS','Tanjakan maks')}</span><b>9%</b></div>
+    </div></div>
+    <div class="card"><div class="pad"><span class="lbl">${L('KETINGGIAN','Ketinggian')}</span><div style="margin-top:8px">${elev(m)}</div></div></div>
+    <div style="display:flex;gap:10px">
+      <span class="btn" style="flex:1;${T?'background:#EFE9DC;color:#141414;border:2px solid #141414':'background:#fff;color:#1B1B1A;border:1px solid #DAD7D0'}">${L('EDIT','Edit')}</span>
+      <span class="btn" style="flex:1;${T?'background:#EFE9DC;color:#141414;border:2px solid #141414':'background:#fff;color:#1B1B1A;border:1px solid #DAD7D0'}">${L('SIMPAN','Simpan')}</span>
+    </div>
+    <span class="btn ${T?'sig':'sig'}">${L('MULAI REKAM DENGAN RUTE INI','Mulai rekam dengan rute ini')}</span>
+  </div></div>`;
+}
+const MAPVARS = {
+  c: '--mapbg:#ECEBE6;--street:#fff;--street2:#F8F7F4;--park:#DDE8D5;--water:#CFE0EA;--route:#FF4F00;--ghost:rgba(27,27,26,.25);--pin:#1B1B1A;--pinring:#fff',
+  t: '--mapbg:#E3DBC9;--street:#EFE9DC;--street2:#CFC6B2;--park:#CBD3AE;--water:#B9CBD0;--route:#FF4F00;--ghost:rgba(20,20,20,.35);--pin:#141414;--pinring:#FF4F00'};
+function renderB(m) {
+  [['pb1',setup],['pb2',options],['pb3',routeDetail]].forEach(([id,fn]) => {
+    const el = document.getElementById(id);
+    el.className = 'phone ' + m;
+    el.setAttribute('style', MAPVARS[m]);
+    el.innerHTML = fn(m);
+  });
+}
+document.querySelectorAll('#tabsB button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#tabsB button').forEach(x => x.classList.toggle('on', x===b));
+  renderB(b.dataset.m);
+});
+document.getElementById('pa1').setAttribute('style', MAPVARS.t);
+document.getElementById('pa2').setAttribute('style', MAPVARS.c);
+renderB('c');
+</script>
+</body>
+</html>

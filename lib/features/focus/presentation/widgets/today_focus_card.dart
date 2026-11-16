@@ -30,8 +30,8 @@ class TodayFocusCard extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: TodayCard(
-        title: 'FOKUS',
-        trailing: 'ATUR →',
+        title: FN.caps('Fokus'),
+        trailing: FN.caps('Atur →'),
         onTap: () => _open(context),
         child: limits.isEmpty
             ? const _Empty()
@@ -40,9 +40,11 @@ class TodayFocusCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (perms != null && !perms.ready) ...[
+                    if (perms != null && perms.needsSetup) ...[
                       Text(
-                        'Izin Akses Penggunaan dibutuhkan',
+                        perms.ready
+                            ? 'Izin "Tampil di atas aplikasi lain" dibutuhkan'
+                            : 'Izin Akses Penggunaan dibutuhkan',
                         style: TextStyle(
                           fontFamily: FN.sans,
                           fontSize: 13,
@@ -88,7 +90,7 @@ class _Empty extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Text(
-          'BATASI APLIKASI',
+          FN.caps('Batasi aplikasi'),
           style: FN
               .label(size: 11, color: FN.ink)
               .copyWith(fontWeight: FontWeight.w700),

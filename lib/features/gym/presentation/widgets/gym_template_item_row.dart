@@ -28,9 +28,8 @@ class GymTemplateItemRow extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.fromLTRB(10, 8, 4, 8),
       decoration: BoxDecoration(
-        color: FN.paper,
-        border: Border.all(color: FN.ink, width: 1.5),
-      ),
+        color: FN.cardFill,
+        border: FN.frame(color: FN.ink, width: 1.5), borderRadius: FN.boxRadius,),
       child: Row(
         children: [
           ReorderableDragStartListener(
@@ -56,9 +55,9 @@ class GymTemplateItemRow extends StatelessWidget {
                 const SizedBox(height: 6),
                 Row(
                   children: [
-                    _stepper('SET', sets, 1, 20, onSets),
+                    _stepper(FN.caps('Set'), sets, 1, 20, onSets),
                     const SizedBox(width: 12),
-                    _stepper('REPS', reps, 1, 100, onReps),
+                    _stepper(FN.caps('Reps'), reps, 1, 100, onReps),
                   ],
                 ),
               ],
@@ -81,7 +80,7 @@ class GymTemplateItemRow extends StatelessWidget {
         width: 28,
         height: 28,
         alignment: Alignment.center,
-        decoration: BoxDecoration(border: Border.all(color: FN.ink)),
+        decoration: BoxDecoration(border: FN.frame(color: FN.ink, width: 1), borderRadius: FN.boxRadius,),
         child: Icon(i, size: 16, color: FN.ink),
       ),
     );

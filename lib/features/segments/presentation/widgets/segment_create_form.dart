@@ -56,7 +56,11 @@ class _SegmentCreateFormState extends ConsumerState<SegmentCreateForm> {
     try {
       final (id, found) = await ref
           .read(segmentRepositoryProvider)
-          .create(name: _name.text, polyline: line, sportType: widget.sportType);
+          .create(
+            name: _name.text,
+            polyline: line,
+            sportType: widget.sportType,
+          );
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
@@ -83,7 +87,11 @@ class _SegmentCreateFormState extends ConsumerState<SegmentCreateForm> {
         padding: const EdgeInsets.all(16),
         child: Text(
           'Rute ini terlalu pendek untuk dijadikan segmen.',
-          style: TextStyle(fontFamily: FN.sans, fontSize: 14, color: FN.inkMuted),
+          style: TextStyle(
+            fontFamily: FN.sans,
+            fontSize: 14,
+            color: FN.inkMuted,
+          ),
         ),
       );
     }
@@ -126,7 +134,7 @@ class _SegmentCreateFormState extends ConsumerState<SegmentCreateForm> {
           const SizedBox(height: 12),
         ],
         InkButton(
-          label: 'SIMPAN SEGMEN',
+          label: FN.caps('SIMPAN SEGMEN'),
           icon: Icons.check,
           style: InkButtonStyle.primary,
           expand: true,

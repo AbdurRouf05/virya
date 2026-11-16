@@ -71,6 +71,10 @@ class _TaskHostState extends ConsumerState<TaskHost>
       final open = next.valueOrNull;
       if (open != null) _bridge.pushSnapshot(taskWidgetSnapshot(open));
     });
+    ref.listen<AsyncValue<List<TaskItem>>>(routinesProvider, (_, next) {
+      final all = next.valueOrNull;
+      if (all != null) _bridge.pushRoutines(routineSnapshot(all));
+    });
     return widget.child;
   }
 }

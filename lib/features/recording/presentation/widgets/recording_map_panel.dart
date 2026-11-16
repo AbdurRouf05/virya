@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/app/theme/field_notes.dart';
 import 'package:virya/core/constants/enums.dart';
 import 'package:virya/features/maps/widgets/route_map_view.dart';
 import 'package:virya/features/recording/domain/recording_state.dart';
+import 'package:virya/features/routes/data/route_providers.dart';
 
-/// Live route map with surface chip and photo counter overlays.
-class RecordingMapPanel extends StatelessWidget {
+/// Live route map with surface chip and photo counter overlays. A planned
+/// route being followed is drawn underneath the live track.
+class RecordingMapPanel extends ConsumerWidget {
   final RecordingState state;
   const RecordingMapPanel({super.key, required this.state});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final plan = ref.watch(activeRouteProvider)?.path.points;
     final snap = state.snapshot;
     final pos = snap.hasFix ? (snap.latitude, snap.longitude) : null;
     return Container(
@@ -28,6 +32,7 @@ class RecordingMapPanel extends StatelessWidget {
             child: RepaintBoundary(
               child: RouteMapView(
                 points: state.route,
+                plan: plan,
                 live: true,
                 currentPosition: pos,
                 bearing: snap.bearingDegrees,

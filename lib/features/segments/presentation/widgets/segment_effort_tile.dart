@@ -60,7 +60,10 @@ class SegmentEffortTile extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             if (isBest) ...[
-              Text('REKOR', style: FN.label(size: 10, color: FN.signal)),
+              Text(
+                FN.caps('REKOR'),
+                style: FN.label(size: 10, color: FN.signal),
+              ),
               const SizedBox(width: 8),
             ],
             Text(

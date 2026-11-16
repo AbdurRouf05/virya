@@ -86,6 +86,33 @@ void main() {
     );
   });
 
+  test('FocusPermissions.needsSetup sampai ada penjaga (overlay atau Aksesibilitas)', () {
+    expect(
+      const FocusPermissions(usageAccess: true, accessibility: false).needsSetup,
+      isTrue,
+    );
+    expect(
+      const FocusPermissions(
+        usageAccess: true,
+        accessibility: false,
+        overlay: true,
+      ).needsSetup,
+      isFalse,
+    );
+    expect(
+      const FocusPermissions(usageAccess: true, accessibility: true).needsSetup,
+      isFalse,
+    );
+    expect(
+      const FocusPermissions(
+        usageAccess: false,
+        accessibility: false,
+        overlay: true,
+      ).needsSetup,
+      isTrue,
+    );
+  });
+
   test('FocusDayEntry.isOver mulai tepat di batas', () {
     FocusDayEntry e(int m) => FocusDayEntry(
       day: '2026-11-08',

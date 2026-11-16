@@ -18,12 +18,14 @@ class SegmentCreateScreen extends ConsumerWidget {
         child: bundle.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, _) => const Center(child: Text('Gagal membaca rute.')),
-          data: (b) => b == null
-              ? const Center(child: Text('Aktivitas sudah dihapus.'))
-              : SegmentCreateForm(
-                  samples: b.samples,
-                  sportType: b.activity.sportType,
-                ),
+          data:
+              (b) =>
+                  b == null
+                      ? const Center(child: Text('Aktivitas sudah dihapus.'))
+                      : SegmentCreateForm(
+                        samples: b.samples,
+                        sportType: b.activity.sportType,
+                      ),
         ),
       ),
     );

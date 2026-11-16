@@ -49,10 +49,8 @@ class _RecordButtonState extends State<RecordButton> {
               _Circle(diameter: widget.diameter),
               const SizedBox(height: 4),
               Text(
-                'REKAM',
-                style: FN
-                    .label(size: 9.5, color: FN.ink)
-                    .copyWith(fontWeight: FontWeight.w700),
+                FN.caps('Rekam'),
+                style: FN.labelStrong(size: 9.5, color: FN.ink),
               ),
             ],
           ),
@@ -75,7 +73,7 @@ class _Circle extends StatelessWidget {
       decoration: BoxDecoration(
         color: FN.signal,
         shape: BoxShape.circle,
-        border: Border.all(color: FN.ink, width: 2),
+        border: FN.isClean ? null : FN.frame(color: FN.ink, width: 2),
       ),
       child: Container(
         width: 18,

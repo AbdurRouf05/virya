@@ -5,17 +5,18 @@ import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/tasks/data/task_repository.dart';
 import 'package:virya/features/tasks/domain/task_models.dart';
 import 'package:virya/features/tasks/presentation/widgets/task_due_chips.dart';
+import 'package:virya/features/tasks/presentation/widgets/task_remind_row.dart';
 
 Future<void> showTaskEditor(BuildContext context, TaskItem task) =>
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: FN.paper,
-      shape: const RoundedRectangleBorder(),
+      backgroundColor: FN.cardFill,
+      shape: FN.isClean ? null : const RoundedRectangleBorder(),
       isScrollControlled: true,
       builder: (_) => TaskEditSheet(task: task),
     );
 
-/// Ubah judul, catatan, tanggal, penting, pin; atau hapus tugas.
+/// Ubah judul, catatan, tanggal atau rutinitas, penting, pin; atau hapus.
 class TaskEditSheet extends ConsumerStatefulWidget {
   final TaskItem task;
   const TaskEditSheet({super.key, required this.task});
@@ -30,6 +31,8 @@ class _State extends ConsumerState<TaskEditSheet> {
   late DateTime? _due = widget.task.due;
   late bool _important = widget.task.important;
   late bool _pinned = widget.task.pinned;
+  late bool _repeat = widget.task.repeatDaily;
+  late int? _remind = widget.task.remindMinute;
 
   @override
   void dispose() {
@@ -50,6 +53,8 @@ class _State extends ConsumerState<TaskEditSheet> {
             due: _due,
             important: _important,
             pinned: _pinned,
+            repeatDaily: _repeat,
+            remindMinute: _remind,
             doneAt: t.doneAt,
             createdAt: t.createdAt,
           ),
@@ -106,15 +111,24 @@ class _State extends ConsumerState<TaskEditSheet> {
                 value: _due,
                 today: today,
                 onChanged: (d) => setState(() => _due = d),
+                repeat: _repeat,
+                onRepeat: (v) => setState(() => _repeat = v),
               ),
+              if (_repeat) ...[
+                const SizedBox(height: 10),
+                TaskRemindRow(
+                  minute: _remind,
+                  onChanged: (m) => setState(() => _remind = m),
+                ),
+              ],
               const SizedBox(height: 8),
               _toggle(
-                'PENTING',
+                FN.caps('Penting'),
                 _important,
                 (v) => setState(() => _important = v),
               ),
               _toggle(
-                'PIN KE HARI INI & WIDGET',
+                FN.caps('Pin ke hari ini & widget'),
                 _pinned,
                 (v) => setState(() => _pinned = v),
               ),

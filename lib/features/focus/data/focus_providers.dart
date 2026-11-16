@@ -63,3 +63,8 @@ final focusInstalledAppsProvider =
     FutureProvider.autoDispose<List<FocusInstalledApp>>(
       (ref) => ref.watch(focusBridgeProvider).installedApps(),
     );
+
+/// Aplikasi berpenghalang rutinitas; disimpan di sisi Android.
+final focusGateAppsProvider = FutureProvider<List<FocusInstalledApp>>(
+  (ref) => ref.watch(focusBridgeProvider).gateApps(),
+);

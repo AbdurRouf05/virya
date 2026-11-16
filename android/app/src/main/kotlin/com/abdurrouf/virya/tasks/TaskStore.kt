@@ -87,6 +87,17 @@ object TaskStore {
         )
     }
 
+    /** Id yang dicentang dari luar aplikasi hari ini dan belum diterapkan Dart. */
+    @Synchronized
+    fun doneToday(context: Context): Set<String> {
+        val now = today()
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        return objects(parseArray(prefs(context).getString(KEY_INBOX, null)))
+            .filter { it.optString("type") == "done" && format.format(Date(it.optLong("at"))) == now }
+            .map { it.optString("taskId") }
+            .toSet()
+    }
+
     @Synchronized
     fun peekInbox(context: Context): String =
         parseArray(prefs(context).getString(KEY_INBOX, null)).toString()
@@ -106,7 +117,10 @@ object TaskStore {
         prefs(context).edit().putString(KEY_SNAPSHOT, json).commit()
     }
 
-    /** Tugas untuk hari ini: snapshot − selesai tertunda + tangkapan tertunda. */
+    /**
+     * Tugas untuk hari ini: rutinitas yang belum dicentang, lalu snapshot −
+     * selesai tertunda + tangkapan tertunda.
+     */
     @Synchronized
     fun visible(context: Context): List<WidgetTask> {
         val p = prefs(context)
@@ -117,12 +131,15 @@ object TaskStore {
             .map { it.optString("taskId") }
             .toSet()
         val result = LinkedHashMap<String, WidgetTask>()
+        for (r in RoutineStore.pending(context)) {
+            result[r.id] = WidgetTask(r.id, r.title, overdue = false, important = false, pinned = false)
+        }
 
         for (o in objects(parseArray(p.getString(KEY_SNAPSHOT, null)))) {
             val id = o.optString("id")
             val day = dayOf(o)
             val pinned = o.optBoolean("pinned")
-            if (id.isEmpty() || id in doneIds) continue
+            if (id.isEmpty() || id in doneIds || id in result) continue
             if (!pinned && (day == null || day > now)) continue
             result[id] = WidgetTask(
                 id = id,

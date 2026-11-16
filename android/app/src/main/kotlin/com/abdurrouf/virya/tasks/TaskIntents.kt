@@ -9,6 +9,8 @@ object TaskIntents {
     const val ACTION_QUICK_TASK = "com.abdurrouf.virya.QUICK_TASK"
     const val ACTION_CAPTURE = "com.abdurrouf.virya.tasks.CAPTURE"
     const val ACTION_DONE = "com.abdurrouf.virya.tasks.DONE"
+    const val ACTION_ROUTINE_ALARM = "com.abdurrouf.virya.tasks.ROUTINE_ALARM"
+    const val ACTION_ROUTINE_SNOOZE = "com.abdurrouf.virya.tasks.ROUTINE_SNOOZE"
     const val EXTRA_TASK_ID = "task_id"
     const val KEY_REPLY = "task_title"
 

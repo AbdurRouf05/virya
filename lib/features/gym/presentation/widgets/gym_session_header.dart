@@ -35,8 +35,7 @@ class GymSessionHeader extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: FN.ink, width: 2),
-          ),
+            border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
           child: IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -51,15 +50,10 @@ class GymSessionHeader extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            name.toUpperCase(),
+                            FN.caps(name),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontFamily: FN.display,
-                              fontSize: 34,
-                              height: 1.0,
-                              color: FN.ink,
-                            ),
+                            style: FN.title(34, color: FN.ink, height: 1.0),
                           ),
                           const SizedBox(height: 6),
                           Text(
@@ -80,7 +74,7 @@ class GymSessionHeader extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('DURASI', style: FN.label(size: 9, color: FN.onInk(FN.acid))),
+                      Text(FN.caps('Durasi'), style: FN.label(size: 9, color: FN.onInk(FN.acid))),
                       Text(hms, style: FN.bigNumber(34, color: FN.paper)),
                     ],
                   ),
@@ -92,18 +86,17 @@ class GymSessionHeader extends StatelessWidget {
         const SizedBox(height: 10),
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: FN.ink, width: 2),
-          ),
+            border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
           child: IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _Cell('VOLUME', '${Fmt.number(summary.volumeKg)} kg'),
+                _Cell(FN.caps('Volume'), '${Fmt.number(summary.volumeKg)} kg'),
                 Container(width: 2, color: FN.ink),
-                _Cell('SET', '${summary.doneSets} / ${summary.totalSets}'),
+                _Cell(FN.caps('Set'), '${summary.doneSets} / ${summary.totalSets}'),
                 Container(width: 2, color: FN.ink),
                 _Cell(
-                  'GERAKAN',
+                  FN.caps('Gerakan'),
                   '${summary.doneExercises} / ${summary.totalExercises}',
                 ),
               ],
@@ -136,7 +129,7 @@ class _Cell extends StatelessWidget {
               value,
               style: FN
                   .label(size: 16, color: FN.ink)
-                  .copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.5),
+                  .copyWith(fontWeight: FontWeight.w700, letterSpacing: FN.track(0.5)),
             ),
           ),
         ],

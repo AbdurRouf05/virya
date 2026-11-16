@@ -11,21 +11,15 @@ class TodayHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = now.toLocal();
-    final day = Fmt.daysLong[d.weekday - 1].toUpperCase();
-    final big = TextStyle(
-      fontFamily: FN.display,
-      fontSize: 46,
-      height: 1.0,
-      color: FN.ink,
-      letterSpacing: 0.3,
-    );
+    final day = FN.caps(Fmt.daysLong[d.weekday - 1]);
+    final big = FN.title(46, color: FN.ink, height: 1.0).copyWith(letterSpacing: FN.track(0.3));
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'SELAMAT ${greetingPart(d)} · MINGGU KE-${isoWeekNumber(d)}',
+            FN.caps('Selamat ${greetingPart(d)} · minggu ke-${isoWeekNumber(d)}'),
             style: FN.label(size: 11, color: FN.inkSoft),
           ),
           const SizedBox(height: 4),
@@ -37,7 +31,7 @@ class TodayHeader extends StatelessWidget {
                 style: big,
                 children: [
                   TextSpan(
-                    text: '$day, ${d.day} ${Fmt.monthsShort[d.month - 1]} ',
+                    text: '$day, ${d.day} ${FN.caps(Fmt.monthsShort[d.month - 1])} ',
                   ),
                   TextSpan(
                     text: '${d.year}',

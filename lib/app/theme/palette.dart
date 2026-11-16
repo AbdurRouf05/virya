@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:virya/app/theme/gaya.dart';
 import 'package:virya/core/constants/enums.dart';
 import 'package:virya/core/constants/sport_category.dart';
 
@@ -60,6 +61,12 @@ class Palette {
   final String mono;
   final String sans;
 
+  /// Gaya bentuk & huruf yang dipakai bersama warna ini.
+  final UiGaya gaya;
+
+  /// Isi kartu. `null` = sama dengan [paper] (gaya Tegas).
+  final Color? card;
+
   const Palette({
     required this.id,
     required this.name,
@@ -89,5 +96,7 @@ class Palette {
     required this.display,
     required this.mono,
     required this.sans,
+    this.gaya = UiGaya.tegas,
+    this.card,
   });
 }

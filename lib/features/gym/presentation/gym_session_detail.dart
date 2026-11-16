@@ -104,12 +104,8 @@ class GymSessionDetail extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            name.toUpperCase(),
-            style: TextStyle(
-              fontFamily: FN.display,
-              fontSize: 20,
-              color: FN.ink,
-            ),
+            FN.caps(name),
+            style: FN.title(20, color: FN.ink),
           ),
           const SizedBox(height: 4),
           InkRule(color: FN.ink),

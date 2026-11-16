@@ -39,6 +39,8 @@ class _FakeBridge implements TaskBridge {
   @override
   Future<void> pushSnapshot(List<Map<String, Object?>> tasks) async {}
   @override
+  Future<void> pushRoutines(List<Map<String, Object?>> routines) async {}
+  @override
   Future<String?> takeLaunchAction() async => null;
   @override
   Future<bool> isQuickCaptureOn() async => false;

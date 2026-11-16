@@ -20,33 +20,34 @@ class SegmentLiveHud extends ConsumerWidget {
         final time = Fmt.duration(s.finalTimeS ?? s.elapsedS);
         final isPr = s.isNewPr == true;
         return (
-          kicker: isPr ? 'REKOR BARU' : 'SEGMEN SELESAI',
+          kicker: isPr ? FN.caps('REKOR BARU') : FN.caps('SEGMEN SELESAI'),
           value: time,
-          caption: delta == null
-              ? 'GHOST BARU'
-              : '${ghostDeltaLabel(delta)} DARI REKOR',
+          caption:
+              delta == null
+                  ? FN.caps('GHOST BARU')
+                  : '${ghostDeltaLabel(delta)} DARI REKOR',
           color: isPr ? FN.acid : plain,
         );
       case LiveSegmentPhase.abandoned:
         return (
-          kicker: 'KELUAR DARI SEGMEN',
+          kicker: FN.caps('KELUAR DARI SEGMEN'),
           value: Fmt.duration(s.elapsedS),
-          caption: 'TIDAK DIHITUNG',
+          caption: FN.caps('TIDAK DIHITUNG'),
           color: FN.warn,
         );
       case LiveSegmentPhase.active:
         final time = Fmt.duration(s.elapsedS);
         if (delta == null) {
           return (
-            kicker: 'SEGMEN AKTIF',
+            kicker: FN.caps('SEGMEN AKTIF'),
             value: time,
-            caption: 'UPAYA PERTAMA',
+            caption: FN.caps('UPAYA PERTAMA'),
             color: plain,
           );
         }
         final ahead = delta.round() <= 0;
         return (
-          kicker: 'SEGMEN AKTIF',
+          kicker: FN.caps('SEGMEN AKTIF'),
           value: ghostDeltaLabel(delta),
           caption: 'GHOST · $time',
           color: ahead ? FN.acid : FN.warn,
@@ -54,9 +55,9 @@ class SegmentLiveHud extends ConsumerWidget {
       case LiveSegmentPhase.approaching:
       case LiveSegmentPhase.idle:
         return (
-          kicker: 'SEGMEN MENDEKAT',
+          kicker: FN.caps('SEGMEN MENDEKAT'),
           value: '${(s.distanceToStartM ?? 0).round()} M',
-          caption: 'KE TITIK MULAI',
+          caption: FN.caps('KE TITIK MULAI'),
           color: plain,
         );
     }
@@ -110,10 +111,7 @@ class SegmentLiveHud extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        d.value,
-                        style: FN.label(size: 20, color: d.color),
-                      ),
+                      Text(d.value, style: FN.label(size: 20, color: d.color)),
                       Text(
                         d.caption,
                         style: FN.label(size: 9, color: FN.onNightMuted),

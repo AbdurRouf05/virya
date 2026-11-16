@@ -31,9 +31,8 @@ class TodayLastCard extends StatelessWidget {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            color: FN.paper,
-            border: Border.all(color: FN.ink, width: 2),
-          ),
+            color: FN.cardFill,
+            border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
           child: IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -46,7 +45,7 @@ class TodayLastCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'TERAKHIR · $when',
+                          FN.caps('Terakhir · $when'),
                           style: FN.label(size: 10.5, color: FN.inkSoft),
                         ),
                         const SizedBox(height: 4),

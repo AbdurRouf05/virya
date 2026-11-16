@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.abdurrouf.virya.focus.FocusGuardService
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -28,6 +29,14 @@ class TaskChannel(
             "pushSnapshot" -> {
                 TaskStore.setSnapshot(appContext, call.arguments as? String ?: "[]")
                 refreshTaskSurfaces(appContext)
+                result.success(null)
+            }
+            "pushRoutines" -> {
+                RoutineStore.setRoutines(appContext, call.arguments as? String ?: "[]")
+                refreshTaskSurfaces(appContext)
+                RoutineReminder.clearStale(appContext)
+                RoutineReminder.reschedule(appContext)
+                FocusGuardService.sync(appContext)
                 result.success(null)
             }
             "peekInbox" -> result.success(TaskStore.peekInbox(appContext))

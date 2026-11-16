@@ -4,6 +4,7 @@ import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/focus/data/focus_providers.dart';
 import 'package:virya/features/focus/domain/focus_models.dart';
 import 'package:virya/features/focus/presentation/widgets/focus_app_picker_sheet.dart';
+import 'package:virya/features/focus/presentation/widgets/focus_gate_section.dart';
 import 'package:virya/features/focus/presentation/widgets/focus_limit_tile.dart';
 import 'package:virya/features/focus/presentation/widgets/focus_minutes_sheet.dart';
 import 'package:virya/features/focus/presentation/widgets/focus_permission_panel.dart';
@@ -102,9 +103,9 @@ class FocusScreen extends ConsumerWidget {
                 ],
               ),
               const Masthead(kicker: 'Batas waktu harian', title: 'Fokus'),
-              if (perms != null && !perms.ready)
+              if (perms != null && perms.needsSetup)
                 FocusPermissionPanel(permissions: perms),
-              if (perms != null && perms.ready)
+              if (perms != null && !perms.needsSetup)
                 FocusModeBanner(permissions: perms),
               SectionHeader(
                 title: 'Aplikasi',
@@ -142,10 +143,17 @@ class FocusScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  'Saat waktu habis, kamu bisa menambah 5 menit satu kali per hari.',
+                  'Cara kerjanya: saat sisa 1 menit ada notifikasi. Saat jatah '
+                  'habis, layar "Waktu habis" muncul di atas aplikasinya, '
+                  'termasuk kalau aplikasi baru dibuka. Kamu tetap bisa membuka '
+                  '5 menit lagi setelah menunggu 10 detik. Tiap kali dibuka lagi '
+                  'di hari yang sama, jedanya makin lama: 20, 40, lalu 60 detik. '
+                  'Jatah kembali penuh setiap tengah malam.',
                   style: body,
                 ),
               ),
+              const SizedBox(height: 8),
+              const FocusGateSection(),
             ],
           ),
         ),

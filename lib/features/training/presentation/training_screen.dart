@@ -20,7 +20,7 @@ class TrainingScreen extends ConsumerStatefulWidget {
 }
 
 class _TrainingScreenState extends ConsumerState<TrainingScreen> {
-  static const _labels = ['JURNAL', 'STATISTIK', 'GYM'];
+  static const _labels = ['Jurnal', 'Statistik', 'Gym'];
   int _index = 0;
   final _built = <int>{0};
 

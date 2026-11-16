@@ -26,8 +26,7 @@ class BodyPhotoFrame extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: FN.paperDeep,
-          border: Border.all(color: FN.ink, width: 1.5),
-        ),
+          border: FN.frame(color: FN.ink, width: 1.5), borderRadius: FN.boxRadius,),
         child: s == null
             ? empty
             : Image.file(

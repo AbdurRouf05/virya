@@ -16,12 +16,12 @@ class CalendarLegend extends StatelessWidget {
       children: [
         for (final c in SportCategory.values)
           _Item(kind: CellKind.active, parts: [c], text: c.label),
-        const _Item(
+        _Item(
           kind: CellKind.active,
           parts: [SportCategory.cycling, SportCategory.strength],
-          text: 'CAMPUR',
+          text: FN.caps('Campur'),
         ),
-        const _Item(kind: CellKind.rest, text: 'ISTIRAHAT'),
+        _Item(kind: CellKind.rest, text: FN.caps('Istirahat')),
       ],
     );
   }

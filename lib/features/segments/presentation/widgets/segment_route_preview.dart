@@ -88,12 +88,13 @@ class _PreviewPainter extends CustomPainter {
       return p..lineTo(last.dx, last.dy);
     }
 
-    Paint stroke(Color c, double width) => Paint()
-      ..color = c
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = width
-      ..strokeJoin = StrokeJoin.round
-      ..strokeCap = StrokeCap.round;
+    Paint stroke(Color c, double width) =>
+        Paint()
+          ..color = c
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = width
+          ..strokeJoin = StrokeJoin.round
+          ..strokeCap = StrokeCap.round;
 
     canvas.drawPath(line(0, points.length - 1), stroke(route, 2));
     if (end <= start) return;

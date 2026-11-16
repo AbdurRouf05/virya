@@ -58,7 +58,8 @@ class _FlyoverScreenState extends ConsumerState<FlyoverScreen>
   @override
   void initState() {
     super.initState();
-    _pb = FlyoverPlayback(this, baseDuration: _baseDuration)..addListener(_onPlayback);
+    _pb = FlyoverPlayback(this, baseDuration: _baseDuration)
+      ..addListener(_onPlayback);
   }
 
   void _onPlayback() {
@@ -78,13 +79,16 @@ class _FlyoverScreenState extends ConsumerState<FlyoverScreen>
     _planFuture = _planInIsolate(b.samples)
         .timeout(const Duration(seconds: 20))
         .then((plan) {
-      debugPrint('[flyover-perf] plan ${b.samples.length} titik: ${sw.elapsedMilliseconds} ms');
-      if (mounted) setState(() => _plan = plan);
-      return plan;
-    }).catchError((Object e) {
-      if (mounted) setState(() => _planError = '$e');
-      throw e;
-    });
+          debugPrint(
+            '[flyover-perf] plan ${b.samples.length} titik: ${sw.elapsedMilliseconds} ms',
+          );
+          if (mounted) setState(() => _plan = plan);
+          return plan;
+        })
+        .catchError((Object e) {
+          if (mounted) setState(() => _planError = '$e');
+          throw e;
+        });
     _planFuture!.ignore(); // cegah "unhandled exception"
   }
 
@@ -186,10 +190,11 @@ class _FlyoverScreenState extends ConsumerState<FlyoverScreen>
     } else if (_planError != null) {
       body = FlyoverPlanError(
         error: _planError!,
-        onRetry: () => setState(() {
-          _planError = null;
-          _planFuture = null;
-        }),
+        onRetry:
+            () => setState(() {
+              _planError = null;
+              _planFuture = null;
+            }),
       );
     } else if (plan == null) {
       body = const FlyoverMessage('MENYIAPKAN JALUR KAMERA…', loading: true);
@@ -204,16 +209,18 @@ class _FlyoverScreenState extends ConsumerState<FlyoverScreen>
   Widget _player(ActivityBundle bundle, FlyoverPlan plan) {
     final k = plan.at(_pb.u);
     final map = _pb.map;
-    final mapView = map != null
-        ? ViryaMapWebView(controller: map, interactive: false)
-        : RoutePreview(
-            points: plan.route,
-            progress: k.progress,
-            currentPosition: (k.lat, k.lon),
-            caption: mapWebViewSupported
-                ? null
-                : 'PRATINJAU 2D · peta 3D butuh Android',
-          );
+    final mapView =
+        map != null
+            ? ViryaMapWebView(controller: map, interactive: false)
+            : RoutePreview(
+              points: plan.route,
+              progress: k.progress,
+              currentPosition: (k.lat, k.lon),
+              caption:
+                  mapWebViewSupported
+                      ? null
+                      : 'PRATINJAU 2D · peta 3D butuh Android',
+            );
     return Stack(
       children: [
         Positioned.fill(child: mapView),
@@ -269,22 +276,22 @@ class _FlyoverScreenState extends ConsumerState<FlyoverScreen>
   }
 
   Widget _controls(ActivityBundle bundle) => FlyoverControls(
-        u: _pb.u,
-        playing: _pb.playing,
-        speed: _pb.speed,
-        speeds: _speeds,
-        exportLength: _exportLength,
-        exportHd: _exportHd,
-        videoW: _videoW,
-        videoH: _videoH,
-        disabled: _exporting,
-        onSeek: _pb.seek,
-        onTogglePlay: _togglePlay,
-        onSpeed: _pb.setSpeed,
-        onLength: (l) => setState(() => _exportLength = l),
-        onHd: (hd) => setState(() => _exportHd = hd),
-        onExport: () => _export(bundle),
-      );
+    u: _pb.u,
+    playing: _pb.playing,
+    speed: _pb.speed,
+    speeds: _speeds,
+    exportLength: _exportLength,
+    exportHd: _exportHd,
+    videoW: _videoW,
+    videoH: _videoH,
+    disabled: _exporting,
+    onSeek: _pb.seek,
+    onTogglePlay: _togglePlay,
+    onSpeed: _pb.setSpeed,
+    onLength: (l) => setState(() => _exportLength = l),
+    onHd: (hd) => setState(() => _exportHd = hd),
+    onExport: () => _export(bundle),
+  );
 }
 
 /// Top-level so the isolate closure captures only [samples] — a closure

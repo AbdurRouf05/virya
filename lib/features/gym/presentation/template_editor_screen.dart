@@ -80,7 +80,7 @@ class _State extends ConsumerState<TemplateEditorScreen> {
       context,
       title: 'Hapus template?',
       body: '"${t.name}" akan dihapus. Sesi yang sudah tercatat tidak berubah.',
-      action: 'HAPUS',
+      action: FN.caps('Hapus'),
       danger: true,
     );
     if (!ok) return;
@@ -94,7 +94,7 @@ class _State extends ConsumerState<TemplateEditorScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.template == null ? 'TEMPLATE BARU' : 'UBAH TEMPLATE',
+          widget.template == null ? FN.caps('Template baru') : FN.caps('Ubah template'),
         ),
         actions: [
           if (widget.template != null)
@@ -181,7 +181,7 @@ class _State extends ConsumerState<TemplateEditorScreen> {
           decoration: const InputDecoration(labelText: 'CATATAN (opsional)'),
         ),
         const SizedBox(height: 18),
-        Text('GERAKAN · ${_items.length}', style: FN.label(size: 10)),
+        Text(FN.caps('Gerakan · ${_items.length}'), style: FN.label(size: 10)),
       ],
     ),
   );

@@ -24,6 +24,8 @@ import 'package:virya/features/maps/widgets/route_map_view.dart';
 import 'package:virya/features/recording/presentation/recording_screen.dart';
 import 'package:virya/features/recording/presentation/recovery_prompt.dart';
 import 'package:virya/features/sensors/presentation/heart_rate_sensor_screen.dart';
+import 'package:virya/features/routes/presentation/saved_routes_screen.dart';
+import 'package:virya/features/routes/presentation/widgets/route_recording_hud.dart';
 import 'package:virya/features/segments/presentation/segments_screen.dart';
 import 'package:virya/features/segments/presentation/widgets/activity_segments_section.dart';
 import 'package:virya/features/segments/presentation/widgets/segment_live_hud.dart';
@@ -122,6 +124,10 @@ class LiveIntegrations extends Integrations {
       ActivitySegmentsSection(activityId: activityId);
   @override
   Widget recordingSegmentHud() => const SegmentLiveHud();
+  @override
+  Widget routesHome() => const SavedRoutesScreen();
+  @override
+  Widget recordingRouteHud() => const RouteRecordingHud();
 
   @override
   Future<List<String>> importFile(AppDatabase db, String path) =>

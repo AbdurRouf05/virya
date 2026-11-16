@@ -22,19 +22,22 @@ class TaskTile extends StatelessWidget {
   String? _dueLabel() {
     final due = task.due;
     if (due == null || task.isDone) return null;
-    if (isTaskOverdue(task, today)) return 'TERLAMBAT';
-    if (due == today) return 'HARI INI';
-    if (due == DateTime(today.year, today.month, today.day + 1)) return 'BESOK';
-    return '${due.day} ${Fmt.monthsShort[due.month - 1]}'.toUpperCase();
+    if (isTaskOverdue(task, today)) return FN.caps('Terlambat');
+    if (due == today) return FN.caps('Hari ini');
+    if (due == DateTime(today.year, today.month, today.day + 1)) return FN.caps('Besok');
+    return FN.caps('${due.day} ${Fmt.monthsShort[due.month - 1]}');
   }
 
   @override
   Widget build(BuildContext context) {
     final overdue = isTaskOverdue(task, today);
     final dueLabel = _dueLabel();
+    final remind = task.remindMinute;
     final meta = [
+      if (task.repeatDaily)
+        remind == null ? FN.caps('Tiap hari') : FN.caps('Tiap hari ${formatRemindMinute(remind)}'),
       if (dueLabel != null) dueLabel,
-      if (task.important) 'PENTING',
+      if (task.important) FN.caps('Penting'),
     ].join(' · ');
     return InkWell(
       onTap: onTap,
@@ -117,11 +120,25 @@ class _CheckBox extends StatelessWidget {
           child: Container(
             width: 24,
             height: 24,
-            decoration: BoxDecoration(
-              color: done ? FN.ink : Colors.transparent,
-              border: Border.all(color: FN.ink, width: 2),
-            ),
-            child: done ? Icon(Icons.check, size: 18, color: FN.paper) : null,
+            decoration: FN.isClean
+                ? BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: done ? FN.signal : Colors.transparent,
+                    border: done
+                        ? null
+                        : Border.all(color: FN.inkMuted, width: 1.5),
+                  )
+                : BoxDecoration(
+                    color: done ? FN.ink : Colors.transparent,
+                    border: Border.all(color: FN.ink, width: 2),
+                  ),
+            child: done
+                ? Icon(
+                    Icons.check,
+                    size: FN.isClean ? 15 : 18,
+                    color: FN.isClean ? FN.onNight : FN.paper,
+                  )
+                : null,
           ),
         ),
       ),

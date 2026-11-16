@@ -11,26 +11,42 @@ class MapPacksActiveCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget row(String k, String? v, String empty) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(children: [
-            SizedBox(width: 92, child: Text(k, style: FN.label())),
-            Expanded(
-              child: Text(v ?? empty,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontFamily: FN.mono,
-                      fontSize: 13,
-                      color: v == null ? FN.inkMuted : FN.ink,
-                      fontWeight: FontWeight.w600)),
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          SizedBox(width: 92, child: Text(k, style: FN.label())),
+          Expanded(
+            child: Text(
+              v ?? empty,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontFamily: FN.mono,
+                fontSize: 13,
+                color: v == null ? FN.inkMuted : FN.ink,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ]),
-        );
+          ),
+        ],
+      ),
+    );
     return MapPacksBox(
       color: FN.paperDeep,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        row('BASEMAP', state.activeBasemap, '— otomatis / tidak ada'),
-        row('TERRAIN', state.activeDem, '— otomatis / tidak ada (3D datar)'),
-      ]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          row(
+            FN.caps('BASEMAP'),
+            state.activeBasemap,
+            '— otomatis / tidak ada',
+          ),
+          row(
+            FN.caps('TERRAIN'),
+            state.activeDem,
+            '— otomatis / tidak ada (3D datar)',
+          ),
+        ],
+      ),
     );
   }
 }

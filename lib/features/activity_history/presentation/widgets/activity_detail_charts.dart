@@ -62,7 +62,7 @@ class ActivityDetailCharts extends StatelessWidget {
                         c.endDistanceM,
                         climbCategoryShort(c.category) == 'HC'
                             ? 'HC'
-                            : 'KAT ${climbCategoryShort(c.category)}',
+                            : FN.caps('Kat ${climbCategoryShort(c.category)}'),
                         color: FN.grade(c.avgGradePct),
                       ),
                 ],

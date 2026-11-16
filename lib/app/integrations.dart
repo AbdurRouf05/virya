@@ -89,6 +89,12 @@ abstract class Integrations {
   /// HUD segmen dan ghost di layar rekam.
   Widget recordingSegmentHud();
 
+  /// Layar rute tersimpan & "Buat rute".
+  Widget routesHome();
+
+  /// HUD rute di layar rekam: pilih rute, sisa jarak, peringatan keluar rute.
+  Widget recordingRouteHud();
+
   Future<List<String>> importFile(AppDatabase db, String path);
   Future<File> exportGpx(AppDatabase db, String activityId);
   Future<File> exportTcx(AppDatabase db, String activityId);
@@ -188,6 +194,10 @@ class PlaceholderIntegrations extends Integrations {
   Widget activitySegments(String activityId) => const SizedBox.shrink();
   @override
   Widget recordingSegmentHud() => const SizedBox.shrink();
+  @override
+  Widget routesHome() => _missing('Rute');
+  @override
+  Widget recordingRouteHud() => const SizedBox.shrink();
 
   Never _unavailable() =>
       throw UnsupportedError('Modul impor/ekspor belum terpasang');

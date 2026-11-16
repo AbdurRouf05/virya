@@ -6,6 +6,7 @@
   var map = null, cfg = {}, loaded = false, is3d = false;
   var routeCoords = []; // [[lon,lat]]
   var liveCoords = [];
+  var ghostCoords = []; // [[[lon,lat]...]...] alternatif rute (Buat rute)
   var pending = [];
 
   function post(msg) {
@@ -48,7 +49,7 @@
 
   function addRouteLayers() {
     var e = fc();
-    ['heat', 'route', 'live', 'trace', 'ends', 'pos', 'photos'].forEach(function (id) {
+    ['heat', 'plan', 'ghosts', 'route', 'live', 'trace', 'ends', 'marks', 'pos', 'photos'].forEach(function (id) {
       map.addSource(id, { type: 'geojson', data: e });
     });
     map.addLayer({ id: 'heat', type: 'heatmap', source: 'heat',
@@ -58,6 +59,14 @@
         'heatmap-opacity': 0.92,
         'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'],
           0, 'rgba(255,79,0,0)', 0.08, 'rgba(255,120,30,0.5)', 0.35, SIGNAL, 0.7, '#A3161B', 1, '#5B0E2D'] } });
+    map.addLayer({ id: 'plan-line', type: 'line', source: 'plan',
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: { 'line-color': C.ink, 'line-opacity': 0.45,
+        'line-width': ['interpolate', ['linear'], ['zoom'], 8, 4, 16, 10] } });
+    map.addLayer({ id: 'ghost-line', type: 'line', source: 'ghosts',
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: { 'line-color': C.ink, 'line-opacity': 0.3,
+        'line-width': ['interpolate', ['linear'], ['zoom'], 8, 2, 16, 5] } });
     map.addLayer({ id: 'route-casing', type: 'line', source: 'route',
       layout: { 'line-cap': 'round', 'line-join': 'round' },
       paint: { 'line-color': C.ink, 'line-width': ['interpolate', ['linear'], ['zoom'], 8, 4, 16, 9] } });
@@ -81,6 +90,11 @@
       paint: { 'circle-radius': 7,
         'circle-color': ['match', ['get', 'k'], 'start', SIGNAL, C.ink],
         'circle-stroke-color': ['match', ['get', 'k'], 'start', C.ink, C.paper],
+        'circle-stroke-width': 3, 'circle-pitch-alignment': 'map' } });
+    map.addLayer({ id: 'marks', type: 'circle', source: 'marks',
+      paint: { 'circle-radius': ['match', ['get', 'k'], 'via', 5, 7],
+        'circle-color': ['match', ['get', 'k'], 'start', SIGNAL, 'via', C.paper, C.ink],
+        'circle-stroke-color': ['match', ['get', 'k'], 'start', C.ink, 'via', C.ink, C.paper],
         'circle-stroke-width': 3, 'circle-pitch-alignment': 'map' } });
     map.addLayer({ id: 'photos', type: 'symbol', source: 'photos',
       layout: { 'icon-image': 'photo', 'icon-allow-overlap': true, 'icon-ignore-placement': true } });
@@ -122,6 +136,9 @@
       canvasContextAttributes: { preserveDrawingBuffer: true, antialias: true }
     });
     map.on('error', function (e) { post({ type: 'error', msg: String(e && e.error && e.error.message || e) }); });
+    map.on('click', function (e) {
+      if (e && e.lngLat) post({ type: 'tap', lat: e.lngLat.lat, lon: e.lngLat.lng });
+    });
     map.on('load', function () {
       try { addIcons(); addRouteLayers(); } catch (e) { post({ type: 'error', msg: String(e) }); }
       try {
@@ -226,6 +243,7 @@
   function fitRoute(animate) {
     whenLoaded(function () {
       var all = routeCoords.concat(liveCoords);
+      ghostCoords.forEach(function (g) { all = all.concat(g); });
       var b = boundsOf(all);
       if (!b) return;
       var pad = cfg.padding || 36;
@@ -265,6 +283,35 @@
   function setPhotos(list) {
     whenLoaded(function () {
       src('photos').setData(fc((list || []).map(function (p) { return pt(p.lon, p.lat, {}); })));
+    });
+  }
+
+  // ---------- Buat rute: alternatif, titik bantu, rute rencana ----------
+  // list: [[[lat,lon],...],...]
+  function setGhosts(list, fit) {
+    whenLoaded(function () {
+      ghostCoords = (list || []).map(function (g) { return g.map(function (p) { return [p[1], p[0]]; }); });
+      src('ghosts').setData(fc(ghostCoords.filter(function (g) { return g.length > 1; })
+        .map(function (g) { return line(g); })));
+      if (fit) fitRoute(false);
+    });
+  }
+  // list: [[lat, lon, kind], ...]; kind: start | finish | via
+  function setMarks(list) {
+    whenLoaded(function () {
+      src('marks').setData(fc((list || []).map(function (m) { return pt(m[1], m[0], { k: m[2] || 'via' }); })));
+    });
+  }
+  // Rute rencana di bawah jejak rekam.
+  function setPlan(coords) {
+    whenLoaded(function () {
+      var c = (coords || []).map(function (p) { return [p[1], p[0]]; });
+      src('plan').setData(c.length > 1 ? fc([line(c)]) : fc());
+    });
+  }
+  function centerOn(lat, lon, zoom) {
+    whenLoaded(function () {
+      map.jumpTo({ center: [lon, lat], zoom: zoom || map.getZoom() });
     });
   }
 
@@ -558,7 +605,8 @@
 
   window.ViryaMap = {
     init: init, setRoute: setRoute, appendLivePoint: appendLivePoint, appendLivePoints: appendLivePoints,
-    setPosition: setPosition, fitRoute: fitRoute, set3d: set3d, setPhotos: setPhotos, setHeat: setHeat,
+    setPosition: setPosition, fitRoute: fitRoute, setGhosts: setGhosts, setMarks: setMarks,
+    setPlan: setPlan, centerOn: centerOn, set3d: set3d, setPhotos: setPhotos, setHeat: setHeat,
     flyLoad: flyLoad, flyPlay: flyPlay, flyPause: flyPause, flySeek: flySeek,
     flySetSpeed: flySetSpeed, flySetDuration: flySetDuration,
     exportBegin: exportBegin, exportWarmup: exportWarmup, renderFrame: renderFrame, exportEnd: exportEnd

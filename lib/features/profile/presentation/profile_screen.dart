@@ -89,7 +89,7 @@ class ProfileScreen extends ConsumerWidget {
                     builder: (_) => AthleteEditDialog(profile: profile),
                   ),
                   child: Text(
-                    'UBAH',
+                    FN.caps('Ubah'),
                     style: FN
                         .label(size: 11, color: FN.signal)
                         .copyWith(fontWeight: FontWeight.w700),
@@ -165,7 +165,7 @@ class ProfileScreen extends ConsumerWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('KELOLA PAKET PETA (.PMTILES)', style: FN.heading(size: 13, color: FN.ink)),
+                                Text(FN.caps('Kelola paket peta (.pmtiles)'), style: FN.heading(size: 13, color: FN.ink)),
                                 const SizedBox(height: 2),
                                 Text('Unduh atau impor peta vektor & elevasi DEM 3D',
                                     style: FN.body(size: 11, color: FN.inkMuted)),

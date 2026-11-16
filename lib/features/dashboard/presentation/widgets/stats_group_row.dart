@@ -24,7 +24,7 @@ class StatsGroupRow extends StatelessWidget {
       opacity: dim ? 0.45 : 1,
       child: Container(
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: FN.ink, width: 1)),
+          border: Border(bottom: FN.side(color: FN.ink, width: 1)),
         ),
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(

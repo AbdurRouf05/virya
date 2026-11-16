@@ -12,9 +12,8 @@ class ActivitySegmentsSection extends ConsumerWidget {
   final String activityId;
   const ActivitySegmentsSection({super.key, required this.activityId});
 
-  void _push(BuildContext context, Widget page) => Navigator.of(
-    context,
-  ).push(MaterialPageRoute<void>(builder: (_) => page));
+  void _push(BuildContext context, Widget page) =>
+      Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => page));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,20 +28,17 @@ class ActivitySegmentsSection extends ConsumerWidget {
             subtitle: fmt.distanceFull(r.distanceM, decimals: 2),
             elapsedS: r.elapsedS,
             isBest: r.isBest,
-            onTap: () => _push(
-              context,
-              SegmentDetailScreen(segmentId: r.segmentId),
-            ),
+            onTap:
+                () =>
+                    _push(context, SegmentDetailScreen(segmentId: r.segmentId)),
           ),
         const SizedBox(height: 8),
         InkButton(
-          label: 'BUAT SEGMEN DARI RUTE INI',
+          label: FN.caps('BUAT SEGMEN DARI RUTE INI'),
           icon: Icons.flag_outlined,
           expand: true,
-          onPressed: () => _push(
-            context,
-            SegmentCreateScreen(activityId: activityId),
-          ),
+          onPressed:
+              () => _push(context, SegmentCreateScreen(activityId: activityId)),
         ),
       ],
     );

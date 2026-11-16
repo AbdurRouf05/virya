@@ -21,9 +21,8 @@ class TodayTrainingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: FN.paper,
-        border: Border.all(color: FN.ink, width: 2),
-      ),
+        color: FN.cardFill,
+        border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -68,7 +67,7 @@ class TodayTrainingCard extends StatelessWidget {
               const SizedBox(width: 8),
               Flexible(
                 child: Text(
-                  'LATIHAN HARI INI',
+                  FN.caps('Latihan hari ini'),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: FN
@@ -104,7 +103,7 @@ class TodayTrainingCard extends StatelessWidget {
             spacing: 10,
             runSpacing: 8,
             children: [
-              _Tag(text: done ? 'SUDAH' : 'BELUM', color: done ? FN.ok : null),
+              _Tag(text: done ? FN.caps('Sudah') : FN.caps('Belum'), color: done ? FN.ok : null),
               if (!done && onStart != null) _StartButton(onTap: onStart!),
             ],
           ),
@@ -126,7 +125,7 @@ class _Tag extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-    decoration: BoxDecoration(border: Border.all(color: color, width: 2)),
+    decoration: BoxDecoration(border: FN.frame(color: color, width: 2), borderRadius: FN.boxRadius,),
     child: Text(
       text,
       style: FN
@@ -148,10 +147,9 @@ class _StartButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
       decoration: BoxDecoration(
         color: FN.signal,
-        border: Border.all(color: FN.ink, width: 2),
-      ),
+        border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
       child: Text(
-        'MULAI →',
+        FN.caps('Mulai →'),
         style: FN
             .label(size: 11, color: FN.onAccent)
             .copyWith(fontWeight: FontWeight.w700),
@@ -173,7 +171,7 @@ class _StreakPanel extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'STREAK',
+          FN.caps('Streak'),
           style: FN
               .label(size: 11, color: FN.acid)
               .copyWith(fontWeight: FontWeight.w700),
@@ -185,7 +183,7 @@ class _StreakPanel extends StatelessWidget {
           child: Text('$days', style: FN.bigNumber(56, color: FN.onNight)),
         ),
         const SizedBox(height: 4),
-        Text('HARI', style: FN.label(size: 11, color: FN.onNight)),
+        Text(FN.caps('Hari'), style: FN.label(size: 11, color: FN.onNight)),
       ],
     ),
   );

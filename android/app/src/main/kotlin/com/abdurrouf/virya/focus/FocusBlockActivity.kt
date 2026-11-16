@@ -6,6 +6,8 @@ import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.WindowInsetsController
 import android.widget.TextView
@@ -16,6 +18,8 @@ import kotlin.math.roundToInt
 
 /** Layar "Waktu habis" yang muncul saat kuota harian aplikasi terpakai. */
 class FocusBlockActivity : Activity() {
+    private val handler = Handler(Looper.getMainLooper())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_focus_block)
@@ -82,14 +86,44 @@ class FocusBlockActivity : Activity() {
             return
         }
         val minutes = intent.getIntExtra(EXTRA_MINUTES, 0)
+        val unlocks = FocusStore.unlockCount(this, packageName)
         findViewById<TextView>(R.id.focus_block_app).text =
             intent.getStringExtra(EXTRA_LABEL) ?: packageName
-        findViewById<TextView>(R.id.focus_block_message).text =
-            getString(R.string.focus_block_message, minutes)
-        val extend = findViewById<View>(R.id.focus_block_extend)
-        val canExtend = FocusStore.bonusMinutes(this, packageName) == 0
-        extend.visibility = if (canExtend) View.VISIBLE else View.GONE
+        findViewById<TextView>(R.id.focus_block_message).text = buildString {
+            append(getString(R.string.focus_block_message, minutes))
+            if (unlocks > 0) {
+                append('\n')
+                append(getString(R.string.focus_block_reopened, unlocks, unlocks * FocusStore.BONUS_MINUTES))
+            }
+        }
+        val extend = findViewById<TextView>(R.id.focus_block_extend)
         extend.setOnClickListener { extendAndReturn(packageName) }
+        startCountdown(extend, FocusStore.waitSeconds(unlocks))
+    }
+
+    /** "Tetap buka" baru bisa ditekan setelah jeda; makin sering dibuka, makin lama. */
+    private fun startCountdown(extend: TextView, seconds: Int) {
+        handler.removeCallbacksAndMessages(null)
+        var left = seconds
+        fun step() {
+            if (left > 0) {
+                extend.isEnabled = false
+                extend.alpha = 0.45f
+                extend.text = getString(R.string.focus_block_extend_wait, FocusStore.BONUS_MINUTES, left)
+                left--
+                handler.postDelayed({ step() }, 1_000L)
+            } else {
+                extend.isEnabled = true
+                extend.alpha = 1f
+                extend.text = getString(R.string.focus_block_extend, FocusStore.BONUS_MINUTES)
+            }
+        }
+        step()
+    }
+
+    override fun onDestroy() {
+        handler.removeCallbacksAndMessages(null)
+        super.onDestroy()
     }
 
     private fun extendAndReturn(packageName: String) {

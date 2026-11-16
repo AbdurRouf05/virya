@@ -61,7 +61,7 @@ class StatsTotals extends StatelessWidget {
                       style: FN.label(size: 13, color: FN.paper),
                     ),
                     Text(
-                      '${all.count}× AKTIVITAS',
+                      FN.caps('${all.count}× aktivitas'),
                       style: FN.label(size: 13, color: FN.paper),
                     ),
                   ],

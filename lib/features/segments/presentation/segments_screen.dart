@@ -48,7 +48,7 @@ class SegmentsScreen extends ConsumerWidget {
               if (list != null && list.isEmpty)
                 _message(
                   'Belum ada segmen. Buka aktivitas, lalu pilih '
-                  'BUAT SEGMEN DARI RUTE INI.',
+                  '"Buat segmen dari rute ini".',
                 ),
               for (final s in list ?? const [])
                 Padding(
@@ -56,11 +56,13 @@ class SegmentsScreen extends ConsumerWidget {
                   child: SegmentTile(
                     segment: s,
                     fmt: fmt,
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => SegmentDetailScreen(segmentId: s.id),
-                      ),
-                    ),
+                    onTap:
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder:
+                                (_) => SegmentDetailScreen(segmentId: s.id),
+                          ),
+                        ),
                   ),
                 ),
             ],

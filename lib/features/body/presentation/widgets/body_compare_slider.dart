@@ -96,8 +96,7 @@ class _BodyCompareSliderState extends State<BodyCompareSlider> {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: FN.onNight,
-                border: Border.all(color: FN.onAccent, width: 1.5),
-              ),
+                border: FN.frame(color: FN.onAccent, width: 1.5), borderRadius: FN.boxRadius,),
               child: Icon(Icons.swap_horiz, size: 20, color: FN.onAccent),
             ),
           ),

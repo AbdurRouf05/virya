@@ -6,6 +6,12 @@ class TaskItem {
   final DateTime? due;
   final bool important;
   final bool pinned;
+
+  /// Rutinitas harian: kembali terbuka setiap hari setelah dicentang.
+  final bool repeatDaily;
+
+  /// Jam pengingat rutinitas, menit sejak tengah malam lokal.
+  final int? remindMinute;
   final DateTime? doneAt;
   final DateTime createdAt;
 
@@ -16,11 +22,26 @@ class TaskItem {
     this.due,
     this.important = false,
     this.pinned = false,
+    this.repeatDaily = false,
+    this.remindMinute,
     this.doneAt,
     required this.createdAt,
   });
 
   bool get isDone => doneAt != null;
+
+  TaskItem copyWith({DateTime? Function()? doneAt}) => TaskItem(
+    id: id,
+    title: title,
+    note: note,
+    due: due,
+    important: important,
+    pinned: pinned,
+    repeatDaily: repeatDaily,
+    remindMinute: remindMinute,
+    doneAt: doneAt == null ? this.doneAt : doneAt(),
+    createdAt: createdAt,
+  );
 }
 
 /// Pembagian tugas terbuka untuk ditampilkan.

@@ -21,7 +21,7 @@ class FieldNotesNavBar extends StatelessWidget {
     required this.onRecord,
   });
 
-  static const _tabs = ['HARI INI', 'KALENDER', 'LATIHAN', 'PROFIL'];
+  static const _tabs = ['Hari ini', 'Kalender', 'Latihan', 'Profil'];
   static const _barHeight = 64.0;
   static const _raise = 14.0;
   static const _centerWidth = 84.0;
@@ -46,7 +46,9 @@ class FieldNotesNavBar extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: FN.paper,
-                border: Border(top: BorderSide(color: FN.ink, width: 2)),
+                border: Border(
+                  top: FN.side(color: FN.cardLine, width: FN.stroke),
+                ),
               ),
               padding: EdgeInsets.only(bottom: bottom),
               child: Row(
@@ -94,11 +96,12 @@ class _NavTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (FN.isClean) return _clean();
     final fg = selected ? FN.paper : FN.ink;
     return Semantics(
       button: true,
       selected: selected,
-      label: label,
+      label: FN.caps(label),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: onTap,
@@ -121,7 +124,7 @@ class _NavTab extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  label,
+                  FN.caps(label),
                   style: FN
                       .label(size: 10.5, color: fg)
                       .copyWith(fontWeight: FontWeight.w700),
@@ -133,4 +136,26 @@ class _NavTab extends StatelessWidget {
       ),
     );
   }
+
+  /// Bersih: teks saja; tab aktif tinta tebal, lainnya abu-abu.
+  Widget _clean() => Semantics(
+    button: true,
+    selected: selected,
+    label: label,
+    child: GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            label,
+            style: selected
+                ? FN.heading(size: 12.5, color: FN.ink)
+                : FN.label(size: 11, color: FN.inkMuted),
+          ),
+        ),
+      ),
+    ),
+  );
 }

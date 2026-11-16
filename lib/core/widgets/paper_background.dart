@@ -22,15 +22,18 @@ class PaperBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Bersih: latar polos tanpa kisi atau garis kontur.
+    final plain = texture == PaperTexture.none || FN.isClean;
     return ColoredBox(
       color: night ? FN.night : FN.paper,
-      child: CustomPaint(
-        isComplex: true,
-        painter: texture == PaperTexture.none
-            ? null
-            : _PaperPainter(texture, night, seed),
-        child: child,
-      ),
+      child:
+          plain
+              ? child
+              : CustomPaint(
+                isComplex: true,
+                painter: _PaperPainter(texture, night, seed),
+                child: child,
+              ),
     );
   }
 }
@@ -45,9 +48,10 @@ class _PaperPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final line = (night ? FN.nightLine : FN.paperLine);
     if (texture == PaperTexture.grid) {
-      final p = Paint()
-        ..color = line.withValues(alpha: 0.45)
-        ..strokeWidth = 0.5;
+      final p =
+          Paint()
+            ..color = line.withValues(alpha: 0.45)
+            ..strokeWidth = 0.5;
       const step = 24.0;
       for (var x = step; x < size.width; x += step) {
         canvas.drawLine(Offset(x, 0), Offset(x, size.height), p);
@@ -76,10 +80,11 @@ void paintContours(
   double strokeWidth = 0.8,
 }) {
   final rnd = math.Random(seed);
-  final p = Paint()
-    ..color = color
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = strokeWidth;
+  final p =
+      Paint()
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth;
   final maxR = math.max(size.width, size.height) * 0.55;
   for (var k = 0; k < peaks; k++) {
     final c = Offset(

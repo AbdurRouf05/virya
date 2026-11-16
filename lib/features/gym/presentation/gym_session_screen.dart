@@ -37,7 +37,7 @@ class _GymSessionScreenState extends ConsumerState<GymSessionScreen> {
       context,
       title: 'Buang sesi?',
       body: 'Semua set di sesi ini akan dihapus dan tidak bisa dikembalikan.',
-      action: 'BUANG',
+      action: FN.caps('Buang'),
       danger: true,
     );
     if (!ok) return;
@@ -64,7 +64,7 @@ class _GymSessionScreenState extends ConsumerState<GymSessionScreen> {
         title: 'Selesai latihan?',
         body:
             '${sum.totalSets - sum.doneSets} set belum dicentang dan tidak akan disimpan.',
-        action: 'SELESAI',
+        action: FN.caps('Selesai'),
       );
       if (!ok) return;
     }
@@ -94,7 +94,7 @@ class _GymSessionScreenState extends ConsumerState<GymSessionScreen> {
     final prs = ref.watch(gymPrsProvider);
     if (s == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('SESI GYM')),
+        appBar: AppBar(title: Text(FN.caps('Sesi gym'))),
         body: const Center(child: Text('Tidak ada sesi berjalan.')),
       );
     }
@@ -102,16 +102,15 @@ class _GymSessionScreenState extends ConsumerState<GymSessionScreen> {
     final rest = s.restEndsAt;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SESI GYM'),
+        title: Text(FN.caps('Sesi gym')),
         actions: [
           Center(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                border: Border.all(color: FN.ok, width: 2),
-              ),
+                border: FN.frame(color: FN.ok, width: 2), borderRadius: FN.boxRadius,),
               child: Text(
-                '● BERJALAN',
+                FN.caps('● Berjalan'),
                 style: FN
                     .label(size: 10, color: FN.ok)
                     .copyWith(fontWeight: FontWeight.w700),
@@ -203,7 +202,7 @@ class _GymSessionScreenState extends ConsumerState<GymSessionScreen> {
       children: [
         Icon(Icons.fitness_center, size: 40, color: FN.inkMuted),
         const SizedBox(height: 10),
-        Text('BELUM ADA GERAKAN', style: FN.label(size: 11)),
+        Text(FN.caps('Belum ada gerakan'), style: FN.label(size: 11)),
         const SizedBox(height: 4),
         Text(
           'Tambah gerakan untuk mulai mencatat set.',

@@ -11,8 +11,8 @@ Future<GymStartChoice?> showGymTemplatePicker(BuildContext context) =>
     showModalBottomSheet<GymStartChoice>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: FN.paper,
-      shape: const RoundedRectangleBorder(),
+      backgroundColor: FN.cardFill,
+      shape: FN.isClean ? null : const RoundedRectangleBorder(),
       builder: (_) => const GymTemplatePickerSheet(),
     );
 
@@ -33,7 +33,7 @@ class GymTemplatePickerSheet extends ConsumerWidget {
           shrinkWrap: true,
           padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
           children: [
-            Text('MULAI GYM', style: FN.label(size: 11, color: FN.ink)),
+            Text(FN.caps('Mulai gym'), style: FN.label(size: 11, color: FN.ink)),
             const SizedBox(height: 12),
             InkButton(
               label: 'Sesi kosong',
@@ -45,7 +45,7 @@ class GymTemplatePickerSheet extends ConsumerWidget {
             ),
             if (templates.isNotEmpty) ...[
               const SizedBox(height: 18),
-              Text('DARI TEMPLATE', style: FN.label(size: 10)),
+              Text(FN.caps('Dari template'), style: FN.label(size: 10)),
               const SizedBox(height: 8),
             ],
             for (final t in templates)
@@ -61,12 +61,8 @@ class GymTemplatePickerSheet extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              t.name.toUpperCase(),
-                              style: TextStyle(
-                                fontFamily: FN.display,
-                                fontSize: 20,
-                                color: FN.ink,
-                              ),
+                              FN.caps(t.name),
+                              style: FN.title(20, color: FN.ink),
                             ),
                             const SizedBox(height: 2),
                             Text(

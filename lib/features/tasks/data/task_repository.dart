@@ -14,6 +14,8 @@ TaskItem taskItemOf(Task t) => TaskItem(
   due: parseTaskDay(t.dueDay),
   important: t.priority > 0,
   pinned: t.pinned,
+  repeatDaily: t.repeatDaily,
+  remindMinute: t.remindMinute,
   doneAt: t.doneAt,
   createdAt: t.createdAt,
 );
@@ -29,6 +31,8 @@ class TaskRepository {
     DateTime? due,
     bool important = false,
     bool pinned = false,
+    bool repeatDaily = false,
+    int? remindMinute,
   }) async {
     final title = normalizeTaskTitle(rawTitle);
     if (title == null) return null;
@@ -37,9 +41,11 @@ class TaskRepository {
       TasksCompanion.insert(
         id: id,
         title: title,
-        dueDay: Value(due == null ? null : taskDayKey(due)),
+        dueDay: Value(due == null || repeatDaily ? null : taskDayKey(due)),
         priority: Value(important ? 1 : 0),
         pinned: Value(pinned),
+        repeatDaily: Value(repeatDaily),
+        remindMinute: Value(repeatDaily ? remindMinute : null),
         createdAt: DateTime.now().toUtc(),
       ),
     );
@@ -55,9 +61,14 @@ class TaskRepository {
       TasksCompanion(
         title: title == null ? const Value.absent() : Value(title),
         note: Value(note == null || note.isEmpty ? null : note),
-        dueDay: Value(t.due == null ? null : taskDayKey(t.due!)),
+        // Rutinitas tidak punya tanggal jatuh tempo.
+        dueDay: Value(
+          t.due == null || t.repeatDaily ? null : taskDayKey(t.due!),
+        ),
         priority: Value(t.important ? 1 : 0),
         pinned: Value(t.pinned),
+        repeatDaily: Value(t.repeatDaily),
+        remindMinute: Value(t.repeatDaily ? t.remindMinute : null),
       ),
     );
   }
@@ -82,7 +93,9 @@ class TaskRepository {
           ),
         );
       case TaskDoneOp():
-        await _dao.markDoneIfOpen(op.taskId, op.at);
+        final local = op.at.toLocal();
+        final dayStart = DateTime(local.year, local.month, local.day);
+        await _dao.markDoneIfOpen(op.taskId, op.at, dayStart.toUtc());
     }
   }
 }

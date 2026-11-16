@@ -35,16 +35,22 @@ class FocusInstalledApp {
         packageName: j['packageName'] as String,
         label: j['label'] as String,
       );
+
+  Map<String, Object> toJson() => {'packageName': packageName, 'label': label};
 }
 
-/// Dua izin khusus yang dibutuhkan modul Fokus.
+/// Izin khusus yang dibutuhkan modul Fokus.
 class FocusPermissions {
   final bool usageAccess;
   final bool accessibility;
 
+  /// "Tampil di atas aplikasi lain": penghalang Mode Ramah Bank.
+  final bool overlay;
+
   const FocusPermissions({
     required this.usageAccess,
     required this.accessibility,
+    this.overlay = false,
   });
 
   static const none = FocusPermissions(
@@ -52,8 +58,14 @@ class FocusPermissions {
     accessibility: false,
   );
 
-  /// Cukup Akses Penggunaan agar fitur melacak waktu dan Mode Ramah Bank bisa berjalan.
+  /// Cukup Akses Penggunaan agar waktu pemakaian bisa dihitung.
   bool get ready => usageAccess;
+
+  /// Ada penjaga yang bisa memunculkan layar "Waktu habis".
+  bool get canBlock => accessibility || overlay;
+
+  /// Masih ada izin yang kurang agar batas benar-benar ditegakkan.
+  bool get needsSetup => !ready || !canBlock;
 
   /// Mode Ramah Bank aktif bila Aksesibilitas nonaktif (mencegah SeaBank/BCA memblokir).
   bool get isBankSafe => !accessibility;

@@ -18,7 +18,39 @@ class TodayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final card = Container(
+    final card = FN.isClean ? _clean() : _tegas();
+    if (onTap == null) return card;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: card,
+    );
+  }
+
+  /// Bersih: kartu putih bergaris rambut, judul kecil abu-abu tanpa garis.
+  Widget _clean() => Container(
+    clipBehavior: Clip.antiAlias,
+    decoration: FN.card(),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 2),
+          child: Row(
+            children: [
+              Expanded(child: Text(FN.caps(title), style: FN.label(size: 11))),
+              if (trailing != null)
+                Text(FN.caps(trailing!), style: FN.label(size: 10.5)),
+            ],
+          ),
+        ),
+        child,
+      ],
+    ),
+  );
+
+  Widget _tegas() {
+    return Container(
       decoration: BoxDecoration(
         color: FN.paper,
         border: Border.all(color: FN.ink, width: 2),
@@ -32,14 +64,17 @@ class TodayCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    title,
+                    FN.caps(title),
                     style: FN
                         .label(size: 11, color: FN.ink)
                         .copyWith(fontWeight: FontWeight.w700),
                   ),
                 ),
                 if (trailing != null)
-                  Text(trailing!, style: FN.label(size: 10.5, color: FN.ink)),
+                  Text(
+                    FN.caps(trailing!),
+                    style: FN.label(size: 10.5, color: FN.ink),
+                  ),
               ],
             ),
           ),
@@ -47,12 +82,6 @@ class TodayCard extends StatelessWidget {
           child,
         ],
       ),
-    );
-    if (onTap == null) return card;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: card,
     );
   }
 }

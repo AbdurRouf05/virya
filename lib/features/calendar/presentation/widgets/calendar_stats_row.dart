@@ -11,19 +11,19 @@ class CalendarStatsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(border: Border.all(color: FN.ink, width: 2)),
+      decoration: BoxDecoration(border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _Cell(value: '${stats.currentStreak}', label: 'STREAK · HARI'),
+            _Cell(value: '${stats.currentStreak}', label: FN.caps('Streak · hari')),
             VerticalDivider(width: 2, thickness: 2, color: FN.ink),
-            _Cell(value: '${stats.longestStreak}', label: 'TERPANJANG'),
+            _Cell(value: '${stats.longestStreak}', label: FN.caps('Terpanjang')),
             VerticalDivider(width: 2, thickness: 2, color: FN.ink),
             _Cell(
               value: '${stats.activePercent}',
               unit: '%',
-              label: 'HARI AKTIF',
+              label: FN.caps('Hari aktif'),
             ),
           ],
         ),

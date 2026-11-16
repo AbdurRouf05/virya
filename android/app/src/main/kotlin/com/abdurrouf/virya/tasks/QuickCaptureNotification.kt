@@ -56,8 +56,21 @@ object QuickCaptureNotification {
 
     /** [saved] = judul yang baru tersimpan, ditampilkan sebagai konfirmasi. */
     fun show(context: Context, saved: String? = null) {
-        val count = TaskStore.visible(context).size
-        val summary = if (count == 0) "Tidak ada tugas hari ini" else "$count tugas hari ini"
+        val routines = RoutineStore.all(context)
+        val pending = RoutineStore.pending(context)
+        val routineIds = routines.map { it.id }.toSet()
+        val count = TaskStore.visible(context).count { it.id !in routineIds }
+        val tasks = if (count == 0) "Tidak ada tugas hari ini" else "$count tugas hari ini"
+        val summary = if (routines.isEmpty()) {
+            tasks
+        } else {
+            "$tasks · Rutinitas ${routines.size - pending.size}/${routines.size} selesai"
+        }
+        val detail = if (pending.isEmpty()) {
+            summary
+        } else {
+            summary + "\nBelum: " + pending.joinToString(", ") { it.title }
+        }
         val open = PendingIntent.getActivity(
             context,
             0,
@@ -68,6 +81,7 @@ object QuickCaptureNotification {
             .setSmallIcon(R.drawable.ic_task_quick)
             .setContentTitle(if (saved != null) "Tersimpan: $saved" else "Catat tugas")
             .setContentText(summary)
+            .setStyle(Notification.BigTextStyle().bigText(detail))
             .setContentIntent(open)
             .setOngoing(true)
             .setOnlyAlertOnce(true)

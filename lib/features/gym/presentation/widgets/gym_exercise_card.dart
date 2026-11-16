@@ -41,7 +41,7 @@ class _GymExerciseCardState extends State<GymExerciseCard> {
   Widget build(BuildContext context) {
     final e = widget.exercise;
     return Container(
-      decoration: BoxDecoration(border: Border.all(color: FN.ink, width: 2)),
+      decoration: BoxDecoration(border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -71,10 +71,10 @@ class _GymExerciseCardState extends State<GymExerciseCard> {
               height: 40,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: FN.paperLine)),
+                border: Border(top: FN.side(color: FN.paperLine)),
               ),
               child: Text(
-                '+ SET',
+                FN.caps('+ Set'),
                 style: FN
                     .label(size: 11, color: FN.ink)
                     .copyWith(fontWeight: FontWeight.w700),
@@ -91,7 +91,7 @@ class _GymExerciseCardState extends State<GymExerciseCard> {
     final info = [
       e.exercise.muscle.label,
       e.exercise.equipment.label,
-      if (pr != null) 'PR ${fmtKg(pr.maxWeightKg)} KG',
+      if (pr != null) FN.caps('PR ${fmtKg(pr.maxWeightKg)} kg'),
     ].join(' · ');
     final allDone = e.sets.isNotEmpty && e.doneCount == e.sets.length;
     return Padding(
@@ -120,10 +120,9 @@ class _GymExerciseCardState extends State<GymExerciseCard> {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: allDone ? FN.ink : null,
-              border: Border.all(color: FN.ink, width: 1.5),
-            ),
+              border: FN.frame(color: FN.ink, width: 1.5), borderRadius: FN.boxRadius,),
             child: Text(
-              '${e.doneCount}/${e.sets.length} SET',
+              FN.caps('${e.doneCount}/${e.sets.length} set'),
               style: FN
                   .label(size: 10, color: allDone ? FN.paper : FN.ink)
                   .copyWith(fontWeight: FontWeight.w700),
@@ -131,7 +130,7 @@ class _GymExerciseCardState extends State<GymExerciseCard> {
           ),
           PopupMenuButton<String>(
             icon: Icon(Icons.more_vert, color: FN.ink),
-            shape: const RoundedRectangleBorder(),
+            shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
             onSelected: (v) => switch (v) {
               'rpe' => setState(() => _rpe = !_rpe),
               'hist' => widget.onHistory(),
@@ -165,12 +164,12 @@ class _GymExerciseCardState extends State<GymExerciseCard> {
         children: [
           SizedBox(
             width: GymSetColumns.set,
-            child: Text('SET', style: st),
+            child: Text(FN.caps('Set'), style: st),
           ),
-          Expanded(child: Text('SEBELUMNYA', style: st)),
+          Expanded(child: Text(FN.caps('Sebelumnya'), style: st)),
           cell('KG', GymSetColumns.field),
           const SizedBox(width: 6),
-          cell('REPS', GymSetColumns.field),
+          cell(FN.caps('Reps'), GymSetColumns.field),
           if (_rpe) ...[
             const SizedBox(width: 6),
             cell('RPE', GymSetColumns.rpe),

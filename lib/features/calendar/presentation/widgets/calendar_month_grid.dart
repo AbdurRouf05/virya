@@ -54,7 +54,7 @@ class CalendarMonthGrid extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: FN
                     .label(size: 13, color: FN.ink)
-                    .copyWith(fontWeight: FontWeight.w700, letterSpacing: 2.4),
+                    .copyWith(fontWeight: FontWeight.w700, letterSpacing: FN.track(2.4)),
               ),
             ),
             IconButton(

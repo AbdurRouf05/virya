@@ -31,14 +31,10 @@ class GymListTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title.toUpperCase(),
+                    FN.caps(title),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontFamily: FN.display,
-                      fontSize: 20,
-                      color: FN.ink,
-                    ),
+                    style: FN.title(20, color: FN.ink),
                   ),
                   const SizedBox(height: 2),
                   Text(

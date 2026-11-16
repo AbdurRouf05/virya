@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/core/widgets/segmented_pick.dart';
 
 /// Saklar segmen bertinta: "01 JURNAL | 02 STATISTIK".
 class TrainingSwitch extends StatelessWidget {
@@ -16,6 +17,13 @@ class TrainingSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (FN.isClean) {
+      return SegmentedPick<int>(
+        options: [for (var i = 0; i < labels.length; i++) (i, labels[i])],
+        value: index,
+        onChanged: onChanged,
+      );
+    }
     return Container(
       height: 40,
       decoration: BoxDecoration(border: Border.all(color: FN.ink, width: 2)),
@@ -36,7 +44,7 @@ class TrainingSwitch extends StatelessWidget {
     return Semantics(
       button: true,
       selected: selected,
-      label: labels[i],
+      label: FN.caps(labels[i]),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => onChanged(i),
@@ -55,7 +63,7 @@ class TrainingSwitch extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                  text: labels[i],
+                  text: FN.caps(labels[i]),
                   style: FN
                       .label(size: 11, color: selected ? FN.paper : FN.ink)
                       .copyWith(fontWeight: FontWeight.w700),

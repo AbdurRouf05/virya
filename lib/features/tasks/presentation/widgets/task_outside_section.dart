@@ -70,7 +70,7 @@ class _State extends ConsumerState<TaskOutsideSection> {
                 children: [
                   Expanded(
                     child: Text(
-                      'CATAT CEPAT DI NOTIFIKASI',
+                      FN.caps('Catat cepat di notifikasi'),
                       style: FN.label(size: 12, color: FN.ink),
                     ),
                   ),

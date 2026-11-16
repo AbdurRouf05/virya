@@ -13,8 +13,8 @@ class TodayWeekStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     final active = week.where((d) => d.active).length;
     return TodayCard(
-      title: 'MINGGU INI',
-      trailing: '$active/7 AKTIF',
+      title: FN.caps('Minggu ini'),
+      trailing: FN.caps('$active/7 aktif'),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
         child: Row(
@@ -36,13 +36,14 @@ class _DayColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (FN.isClean) return _clean();
     final filled = cell.active;
     final numColor = filled ? FN.paper : (cell.isFuture ? FN.inkMuted : FN.ink);
     final border = cell.isToday
-        ? Border.all(color: FN.signal, width: 2.5)
+        ? FN.frame(color: FN.signal, width: 2.5)
         : filled
         ? null
-        : Border.all(color: cell.isFuture ? FN.inkMuted : FN.ink);
+        : FN.frame(color: cell.isFuture ? FN.inkMuted : FN.ink, width: 1);
     return Column(
       children: [
         AspectRatio(
@@ -74,6 +75,52 @@ class _DayColumn extends StatelessWidget {
           style: FN
               .label(size: 10, color: cell.isToday ? FN.signal : FN.ink)
               .copyWith(fontWeight: FontWeight.w700),
+        ),
+      ],
+    );
+  }
+
+  /// Bersih: nama hari kecil abu-abu di atas titik bulat.
+  Widget _clean() {
+    final filled = cell.active;
+    return Column(
+      children: [
+        Text(
+          FN.caps(Fmt.daysShort[cell.date.weekday - 1]),
+          style: FN.label(
+            size: 10,
+            color: cell.isToday ? FN.signal : FN.inkMuted,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: 30,
+          height: 30,
+          padding: EdgeInsets.all(cell.isToday ? 2 : 0),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: cell.isToday
+                ? Border.all(color: FN.signal, width: 1.5)
+                : null,
+          ),
+          child: ClipOval(
+            child: CustomPaint(
+              painter: _SplitPainter([
+                for (final c in cell.categories) FN.category(c),
+              ], empty: FN.fill),
+              child: Center(
+                child: Text(
+                  '${cell.date.day}',
+                  style: FN.labelStrong(
+                    size: 10,
+                    color: filled
+                        ? FN.onAccent
+                        : (cell.isFuture ? FN.inkMuted : FN.inkSoft),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ],
     );

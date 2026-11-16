@@ -9,8 +9,15 @@ part 'tasks_dao.g.dart';
 class TasksDao extends DatabaseAccessor<AppDatabase> with _$TasksDaoMixin {
   TasksDao(super.db);
 
-  Stream<List<Task>> watchOpen() =>
-      (select(tasks)..where((t) => t.doneAt.isNull())).watch();
+  /// Tugas belum selesai, plus semua rutinitas (selesai-tidaknya hari ini
+  /// dipilah di Dart karena bergantung pada hari lokal).
+  Stream<List<Task>> watchOpen() => (select(
+    tasks,
+  )..where((t) => t.doneAt.isNull() | t.repeatDaily.equals(true))).watch();
+
+  /// Semua rutinitas harian.
+  Stream<List<Task>> watchRoutines() =>
+      (select(tasks)..where((t) => t.repeatDaily.equals(true))).watch();
 
   /// Tugas selesai, terbaru dulu.
   Stream<List<Task>> watchDone({int limit = 30}) =>
@@ -44,10 +51,16 @@ class TasksDao extends DatabaseAccessor<AppDatabase> with _$TasksDaoMixin {
   );
 
   /// Tandai selesai hanya bila masih terbuka (waktu selesai pertama dipakai).
-  Future<void> markDoneIfOpen(String id, DateTime at) =>
-      (update(tasks)..where((r) => r.id.equals(id) & r.doneAt.isNull())).write(
-        TasksCompanion(doneAt: Value(at)),
-      );
+  /// Rutinitas yang terakhir dicentang sebelum [dayStart] dianggap terbuka.
+  Future<void> markDoneIfOpen(String id, DateTime at, DateTime dayStart) =>
+      (update(tasks)..where(
+            (r) =>
+                r.id.equals(id) &
+                (r.doneAt.isNull() |
+                    (r.repeatDaily.equals(true) &
+                        r.doneAt.isSmallerThanValue(dayStart))),
+          ))
+          .write(TasksCompanion(doneAt: Value(at)));
 
   Future<void> deleteTask(String id) =>
       (delete(tasks)..where((r) => r.id.equals(id))).go();

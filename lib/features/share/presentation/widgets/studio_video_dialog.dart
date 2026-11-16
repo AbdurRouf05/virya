@@ -37,15 +37,15 @@ class _StudioVideoDialogState extends State<StudioVideoDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: FN.paper,
-      shape: const RoundedRectangleBorder(),
+      backgroundColor: FN.cardFill,
+      shape: FN.isClean ? null : const RoundedRectangleBorder(),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('MERENDER RECAP',
+            Text(FN.caps('Merender recap'),
                 style: FN.label(size: 11, color: FN.ink)
                     .copyWith(fontWeight: FontWeight.w700)),
             const SizedBox(height: 10),
@@ -78,7 +78,7 @@ class _StudioVideoDialogState extends State<StudioVideoDialog> {
                             setState(() => _cancelling = true);
                             widget.renderer.cancel();
                           },
-                child: Text(_error != null ? 'TUTUP' : 'BATAL',
+                child: Text(_error != null ? FN.caps('Tutup') : FN.caps('Batal'),
                     style: FN.label(size: 11, color: FN.ink)
                         .copyWith(fontWeight: FontWeight.w700)),
               ),

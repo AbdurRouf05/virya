@@ -78,7 +78,7 @@ class _GymSetRowState extends State<GymSetRow> {
     final v = await showMenu<String>(
       context: context,
       position: RelativeRect.fromLTRB(at.dx, at.dy + 40, at.dx + 200, 0),
-      shape: const RoundedRectangleBorder(),
+      shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
       items: [
         PopupMenuItem(
           value: 'warm',
@@ -100,7 +100,7 @@ class _GymSetRowState extends State<GymSetRow> {
       height: 52,
       decoration: BoxDecoration(
         color: done ? FN.paperDeep : null,
-        border: Border(top: BorderSide(color: FN.paperLine, width: 1)),
+        border: Border(top: FN.side(color: FN.paperLine, width: 1)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
@@ -180,7 +180,7 @@ class _GymSetRowState extends State<GymSetRow> {
         ],
         style: FN
             .label(size: 15, color: FN.ink)
-            .copyWith(fontWeight: FontWeight.w700, letterSpacing: 0),
+            .copyWith(fontWeight: FontWeight.w700, letterSpacing: FN.track(0)),
         decoration: InputDecoration(
           isDense: true,
           hintText: hint,
@@ -190,12 +190,12 @@ class _GymSetRowState extends State<GymSetRow> {
           enabledBorder: done
               ? InputBorder.none
               : OutlineInputBorder(
-                  borderRadius: BorderRadius.zero,
-                  borderSide: BorderSide(color: FN.ink, width: 1.5),
+                  borderRadius: FN.smallRadius,
+                  borderSide: FN.side(color: FN.ink, width: 1.5),
                 ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.zero,
-            borderSide: BorderSide(color: FN.signal, width: 2),
+            borderRadius: FN.smallRadius,
+            borderSide: FN.side(color: FN.signal, width: 2),
           ),
         ),
       ),
@@ -221,8 +221,7 @@ class _Check extends StatelessWidget {
         height: 38,
         decoration: BoxDecoration(
           color: done ? FN.ok : null,
-          border: Border.all(color: FN.ink, width: 2),
-        ),
+          border: FN.frame(color: FN.ink, width: 2), borderRadius: FN.boxRadius,),
         child: done ? Icon(Icons.check, color: FN.onNight, size: 22) : null,
       ),
     ),

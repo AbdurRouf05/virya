@@ -32,7 +32,7 @@ class _HeatmapScreenState extends ConsumerState<HeatmapScreen> {
     if (async.hasValue && !async.isLoading) _shown = async.value;
     final result = _shown;
     return Scaffold(
-      appBar: AppBar(title: const Text('HEATMAP')),
+      appBar: AppBar(title: Text(FN.caps('Heatmap'))),
       body: PaperBackground(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -68,7 +68,7 @@ class _HeatmapScreenState extends ConsumerState<HeatmapScreen> {
   }
 
   String _summary(AsyncValue<HeatmapResult> async, HeatmapResult? result) {
-    if (async.isLoading) return 'MENGHITUNG JALUR...';
+    if (async.isLoading) return FN.caps('Menghitung jalur...');
     if (async.hasError || result == null || result.isEmpty) return ' ';
     return '${result.trackCount} AKTIVITAS · '
         'TERSERING ${result.maxCount}× LEWAT';
@@ -78,9 +78,9 @@ class _HeatmapScreenState extends ConsumerState<HeatmapScreen> {
     if (async.isLoading) return null;
     if (async.hasError) {
       return HeatmapNote(
-        title: 'HEATMAP GAGAL DIHITUNG',
+        title: FN.caps('Heatmap gagal dihitung'),
         message: 'Data jalurmu tetap aman. Coba hitung sekali lagi.',
-        actionLabel: 'COBA LAGI',
+        actionLabel: FN.caps('Coba lagi'),
         onAction: _retry,
       );
     }
@@ -89,7 +89,7 @@ class _HeatmapScreenState extends ConsumerState<HeatmapScreen> {
         ? 'Rekam atau impor aktivitas GPS'
         : 'Rekam aktivitas ${_filter.label.toLowerCase()}';
     return HeatmapNote(
-      title: 'BELUM ADA JALUR',
+      title: FN.caps('Belum ada jalur'),
       message: '$what, nanti jalurnya muncul di sini.',
     );
   }

@@ -33,7 +33,7 @@ Virya menggabungkan pelacakan rute GPS untuk olahraga luar ruangan, modul latiha
    - [Studio Bagikan dan Video Rekap 3D](#5-studio-bagikan-dan-video-rekap-3d)
    - [Modul Gym dan Latihan Beban](#6-modul-gym-dan-latihan-beban)
    - [Fokus dan Pembatas Layar](#7-fokus-dan-pembatas-layar)
-   - [Catat Cepat Tugas di Notifikasi](#8-catat-cepat-tugas-di-notifikasi)
+   - [Tugas, Rutinitas, dan Catat Cepat](#8-tugas-rutinitas-dan-catat-cepat)
    - [Profil Atlet dan Garasi](#9-profil-atlet-dan-garasi)
    - [Peta Offline Tanpa Sinyal](#10-peta-offline-tanpa-sinyal)
    - [Cadangan Data dan Ekspor GPX](#11-cadangan-data-dan-ekspor-gpx)
@@ -53,13 +53,20 @@ Virya menggabungkan pelacakan rute GPS untuk olahraga luar ruangan, modul latiha
 ## Cara Pasang di HP Android
 
 ### Langkah 1: Unduh File APK
-Buka halaman [Releases](https://github.com/AbdurRouf05/virya/releases) di repositori ini, lalu unduh file rilis terbaru:
-* **`app-release.apk`**: Kompatibel dengan semua ponsel Android (Android 7.0 hingga Android 15).
+Buka halaman [Releases](https://github.com/AbdurRouf05/virya/releases) di repositori ini, lalu unduh **salah satu** file berikut:
+
+| File | Ukuran | Untuk |
+|---|---|---|
+| `app-arm64-v8a-release.apk` | ± 26 MB | **Hampir semua HP Android 2017 ke atas. Pilih ini kalau ragu.** |
+| `app-armeabi-v7a-release.apk` | ± 25 MB | HP lama (32-bit). Pakai ini kalau file di atas ditolak "tidak kompatibel". |
+| `app-release.apk` | ± 75 MB | Versi universal, jalan di semua HP, tetapi ukurannya tiga kali lipat. |
 
 ### Langkah 2: Pasang File
 1. Buka file APK yang sudah diunduh melalui aplikasi File Manager atau browser di ponsel Anda.
 2. Jika muncul peringatan keamanan tentang instalasi dari sumber luar, pilih **Setelan**, lalu aktifkan opsi **Izinkan dari sumber ini**.
 3. Ketuk **Instal** dan tunggu hingga selesai.
+
+Untuk memperbarui ke versi baru, cukup pasang APK baru di atas versi lama. **Jangan uninstall dulu**, karena seluruh data aktivitas di ponsel ikut terhapus.
 
 ### Langkah 3: Pengaturan Penghemat Baterai (Penting)
 Agar perekaman rute GPS tidak terhenti saat layar ponsel mati atau terkunci:
@@ -67,10 +74,48 @@ Agar perekaman rute GPS tidak terhenti saat layar ponsel mati atau terkunci:
 2. Masuk ke menu **Penghemat Baterai** (atau Penggunaan Baterai).
 3. Ubah pilihannya menjadi **Tidak Ada Pembatasan** (*Unrestricted*).
 
-### Langkah 4: Mode Ramah Bank pada Fitur Fokus
-Modul Fokus di Virya dirancang agar tidak memicu sistem keamanan aplikasi perbankan (seperti SeaBank, BCA, Livin Mandiri, dan BRImo):
-* Cukup berikan izin **Akses Penggunaan** (*Usage Access*) saat diminta di dalam aplikasi.
-* Izin ini aman dan tidak pernah diblokir oleh aplikasi perbankan. Anda tidak perlu menyalakan izin Aksesibilitas.
+### Langkah 4: Izin Akses Penggunaan untuk Fitur Fokus
+Fitur Fokus (batas waktu harian per aplikasi) membutuhkan dua izin:
+
+1. **Akses Penggunaan** (*Usage Access*), untuk menghitung berapa lama tiap aplikasi dipakai.
+2. **Tampil di atas aplikasi lain** (*Display over other apps*), untuk memunculkan layar "Waktu habis" di atas aplikasi yang jatahnya habis. Tanpa izin ini Virya hanya mencatat waktu, tidak bisa menghentikan.
+
+Fokus sengaja tidak memakai Aksesibilitas, supaya aplikasi bank seperti SeaBank, BCA, Livin Mandiri, dan BRImo tidak menganggap ponsel Anda berbahaya. Buka **Fokus** di Virya, lalu ketuk tombol **Buka pengaturan** pada tiap izin dan aktifkan **Virya**.
+
+Selama ada batas yang aktif, muncul notifikasi kecil **"Fokus aktif"** di bilah status. Itu tanda penjaga sedang berjalan, jangan dimatikan. Kalau layar "Waktu habis" tidak muncul, atur Baterai Virya ke **Tidak Ada Pembatasan** (lihat Langkah 3).
+
+#### Jika tombolnya abu-abu: "Controlled by Restricted Setting"
+Di Android 13 ke atas, APK yang dipasang di luar Play Store dikunci dari izin sensitif seperti Akses Penggunaan. Tombolnya tampil abu-abu dengan tulisan *Controlled by Restricted Setting* atau *Dikontrol oleh Setelan Terbatas*. Saat ditekan, muncul pesan *App was denied access*. Ini aturan Android, bukan kerusakan aplikasi. Ada tiga cara membukanya, coba berurutan:
+
+**Cara A: Izinkan setelan terbatas (tanpa laptop)**
+1. Tekan dulu tombol Akses Penggunaan Virya sekali sampai muncul pesan *App was denied access*, lalu tutup. Langkah ini wajib, karena menu di bawah baru muncul setelah izinnya pernah ditolak.
+2. Buka **Setelan** > **Aplikasi** > **Virya** (atau tekan lama ikon Virya > **Info aplikasi**).
+3. Ketuk **⋮** (titik tiga) di pojok kanan atas, lalu pilih **Izinkan setelan terbatas** (*Allow restricted settings*). Di beberapa merek pilihan ini ada di **bagian paling bawah** halaman, bukan di menu ⋮.
+4. Konfirmasi dengan PIN atau sidik jari.
+5. Kembali ke **Akses Penggunaan** > **Virya**. Sekarang tombolnya bisa diaktifkan.
+
+**Cara B: Pasang ulang lewat File Manager bawaan**
+Sebagian ponsel hanya mengunci APK yang dibuka dari aplikasi chat atau browser (WhatsApp, Telegram, Chrome). Salin APK ke penyimpanan ponsel, lalu buka dari aplikasi **File/File Manager bawaan**, dan pasang di atas versi lama. Cara ini tidak selalu berhasil, tergantung merek ponsel.
+
+**Cara C: Pasang lewat kabel USB (ADB), pasti berhasil**
+Beberapa ponsel (misalnya Infinix, Tecno, dan sebagian Xiaomi/HyperOS) menyembunyikan menu *Izinkan setelan terbatas* sama sekali. Untuk ponsel seperti ini, pasang lewat laptop:
+
+1. Di laptop, unduh [Android SDK Platform-Tools](https://developer.android.com/tools/releases/platform-tools) dan ekstrak.
+2. Di ponsel, aktifkan **Opsi Pengembang**: **Setelan** > **Tentang ponsel**, lalu ketuk **Nomor bentukan** (*Build number*) 7 kali.
+3. Buka **Opsi Pengembang**, lalu aktifkan **USB debugging**.
+4. Sambungkan ponsel ke laptop, lalu pilih **Izinkan** saat muncul pertanyaan di ponsel.
+5. Buka terminal di folder platform-tools, lalu jalankan:
+   ```bash
+   adb devices                                   # ponsel harus muncul dengan status "device"
+   adb install -r app-arm64-v8a-release.apk      # -r = pasang di atas versi lama, data aman
+   adb shell appops set com.abdurrouf.virya ACCESS_RESTRICTED_SETTINGS allow
+   adb shell appops set com.abdurrouf.virya GET_USAGE_STATS allow
+   adb shell appops set com.abdurrouf.virya SYSTEM_ALERT_WINDOW allow
+   ```
+   Perintah ketiga membuka kunci setelan terbatas. Dua perintah terakhir langsung menyalakan Akses Penggunaan dan Tampil di atas aplikasi lain, jadi Anda tidak perlu menekan tombolnya lagi.
+6. Cek dengan `adb shell appops get com.abdurrouf.virya GET_USAGE_STATS`. Hasilnya harus `allow`.
+
+Izin ini hanya perlu dibuka sekali. Pembaruan berikutnya yang dipasang di atas versi lama tidak menguncinya lagi. Kalau Virya di-uninstall lalu dipasang ulang, ulangi langkah di atas.
 
 ---
 
@@ -153,16 +198,25 @@ Pencatat program latihan kekuatan di pusat kebugaran:
 ### 7. Fokus dan Pembatas Layar
 Bantu menjaga kendali waktu dari distraksi media sosial:
 * Tentukan batas waktu harian untuk aplikasi tertentu (contoh: membatasi pemakaian TikTok atau Instagram selama 30 menit per hari).
-* **Mode Ramah Bank**: Berjalan menggunakan izin analitik resmi Android (*Usage Access*) tanpa menyalakan Aksesibilitas. Peringatan akan dikirimkan melalui notifikasi layar saat kuota tercapai, sehingga rekening m-banking Anda tetap aman dan tidak pernah terblokir.
-* Opsi darurat untuk menambah waktu 5 menit, maksimal 1 kali per aplikasi setiap hari.
+* **Sisa 1 menit**: notifikasi peringatan muncul sebelum jatah habis.
+* **Waktu habis**: layar "Waktu habis" langsung muncul di atas aplikasinya (paling lambat sekitar 3 detik). Hal yang sama terjadi kalau aplikasi baru dibuka saat jatahnya sudah habis.
+* **Tetap buka, tapi ada jeda**: tombol "Tetap buka 5 menit" baru aktif setelah hitung mundur. Tiap kali dibuka lagi di hari yang sama, jedanya makin lama (10, 20, 40, lalu 60 detik). Tombol utamanya tetap "Tutup".
+* **Mode Ramah Bank**: penghalang memakai izin *Usage Access* dan *Tampil di atas aplikasi lain*, tanpa Aksesibilitas, sehingga aplikasi m-banking tetap bisa dibuka. Jika izinnya terkunci, lihat [Langkah 4](#langkah-4-izin-akses-penggunaan-untuk-fitur-fokus).
+* Jatah kembali penuh setiap tengah malam.
 
 ---
 
-### 8. Catat Cepat Tugas di Notifikasi
+### 8. Tugas, Rutinitas, dan Catat Cepat
 Kelola daftar rencana tanpa repot membuka aplikasi:
 * Notifikasi minimalis permanen di bilah status Android yang memiliki kolom ketik langsung.
 * Anda cukup menarik panel notifikasi ponsel, mengetik tugas yang baru terpikirkan, lalu menekan tombol kirim. Tugas akan langsung masuk ke daftar agenda.
 * Dukungan tombol pintas di menu Quick Settings atas ponsel dan widget interaktif di layar beranda.
+
+**Rutinitas harian** (misalnya push GitHub atau live TikTok):
+* Saat menambah atau mengedit tugas, pilih **TIAP HARI**. Setelah dicentang, rutinitas muncul lagi besok.
+* **Jam pengingat** (opsional): notifikasi muncul di jam itu dengan tombol "Selesai" dan "Tunda 30 mnt". Kalau belum dicentang, notifikasi diulang tiap jam sampai pukul 22.00.
+* **Ringkasan di notifikasi catat cepat**: misalnya "Rutinitas 1/3 selesai", plus nama rutinitas yang belum.
+* **Penghalang saat buka aplikasi**: di layar Fokus, bagian "Ingatkan rutinitas", pilih aplikasi seperti TikTok atau YouTube. Saat aplikasi itu dibuka dan masih ada rutinitas yang belum dicentang, daftarnya muncul dulu. Kamu bisa mencentang langsung, menekan "Kerjakan sekarang", atau lanjut setelah 5 detik. Paling sering sekali tiap 30 menit per aplikasi. Butuh izin yang sama dengan Fokus ([Langkah 4](#langkah-4-izin-akses-penggunaan-untuk-fitur-fokus)).
 
 ---
 

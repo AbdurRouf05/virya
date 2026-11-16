@@ -43,7 +43,7 @@ class _ExercisePickerScreenState extends ConsumerState<ExercisePickerScreen> {
         .toList();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PILIH GERAKAN'),
+        title: Text(FN.caps('Pilih gerakan')),
         actions: [
           IconButton(
             tooltip: 'Gerakan baru',
@@ -73,7 +73,7 @@ class _ExercisePickerScreenState extends ConsumerState<ExercisePickerScreen> {
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
                 children: [
-                  _chip('SEMUA', null),
+                  _chip(FN.caps('Semua'), null),
                   for (final m in MuscleGroup.values) _chip(m.label, m),
                 ],
               ),
