@@ -7,16 +7,22 @@ import 'package:virya/features/recording/presentation/recording_format.dart';
 class RecordingPrimaryMetric extends StatelessWidget {
   final RecordingState state;
   final RecFormat fmt;
-  const RecordingPrimaryMetric(
-      {super.key, required this.state, required this.fmt});
+  const RecordingPrimaryMetric({
+    super.key,
+    required this.state,
+    required this.fmt,
+  });
 
   @override
   Widget build(BuildContext context) {
     final snap = state.snapshot;
     final cycling = state.sport.isCycling;
     final value =
-        cycling ? fmt.speed(snap.currentSpeedKmh) : fmt.pace(snap.currentSpeedKmh);
-    final label = cycling ? 'KECEPATAN · ${fmt.speedUnit}' : 'PACE · ${fmt.paceUnit}';
+        cycling
+            ? fmt.speed(snap.currentSpeedKmh)
+            : fmt.pace(snap.currentSpeedKmh);
+    final label =
+        cycling ? 'KECEPATAN · ${fmt.speedUnit}' : 'PACE · ${fmt.paceUnit}';
     final size = (MediaQuery.sizeOf(context).width * 0.30).clamp(72.0, 132.0);
 
     String? ribbon;
@@ -35,13 +41,21 @@ class RecordingPrimaryMetric extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(label, style: FN.label(color: FN.onNightMuted)),
+              Text(FN.caps(label), style: FN.label(color: FN.onNightMuted)),
               if (ribbon != null)
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  color: ribbonColor,
-                  child: Text(ribbon, style: FN.label(size: 10, color: FN.onAccent)),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: ribbonColor,
+                    borderRadius: FN.smallRadius,
+                  ),
+                  child: Text(
+                    FN.caps(ribbon),
+                    style: FN.label(size: 10, color: FN.onAccent),
+                  ),
                 ),
             ],
           ),
@@ -51,9 +65,10 @@ class RecordingPrimaryMetric extends StatelessWidget {
               value,
               style: FN.bigNumber(
                 size,
-                color: state.isActive && !snap.isPaused
-                    ? FN.onNight
-                    : FN.onNight.withValues(alpha: 0.55),
+                color:
+                    state.isActive && !snap.isPaused
+                        ? FN.onNight
+                        : FN.onNight.withValues(alpha: 0.55),
               ),
             ),
           ),

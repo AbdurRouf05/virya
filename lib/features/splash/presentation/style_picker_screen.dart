@@ -65,16 +65,26 @@ class StylePickerScreen extends ConsumerWidget {
                 style: FN.body(size: 14, color: FN.inkSoft),
               ),
               const SizedBox(height: 20),
-              for (final g in UiGaya.values) ...[
-                GayaChoiceCard(
-                  gaya: g,
-                  preview: g == UiGaya.tegas ? tegas : bersih,
-                  about: _about[g]!,
-                  selected: g == gaya,
-                  onTap: () => _pick(ref, g),
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (final g in UiGaya.values) ...[
+                      if (g != UiGaya.values.first) const SizedBox(width: 12),
+                      Expanded(
+                        child: GayaChoiceCard(
+                          gaya: g,
+                          preview: g == UiGaya.tegas ? tegas : bersih,
+                          about: _about[g]!,
+                          selected: g == gaya,
+                          onTap: () => _pick(ref, g),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
-                const SizedBox(height: 12),
-              ],
+              ),
+              const SizedBox(height: 16),
               if (gaya == UiGaya.bersih) ...[
                 const SizedBox(height: 4),
                 Text(FN.caps('Kecerahan'), style: FN.label(size: 10)),

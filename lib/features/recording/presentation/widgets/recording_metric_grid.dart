@@ -8,8 +8,11 @@ import 'package:virya/features/recording/presentation/recording_format.dart';
 class RecordingMetricGrid extends StatelessWidget {
   final RecordingState state;
   final RecFormat fmt;
-  const RecordingMetricGrid(
-      {super.key, required this.state, required this.fmt});
+  const RecordingMetricGrid({
+    super.key,
+    required this.state,
+    required this.fmt,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +21,17 @@ class RecordingMetricGrid extends StatelessWidget {
     final tiles = <_Tile>[
       _Tile('JARAK', fmt.distance(s.totalDistanceMeters), fmt.distanceUnit),
       _Tile('WAKTU GERAK', RecFormat.duration(s.movingTimeSeconds), ''),
-      _Tile('ELEV NAIK', fmt.elevation(s.totalElevationGainMeters),
-          fmt.elevationUnit),
-      _Tile('TANJAKAN', RecFormat.grade(s.currentGradePct), '%',
-          accent: s.currentGradePct >= 3 ? FN.grade(s.currentGradePct) : null),
+      _Tile(
+        'ELEV NAIK',
+        fmt.elevation(s.totalElevationGainMeters),
+        fmt.elevationUnit,
+      ),
+      _Tile(
+        'TANJAKAN',
+        RecFormat.grade(s.currentGradePct),
+        '%',
+        accent: s.currentGradePct >= 3 ? FN.grade(s.currentGradePct) : null,
+      ),
       cycling
           ? _Tile('RATA-RATA', fmt.speed(s.averageSpeedKmh), fmt.speedUnit)
           : _Tile('PACE RATA²', fmt.pace(s.averageSpeedKmh), fmt.paceUnit),
@@ -65,17 +75,26 @@ class _TileView extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
       decoration: BoxDecoration(
         color: FN.nightSurface,
-        border: Border(
-          left: BorderSide(color: tile.accent ?? FN.nightLine, width: 3),
-        ),
+        borderRadius: FN.boxRadius,
+        border:
+            FN.isClean
+                ? null
+                : Border(
+                  left: BorderSide(
+                    color: tile.accent ?? FN.nightLine,
+                    width: 3,
+                  ),
+                ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(tile.label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: FN.label(size: 9, color: FN.onNightMuted)),
+          Text(
+            FN.caps(tile.label),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: FN.label(size: 9, color: FN.onNightMuted),
+          ),
           const SizedBox(height: 2),
           FittedBox(
             fit: BoxFit.scaleDown,
@@ -84,10 +103,22 @@ class _TileView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               children: [
-                Text(tile.value, style: FN.bigNumber(30, color: FN.onNight)),
+                Text(
+                  tile.value,
+                  style: FN.bigNumber(
+                    30,
+                    color:
+                        FN.isClean && tile.accent != null
+                            ? tile.accent
+                            : FN.onNight,
+                  ),
+                ),
                 if (tile.unit.isNotEmpty) ...[
                   const SizedBox(width: 3),
-                  Text(tile.unit, style: FN.label(size: 9, color: FN.onNightMuted)),
+                  Text(
+                    tile.unit,
+                    style: FN.label(size: 9, color: FN.onNightMuted),
+                  ),
                 ],
               ],
             ),

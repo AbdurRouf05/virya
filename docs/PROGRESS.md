@@ -18,6 +18,13 @@ Newest entries on top. Baru bergabung? Mulai dari [PANDUAN.md](PANDUAN.md). Atur
 
 ## Log
 
+### 2026-11-17 — Pratinjau gaya + layar rekam ikut Bersih ✅
+- `core/widgets/look_preview.dart` (+ `look_preview_parts.dart`): layar mini "Hari ini" 9:16 digambar dengan palet & gaya sendiri (tidak lewat `FN`), jadi Tegas dan Bersih tampil berdampingan.
+- Layar pilih gaya pertama: dua kartu berdampingan berisi pratinjau. Pengaturan → Tampilan: segmen Gaya diganti dua pratinjau yang bisa disentuh; pratinjau Tegas ikut warna yang dipilih, Bersih ikut kecerahan.
+- Layar rekam (non-AMOLED) kini ikut Bersih: tombol besar membulat & huruf sans, label kapital kalimat, ubin metrik tanpa garis kiri, chip GPS/AMOLED/olahraga membulat, dialog & sheet membulat. HUD AMOLED dan flyover tetap Tegas.
+- Map packs/unduh wilayah: bentuk dan label ikut gaya.
+- Tes: `test/theme/look_preview_test.dart`; 603 tes lulus, analyze bersih (hanya info lama).
+
 ### 2026-11-16 — Buat Rute (otomatis + manual) & rekam mengikuti rute ✅
 - Fitur baru `lib/features/routes/`. Alurnya Atur → 3 pilihan → Detail. Atur: titik mulai dari lokasi sekarang atau sentuh peta, olahraga Lari/Sepeda/Jalan, jarak lewat slider atau angka pas, bentuk Keliling/Pergi-pulang/A → B, medan Datar/Bebas/Cari tanjakan, "Utamakan jalan baru", "Hindari jalan raya". Tiga pilihan tampil di peta (yang dipilih tebal, sisanya samar) dengan jarak, naik, perkiraan waktu, dan ciri ("72% jalan baru", "Paling datar", "Banyak tanjakan"). Ada tombol "Acak lagi".
 - Routing memakai server publik BRouter (profil trekking/safety untuk sepeda, shortest/hiking-mountain untuk lari dan jalan). Kalau BRouter gagal, cadangannya OSRM routing.openstreetmap.de. User-Agent "Virya/1.0". Internet hanya dipakai saat membuat rute; pesan offline dan galat dalam bahasa Indonesia.

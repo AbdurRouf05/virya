@@ -5,6 +5,7 @@ import 'package:virya/app/theme/gaya.dart';
 import 'package:virya/app/theme/palette.dart';
 import 'package:virya/app/theme/styles/styles.dart';
 import 'package:virya/core/widgets/field_kit.dart';
+import 'package:virya/core/widgets/look_preview.dart';
 
 /// Pilihan tampilan: gaya (Tegas/Bersih), lalu warna Tegas atau kecerahan
 /// Bersih. Tiap baris warna digambar dengan warnanya sendiri, jadi bisa
@@ -39,10 +40,29 @@ class _StylePickerState extends ConsumerState<StylePicker> {
       children: [
         Text(FN.caps('Gaya'), style: FN.label(size: 10)),
         const SizedBox(height: 6),
-        SegmentedPick<UiGaya>(
-          options: [for (final g in UiGaya.values) (g, g.label)],
-          value: gaya,
-          onChanged: (g) => setState(() => _gaya = g),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final g in UiGaya.values) ...[
+              if (g != UiGaya.values.first) const SizedBox(width: 12),
+              Expanded(
+                child: _GayaPreview(
+                  gaya: g,
+                  palette:
+                      g == UiGaya.tegas
+                          ? styleById(style)
+                          : resolveStyle(
+                            styleId: null,
+                            gaya: UiGaya.bersih,
+                            mode: mode,
+                            platform: MediaQuery.platformBrightnessOf(context),
+                          ),
+                  selected: g == gaya,
+                  onTap: () => setState(() => _gaya = g),
+                ),
+              ),
+            ],
+          ],
         ),
         const SizedBox(height: 6),
         Text(
@@ -130,7 +150,12 @@ class _StyleTile extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: style.paper,
-              border: FN.frame(color: selected ? FN.signal : style.ink, width: selected ? 3 : 1), borderRadius: FN.boxRadius,),
+              border: FN.frame(
+                color: selected ? FN.signal : style.ink,
+                width: selected ? 3 : 1,
+              ),
+              borderRadius: FN.boxRadius,
+            ),
             child: Row(
               children: [
                 Expanded(child: _names()),
@@ -141,7 +166,9 @@ class _StyleTile extends StatelessWidget {
                     margin: const EdgeInsets.only(left: 4),
                     decoration: BoxDecoration(
                       color: c,
-                      border: FN.frame(color: style.ink, width: 1), borderRadius: FN.boxRadius,),
+                      border: FN.frame(color: style.ink, width: 1),
+                      borderRadius: FN.boxRadius,
+                    ),
                   ),
               ],
             ),
@@ -173,4 +200,69 @@ class _StyleTile extends StatelessWidget {
       ),
     ],
   );
+}
+
+/// Layar contoh satu gaya; sentuh untuk memilih (belum diterapkan).
+class _GayaPreview extends StatelessWidget {
+  final UiGaya gaya;
+  final Palette palette;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _GayaPreview({
+    required this.gaya,
+    required this.palette,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: 'Gaya ${gaya.label}',
+      child: ExcludeSemantics(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            padding: const EdgeInsets.all(6),
+            decoration: FN.card(
+              borderColor: selected ? FN.signal : null,
+              width: selected ? 3 : 1,
+            ),
+            child: Column(
+              children: [
+                LookPreview(palette: palette),
+                const SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      selected ? Icons.check_circle : Icons.circle_outlined,
+                      size: 16,
+                      color: selected ? FN.signal : FN.inkMuted,
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        FN.caps(gaya.label),
+                        overflow: TextOverflow.ellipsis,
+                        style: FN.labelStrong(
+                          size: 12,
+                          color: selected ? FN.ink : FN.inkMuted,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

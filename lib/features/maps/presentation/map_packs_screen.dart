@@ -119,7 +119,7 @@ class MapPacksScreen extends ConsumerWidget {
       style: FilledButton.styleFrom(
         backgroundColor: FN.ink,
         foregroundColor: FN.paper,
-        shape: const RoundedRectangleBorder(),
+        shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
       ),
       onPressed: () => _download(context, ref),
       icon: const Icon(Icons.download_for_offline_outlined),

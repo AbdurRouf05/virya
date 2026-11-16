@@ -45,13 +45,13 @@ class RecordingTopBar extends StatelessWidget {
                   const SizedBox(width: 8),
                   Flexible(
                     child: Text(
-                      state.sport.displayName.toUpperCase(),
+                      FN.isClean
+                          ? state.sport.displayName
+                          : state.sport.displayName.toUpperCase(),
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontFamily: FN.display,
-                          fontSize: 20,
-                          color: FN.onNight,
-                          letterSpacing: 0.5),
+                      style: FN
+                          .title(26, color: FN.onNight)
+                          .copyWith(letterSpacing: FN.track(0.5)),
                     ),
                   ),
                   if (idle) Icon(Icons.expand_more, color: FN.onNightMuted),
@@ -93,6 +93,7 @@ class _AmoledChip extends StatelessWidget {
           decoration: BoxDecoration(
             color: bg,
             border: Border.all(color: border, width: active ? 1.5 : 1),
+            borderRadius: FN.smallRadius,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -105,9 +106,11 @@ class _AmoledChip extends StatelessWidget {
               const SizedBox(width: 5),
               Text(
                 'AMOLED',
-                style: FN.label(size: 10, color: color).copyWith(
-                  fontWeight: active ? FontWeight.w700 : FontWeight.w500,
-                ),
+                style: FN
+                    .label(size: 10, color: color)
+                    .copyWith(
+                      fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+                    ),
               ),
             ],
           ),
@@ -133,13 +136,16 @@ class _GpsChip extends StatelessWidget {
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-      decoration: BoxDecoration(border: Border.all(color: color)),
+      decoration: BoxDecoration(
+        border: Border.all(color: color),
+        borderRadius: FN.smallRadius,
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           _Blink(active: status == GpsStatus.searching, color: color),
           const SizedBox(width: 6),
-          Text(label, style: FN.label(size: 10, color: color)),
+          Text(FN.caps(label), style: FN.label(size: 10, color: color)),
         ],
       ),
     );
@@ -157,7 +163,9 @@ class _Blink extends StatefulWidget {
 
 class _BlinkState extends State<_Blink> with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 700));
+    vsync: this,
+    duration: const Duration(milliseconds: 700),
+  );
 
   @override
   void initState() {
@@ -187,7 +195,14 @@ class _BlinkState extends State<_Blink> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) => FadeTransition(
-        opacity: _c,
-        child: Container(width: 8, height: 8, color: widget.color),
-      );
+    opacity: _c,
+    child: Container(
+      width: 8,
+      height: 8,
+      decoration: BoxDecoration(
+        color: widget.color,
+        shape: FN.isClean ? BoxShape.circle : BoxShape.rectangle,
+      ),
+    ),
+  );
 }

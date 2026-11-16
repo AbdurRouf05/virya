@@ -31,34 +31,46 @@ Future<void> checkAndOfferRecovery(BuildContext context, WidgetRef ref) async {
   final choice = await showDialog<_RecoveryChoice>(
     context: context,
     barrierDismissible: false,
-    builder: (ctx) => AlertDialog(
-      backgroundColor: FN.nightSurface,
-      shape: const RoundedRectangleBorder(),
-      title: Text('REKAMAN TERPUTUS',
-          style: FN.label(size: 14, color: FN.signal)),
-      content: Text(
-        '"${activity.title}" ($when) belum selesai — kemungkinan aplikasi '
-        'tertutup atau baterai habis.\n\n'
-        '${check.recoveredPointsCount} titik GPS berhasil diselamatkan.',
-        style: TextStyle(
-            fontFamily: FN.sans, color: FN.onNight, height: 1.4),
-      ),
-      actionsOverflowDirection: VerticalDirection.down,
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(ctx, _RecoveryChoice.discard),
-          child: Text('BUANG', style: FN.label(color: FN.warn)),
+    builder:
+        (ctx) => AlertDialog(
+          backgroundColor: FN.nightSurface,
+          shape: RoundedRectangleBorder(borderRadius: FN.cardRadius),
+          title: Text(
+            FN.caps('REKAMAN TERPUTUS'),
+            style: FN.label(size: 14, color: FN.signal),
+          ),
+          content: Text(
+            '"${activity.title}" ($when) belum selesai — kemungkinan aplikasi '
+            'tertutup atau baterai habis.\n\n'
+            '${check.recoveredPointsCount} titik GPS berhasil diselamatkan.',
+            style: TextStyle(
+              fontFamily: FN.sans,
+              color: FN.onNight,
+              height: 1.4,
+            ),
+          ),
+          actionsOverflowDirection: VerticalDirection.down,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, _RecoveryChoice.discard),
+              child: Text(FN.caps('BUANG'), style: FN.label(color: FN.warn)),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, _RecoveryChoice.save),
+              child: Text(
+                FN.caps('SIMPAN'),
+                style: FN.label(color: FN.onNight),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, _RecoveryChoice.resume),
+              child: Text(
+                FN.caps('LANJUTKAN'),
+                style: FN.label(color: FN.acid),
+              ),
+            ),
+          ],
         ),
-        TextButton(
-          onPressed: () => Navigator.pop(ctx, _RecoveryChoice.save),
-          child: Text('SIMPAN', style: FN.label(color: FN.onNight)),
-        ),
-        TextButton(
-          onPressed: () => Navigator.pop(ctx, _RecoveryChoice.resume),
-          child: Text('LANJUTKAN', style: FN.label(color: FN.acid)),
-        ),
-      ],
-    ),
   );
   if (choice == null || !context.mounted) return;
 
@@ -68,9 +80,9 @@ Future<void> checkAndOfferRecovery(BuildContext context, WidgetRef ref) async {
           .read(recordingControllerProvider.notifier)
           .resumeRecovered(activity);
       if (context.mounted) {
-        await Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const RecordingScreen()),
-        );
+        await Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => const RecordingScreen()));
       }
     case _RecoveryChoice.save:
       if (check.recoveredPointsCount == 0) {
@@ -89,24 +101,35 @@ Future<void> checkAndOfferRecovery(BuildContext context, WidgetRef ref) async {
     case _RecoveryChoice.discard:
       final sure = await showDialog<bool>(
         context: context,
-        builder: (ctx) => AlertDialog(
-          backgroundColor: FN.nightSurface,
-          shape: const RoundedRectangleBorder(),
-          title: Text('YAKIN BUANG?',
-              style: FN.label(size: 14, color: FN.onNight)),
-          content: Text('Data rekaman ini akan dihapus permanen.',
-              style: TextStyle(fontFamily: FN.sans, color: FN.onNight)),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: Text('BATAL', style: FN.label(color: FN.onNightMuted)),
+        builder:
+            (ctx) => AlertDialog(
+              backgroundColor: FN.nightSurface,
+              shape: RoundedRectangleBorder(borderRadius: FN.cardRadius),
+              title: Text(
+                'YAKIN BUANG?',
+                style: FN.label(size: 14, color: FN.onNight),
+              ),
+              content: Text(
+                'Data rekaman ini akan dihapus permanen.',
+                style: TextStyle(fontFamily: FN.sans, color: FN.onNight),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx, false),
+                  child: Text(
+                    FN.caps('BATAL'),
+                    style: FN.label(color: FN.onNightMuted),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx, true),
+                  child: Text(
+                    FN.caps('BUANG'),
+                    style: FN.label(color: FN.warn),
+                  ),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: Text('BUANG', style: FN.label(color: FN.warn)),
-            ),
-          ],
-        ),
       );
       if (sure == true) {
         await service.discardSession(activity.id);

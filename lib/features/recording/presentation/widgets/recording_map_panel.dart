@@ -64,12 +64,17 @@ class _PhotoCount extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      color: FN.night.withValues(alpha: 0.85),
-      child: Row(children: [
-        Icon(Icons.photo_camera, size: 14, color: FN.onNight),
-        const SizedBox(width: 4),
-        Text('$count', style: FN.label(size: 11, color: FN.onNight)),
-      ]),
+      decoration: BoxDecoration(
+        color: FN.night.withValues(alpha: 0.85),
+        borderRadius: FN.smallRadius,
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.photo_camera, size: 14, color: FN.onNight),
+          const SizedBox(width: 4),
+          Text('$count', style: FN.label(size: 11, color: FN.onNight)),
+        ],
+      ),
     );
   }
 }
@@ -79,9 +84,10 @@ class _GridPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final p = Paint()
-      ..color = FN.nightLine
-      ..strokeWidth = 1;
+    final p =
+        Paint()
+          ..color = FN.nightLine
+          ..strokeWidth = 1;
     const step = 32.0;
     for (var x = 0.0; x < size.width; x += step) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), p);
@@ -104,14 +110,19 @@ class _SurfaceChip extends StatelessWidget {
     final color = FN.surface[surface] ?? FN.inkMuted;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-      color: FN.night.withValues(alpha: 0.85),
+      decoration: BoxDecoration(
+        color: FN.night.withValues(alpha: 0.85),
+        borderRadius: FN.smallRadius,
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(width: 12, height: 12, color: color),
           const SizedBox(width: 6),
-          Text(surface.label.toUpperCase(),
-              style: FN.label(size: 10, color: FN.onNight)),
+          Text(
+            FN.isClean ? surface.label : surface.label.toUpperCase(),
+            style: FN.label(size: 10, color: FN.onNight),
+          ),
         ],
       ),
     );

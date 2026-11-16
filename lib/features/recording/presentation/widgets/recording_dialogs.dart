@@ -7,61 +7,76 @@ import 'package:virya/features/recording/presentation/widgets/recording_sport_ic
 Future<bool?> showDiscardRecordingDialog(BuildContext context) {
   return showDialog<bool>(
     context: context,
-    builder: (ctx) => AlertDialog(
-      backgroundColor: FN.nightSurface,
-      shape: const RoundedRectangleBorder(),
-      title: Text('BUANG AKTIVITAS?', style: FN.label(size: 14, color: FN.onNight)),
-      content: Text(
-        'Seluruh rute, data, dan foto sesi ini akan dihapus permanen.',
-        style: TextStyle(fontFamily: FN.sans, color: FN.onNight),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(ctx, false),
-          child: Text('BATAL', style: FN.label(color: FN.onNightMuted)),
+    builder:
+        (ctx) => AlertDialog(
+          backgroundColor: FN.nightSurface,
+          shape: RoundedRectangleBorder(borderRadius: FN.cardRadius),
+          title: Text(
+            FN.caps('BUANG AKTIVITAS?'),
+            style: FN.label(size: 14, color: FN.onNight),
+          ),
+          content: Text(
+            'Seluruh rute, data, dan foto sesi ini akan dihapus permanen.',
+            style: TextStyle(fontFamily: FN.sans, color: FN.onNight),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(
+                FN.caps('BATAL'),
+                style: FN.label(color: FN.onNightMuted),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: Text(FN.caps('BUANG'), style: FN.label(color: FN.warn)),
+            ),
+          ],
         ),
-        TextButton(
-          onPressed: () => Navigator.pop(ctx, true),
-          child: Text('BUANG', style: FN.label(color: FN.warn)),
-        ),
-      ],
-    ),
   );
 }
 
 /// Bottom sheet listing every sport. Returns the picked sport or null.
 Future<SportType?> showRecordingSportPicker(
-    BuildContext context, SportType current) {
+  BuildContext context,
+  SportType current,
+) {
   return showModalBottomSheet<SportType>(
     context: context,
     backgroundColor: FN.nightSurface,
-    shape: const RoundedRectangleBorder(),
-    builder: (ctx) => SafeArea(
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
-            child: Text('PILIH OLAHRAGA',
-                style: FN.label(size: 12, color: FN.signal)),
-          ),
-          for (final s in SportType.gps)
-            ListTile(
-              minTileHeight: 56,
-              leading: Icon(sportIcon(s),
-                  color: s == current ? FN.acid : FN.onNightMuted),
-              title: Text(
-                s.displayName.toUpperCase(),
-                style: TextStyle(
-                  fontFamily: FN.display,
-                  fontSize: 20,
-                  color: s == current ? FN.acid : FN.onNight,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(FN.radius)),
+    ),
+    builder:
+        (ctx) => SafeArea(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
+                child: Text(
+                  FN.caps('PILIH OLAHRAGA'),
+                  style: FN.label(size: 12, color: FN.signal),
                 ),
               ),
-              onTap: () => Navigator.pop(ctx, s),
-            ),
-        ],
-      ),
-    ),
+              for (final s in SportType.gps)
+                ListTile(
+                  minTileHeight: 56,
+                  leading: Icon(
+                    sportIcon(s),
+                    color: s == current ? FN.acid : FN.onNightMuted,
+                  ),
+                  title: Text(
+                    FN.isClean ? s.displayName : s.displayName.toUpperCase(),
+                    style: FN.title(
+                      24,
+                      color: s == current ? FN.acid : FN.onNight,
+                    ),
+                  ),
+                  onTap: () => Navigator.pop(ctx, s),
+                ),
+            ],
+          ),
+        ),
   );
 }

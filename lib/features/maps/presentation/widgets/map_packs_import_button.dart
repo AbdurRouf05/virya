@@ -25,7 +25,9 @@ class MapPacksImportButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'MENYALIN ${fileName ?? ''}'.toUpperCase(),
+              FN.isClean
+                  ? 'Menyalin ${fileName ?? ''}'
+                  : 'MENYALIN ${fileName ?? ''}'.toUpperCase(),
               overflow: TextOverflow.ellipsis,
               style: FN.label(size: 11, color: FN.ink),
             ),
@@ -51,7 +53,7 @@ class MapPacksImportButton extends StatelessWidget {
         style: FilledButton.styleFrom(
           backgroundColor: FN.ink,
           foregroundColor: FN.paper,
-          shape: const RoundedRectangleBorder(),
+          shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
         ),
         onPressed: onImport,
         icon: const Icon(Icons.file_download_outlined),

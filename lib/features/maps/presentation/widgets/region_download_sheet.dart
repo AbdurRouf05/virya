@@ -18,7 +18,7 @@ class RegionDownloadSheet extends StatefulWidget {
         context: context,
         isScrollControlled: true,
         backgroundColor: FN.paper,
-        shape: const RoundedRectangleBorder(),
+        shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
         builder: (_) => const RegionDownloadSheet(),
       );
 
@@ -149,7 +149,7 @@ class _RegionDownloadSheetState extends State<RegionDownloadSheet> {
             decoration: InputDecoration(
               labelText: 'Nama wilayah (opsional)',
               hintText: 'Sekitar posisi · $_radius km',
-              border: const OutlineInputBorder(borderRadius: BorderRadius.zero),
+              border: OutlineInputBorder(borderRadius: FN.smallRadius),
             ),
           ),
           const SizedBox(height: 12),
@@ -162,7 +162,7 @@ class _RegionDownloadSheetState extends State<RegionDownloadSheet> {
               style: FilledButton.styleFrom(
                 backgroundColor: FN.ink,
                 foregroundColor: FN.paper,
-                shape: const RoundedRectangleBorder(),
+                shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
               ),
               onPressed: _pos == null || tooMany ? null : _submit,
               icon: const Icon(Icons.download),

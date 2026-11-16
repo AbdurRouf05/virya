@@ -73,8 +73,11 @@ class _SportChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(
             color: selected ? FN.acid : Colors.transparent,
+            borderRadius: FN.isClean ? BorderRadius.circular(28) : null,
             border:
-                selected ? null : Border.all(color: FN.onNightMuted, width: 1.2),
+                selected
+                    ? null
+                    : Border.all(color: FN.onNightMuted, width: 1.2),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -82,8 +85,9 @@ class _SportChip extends StatelessWidget {
               Icon(sportIcon(sport), size: 20, color: fg),
               const SizedBox(width: 8),
               Text(
-                label,
-                style: FN.label(size: 12, color: fg)
+                FN.caps(label),
+                style: FN
+                    .label(size: 12, color: fg)
                     .copyWith(fontWeight: FontWeight.w700),
               ),
             ],

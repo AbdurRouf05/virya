@@ -40,7 +40,9 @@ void main() {
         container: container,
         child: MaterialApp(
           theme: FieldNotesTheme.paper,
-          home: const Scaffold(body: StylePicker()),
+          home: const Scaffold(
+            body: SingleChildScrollView(child: StylePicker()),
+          ),
         ),
       ),
     );
@@ -48,11 +50,13 @@ void main() {
     expect(find.text('FIELD NOTES'), findsOneWidget);
     expect(find.text('TERAPKAN'), findsNothing);
 
+    await tester.ensureVisible(find.text('MALAM'));
     await tester.tap(find.text('MALAM'));
     await tester.pump();
     expect(find.text('TERAPKAN'), findsOneWidget);
     expect(container.read(styleIdProvider), isNull);
 
+    await tester.ensureVisible(find.text('TERAPKAN'));
     await tester.tap(find.text('TERAPKAN'));
     await settle(tester);
     expect(container.read(styleIdProvider), 'night');

@@ -33,8 +33,9 @@ class RecordingScreen extends ConsumerStatefulWidget {
 }
 
 class _RecordingScreenState extends ConsumerState<RecordingScreen> {
-  late final RecordingController _ctrl =
-      ref.read(recordingControllerProvider.notifier);
+  late final RecordingController _ctrl = ref.read(
+    recordingControllerProvider.notifier,
+  );
   bool _busy = false;
 
   bool _amoledMode = false;
@@ -61,10 +62,7 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
     if (!mounted) return;
     final s = ref.read(recordingControllerProvider);
     if (s.phase != RecordingPhase.idle || s.simulated) return;
-    final ok = await TrackingPermissions.ensureForRecording(
-      context,
-      db: db,
-    );
+    final ok = await TrackingPermissions.ensureForRecording(context, db: db);
     if (ok && mounted) await _ctrl.warmUp();
   }
 
@@ -118,10 +116,14 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
       }
     });
     final db = ref.read(databaseProvider);
-    unawaited(db.setSetting(RecordingSettings.keyAmoledHud, _amoledMode.toString()));
-    _snack(_amoledMode
-        ? 'Mode Layar Hemat (AMOLED HUD) aktif. Sentuh layar untuk intip peta.'
-        : 'Mode Peta normal aktif.');
+    unawaited(
+      db.setSetting(RecordingSettings.keyAmoledHud, _amoledMode.toString()),
+    );
+    _snack(
+      _amoledMode
+          ? 'Mode Layar Hemat (AMOLED HUD) aktif. Sentuh layar untuk intip peta.'
+          : 'Mode Peta normal aktif.',
+    );
   }
 
   Future<void> _start() async {
@@ -146,9 +148,9 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
     final id = await _ctrl.stop();
     if (!mounted) return;
     if (id != null) {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (_) => ActivityDetailScreen(activityId: id),
-      ));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => ActivityDetailScreen(activityId: id)),
+      );
     }
   }
 
@@ -177,11 +179,13 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
   void _snack(String text) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        content: Text(text, style: TextStyle(fontFamily: FN.sans)),
-        backgroundColor: FN.nightSurface,
-        behavior: SnackBarBehavior.floating,
-      ));
+      ..showSnackBar(
+        SnackBar(
+          content: Text(text, style: TextStyle(fontFamily: FN.sans)),
+          backgroundColor: FN.nightSurface,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
   }
 
   Future<void> _pickSport(SportType current) async {
@@ -192,14 +196,14 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(recordingControllerProvider);
-    ref.listen<String?>(
-      recordingControllerProvider.select((v) => v.message),
-      (_, msg) {
-        if (msg == null) return;
-        _snack(msg);
-        _ctrl.clearMessage();
-      },
-    );
+    ref.listen<String?>(recordingControllerProvider.select((v) => v.message), (
+      _,
+      msg,
+    ) {
+      if (msg == null) return;
+      _snack(msg);
+      _ctrl.clearMessage();
+    });
     final fmt = RecFormat(imperial: s.imperial);
 
     return PopScope(
@@ -278,7 +282,8 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
                     ),
                   ],
                 ),
-                if (s.phase == RecordingPhase.saving) const RecordingSavingOverlay(),
+                if (s.phase == RecordingPhase.saving)
+                  const RecordingSavingOverlay(),
               ],
             ),
           ),
@@ -305,8 +310,8 @@ class _PeekCountdownBanner extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.black.withValues(alpha: 0.92),
-          borderRadius: BorderRadius.circular(4),
-          border: Border.all(color: FN.acid, width: 1.5),
+          borderRadius: BorderRadius.circular(FN.isClean ? FN.radius : 4),
+          border: Border.all(color: FN.acid, width: FN.line(1.5)),
           boxShadow: const [
             BoxShadow(
               color: Colors.black87,
@@ -320,11 +325,15 @@ class _PeekCountdownBanner extends StatelessWidget {
             Icon(Icons.visibility, size: 16, color: FN.acid),
             const SizedBox(width: 8),
             Text(
-              'INTIP PETA: ${secondsRemaining}S',
-              style: FN.label(size: 11, color: FN.acid).copyWith(
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.1,
-              ),
+              FN.isClean
+                  ? 'Intip peta: ${secondsRemaining}s'
+                  : 'INTIP PETA: ${secondsRemaining}S',
+              style: FN
+                  .label(size: 11, color: FN.acid)
+                  .copyWith(
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: FN.track(1.1),
+                  ),
             ),
             const Spacer(),
             InkWell(
@@ -340,10 +349,10 @@ class _PeekCountdownBanner extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'TUTUP',
-                      style: FN.label(size: 10, color: Colors.white).copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                      FN.caps('TUTUP'),
+                      style: FN
+                          .label(size: 10, color: Colors.white)
+                          .copyWith(fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(width: 4),
                     const Icon(Icons.close, size: 12, color: Colors.white),

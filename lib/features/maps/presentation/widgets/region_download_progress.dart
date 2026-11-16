@@ -22,7 +22,9 @@ class RegionDownloadProgressCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'MENGUNDUH ${state.region.name}'.toUpperCase(),
+            FN.isClean
+                ? 'Mengunduh ${state.region.name}'
+                : 'MENGUNDUH ${state.region.name}'.toUpperCase(),
             overflow: TextOverflow.ellipsis,
             style: FN.label(size: 11, color: FN.ink),
           ),

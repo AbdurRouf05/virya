@@ -8,6 +8,7 @@ class HoldToConfirmButton extends StatefulWidget {
   final String label;
   final IconData icon;
   final VoidCallback onConfirmed;
+
   /// Accent color; defaults to [FN.signal].
   final Color? color;
   final Duration holdDuration;
@@ -29,15 +30,16 @@ class HoldToConfirmButton extends StatefulWidget {
 
 class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _c =
-      AnimationController(vsync: this, duration: widget.holdDuration)
-        ..addStatusListener((s) {
-          if (s == AnimationStatus.completed) {
-            HapticFeedback.heavyImpact();
-            widget.onConfirmed();
-            _c.value = 0;
-          }
-        });
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: widget.holdDuration,
+  )..addStatusListener((s) {
+    if (s == AnimationStatus.completed) {
+      HapticFeedback.heavyImpact();
+      widget.onConfirmed();
+      _c.value = 0;
+    }
+  });
 
   @override
   void dispose() {
@@ -56,10 +58,12 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
       if (_c.value < 0.3) {
         ScaffoldMessenger.maybeOf(context)
           ?..hideCurrentSnackBar()
-          ..showSnackBar(const SnackBar(
-            content: Text('Tahan tombol untuk menyelesaikan'),
-            duration: Duration(seconds: 1),
-          ));
+          ..showSnackBar(
+            const SnackBar(
+              content: Text('Tahan tombol untuk menyelesaikan'),
+              duration: Duration(seconds: 1),
+            ),
+          );
       }
     }
   }
@@ -76,36 +80,44 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
         onPointerCancel: (_) => _up(),
         child: AnimatedBuilder(
           animation: _c,
-          builder: (context, _) => Container(
-            height: widget.height,
-            decoration: BoxDecoration(
-              border: Border.all(color: color, width: 2),
-              color: FN.night,
-            ),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                FractionallySizedBox(
-                  alignment: Alignment.bottomCenter,
-                  heightFactor: _c.value,
-                  child: ColoredBox(color: color),
+          builder:
+              (context, _) => Container(
+                height: widget.height,
+                decoration: BoxDecoration(
+                  border: Border.all(color: color, width: FN.line(2)),
+                  borderRadius: FN.boxRadius,
+                  color: FN.night,
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                clipBehavior: FN.isClean ? Clip.antiAlias : Clip.none,
+                child: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    Icon(widget.icon,
-                        size: 30,
-                        color: _c.value > 0.5 ? FN.onAccent : color),
-                    const SizedBox(height: 4),
-                    Text(widget.label,
-                        style: FN.label(
+                    FractionallySizedBox(
+                      alignment: Alignment.bottomCenter,
+                      heightFactor: _c.value,
+                      child: ColoredBox(color: color),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          widget.icon,
+                          size: 30,
+                          color: _c.value > 0.5 ? FN.onAccent : color,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          FN.caps(widget.label),
+                          style: FN.label(
                             size: 11,
-                            color: _c.value > 0.5 ? FN.onAccent : color)),
+                            color: _c.value > 0.5 ? FN.onAccent : color,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
         ),
       ),
     );

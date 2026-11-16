@@ -43,72 +43,74 @@ class RecordingControls extends StatelessWidget {
   }
 
   Widget _idle() => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _BigButton(
-            label: 'MULAI',
-            icon: Icons.play_arrow,
-            color: FN.signal,
-            onTap: busy ? null : onStart,
-          ),
-          _SimToggle(value: state.simulated, onChanged: onToggleSim),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      _BigButton(
+        label: 'MULAI',
+        icon: Icons.play_arrow,
+        color: FN.signal,
+        onTap: busy ? null : onStart,
+      ),
+      _SimToggle(value: state.simulated, onChanged: onToggleSim),
+    ],
+  );
 
   Widget _recording() => Row(
+    children: [
+      _SquareButton(icon: Icons.photo_camera, onTap: onPhoto),
+      const SizedBox(width: 8),
+      Expanded(
+        child: _BigButton(
+          label: 'JEDA',
+          icon: Icons.pause,
+          color: FN.onNight,
+          onTap: onPause,
+        ),
+      ),
+      const SizedBox(width: 8),
+      SizedBox(
+        width: 88,
+        child: HoldToConfirmButton(
+          label: 'SELESAI',
+          icon: Icons.stop,
+          onConfirmed: onStop,
+        ),
+      ),
+    ],
+  );
+
+  Widget _paused() => Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Row(
         children: [
-          _SquareButton(icon: Icons.photo_camera, onTap: onPhoto),
-          const SizedBox(width: 8),
           Expanded(
             child: _BigButton(
-              label: 'JEDA',
-              icon: Icons.pause,
-              color: FN.onNight,
-              onTap: onPause,
+              label: 'LANJUT',
+              icon: Icons.play_arrow,
+              color: FN.acid,
+              onTap: onResume,
             ),
           ),
           const SizedBox(width: 8),
-          SizedBox(
-            width: 88,
+          Expanded(
             child: HoldToConfirmButton(
-              label: 'SELESAI',
+              label: 'TAHAN · SELESAI',
               icon: Icons.stop,
               onConfirmed: onStop,
             ),
           ),
         ],
-      );
-
-  Widget _paused() => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: _BigButton(
-                  label: 'LANJUT',
-                  icon: Icons.play_arrow,
-                  color: FN.acid,
-                  onTap: onResume,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: HoldToConfirmButton(
-                  label: 'TAHAN · SELESAI',
-                  icon: Icons.stop,
-                  onConfirmed: onStop,
-                ),
-              ),
-            ],
-          ),
-          TextButton(
-            onPressed: onDiscard,
-            child:
-                Text('BUANG AKTIVITAS', style: FN.label(size: 11, color: FN.warn)),
-          ),
-        ],
-      );
+      ),
+      TextButton(
+        onPressed: onDiscard,
+        child: Text(
+          FN.caps('BUANG AKTIVITAS'),
+          style: FN.label(size: 11, color: FN.warn),
+        ),
+      ),
+    ],
+  );
 }
 
 class _BigButton extends StatelessWidget {
@@ -128,13 +130,16 @@ class _BigButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: onTap == null ? color.withValues(alpha: 0.4) : color,
+      borderRadius: FN.boxRadius,
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: onTap == null
-            ? null
-            : () {
-                HapticFeedback.mediumImpact();
-                onTap!();
-              },
+        onTap:
+            onTap == null
+                ? null
+                : () {
+                  HapticFeedback.mediumImpact();
+                  onTap!();
+                },
         child: SizedBox(
           height: 88,
           width: double.infinity,
@@ -143,12 +148,12 @@ class _BigButton extends StatelessWidget {
             children: [
               Icon(icon, size: 36, color: FN.onAccent),
               const SizedBox(width: 10),
-              Text(label,
-                  style: TextStyle(
-                      fontFamily: FN.display,
-                      fontSize: 32,
-                      color: FN.onAccent,
-                      letterSpacing: 1)),
+              Text(
+                FN.caps(label),
+                style: FN
+                    .title(32, color: FN.onAccent)
+                    .copyWith(letterSpacing: FN.track(1)),
+              ),
             ],
           ),
         ),
@@ -167,7 +172,10 @@ class _SquareButton extends StatelessWidget {
     return Material(
       color: FN.nightSurface,
       shape: RoundedRectangleBorder(
-          side: BorderSide(color: FN.nightLine, width: 2)),
+        borderRadius: FN.cardRadius,
+        side: BorderSide(color: FN.nightLine, width: FN.line(2)),
+      ),
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: SizedBox(
@@ -190,7 +198,10 @@ class _SimToggle extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('GPS SIMULASI (DEV)', style: FN.label(size: 10, color: FN.inkMuted)),
+        Text(
+          FN.caps('GPS SIMULASI (DEV)'),
+          style: FN.label(size: 10, color: FN.inkMuted),
+        ),
         Transform.scale(
           scale: 0.8,
           child: Switch(
