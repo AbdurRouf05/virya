@@ -25,7 +25,14 @@ class MapPacksGuide extends StatelessWidget {
         );
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(children: [
-        Text('CARA MENDAPATKAN PAKET', style: FN.label(size: 12, color: FN.ink)),
+        Flexible(
+          child: Text(
+            'CARA MENDAPATKAN PAKET',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: FN.label(size: 12, color: FN.ink),
+          ),
+        ),
         const SizedBox(width: 8),
         Expanded(child: Divider(color: FN.ink, thickness: 1)),
       ]),

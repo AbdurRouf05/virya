@@ -20,7 +20,17 @@ class ActivityDetailGritPanel extends StatelessWidget {
       color: FN.paperDeep,
       child: Row(
         children: [
-          Text(s.round().toString(), style: FN.bigNumber(48, color: FN.signal)),
+          SizedBox(
+            width: 56,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                s.round().toString(),
+                style: FN.bigNumber(48, color: FN.signal),
+              ),
+            ),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -28,6 +38,8 @@ class ActivityDetailGritPanel extends StatelessWidget {
               children: [
                 Text(
                   'GRIT SCORE · $word',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: FN
                       .label(size: 11, color: FN.ink)
                       .copyWith(fontWeight: FontWeight.w700),
@@ -36,7 +48,7 @@ class ActivityDetailGritPanel extends StatelessWidget {
                 Text(
                   'Gabungan porsi gravel, kekasaran getaran, dan tanjakan di '
                   'permukaan lepas. 0 = aspal mulus, 100 = neraka makadam.',
-                  style: FN.label(size: 9.5),
+                  style: FN.body(size: 11, color: FN.inkSoft),
                 ),
                 const SizedBox(height: 8),
                 LayoutBuilder(

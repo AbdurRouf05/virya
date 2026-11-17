@@ -54,15 +54,24 @@ class MapPacksPackTile extends StatelessWidget {
         const SizedBox(width: 10),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(p.fileName,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontFamily: FN.mono,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: active ? FN.paper : FN.ink)),
-            const SizedBox(height: 2),
-            Text(meta, style: FN.label(size: 10, color: active ? FN.paperLine : FN.inkMuted)),
+            Text(
+              p.fileName,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontFamily: FN.mono,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: active ? FN.paper : FN.ink,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              meta,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: FN.label(size: 10, color: active ? FN.paperLine : FN.inkMuted),
+            ),
           ]),
         ),
         if (p.type != MapPackType.unknown)

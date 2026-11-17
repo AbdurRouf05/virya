@@ -32,6 +32,7 @@ class RecordingMetricGrid extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           for (var r = 0; r < 2; r++)
             Row(
@@ -61,22 +62,34 @@ class _TileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(2),
+      margin: const EdgeInsets.all(2.5),
       padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
       decoration: BoxDecoration(
         color: FN.nightSurface,
         border: Border(
           left: BorderSide(color: tile.accent ?? FN.nightLine, width: 3),
+          top: BorderSide(color: FN.nightLine.withValues(alpha: 0.4), width: 1),
+          right: BorderSide(color: FN.nightLine.withValues(alpha: 0.4), width: 1),
+          bottom: BorderSide(color: FN.nightLine.withValues(alpha: 0.4), width: 1),
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(tile.label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: FN.label(size: 9, color: FN.paperLine)),
-          const SizedBox(height: 2),
+          Text(
+            tile.label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontFamily: FN.mono,
+              fontSize: 9,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.8,
+              color: FN.paperLine,
+            ),
+          ),
+          const SizedBox(height: 6),
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
@@ -84,10 +97,22 @@ class _TileView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               children: [
-                Text(tile.value, style: FN.bigNumber(30, color: FN.paper)),
+                Text(
+                  tile.value,
+                  style: FN.bigNumber(26, color: FN.paper),
+                ),
                 if (tile.unit.isNotEmpty) ...[
-                  const SizedBox(width: 3),
-                  Text(tile.unit, style: FN.label(size: 9, color: FN.paperLine)),
+                  const SizedBox(width: 4),
+                  Text(
+                    tile.unit,
+                    style: TextStyle(
+                      fontFamily: FN.mono,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.8,
+                      color: FN.paperLine,
+                    ),
+                  ),
                 ],
               ],
             ),

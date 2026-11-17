@@ -9,20 +9,62 @@ Future<bool?> showDiscardRecordingDialog(BuildContext context) {
     context: context,
     builder: (ctx) => AlertDialog(
       backgroundColor: FN.nightSurface,
-      shape: const RoundedRectangleBorder(),
-      title: Text('BUANG AKTIVITAS?', style: FN.label(size: 14, color: FN.paper)),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: FN.nightLine, width: 1.5),
+      ),
+      title: Text(
+        'BUANG AKTIVITAS?',
+        style: TextStyle(
+          fontFamily: FN.sans,
+          fontSize: 16,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.8,
+          color: FN.paper,
+        ),
+      ),
       content: Text(
         'Seluruh rute, data, dan foto sesi ini akan dihapus permanen.',
-        style: TextStyle(fontFamily: FN.sans, color: FN.paper),
+        style: TextStyle(
+          fontFamily: FN.sans,
+          fontSize: 13,
+          height: 1.4,
+          color: FN.paperLine,
+        ),
       ),
       actions: [
         TextButton(
+          style: TextButton.styleFrom(
+            minimumSize: const Size(64, 48),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
           onPressed: () => Navigator.pop(ctx, false),
-          child: Text('BATAL', style: FN.label(color: FN.paperLine)),
+          child: Text(
+            'BATAL',
+            style: TextStyle(
+              fontFamily: FN.sans,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.0,
+              color: FN.paperLine,
+            ),
+          ),
         ),
         TextButton(
+          style: TextButton.styleFrom(
+            minimumSize: const Size(64, 48),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
           onPressed: () => Navigator.pop(ctx, true),
-          child: Text('BUANG', style: FN.label(color: FN.warn)),
+          child: Text(
+            'BUANG',
+            style: TextStyle(
+              fontFamily: FN.sans,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.0,
+              color: FN.warn,
+            ),
+          ),
         ),
       ],
     ),
@@ -110,9 +152,12 @@ Future<SportType?> showRecordingSportPicker(
                 padding: const EdgeInsets.only(left: 4, bottom: 14),
                 child: Text(
                   'PILIH JENIS OLAHRAGA',
-                  style: FN.label(size: 13, color: FN.signal).copyWith(
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.5,
+                  style: TextStyle(
+                    fontFamily: FN.sans,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.3,
+                    color: FN.signal,
                   ),
                 ),
               ),
@@ -129,9 +174,12 @@ Future<SportType?> showRecordingSportPicker(
                       ),
                       Text(
                         groupTitle,
-                        style: FN.label(size: 11, color: FN.paperLine).copyWith(
+                        style: TextStyle(
+                          fontFamily: FN.mono,
+                          fontSize: 11,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.2,
+                          color: FN.paperLine,
                         ),
                       ),
                     ],
@@ -152,8 +200,9 @@ Future<SportType?> showRecordingSportPicker(
                     child: ListTile(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 14,
-                        vertical: 4,
+                        vertical: 6,
                       ),
+                      minVerticalPadding: 10,
                       leading: Container(
                         width: 40,
                         height: 40,
@@ -186,7 +235,7 @@ Future<SportType?> showRecordingSportPicker(
                         desc,
                         style: TextStyle(
                           fontFamily: FN.sans,
-                          fontSize: 11.5,
+                          fontSize: 12,
                           color: FN.paperLine,
                         ),
                       ),

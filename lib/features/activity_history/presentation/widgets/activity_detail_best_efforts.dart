@@ -27,9 +27,11 @@ class BestEffortsTable extends StatelessWidget {
             child: Row(
               children: [
                 SizedBox(
-                  width: 72,
+                  width: 80,
                   child: Text(
                     efforts[i].label.toUpperCase(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: detailTd(bold: true),
                   ),
                 ),
@@ -44,7 +46,11 @@ class BestEffortsTable extends StatelessWidget {
                     final e = efforts[i];
                     final mps = e.timeS == 0 ? 0.0 : e.distanceM / e.timeS;
                     final (v, u) = fmt.speedOrPace(mps, sport);
-                    return Text('$v ${u.toLowerCase()}', style: detailTd());
+                    return FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerRight,
+                      child: Text('$v ${u.toLowerCase()}', style: detailTd()),
+                    );
                   },
                 ),
               ],

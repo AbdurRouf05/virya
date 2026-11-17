@@ -35,10 +35,10 @@ void paintRecapIntro(Canvas c, RecapStage s, double t) {
 
   final title = data.title.toUpperCase();
   final chars = (title.length * ((t - 0.2) / 0.55).clamp(0.0, 1.0)).round();
-  recapText(c, title.substring(0, chars), 22, y0 + big.height * sc + 10,
+  recapText(c, title.substring(0, chars), 22, y0 + big.height * sc + 14,
       size: 15, color: ink, family: FN.sans, bold: true, maxW: 316);
   recapText(c, '${SF.date(data.start)} · MULAI ${SF.time(data.start)}', 22,
-      y0 + big.height * sc + 36,
+      y0 + big.height * sc + 40,
       mono: true, size: 9, color: FN.inkSoft);
 
   if (t > 0.55) {

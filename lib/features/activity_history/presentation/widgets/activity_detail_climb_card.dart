@@ -23,7 +23,10 @@ class ClimbCard extends StatelessWidget {
     final cat = climbCategoryShort(c.category);
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(border: Border.all(color: FN.ink, width: 1)),
+      decoration: BoxDecoration(
+        color: FN.paper,
+        border: Border.all(color: FN.ink, width: 1),
+      ),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -36,7 +39,11 @@ class ClimbCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('KAT', style: FN.label(size: 8.5, color: FN.paper)),
-                  Text(cat, style: FN.bigNumber(34, color: FN.paper)),
+                  const SizedBox(height: 3),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(cat, style: FN.bigNumber(34, color: FN.paper)),
+                  ),
                 ],
               ),
             ),
@@ -48,6 +55,8 @@ class ClimbCard extends StatelessWidget {
                   children: [
                     Text(
                       'TANJAKAN ${index + 1} · ${fmt.distUnit} ${fmt.distance(c.startDistanceM, decimals: 1)} → ${fmt.distance(c.endDistanceM, decimals: 1)}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: FN.label(size: 9.5),
                     ),
                     const SizedBox(height: 6),

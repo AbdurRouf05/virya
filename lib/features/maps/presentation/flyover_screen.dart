@@ -263,6 +263,8 @@ class _FlyoverScreenState extends ConsumerState<FlyoverScreen>
             stage: _exportStage,
             cancelling: _cancel,
             onCancel: () => setState(() => _cancel = true),
+            videoW: _videoW,
+            videoH: _videoH,
           ),
       ],
     );

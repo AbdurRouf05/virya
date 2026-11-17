@@ -40,7 +40,7 @@ class StatStrip extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     MonoLabel(stats[i].label, size: 7, color: muted),
-                    const SizedBox(height: 3),
+                    const SizedBox(height: 4),
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,

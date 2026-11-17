@@ -36,7 +36,7 @@ class StatBlock extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: size >= 24 ? 6 : 4),
         FittedBox(
           fit: BoxFit.scaleDown,
           alignment: align == CrossAxisAlignment.end

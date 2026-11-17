@@ -31,7 +31,7 @@ class FlyoverPlanError extends StatelessWidget {
                       textAlign: TextAlign.center,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      style: FN.label(size: 10, color: FN.inkSoft),
+                      style: FN.label(size: 10, color: FN.paperLine),
                     ),
                     const SizedBox(height: 16),
                     StampChip(text: 'COBA LAGI', color: FN.acid, onTap: onRetry),

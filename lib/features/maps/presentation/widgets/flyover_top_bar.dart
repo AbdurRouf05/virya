@@ -40,6 +40,7 @@ class FlyoverTopBar extends StatelessWidget {
                         'VIRYA // FLYOVER',
                         style: FN.label(size: 10, color: FN.acid),
                       ),
+                      const SizedBox(height: 2),
                       Text(
                         title.toUpperCase(),
                         maxLines: 1,

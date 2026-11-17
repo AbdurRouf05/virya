@@ -18,7 +18,8 @@ void paintRecapRoute(Canvas c, RecapStage s, RecapFrame f) {
   s.background(c, paper: !s.night);
   final p = f.progress;
   final yaw = -0.75 + f.local * 1.3;
-  final vp = Rect.fromLTWH(0, h * 0.17, 360, h * 0.58);
+  final vpTop = math.max(140.0, h * 0.22);
+  final vp = Rect.fromLTWH(0, vpTop, 360, math.max(0.0, h * 0.75 - vpTop));
   s.topo.paint(c, Size(360, h),
       t: p,
       yaw: yaw,
@@ -51,7 +52,7 @@ void paintRecapRoute(Canvas c, RecapStage s, RecapFrame f) {
     final inside = d >= sec.startDistanceM && d <= sec.endDistanceM;
     if (age < 0 || !(inside || age < 1.4)) continue;
     final fade = (age / 0.25).clamp(0.0, 1.0);
-    recapNote(c, Offset(22, h * 0.2), [
+    recapNote(c, Offset(22, math.max(142.0, h * 0.23)), [
       'SEKTOR ${sec.number}  ${SF.stars(sec.stars)}',
       '${SF.km(sec.lengthM)} KM · ${SF.surface(sec.dominantSurface)}',
     ], pal.accent, alpha: fade, fill: pal.bg);
@@ -81,11 +82,11 @@ void _hud(Canvas c, RecapStage s, int idx, double distShown) {
   }
   sp = n == 0 ? 0 : sp / n;
 
-  recapText(c, data.title.toUpperCase(), 22, 26,
+  recapText(c, data.title.toUpperCase(), 22, 32,
       mono: true, size: 8, color: pal.muted, maxW: 230);
-  recapTextR(c, SF.date(data.start), 338, 26, size: 8, color: pal.muted);
-  c.drawRect(Rect.fromLTWH(22, 40, 316, 0.8), Paint()..color = pal.line);
-  recapText(c, 'JARAK', 22, 50, mono: true, size: 7, color: pal.muted);
+  recapTextR(c, SF.date(data.start), 338, 32, size: 8, color: pal.muted);
+  c.drawRect(Rect.fromLTWH(22, 48, 316, 0.8), Paint()..color = pal.line);
+  recapText(c, 'JARAK', 22, 58, mono: true, size: 7, color: pal.muted);
   final dv = TextPainter(
     text: TextSpan(children: [
       TextSpan(text: SF.km(distShown), style: FN.bigNumber(58, color: pal.ink)),
@@ -93,13 +94,13 @@ void _hud(Canvas c, RecapStage s, int idx, double distShown) {
     ]),
     textDirection: TextDirection.ltr,
   )..layout();
-  dv.paint(c, const Offset(22, 62));
-  recapText(c, 'ELEV', 232, 50, mono: true, size: 7, color: pal.muted);
-  recapText(c, '+${gain.round()} M', 232, 60, size: 24, color: pal.ink);
+  dv.paint(c, const Offset(22, 72));
+  recapText(c, 'ELEV', 232, 58, mono: true, size: 7, color: pal.muted);
+  recapText(c, '+${gain.round()} M', 232, 72, size: 22, color: pal.ink);
   final runner = data.sport.isRunning;
-  recapText(c, runner ? 'PACE' : 'KEC', 232, 92, mono: true, size: 7, color: pal.muted);
-  recapText(c, runner ? '${SF.pace(sp)}/KM' : '${SF.kmh(sp)} KM/J', 232, 102,
-      size: 24, color: pal.ink);
+  recapText(c, runner ? 'PACE' : 'KEC', 232, 104, mono: true, size: 7, color: pal.muted);
+  recapText(c, runner ? '${SF.pace(sp)}/KM' : '${SF.kmh(sp)} KM/J', 232, 118,
+      size: 22, color: pal.ink);
 }
 
 void _elevationStrip(Canvas c, RecapStage s, double p, int idx, double distShown) {

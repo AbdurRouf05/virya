@@ -80,7 +80,7 @@ class ProfilCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 5),
             MonoLabel(
               '${SF.km(data.distanceM)} KM · PUNCAK ${SF.meters(data.maxEleM)} MDPL · ${data.climbs.length} TANJAKAN',
               color: FN.inkSoft,

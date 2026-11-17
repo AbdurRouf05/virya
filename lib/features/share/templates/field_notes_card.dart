@@ -143,6 +143,7 @@ class FieldNotesCard extends StatelessWidget {
                         'KM',
                         style: FN.bigNumber(big * 0.22, color: accent),
                       ),
+                      const SizedBox(height: 2),
                       const MonoLabel('JARAK', size: 7),
                     ],
                   ),

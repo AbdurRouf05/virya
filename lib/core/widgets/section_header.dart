@@ -33,11 +33,15 @@ class SectionHeader extends StatelessWidget {
             ),
             Text(' / ', style: FN.label(size: 12, color: fg)),
           ],
-          Text(
-            title.toUpperCase(),
-            style: FN
-                .label(size: 12, color: fg)
-                .copyWith(fontWeight: FontWeight.w700, letterSpacing: 2),
+          Flexible(
+            child: Text(
+              title.toUpperCase(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: FN
+                  .label(size: 12, color: fg)
+                  .copyWith(fontWeight: FontWeight.w700, letterSpacing: 2),
+            ),
           ),
           const SizedBox(width: 10),
           Expanded(child: Container(height: 1, color: fg)),

@@ -113,30 +113,42 @@ class SplitsTable extends StatelessWidget {
                 ),
                 SizedBox(
                   width: 50,
-                  child: Text(
-                    '${splits[i].elevationDeltaM >= 0 ? '+' : ''}${fmt.elevation(splits[i].elevationDeltaM)}',
-                    textAlign: TextAlign.right,
-                    style: detailTd(),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '${splits[i].elevationDeltaM >= 0 ? '+' : ''}${fmt.elevation(splits[i].elevationDeltaM)}',
+                      textAlign: TextAlign.right,
+                      style: detailTd(),
+                    ),
                   ),
                 ),
                 if (showHr)
                   SizedBox(
                     width: 40,
-                    child: Text(
-                      splits[i].avgHeartRate?.toString() ?? '–',
-                      textAlign: TextAlign.right,
-                      style: detailTd(),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        splits[i].avgHeartRate?.toString() ?? '–',
+                        textAlign: TextAlign.right,
+                        style: detailTd(),
+                      ),
                     ),
                   ),
                 if (showGap)
                   SizedBox(
                     width: 48,
-                    child: Text(
-                      splits[i].gapMps == null
-                          ? '–'
-                          : fmt.pace(splits[i].gapMps!),
-                      textAlign: TextAlign.right,
-                      style: detailTd(),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        splits[i].gapMps == null
+                            ? '–'
+                            : fmt.pace(splits[i].gapMps!),
+                        textAlign: TextAlign.right,
+                        style: detailTd(),
+                      ),
                     ),
                   ),
               ],

@@ -89,7 +89,10 @@ class _MapPacksScreenState extends ConsumerState<MapPacksScreen> {
       context: context,
       builder: (c) => AlertDialog(
         backgroundColor: FN.paper,
-        shape: RoundedRectangleBorder(side: BorderSide(color: FN.ink, width: 2)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+          side: BorderSide(color: FN.ink, width: 2),
+        ),
         title: Text('HAPUS PAKET?', style: FN.bigNumber(24)),
         content: Text('${pack.fileName}\n${formatBytes(pack.sizeBytes)} akan dihapus.',
             style: TextStyle(fontFamily: FN.sans, color: FN.inkSoft)),

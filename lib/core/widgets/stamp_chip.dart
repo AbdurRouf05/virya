@@ -47,11 +47,15 @@ class StampChip extends StatelessWidget {
                 Icon(icon, size: fontSize + 3, color: fg),
                 const SizedBox(width: 6),
               ],
-              Text(
-                text.toUpperCase(),
-                style: FN
-                    .label(size: fontSize, color: fg)
-                    .copyWith(fontWeight: FontWeight.w700),
+              Flexible(
+                child: Text(
+                  text.toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: FN
+                      .label(size: fontSize, color: fg)
+                      .copyWith(fontWeight: FontWeight.w700),
+                ),
               ),
             ],
           ),

@@ -15,6 +15,8 @@ Future<void> showEditActivitySheet(BuildContext context, Activity activity) {
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
+    backgroundColor: FN.paper,
+    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
     builder: (_) => EditActivitySheet(activity: activity),
   );
 }

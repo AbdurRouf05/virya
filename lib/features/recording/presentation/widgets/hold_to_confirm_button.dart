@@ -8,6 +8,7 @@ class HoldToConfirmButton extends StatefulWidget {
   final String label;
   final IconData icon;
   final VoidCallback onConfirmed;
+
   /// Accent color; defaults to [FN.signal].
   final Color? color;
   final Duration holdDuration;
@@ -29,10 +30,13 @@ class HoldToConfirmButton extends StatefulWidget {
 
 class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
     with SingleTickerProviderStateMixin {
+  bool _triggered = false;
+
   late final AnimationController _c =
       AnimationController(vsync: this, duration: widget.holdDuration)
         ..addStatusListener((s) {
-          if (s == AnimationStatus.completed) {
+          if (s == AnimationStatus.completed && !_triggered) {
+            _triggered = true;
             HapticFeedback.heavyImpact();
             widget.onConfirmed();
             _c.value = 0;
@@ -46,19 +50,30 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
   }
 
   void _down() {
+    _triggered = false;
     HapticFeedback.selectionClick();
     _c.forward();
   }
 
   void _up() {
-    if (_c.status != AnimationStatus.completed) {
+    if (!_triggered && _c.status != AnimationStatus.completed) {
+      final wasLow = _c.value < 0.3;
       _c.reverse();
-      if (_c.value < 0.3) {
+      if (wasLow) {
         ScaffoldMessenger.maybeOf(context)
           ?..hideCurrentSnackBar()
-          ..showSnackBar(const SnackBar(
-            content: Text('Tahan tombol untuk menyelesaikan'),
-            duration: Duration(seconds: 1),
+          ..showSnackBar(SnackBar(
+            content: Text(
+              'Tahan tombol untuk menyelesaikan',
+              style: TextStyle(
+                fontFamily: FN.sans,
+                fontSize: 13,
+                color: FN.paper,
+              ),
+            ),
+            backgroundColor: FN.nightSurface,
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 1),
           ));
       }
     }
@@ -93,14 +108,28 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(widget.icon,
-                        size: 30,
-                        color: _c.value > 0.5 ? FN.ink : color),
-                    const SizedBox(height: 4),
-                    Text(widget.label,
-                        style: FN.label(
-                            size: 11,
-                            color: _c.value > 0.5 ? FN.ink : color)),
+                    Icon(
+                      widget.icon,
+                      size: 30,
+                      color: _c.value > 0.5 ? FN.ink : color,
+                    ),
+                    const SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Text(
+                        widget.label,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: FN.sans,
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.1,
+                          color: _c.value > 0.5 ? FN.ink : color,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],

@@ -12,9 +12,8 @@ import 'package:virya/features/recording/domain/recording_state.dart';
 import 'package:virya/features/recording/presentation/recording_format.dart';
 import 'package:virya/features/recording/presentation/widgets/recording_controls.dart';
 import 'package:virya/features/recording/presentation/widgets/recording_dialogs.dart';
+import 'package:virya/features/recording/presentation/widgets/recording_hud.dart';
 import 'package:virya/features/recording/presentation/widgets/recording_map_panel.dart';
-import 'package:virya/features/recording/presentation/widgets/recording_metric_grid.dart';
-import 'package:virya/features/recording/presentation/widgets/recording_primary_metric.dart';
 import 'package:virya/features/recording/presentation/widgets/recording_saving_overlay.dart';
 import 'package:virya/features/recording/presentation/widgets/recording_sport_strip.dart';
 import 'package:virya/features/recording/presentation/widgets/recording_top_bar.dart';
@@ -112,7 +111,14 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
-        content: Text(text, style: TextStyle(fontFamily: FN.sans)),
+        content: Text(
+          text,
+          style: TextStyle(
+            fontFamily: FN.sans,
+            fontSize: 13,
+            color: FN.paper,
+          ),
+        ),
         backgroundColor: FN.nightSurface,
         behavior: SnackBarBehavior.floating,
       ));
@@ -158,8 +164,7 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
                       onSport: () => _pickSport(s.sport),
                     ),
                     Expanded(flex: 5, child: RecordingMapPanel(state: s)),
-                    RecordingPrimaryMetric(state: s, fmt: fmt),
-                    RecordingMetricGrid(state: s, fmt: fmt),
+                    RecordingHud(state: s, fmt: fmt),
                     const SizedBox(height: 10),
                     if (s.phase == RecordingPhase.idle)
                       RecordingSportStrip(
@@ -179,7 +184,8 @@ class _RecordingScreenState extends ConsumerState<RecordingScreen> {
                     ),
                   ],
                 ),
-                if (s.phase == RecordingPhase.saving) const RecordingSavingOverlay(),
+                if (s.phase == RecordingPhase.saving)
+                  const RecordingSavingOverlay(),
               ],
             ),
           ),

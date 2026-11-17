@@ -85,7 +85,7 @@ class StickerCard extends StatelessWidget {
                           maxLines: 1,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 4),
                       Text(
                         s.label,
                         style: FN
@@ -100,7 +100,7 @@ class StickerCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Text(
             'VIRYA · ${SF.sport(data.sport)} · ${SF.date(data.start)}',
             style: FN

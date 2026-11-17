@@ -89,13 +89,16 @@ class SektorCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       MonoLabel('GRIT', color: accent),
+                      const SizedBox(height: 2),
                       Text(
                           data.gritScore > 0
                               ? data.gritScore.round().toString()
                               : '—',
                           style: FN.bigNumber(compact ? 40 : 56, color: accent)),
-                      if (data.gritScore > 0)
+                      if (data.gritScore > 0) ...[
+                        const SizedBox(height: 1),
                         MonoLabel('/100', color: FN.inkSoft),
+                      ],
                     ],
                   ),
                 ],
@@ -184,6 +187,7 @@ class _SectorRow extends StatelessWidget {
               color: accent,
             ),
           ),
+          const SizedBox(width: 6),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -210,6 +214,7 @@ class _SectorRow extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(width: 6),
           Text(
             SF.stars(s.stars),
             style: TextStyle(fontSize: 11, color: accent, letterSpacing: 0.5),

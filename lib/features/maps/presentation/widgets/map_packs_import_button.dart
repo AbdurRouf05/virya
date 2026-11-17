@@ -22,8 +22,12 @@ class MapPacksImportButton extends StatelessWidget {
     if (prog != null) {
       return MapPacksBox(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('MENYALIN ${fileName ?? ''}'.toUpperCase(),
-              overflow: TextOverflow.ellipsis, style: FN.label(size: 11, color: FN.ink)),
+          Text(
+            'MENYALIN ${fileName ?? ''}'.toUpperCase(),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: FN.label(size: 11, color: FN.ink),
+          ),
           const SizedBox(height: 8),
           LinearProgressIndicator(
             value: prog > 0 ? prog : null,
@@ -46,7 +50,12 @@ class MapPacksImportButton extends StatelessWidget {
         ),
         onPressed: onImport,
         icon: const Icon(Icons.file_download_outlined),
-        label: Text('IMPOR FILE .PMTILES', style: FN.label(size: 13, color: FN.paper)),
+        label: Text(
+          'IMPOR FILE .PMTILES',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: FN.label(size: 13, color: FN.paper),
+        ),
       ),
     );
   }

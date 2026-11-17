@@ -149,6 +149,7 @@ class _DateStamp extends StatelessWidget {
               style: FN.bigNumber(26),
             ),
           ),
+          const SizedBox(height: 2),
           Padding(
             padding: const EdgeInsets.only(bottom: 3),
             child: Text(

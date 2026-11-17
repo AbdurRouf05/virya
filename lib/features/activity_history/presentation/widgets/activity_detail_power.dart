@@ -42,11 +42,11 @@ class ActivityDetailPower extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(
             'Estimasi dari model fisika (berat, kemiringan, hambatan '
             'udara & permukaan) — tanpa power meter.',
-            style: FN.label(size: 9.5),
+            style: FN.body(size: 11, color: FN.inkMuted),
           ),
         ],
       ),

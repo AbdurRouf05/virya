@@ -13,15 +13,27 @@ class MapPacksActiveCard extends StatelessWidget {
     Widget row(String k, String? v, String empty) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 4),
           child: Row(children: [
-            SizedBox(width: 92, child: Text(k, style: FN.label())),
+            SizedBox(
+              width: 92,
+              child: Text(
+                k,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: FN.label(),
+              ),
+            ),
             Expanded(
-              child: Text(v ?? empty,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontFamily: FN.mono,
-                      fontSize: 13,
-                      color: v == null ? FN.inkMuted : FN.ink,
-                      fontWeight: FontWeight.w600)),
+              child: Text(
+                v ?? empty,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontFamily: FN.mono,
+                  fontSize: 13,
+                  color: v == null ? FN.inkMuted : FN.ink,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ]),
         );

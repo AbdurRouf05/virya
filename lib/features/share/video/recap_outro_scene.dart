@@ -52,7 +52,8 @@ void paintRecapOutro(Canvas c, RecapStage s, double t, double sceneS) {
   for (var k = 0; k < cells.length && k < 4; k++) {
     final x = 22 + (k % 2) * 160.0, yy = gy + 10 + (k ~/ 2) * 52.0;
     recapText(c, cells[k].label, x, yy, mono: true, size: 7, color: FN.inkMuted);
-    recapText(c, '${cells[k].value} ${cells[k].unit}'.trim(), x, yy + 10, size: 28, color: ink);
+    recapText(c, '${cells[k].value} ${cells[k].unit}'.trim(), x, yy + 14,
+        size: 24, color: ink, maxW: 150);
   }
   if (sceneS > 0.45) {
     final k = recapEase(((sceneS - 0.45) / 0.25).clamp(0.0, 1.0));

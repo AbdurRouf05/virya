@@ -79,19 +79,29 @@ class FlyoverControls extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 52,
-                height: 52,
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(color: FN.signal),
                 child: IconButton(
                   color: FN.night,
-                  iconSize: 30,
+                  iconSize: 28,
                   onPressed: disabled ? null : onTogglePlay,
                   icon: Icon(playing ? Icons.pause : Icons.play_arrow),
                 ),
               ),
-              const SizedBox(width: 10),
-              for (final s in speeds) _chip('${s.toInt()}×', speed == s, () => onSpeed(s)),
-              const Spacer(),
+              const SizedBox(width: 8),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      for (final s in speeds)
+                        _chip('${s.toInt()}×', speed == s, () => onSpeed(s)),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   foregroundColor: FN.acid,

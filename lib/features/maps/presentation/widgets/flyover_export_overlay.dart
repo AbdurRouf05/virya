@@ -9,11 +9,15 @@ class FlyoverExportOverlay extends StatelessWidget {
     required this.stage,
     required this.cancelling,
     required this.onCancel,
+    this.videoW = 1080,
+    this.videoH = 1920,
   });
   final double progress;
   final String stage;
   final bool cancelling;
   final VoidCallback onCancel;
+  final int videoW;
+  final int videoH;
 
   @override
   Widget build(BuildContext context) => Positioned.fill(
@@ -32,7 +36,7 @@ class FlyoverExportOverlay extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'EKSPOR VIDEO 1080×1920',
+                    'EKSPOR VIDEO $videoW×$videoH',
                     style: FN.label(size: 10, color: FN.acid),
                   ),
                   const SizedBox(height: 8),
@@ -48,7 +52,12 @@ class FlyoverExportOverlay extends StatelessWidget {
                     backgroundColor: FN.nightLine,
                   ),
                   const SizedBox(height: 8),
-                  Text(stage, style: FN.label(size: 10, color: FN.paperLine)),
+                  Text(
+                    stage,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: FN.label(size: 10, color: FN.paperLine),
+                  ),
                   const SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerRight,

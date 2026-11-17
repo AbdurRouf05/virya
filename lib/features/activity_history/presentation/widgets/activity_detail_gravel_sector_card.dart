@@ -42,6 +42,8 @@ class GravelSectorCard extends StatelessWidget {
               children: [
                 Text(
                   s.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontFamily: FN.sans,
                     fontWeight: FontWeight.w600,
@@ -52,6 +54,8 @@ class GravelSectorCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   '${fmt.distUnit} ${fmt.distance(s.startDistanceM, decimals: 1)} → ${fmt.distance(s.endDistanceM, decimals: 1)}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: FN.label(size: 10),
                 ),
                 const SizedBox(height: 10),

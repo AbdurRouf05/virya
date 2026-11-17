@@ -47,6 +47,8 @@ class PhotoStrip extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   '${fmt.distUnit} ${fmt.distance(p.distanceFromStartMeters, decimals: 1)}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: FN.label(size: 9.5, color: FN.ink),
                 ),
               ],

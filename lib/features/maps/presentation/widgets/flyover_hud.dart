@@ -67,8 +67,13 @@ class _Cell extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: FN.label(size: 9, color: FN.inkMuted)),
-            const SizedBox(height: 2),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: FN.label(size: 9, color: FN.paperLine),
+            ),
+            const SizedBox(height: 5),
             FittedBox(
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,

@@ -93,6 +93,7 @@ class NightInkCard extends StatelessWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(width: 8),
                     MonoLabel(
                       SF.sport(data.sport),
                       color: accent,

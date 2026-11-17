@@ -51,6 +51,7 @@ class RecordingControls extends StatelessWidget {
             color: FN.signal,
             onTap: busy ? null : onStart,
           ),
+          const SizedBox(height: 4),
           _SimToggle(value: state.simulated, onChanged: onToggleSim),
         ],
       );
@@ -69,7 +70,7 @@ class RecordingControls extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           SizedBox(
-            width: 88,
+            width: 96,
             child: HoldToConfirmButton(
               label: 'SELESAI',
               icon: Icons.stop,
@@ -102,10 +103,23 @@ class RecordingControls extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 4),
           TextButton(
             onPressed: onDiscard,
-            child:
-                Text('BUANG AKTIVITAS', style: FN.label(size: 11, color: FN.warn)),
+            style: TextButton.styleFrom(
+              minimumSize: const Size(140, 48),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            ),
+            child: Text(
+              'BUANG AKTIVITAS',
+              style: TextStyle(
+                fontFamily: FN.sans,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.2,
+                color: FN.warn,
+              ),
+            ),
           ),
         ],
       );
@@ -141,14 +155,18 @@ class _BigButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 36, color: FN.ink),
+              Icon(icon, size: 34, color: FN.ink),
               const SizedBox(width: 10),
-              Text(label,
-                  style: TextStyle(
-                      fontFamily: FN.display,
-                      fontSize: 32,
-                      color: FN.ink,
-                      letterSpacing: 1)),
+              Text(
+                label,
+                style: TextStyle(
+                  fontFamily: FN.sans,
+                  fontSize: 26,
+                  fontWeight: FontWeight.w800,
+                  color: FN.ink,
+                  letterSpacing: 1.2,
+                ),
+              ),
             ],
           ),
         ),
@@ -167,13 +185,16 @@ class _SquareButton extends StatelessWidget {
     return Material(
       color: FN.nightSurface,
       shape: RoundedRectangleBorder(
-          side: BorderSide(color: FN.nightLine, width: 2)),
+        side: BorderSide(color: FN.nightLine, width: 2),
+      ),
       child: InkWell(
         onTap: onTap,
         child: SizedBox(
           width: 72,
           height: 88,
-          child: Icon(icon, color: FN.paper, size: 30),
+          child: Center(
+            child: Icon(icon, color: FN.paper, size: 28),
+          ),
         ),
       ),
     );
@@ -187,21 +208,34 @@ class _SimToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('GPS SIMULASI (DEV)', style: FN.label(size: 10, color: FN.inkMuted)),
-        Transform.scale(
-          scale: 0.8,
-          child: Switch(
-            value: value,
-            onChanged: onChanged,
-            activeColor: FN.acid,
-            inactiveThumbColor: FN.inkMuted,
-            inactiveTrackColor: FN.nightSurface,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 48),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'GPS SIMULASI (DEV)',
+            style: TextStyle(
+              fontFamily: FN.mono,
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.0,
+              color: FN.paperLine,
+            ),
           ),
-        ),
-      ],
+          const SizedBox(width: 6),
+          Transform.scale(
+            scale: 0.85,
+            child: Switch(
+              value: value,
+              onChanged: onChanged,
+              activeColor: FN.acid,
+              inactiveThumbColor: FN.paperLine,
+              inactiveTrackColor: FN.nightSurface,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

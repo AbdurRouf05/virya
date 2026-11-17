@@ -32,17 +32,16 @@ class ActivityDetailMap extends StatelessWidget {
             child: ClipRect(child: map),
           ),
           const SizedBox(height: 8),
-          Row(
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
             children: [
               for (final m in MapColorMode.values)
-                Padding(
-                  padding: const EdgeInsets.only(right: 6),
-                  child: StampChip(
-                    text: m.label,
-                    fontSize: 10,
-                    selected: mode == m,
-                    onTap: () => onModeChanged(m),
-                  ),
+                StampChip(
+                  text: m.label,
+                  fontSize: 10,
+                  selected: mode == m,
+                  onTap: () => onModeChanged(m),
                 ),
             ],
           ),

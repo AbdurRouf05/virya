@@ -43,10 +43,12 @@ class RecordingTopBar extends StatelessWidget {
                       state.sport.displayName.toUpperCase(),
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                          fontFamily: FN.display,
-                          fontSize: 20,
-                          color: FN.paper,
-                          letterSpacing: 0.5),
+                        fontFamily: FN.sans,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: FN.paper,
+                        letterSpacing: 0.8,
+                      ),
                     ),
                   ),
                   if (idle) Icon(Icons.expand_more, color: FN.paperLine),
@@ -73,12 +75,15 @@ class _GpsChip extends StatelessWidget {
       GpsStatus.good => ('GPS ±${accuracy.round()}M', FN.acid),
       GpsStatus.weak => ('GPS LEMAH', FN.caution),
       GpsStatus.searching => ('MENCARI GPS', FN.signal),
-      GpsStatus.off => ('GPS MATI', FN.inkMuted),
+      GpsStatus.off => ('GPS MATI', FN.paperLine),
       GpsStatus.simulated => ('SIMULASI', FN.acid),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-      decoration: BoxDecoration(border: Border.all(color: color)),
+      decoration: BoxDecoration(
+        color: FN.nightSurface,
+        border: Border.all(color: color),
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -102,27 +107,9 @@ class _Blink extends StatefulWidget {
 
 class _BlinkState extends State<_Blink> with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 700));
-
-  @override
-  void initState() {
-    super.initState();
-    _sync();
-  }
-
-  @override
-  void didUpdateWidget(_Blink old) {
-    super.didUpdateWidget(old);
-    _sync();
-  }
-
-  void _sync() {
-    if (widget.active && !_c.isAnimating) {
-      _c.repeat(reverse: true);
-    } else if (!widget.active) {
-      _c.value = 1;
-    }
-  }
+    vsync: this,
+    duration: const Duration(milliseconds: 700),
+  )..repeat(reverse: true);
 
   @override
   void dispose() {
@@ -131,8 +118,24 @@ class _BlinkState extends State<_Blink> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) => FadeTransition(
-        opacity: _c,
-        child: Container(width: 8, height: 8, color: widget.color),
+  Widget build(BuildContext context) {
+    if (!widget.active) {
+      return Container(
+        width: 8,
+        height: 8,
+        decoration: BoxDecoration(color: widget.color, shape: BoxShape.circle),
       );
+    }
+    return AnimatedBuilder(
+      animation: _c,
+      builder: (_, _) => Opacity(
+        opacity: (0.3 + 0.7 * _c.value).clamp(0.0, 1.0),
+        child: Container(
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(color: widget.color, shape: BoxShape.circle),
+        ),
+      ),
+    );
+  }
 }

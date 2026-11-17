@@ -13,7 +13,14 @@ class MapPacksSectionTitle extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(children: [
-        Text(title, style: FN.label(size: 12, color: FN.ink)),
+        Flexible(
+          child: Text(
+            title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: FN.label(size: 12, color: FN.ink),
+          ),
+        ),
         const SizedBox(width: 8),
         Expanded(child: Divider(color: FN.ink, thickness: 1)),
         if (trailing != null) ...[

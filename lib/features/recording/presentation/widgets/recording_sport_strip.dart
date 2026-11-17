@@ -83,8 +83,13 @@ class _SportChip extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 label,
-                style: FN.label(size: 12, color: fg)
-                    .copyWith(fontWeight: FontWeight.w700),
+                style: TextStyle(
+                  fontFamily: FN.sans,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.8,
+                  color: fg,
+                ),
               ),
             ],
           ),
