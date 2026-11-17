@@ -9,17 +9,17 @@ class FlyoverGradient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: top ? Alignment.topCenter : Alignment.bottomCenter,
-            end: top ? Alignment.bottomCenter : Alignment.topCenter,
-            colors: [
-              FN.night.withValues(alpha: .94),
-              FN.night.withValues(alpha: top ? 0 : .80),
-              if (!top) FN.night.withValues(alpha: 0),
-            ],
-          ),
-        ),
-        child: child,
-      );
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        begin: top ? Alignment.topCenter : Alignment.bottomCenter,
+        end: top ? Alignment.bottomCenter : Alignment.topCenter,
+        colors: [
+          FN.night.withValues(alpha: .94),
+          FN.night.withValues(alpha: top ? 0 : .80),
+          if (!top) FN.night.withValues(alpha: 0),
+        ],
+      ),
+    ),
+    child: child,
+  );
 }

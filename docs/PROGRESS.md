@@ -1,6 +1,6 @@
-# Stravo Pro — Progress Log
+# Virya — Progress Log
 
-Newest entries on top. Contract & ownership: [BUILD_CONTRACT_V2.md](BUILD_CONTRACT_V2.md).
+Newest entries on top. Baru bergabung? Mulai dari [PANDUAN.md](PANDUAN.md). Aturan kode: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Status board
 
@@ -14,11 +14,110 @@ Newest entries on top. Contract & ownership: [BUILD_CONTRACT_V2.md](BUILD_CONTRA
 | D | Share studio: story cards, sticker PNG, Topo-Ink renderer, MP4 encoder | Modul D | ✅ Done (30 tests) — device test pending |
 | E | Offline maps (PMTiles server), MapLibre WebView, 3D flyover + video | Modul E | ✅ Done (48 tests) — device test pending |
 | 2.1 | Perbaikan v2.1 (stempel, video cepat, durasi, flyover, lari, analitik) | Antigravity | ✅ Done (186 tests) |
-| 2 | Virya modular refactor, rename, token tema, tombol rekam baru | Integrator | ✅ Done |
-| 3 | Layar Hari Ini, Navigasi Baru (5-tab), Audit Kinerja & Keamanan (Paket A-D) | Antigravity | ✅ Done (190 tests) |
-| 4 | Gym + kalender kategori lanjutan | — | 🔜 Planned |
+| 2 | Wave 2: live segments + ghost pacer, personal heatmap, BLE HR, polish | — | 🔜 Planned |
 
 ## Log
+
+### 2026-11-17 — Pratinjau gaya + layar rekam ikut Bersih ✅
+- `core/widgets/look_preview.dart` (+ `look_preview_parts.dart`): layar mini "Hari ini" 9:16 digambar dengan palet & gaya sendiri (tidak lewat `FN`), jadi Tegas dan Bersih tampil berdampingan.
+- Layar pilih gaya pertama: dua kartu berdampingan berisi pratinjau. Pengaturan → Tampilan: segmen Gaya diganti dua pratinjau yang bisa disentuh; pratinjau Tegas ikut warna yang dipilih, Bersih ikut kecerahan.
+- Layar rekam (non-AMOLED) kini ikut Bersih: tombol besar membulat & huruf sans, label kapital kalimat, ubin metrik tanpa garis kiri, chip GPS/AMOLED/olahraga membulat, dialog & sheet membulat. HUD AMOLED dan flyover tetap Tegas.
+- Map packs/unduh wilayah: bentuk dan label ikut gaya.
+- Tes: `test/theme/look_preview_test.dart`; 603 tes lulus, analyze bersih (hanya info lama).
+
+### 2026-11-16 — Buat Rute (otomatis + manual) & rekam mengikuti rute ✅
+- Fitur baru `lib/features/routes/`. Alurnya Atur → 3 pilihan → Detail. Atur: titik mulai dari lokasi sekarang atau sentuh peta, olahraga Lari/Sepeda/Jalan, jarak lewat slider atau angka pas, bentuk Keliling/Pergi-pulang/A → B, medan Datar/Bebas/Cari tanjakan, "Utamakan jalan baru", "Hindari jalan raya". Tiga pilihan tampil di peta (yang dipilih tebal, sisanya samar) dengan jarak, naik, perkiraan waktu, dan ciri ("72% jalan baru", "Paling datar", "Banyak tanjakan"). Ada tombol "Acak lagi".
+- Routing memakai server publik BRouter (profil trekking/safety untuk sepeda, shortest/hiking-mountain untuk lari dan jalan). Kalau BRouter gagal, cadangannya OSRM routing.openstreetmap.de. User-Agent "Virya/1.0". Internet hanya dipakai saat membuat rute; pesan offline dan galat dalam bahasa Indonesia.
+- Keliling: 2–4 titik bantu di lingkaran yang melewati titik mulai, dengan 4 arah dan jari-jari diskalakan ulang maks. 3× sampai jarak ±10% dari target. Lalu dipilih 3 yang beragam (duplikat dengan tumpang tindih >90% dibuang). "Jalan baru" dihitung dari kisi jejak lama (~20 m).
+- Detail: peta, jarak, naik, perkiraan waktu dari kecepatan rata-rata sendiri (atau bawaan), tanjakan maks., grafik ketinggian. Tombol Edit / Simpan / "Mulai rekam dengan rute ini". Mode manual: sentuh titik, garis menempel ke jalan, ada Urungkan / Balik ke awal / Putar arah, bisa juga dari nol.
+- Rute tersimpan (offline, tabel `planned_routes`, skema v8): daftar dengan peta mini, ganti nama, hapus, ekspor GPX. Masuk lewat tombol "Rute" di Jurnal.
+- Saat merekam, rute tergambar di bawah jejak dan ada panel sisa jarak. Kalau keluar rute (>50 m selama 10 detik), HP bergetar dan suara "Kamu keluar dari rute" diputar; saat kembali terdengar "Kembali di rute".
+- Tes baru: domain rute, parser + generator dengan routing palsu, migrasi v8; total 600 tes lulus.
+
+### 2026-11-16 — Gaya tampilan Tegas / Bersih + layar pilih gaya ✅
+- Gaya baru **Bersih** di samping tampilan lama, yang kini bernama **Tegas** (piksel sama seperti sebelumnya). Bersih: latar #F7F6F3, kartu putih bergaris rambut #ECEAE5, sudut 14/10, tanpa bayangan, judul Plex Sans SemiBold kapital kalimat, angka besar Plex Sans tabular, kontrol segmen pil putih, centang bulat, strip minggu berupa titik, garis warna samping dihilangkan. Ada varian gelap (Terang / Gelap / Ikuti sistem).
+- Token baru di `FN`: `isClean`, `stroke`, `line()`, `cardLine`, `divider`, `cardFill`, `fill`, `radius`/`radiusSmall`/`cardRadius`/`smallRadius`/`boxRadius`, `hardShadow()`, `frame()`, `side()`, `stripe()`, `card()`, `caps()`, `track()`, `title()`, `labelStrong()`. Gaya dibawa oleh `Palette.gaya`; palet lama tetap pilihan warna Tegas; `bersihStyle` + `bersihDarkStyle`; `resolveStyle()`.
+- Pengaturan → Tampilan: segmen "Gaya: Tegas / Bersih", lalu warna (Tegas) atau kecerahan (Bersih), disimpan lewat "Terapkan" (`ui_gaya`, `bersih_mode`, dibaca sebelum `runApp`). Widget umum baru `SegmentedPick`.
+- Pertama kali dibuka: splash → **Pilih gaya** (dua kartu dengan contoh mini, sentuh = gaya langsung berganti, "Lanjut") → Beranda. Disimpan di `look_chosen`; pengguna lama dengan `style_id` tersimpan langsung ke Beranda.
+- Layar peta, rekam, segmen, rute belum disesuaikan (masih Tegas). Tes baru: token Tegas/Bersih, simpan gaya, layar pilih gaya; total 600 tes lulus.
+
+### 2026-11-16 — Splash hanya logo ✅
+- `EntryLoadingScreen` disederhanakan: hanya `ViryaMark` 120dp di tengah, latar `FN.paper`, sama dengan splash Android, jadi perpindahannya tidak terasa. Label atas, stempel miring, grid, bar loading, log palsu, dan teks "sentuh untuk lewati" dihapus. Logo ditahan 0,7 detik lalu memudar ke Beranda dalam 450 ms; sentuh untuk langsung lanjut. Waktu sampai Beranda turun dari sekitar 2,8 detik menjadi sekitar 1,2 detik.
+- Batasan: splash Android selalu memakai warna kertas Field Notes (#EFE9DC). Pada gaya lain, terutama Malam, warna latarnya berganti saat masuk layar Flutter.
+- Preview pilihan desain: `design_prototype/splash_preview.html`. Tes splash ditulis ulang (4 tes); total 560 tes lulus.
+
+### 2026-11-16 — Top speed, penjaga Fokus, rutinitas harian ✅
+- **Top speed** di kartu share dan video recap (`ShareStat.topSpeed`). Lari menampilkan pace tercepat, olahraga lain km/j. Hanya muncul bila `maxSpeedMps > 0`.
+- **Penjaga Fokus tanpa Aksesibilitas** (`FocusGuardService`, foreground `specialUse`): membaca aplikasi di depan dari UsageEvents tiap 3 detik dan menampilkan "Waktu habis" lewat izin tampil di atas aplikasi lain. Sebelumnya Mode Ramah Bank hanya mencatat waktu. "Tetap buka 5 menit" baru aktif setelah jeda 10/20/40/60 detik, makin lama tiap dibuka lagi di hari yang sama. Ada peringatan sisa 1 menit.
+- Panduan izin terkunci "Restricted Setting" (Android 13+) di README Langkah 4 dan di panel izin Fokus: menu ⋮ di info aplikasi, atau pasang ulang lewat ADB plus `appops`.
+- **Rutinitas harian**: kolom `repeat_daily` dan `remind_minute` di tabel `tasks` (skema v7; migrasi memeriksa kolom yang sudah ada, karena tabel yang dibuat di langkah v4 sudah punya kolomnya). Untuk rutinitas, `doneAt` = terakhir dicentang; terbuka lagi bila tanggal lokalnya bukan hari ini (`openTasksOn`). Centang dari luar hanya diterapkan sekali per hari (`markDoneIfOpen` dengan `dayStart`). Riwayat rutinitas hanya menyimpan centang terakhir.
+- Native (`tasks/RoutineStore`, `RoutineReminder`): satu alarm exact (`USE_EXACT_ALARM`) untuk pengingat terdekat, diulang tiap jam sampai 22.00, tunda 30 menit, dipasang ulang saat boot/update/ganti jam. Notifikasi catat cepat menampilkan ringkasan rutinitas. Widget ikut menampilkan rutinitas yang belum dicentang.
+- **Penghalang rutinitas** (`focus/FocusGate`, `RoutineGateActivity`): aplikasi dipilih di layar Fokus → "Ingatkan rutinitas". Muncul saat aplikasi itu dibuka dan masih ada rutinitas terbuka; maksimal sekali per 30 menit per aplikasi; "Lanjut" aktif setelah 5 detik. Berjalan di kedua penjaga (overlay dan Aksesibilitas). Tidak muncul bila jatah aplikasi itu sudah habis.
+- Verifikasi: analyze bersih (kecuali info/warning lama), 558 tes lulus, APK rilis per ABI berhasil, arm64 terpasang di Infinix X6853 lewat ADB dan aplikasi terbuka tanpa crash. Pengingat, penghalang, dan penjaga Fokus belum dicoba langsung dengan TikTok.
+
+### 2026-11-08 — Wave 2 dan sisa kecil ✅
+- **Segmen live + ghost** (`features/segments`): buat segmen dari rute di detail aktivitas, upaya lama langsung dicari, upaya baru dicocokkan tiap aktivitas selesai direkam, diimpor, atau dihitung ulang. HUD dan suara di layar rekam (mendekat, dimulai, selisih ghost tiap 30 detik, hasil akhir). Masuk dari ikon bendera di Jurnal dan bagian Segmen di detail aktivitas. HUD dan suara selalu memakai meter walau setelan imperial aktif.
+- **Heatmap pribadi** (`features/heatmap`): layer `heat` di MapLibre, filter Semua/Sepeda/Lari/Jalan, dihitung di luar UI thread, maksimal 40.000 titik. Masuk dari tab Statistik. Hanya 2D; versi 3D dari PRD tidak dibuat.
+- **Sensor detak jantung BLE** (`core/sensors`, `features/sensors`): pindai, sambung, simpan sensor terakhir, sambung ulang otomatis, bpm masuk ke track point. Pengaturan → Perekaman → Sensor detak jantung. Sensor speed/cadence belum dikerjakan. `flutter_blue_plus` memakai `License.nonprofit`, dan lisensinya menyebut "ping" saat build (nama paket, nama dan versi aplikasi, versi paket, tanggal), bukan saat aplikasi berjalan. Build rilis butuh `android/app/proguard-rules.pro`.
+- **Sisa kecil:** judul kartu latihan di Hari Ini aman di layar sempit; jadwal pengingat foto tubuh 7/14/30 hari atau mati; warna zona detak jantung, layar "Waktu habis", dan widget tugas mengikuti style (channel `virya/style`).
+- Audit ROADMAP bagian 2 dan 4: tidak ada butir besar yang hilang. Belum ada: gelembung mengambang (opsional). Beda dari rancangan: riwayat Fokus hanya di detail hari, bukan tanda di kotak kalender; widget juga menampilkan tugas jatuh tempo; intensitas kalender hanya dari durasi.
+- Tes yang memompa `HomeShell`: macetnya artefak urutan penutupan. Urutan yang benar: `container.dispose()`, `tester.pump()`, lalu `tester.runAsync(db.close)`.
+- Verifikasi: analyze bersih, 534 tes lulus, APK rilis arm64 dan armeabi-v7a berhasil. Belum diuji di HP; sensor BLE asli, GPS, dan WebView heatmap hanya teruji lewat tes dengan pengganti palsu. Daftarnya di `PANDUAN.md` bagian 8.
+
+### 2026-11-08 — Fase 8: Mode style ✅
+- Tiga style baru selain Field Notes: **Malam** (gelap), **Cetak Biru**, **Hutan**. Semuanya memakai font yang sudah ada di aplikasi. Daftarnya di `lib/app/theme/styles/styles.dart`; id yang tidak dikenal jatuh ke Field Notes.
+- Token baru `FN.onNight`, `FN.onNightMuted`, `FN.onAccent`, `FN.isDark`, dan `FN.onInk(accent)`, supaya teks di atas foto, peta, dan warna aksen tetap terbaca di style gelap. Nilainya sama dengan warna lama di Field Notes, jadi tampilan Field Notes tidak berubah. Aturan pakainya di `ARCHITECTURE.md` bagian 5.
+- `FNExport` selalu Field Notes. Dipakai oleh kartu share, video recap, timelapse, dan warna rute di peta dasar yang tetap krem.
+- Pilihan ada di Pengaturan → Tampilan (`StylePicker`), tersimpan di setting `style_id`, dan dibaca sebelum `runApp` supaya tidak berkedip saat aplikasi dibuka.
+- `MaterialApp` memakai `ValueKey(style.id)`, karena banyak widget `const` membaca `FN.*`. Akibatnya, setelah ganti style aplikasi kembali ke beranda; state Riverpod tetap ada.
+- Splash native tidak mengikuti style, karena digambar sebelum kode aplikasi berjalan.
+- Tes rebuild memakai `ViryaApp(home: Scaffold())`. Sisa pekerjaan dan penjelasan tes `HomeShell` ada di entri Wave 2 di atas.
+- Verifikasi: analyze bersih, 445 tes lulus, APK debug berhasil. Belum diuji di HP; daftarnya di `PANDUAN.md` bagian 8.
+
+### 2026-11-08 — Fase 7: Progres tubuh ✅
+- **Skema DB v6**: tabel `body_checkins` (satu check-in per hari, `day` berupa `YYYY-MM-DD`) dan `body_photos` (cascade dari check-in, satu foto per pose), migrasi 5→6, `BodyDao`.
+- `features/body`: layar PROGRES TUBUH (grafik berat, grid foto per tanggal), form check-in (3 pose, 5 ukuran, catatan), kamera dengan bayangan foto sebelumnya, slider sebelum/sesudah, dan video timelapse 720x960 yang bisa dibagikan.
+- Foto disimpan di `photos/body/` dalam folder dokumen aplikasi, jadi tidak masuk galeri dan ikut backup. Database menyimpan path relatif supaya restore di HP lain tetap jalan. Video timelapse dibuat di folder sementara dan dihapus saat dialog ditutup.
+- Pratinjau, bayangan, tampilan foto, dan timelapse semuanya memakai potongan tengah 3:4, supaya posisi tetap sejajar walau rasio kamera berbeda.
+- Pengingat di Hari Ini muncul 7 hari setelah check-in terakhir (konstanta, belum ada pengaturan) dan hanya bila sudah pernah check-in.
+- Titik masuk: tombol FOTO TUBUH di lembar "MAU NGAPAIN?", seksi Progres tubuh di Profil, kartu pengingat di Hari Ini, dan detail hari kalender.
+- `video_encoder.dart` pindah dari `features/share/video/` ke `core/video/` karena dipakai dua modul. Paket baru: `camera`.
+- Verifikasi: analyze bersih, 406 tes lulus, APK debug berhasil. Kamera dan encoder belum diuji di HP; daftarnya di `PANDUAN.md` bagian 8.
+
+### 2026-11-08 — Fase 6: Fokus ✅
+- **Skema DB v5**: tabel `app_limits` dan `app_usage_days`, migrasi 4→5, `FocusDao`. Riwayat ikut menyimpan nama dan batas yang berlaku saat itu, jadi tetap benar setelah batasnya diubah atau dihapus. Pemakaian sebelum batas dibuat tidak dicatat.
+- `features/focus`: layar FOKUS (izin, daftar batas, pilih aplikasi, atur menit), kartu Fokus di Hari Ini setelah Tugas, pemakaian per aplikasi di detail hari kalender. `FocusHost` menyinkronkan saat aplikasi aktif dan tiap 60 detik.
+- Native `android/.../focus/`, channel `virya/focus`: pemakaian dihitung dari event `UsageStatsManager` per hari lokal; `FocusAccessibilityService` menutup aplikasi saat kuota habis dan membuka layar "Waktu habis" dengan +5 menit (1× per aplikasi per hari). Native tidak menulis ke SQLite.
+- Belum ada: titik penanda di sel grid kalender (indikator baru ada di detail hari).
+- Verifikasi: analyze bersih, 346 tes lulus, APK debug berhasil. Belum diuji di HP; daftarnya di `PANDUAN.md` bagian 8.
+
+### 2026-11-08 — Fase 5: Tugas ✅
+- **Skema DB v4**: tabel `tasks` + indeks `done_at`, migrasi 3→4, `TasksDao`. Jatuh tempo disimpan sebagai teks `YYYY-MM-DD` agar tidak bergeser saat zona waktu berubah.
+- `features/tasks`: layar TUGAS (kolom ketik di atas, seksi Hari ini · Nanti · Selesai), lembar catat cepat, lembar edit (catatan, tanggal, penting, pin, hapus), centang dengan BATAL. Tugas di-pin selalu tampil di Hari Ini dan widget; tugas terlambat tetap di Hari ini.
+- Titik masuk: kartu tugas di atas LATIHAN HARI INI, tombol TUGAS BARU di lembar "MAU NGAPAIN?", dan tugas selesai di detail hari kalender. `TodayCard` pindah ke `core/widgets/`.
+- Android (`kotlin/.../tasks/`, channel `virya/tasks`): widget layar utama yang bisa dicentang, notifikasi permanen dengan kolom balas (aktif lewat toggle, muncul lagi setelah reboot), ubin Quick Settings "Catat tugas", pintasan ikon aplikasi.
+- **Sinkronisasi**: native tidak menulis ke SQLite. Perubahan masuk antrean SharedPreferences, lalu `TaskInboxSync` membaca → menerapkan → mengonfirmasi saat aplikasi aktif; penerapan idempoten sehingga tidak ada tugas ganda. Widget menampilkan snapshot − selesai tertunda + tangkapan tertunda.
+- Belum dikerjakan dari rancangan: `task_reminders` (pengingat) dan gelembung mengambang (opsional).
+- `flutter analyze` bersih, 305 tes lulus, `flutter build apk --debug` berhasil. Fitur Android belum diuji di perangkat: widget, balas notifikasi, ubin, pintasan, reboot.
+
+### 2026-11-08 — Fase 4: Gym ✅
+- **Skema DB v3**: tabel `exercises`, `workout_sets` (cascade dari `activities`), `workout_templates`, `workout_template_items` (cascade dari template) + indeks; migrasi 2→3 membuat tabel & men-seed 44 gerakan bawaan (`core/database/seed/exercise_library.dart`). `GymDao` di `core/database/daos/gym_dao.dart`. Backup tetap menyalin file sqlite utuh, jadi tabel baru ikut otomatis.
+- Sesi gym = baris `activities` dengan `sportType: strength` (jarak 0, durasi = mulai→selesai). `SportType.strength` (label GYM, kategori kekuatan); `isGps` / `SportType.gps` memisahkan olahraga GPS. Pemulihan rekaman GPS & finalizer mengabaikan gym.
+- `features/gym`: sesi berjalan (header durasi live, tabel set kg/reps/RPE opsional, "sblm 60×8", pemanasan, centang → timer istirahat 90 d −15/+15/lewati, SELESAI LATIHAN, buang sesi), draf tersimpan per perubahan sehingga selamat dari app ditutup paksa. Pemilih gerakan (cari + otot + gerakan kustom), template (buat/ubah/urutkan/hapus, simpan dari sesi selesai), riwayat & PR per gerakan (beban maks, e1RM Epley, set volume terbaik), volume mingguan, otot yang terlewat 7/14 hari.
+- Titik masuk: lembar "MAU NGAPAIN?" → MULAI GYM; tab LATIHAN → GYM. Detail aktivitas gym (tanpa peta/ekspor) lewat `Integrations.gymSessionDetail`; jurnal punya filter GYM dan menampilkan durasi untuk gym.
+- `build.yaml` baru: drift_dev hanya untuk `lib/core/database/**` (analyzer drift_dev 2.24 gagal membaca dot-shorthand di `win32 6.4.0`).
+- Tes: `test/gym/` (matematika, DAO in-memory, migrasi 2→3) — 22/22 lulus.
+
+### 2026-11-08 — Fase 3: logo, Hari Ini, kalender, navigasi ✅
+- Logo **Streak Sel** (sel heatmap membentuk V, sel terakhir oranye). Kit di `assets/branding/`, generator `design/logo/build_kit.py`. Ikon Android adaptif + bulat + monokrom (Android 13), splash Android 12+/lama, ikon & launch screen iOS. Widget `ViryaMark` (`lib/core/widgets/virya_mark.dart`).
+- Navigasi baru: HARI INI · KALENDER · [REKAM] · LATIHAN · PROFIL. Tombol tengah membuka lembar "MAU NGAPAIN?" (Rekam GPS aktif; Gym/Tugas/Foto tubuh menyusul). Tab PETA dihapus; peta offline pindah ke Pengaturan.
+- `features/today`: tanggal, latihan hari ini + streak, strip 7 hari per kategori, aktivitas terakhir.
+- `features/calendar`: heatmap tahun + grid bulan, warna per kategori, hari campuran terbelah, filter, streak, % hari aktif, detail hari. Provider publik `calendarDaysProvider`, `calendarStatsProvider(filter)`.
+- `features/training`: tab LATIHAN = JURNAL · STATISTIK (layar tertanam tanpa judul ganda, `Masthead.title` kini opsional).
+- Kategori olahraga bersama: `core/constants/sport_category.dart` + `FN.category(cat)` (warna di `Palette.category`).
+- `core/time/current_day.dart`: `currentDayProvider` berganti saat tengah malam / app dibuka lagi.
+- `Integrations.activityDetail(id)` untuk membuka detail aktivitas dari modul lain.
+- **Peta gabungan**: peta online (OpenFreeMap) langsung jalan tanpa setup lewat server lokal `/tiles/` (urutan: wilayah terunduh → cache → internet). Cache tile 500 MB (LRU). "Unduh wilayah" di aplikasi: kotak 10–100 km di sekitar posisi GPS, zoom 5–14, estimasi ukuran, maks 30.000 tile, bisa dilanjutkan. Impor .pmtiles + panduan dipindah ke "Lanjutan". Layar bernama "PETA OFFLINE", dibuka dari Pengaturan.
 
 ### 2026-11-08 — Audit Kinerja, Pengamanan, & Fase 3 (Layar Hari Ini + Navigasi Baru) ✅
 - **Optimasi & Bug Fix (Paket A-D)**:

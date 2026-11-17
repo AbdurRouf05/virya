@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 
 /// Colors for the Topo-Ink renderer.
 class TopoInkStyle {
@@ -30,10 +30,10 @@ class TopoInkStyle {
     this.glow = true,
   });
 
-  /// [accent] defaults to `FN.acid`.
+  /// [accent] defaults to `FNExport.acid`.
   factory TopoInkStyle.night({Color? accent, bool background = true}) =>
       TopoInkStyle(
-        background: background ? FN.night : null,
+        background: background ? FNExport.night : null,
         ground: const Color(0xFF151513),
         rim: const Color(0xFF55554C),
         grid: const Color(0xFF26261F),
@@ -41,23 +41,23 @@ class TopoInkStyle {
         shadow: const Color(0x66000000),
         curtain: const Color(0x40EFE9DC),
         ribbon: const Color(0x80EFE9DC),
-        accent: accent ?? FN.acid,
-        head: FN.paper,
+        accent: accent ?? FNExport.acid,
+        head: FNExport.paper,
       );
 
-  /// [accent] defaults to `FN.signal`.
+  /// [accent] defaults to `FNExport.signal`.
   factory TopoInkStyle.paper({Color? accent, bool background = true}) =>
       TopoInkStyle(
-        background: background ? FN.paper : null,
-        ground: FN.paperDeep,
-        rim: FN.inkSoft,
+        background: background ? FNExport.paper : null,
+        ground: FNExport.paperDeep,
+        rim: FNExport.inkSoft,
         grid: const Color(0x30141414),
-        contour: FN.paperLine,
+        contour: FNExport.paperLine,
         shadow: const Color(0x30141414),
         curtain: const Color(0x55141414),
-        ribbon: FN.ink,
-        accent: accent ?? FN.signal,
-        head: FN.ink,
+        ribbon: FNExport.ink,
+        accent: accent ?? FNExport.signal,
+        head: FNExport.ink,
         glow: false,
       );
 }

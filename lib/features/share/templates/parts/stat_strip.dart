@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/templates/parts/mono_label.dart';
 
-/// Row of stats split by hairlines. Colors default to `FN.ink` /
-/// `FN.inkMuted` / `FN.ink`.
+/// Row of stats split by hairlines. Colors default to `FNExport.ink` /
+/// `FNExport.inkMuted` / `FNExport.ink`.
 class StatStrip extends StatelessWidget {
   final List<StatValue> stats;
   final Color? ink;
@@ -23,9 +23,9 @@ class StatStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (stats.isEmpty) return const SizedBox.shrink();
-    final ink = this.ink ?? FN.ink;
-    final muted = this.muted ?? FN.inkMuted;
-    final rule = this.rule ?? FN.ink;
+    final ink = this.ink ?? FNExport.ink;
+    final muted = this.muted ?? FNExport.inkMuted;
+    final rule = this.rule ?? FNExport.ink;
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -49,12 +49,12 @@ class StatStrip extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: stats[i].value,
-                              style: FN.bigNumber(valueSize, color: ink),
+                              style: FNExport.bigNumber(valueSize, color: ink),
                             ),
                             if (stats[i].unit.isNotEmpty)
                               TextSpan(
                                 text: ' ${stats[i].unit}',
-                                style: FN.label(size: 7, color: muted),
+                                style: FNExport.label(size: 7, color: muted),
                               ),
                           ],
                         ),

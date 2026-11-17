@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:virya/core/data/activity_repository.dart';
 import 'package:virya/core/offline_maps/local_tile_server.dart';
 import 'package:virya/features/maps/widgets/virya_map_controller.dart';
-import 'package:virya/features/share/video/video_encoder.dart';
+import 'package:virya/core/video/video_encoder.dart';
 
 /// Subtitle burned into the exported flyover ("date · km · +gain").
 /// [fallbackDistM] is used when the analysis has no distance.

@@ -26,6 +26,7 @@ class StampChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bg = Theme.of(context).scaffoldBackgroundColor;
+    final clean = FN.isClean;
     final fg = selected ? bg : color;
     return Semantics(
       button: onTap != null,
@@ -36,10 +37,18 @@ class StampChip extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 120),
           padding: padding,
-          decoration: BoxDecoration(
-            color: selected ? color : Colors.transparent,
-            border: Border.all(color: color, width: 1.2),
-          ),
+          decoration: clean
+              ? BoxDecoration(
+                  color: selected ? color : FN.cardFill,
+                  borderRadius: FN.smallRadius,
+                  border: Border.all(
+                    color: selected ? color : FN.paperLine,
+                  ),
+                )
+              : BoxDecoration(
+                  color: selected ? color : Colors.transparent,
+                  border: Border.all(color: color, width: 1.2),
+                ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -49,12 +58,10 @@ class StampChip extends StatelessWidget {
               ],
               Flexible(
                 child: Text(
-                  text.toUpperCase(),
+                  FN.caps(text),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: FN
-                      .label(size: fontSize, color: fg)
-                      .copyWith(fontWeight: FontWeight.w700),
+                  style: FN.labelStrong(size: fontSize, color: fg),
                 ),
               ),
             ],

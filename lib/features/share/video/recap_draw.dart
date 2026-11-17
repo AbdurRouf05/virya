@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/painting.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_data.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/render/paper_painters.dart';
@@ -11,7 +11,7 @@ import 'package:virya/features/share/render/paper_painters.dart';
 double recapEase(double x) => 1 - math.pow(1 - x, 3).toDouble();
 
 /// Text at ([x],[y]): mono label, sans ([family]) or poster numeral.
-/// [color] defaults to `FN.ink`.
+/// [color] defaults to `FNExport.ink`.
 void recapText(Canvas c, String s, double x, double y,
     {bool mono = false,
     double size = 10,
@@ -19,19 +19,19 @@ void recapText(Canvas c, String s, double x, double y,
     bool bold = false,
     String? family,
     double? maxW}) {
-  final col = color ?? FN.ink;
+  final col = color ?? FNExport.ink;
   final tp = TextPainter(
     text: TextSpan(
       text: s,
       style: mono || family != null
           ? TextStyle(
-              fontFamily: family ?? FN.mono,
+              fontFamily: family ?? FNExport.mono,
               fontSize: size,
               letterSpacing: mono ? 1.3 : 0.4,
               fontWeight: bold ? FontWeight.w700 : FontWeight.w500,
               color: col,
             )
-          : FN.bigNumber(size, color: col),
+          : FNExport.bigNumber(size, color: col),
     ),
     textDirection: TextDirection.ltr,
     maxLines: 1,
@@ -40,10 +40,10 @@ void recapText(Canvas c, String s, double x, double y,
   tp.paint(c, Offset(x, y));
 }
 
-/// Right-aligned mono text ending at [right]. [color] defaults to `FN.ink`.
+/// Right-aligned mono text ending at [right]. [color] defaults to `FNExport.ink`.
 void recapTextR(Canvas c, String s, double right, double y,
     {double size = 9, Color? color}) {
-  final tp = monoText(s, size: size, color: color ?? FN.ink);
+  final tp = monoText(s, size: size, color: color ?? FNExport.ink);
   tp.paint(c, Offset(right - tp.width, y));
 }
 
@@ -90,13 +90,13 @@ void recapPolaroid(Canvas c, ui.Image img, SharePhoto p, Offset center,
       Paint()
         ..color = const Color(0x66000000)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6));
-  c.drawRect(frame, Paint()..color = FN.paper);
+  c.drawRect(frame, Paint()..color = FNExport.paper);
   final ir = Rect.fromLTWH(frame.left + 8, frame.top + 8, w - 16, ih);
   paintImage(canvas: c, rect: ir, image: img, fit: BoxFit.cover,
       filterQuality: FilterQuality.medium);
   final cap = p.caption?.toUpperCase() ?? 'FOTO';
   recapText(c, '$cap · KM ${SF.km(p.distanceM)}', frame.left + 10, ir.bottom + 6,
-      mono: true, size: 7.5, color: FN.ink, bold: true, maxW: w - 20);
+      mono: true, size: 7.5, color: FNExport.ink, bold: true, maxW: w - 20);
   c.restore();
   c.restore();
 }

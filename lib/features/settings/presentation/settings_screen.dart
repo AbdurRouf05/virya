@@ -4,9 +4,13 @@ import 'package:virya/app/integrations.dart';
 import 'package:virya/app/settings.dart';
 import 'package:virya/app/sport_ui.dart';
 import 'package:virya/core/constants/enums.dart';
+import 'package:virya/core/updater/update_dialog.dart';
+import 'package:virya/core/updater/update_model.dart';
+import 'package:virya/core/updater/update_provider.dart';
 import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/settings/data/data_actions.dart';
 import 'package:virya/features/settings/presentation/widgets/settings_row.dart';
+import 'package:virya/features/settings/presentation/widgets/style_picker.dart';
 
 /// "PENGATURAN" — units, recording, voice, data, about.
 class SettingsScreen extends ConsumerWidget {
@@ -17,6 +21,9 @@ class SettingsScreen extends ConsumerWidget {
     final s = ref.watch(settingsProvider);
     final ctl = ref.read(settingsProvider.notifier);
     final sec = SectionCounter();
+    final appInfoAsync = ref.watch(localAppInfoProvider);
+    final currentVer = appInfoAsync.value?.versionName ?? '1.0.0';
+    final currentBuild = appInfoAsync.value?.versionCode ?? 1;
     Widget toggle(String key, String title, [String? note]) => SettingRow(
       title: title,
       note: note,
@@ -58,11 +65,13 @@ class SettingsScreen extends ConsumerWidget {
                 title: 'Pengaturan',
                 subtitle: 'Semua tersimpan di perangkat, tanpa akun',
               ),
+              SectionHeader(number: sec.next(), title: 'Tampilan'),
+              _pad(const StylePicker()),
               SectionHeader(number: sec.next(), title: 'Satuan'),
               _pad(
-                chips(const [
-                  ('metric', 'METRIK · KM'),
-                  ('imperial', 'IMPERIAL · MIL'),
+                chips([
+                  ('metric', FN.caps('Metrik · km')),
+                  ('imperial', FN.caps('Imperial · mil')),
                 ], SettingKeys.units),
               ),
               SectionHeader(number: sec.next(), title: 'Perekaman'),
@@ -70,10 +79,10 @@ class SettingsScreen extends ConsumerWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('OLAHRAGA DEFAULT', style: FN.label(size: 10)),
+                    Text(FN.caps('Olahraga default'), style: FN.label(size: 10)),
                     const SizedBox(height: 6),
                     chips([
-                      for (final t in SportType.values) (t.name, t.label),
+                      for (final t in SportType.gps) (t.name, t.label),
                     ], SettingKeys.defaultSport),
                   ],
                 ),
@@ -84,12 +93,26 @@ class SettingsScreen extends ConsumerWidget {
                 'Berhenti mencatat saat kamu diam',
               ),
               toggle(SettingKeys.keepScreenOn, 'Layar tetap menyala'),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) =>
+                        ref.read(integrationsProvider).heartRateSensors(),
+                  ),
+                ),
+                child: const SettingRow(
+                  title: 'Sensor detak jantung',
+                  note: 'Sambungkan sensor Bluetooth untuk merekam detak',
+                  trailing: Icon(Icons.chevron_right),
+                ),
+              ),
               SettingRow(
                 title: 'Posisi ponsel',
                 note: 'Memengaruhi klasifikasi permukaan dari getaran',
-                below: chips(const [
-                  ('handlebar', 'STANG'),
-                  ('pocket', 'SAKU / TAS'),
+                below: chips([
+                  ('handlebar', FN.caps('Stang')),
+                  ('pocket', FN.caps('Saku / tas')),
                 ], SettingKeys.phoneMount),
               ),
               SettingRow(
@@ -174,7 +197,7 @@ class SettingsScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 10),
                     InkButton(
-                      label: 'Paket peta offline',
+                      label: 'Peta offline',
                       icon: Icons.map_outlined,
                       style: InkButtonStyle.outline,
                       expand: true,
@@ -196,6 +219,56 @@ class SettingsScreen extends ConsumerWidget {
                   ],
                 ),
               ),
+              SectionHeader(number: sec.next(), title: 'Pembaruan'),
+              _pad(
+                InkBox(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(FN.caps('Versi terpasang'), style: FN.label(size: 10)),
+                          Text(
+                            'v$currentVer (Build $currentBuild)',
+                            style: FN.monoStyle(size: 11, weight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      InkButton(
+                        label: 'Periksa pembaruan sekarang',
+                        icon: Icons.sync,
+                        style: InkButtonStyle.primary,
+                        expand: true,
+                        onPressed: () =>
+                            _checkUpdateManually(context, ref, currentVer),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              toggle(
+                SettingKeys.autoCheckUpdate,
+                'Periksa otomatis saat buka aplikasi',
+                'Pemberitahuan jika ada rilis APK baru',
+              ),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => _editUpdateUrl(
+                  context,
+                  ref,
+                  s[SettingKeys.updateUrl] ?? '',
+                ),
+                child: SettingRow(
+                  title: 'Sumber pembaruan (Gist / Raw JSON)',
+                  note: s[SettingKeys.updateUrl]?.isNotEmpty == true
+                      ? s[SettingKeys.updateUrl]!
+                      : 'Bawaan (GitHub Releases / Gist)',
+                  trailing: const Icon(Icons.edit_outlined, size: 18),
+                ),
+              ),
               SectionHeader(number: sec.next(), title: 'Tentang'),
               _pad(
                 InkBox(
@@ -203,7 +276,16 @@ class SettingsScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('VIRYA', style: FN.bigNumber(30)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(FN.caps('Virya'), style: FN.bigNumber(30)),
+                          Text(
+                            'v$currentVer',
+                            style: FN.monoStyle(size: 11, color: FN.inkMuted),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 4),
                       Text(
                         'Jurnal lapangan untuk gravel, sepeda & lari. '
@@ -218,6 +300,93 @@ class SettingsScreen extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  static Future<void> _checkUpdateManually(
+    BuildContext context,
+    WidgetRef ref,
+    String currentVer,
+  ) async {
+    try {
+      final info = await DataActions.withProgress<AppUpdateInfo?>(
+        context,
+        'Memeriksa pembaruan…',
+        () => ref.read(updateProvider.notifier).checkManual(),
+      );
+      if (!context.mounted) return;
+      if (info != null) {
+        UpdateDialog.show(
+          context,
+          updateInfo: info,
+          currentVersion: currentVer,
+        );
+      } else {
+        DataActions.toast(
+          context,
+          'Virya sudah dalam versi terbaru (v$currentVer).',
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        DataActions.toast(context, 'Gagal memeriksa pembaruan: $e');
+      }
+    }
+  }
+
+  static Future<void> _editUpdateUrl(
+    BuildContext context,
+    WidgetRef ref,
+    String currentUrl,
+  ) async {
+    final controller = TextEditingController(text: currentUrl);
+    final ctl = ref.read(settingsProvider.notifier);
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(FN.caps('Sumber pembaruan'), style: FN.label(size: 14)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Masukkan URL GitHub Gist (raw) atau endpoint JSON versi. Kosongkan untuk menggunakan URL bawaan repo.',
+              style: FN.label(size: 10),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: controller,
+              style: FN.monoStyle(size: 11),
+              decoration: const InputDecoration(
+                hintText: 'https://gist.githubusercontent.com/...',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 2,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              controller.text = '';
+              ctl.set(SettingKeys.updateUrl, '');
+              Navigator.pop(ctx);
+            },
+            child: Text(FN.caps('Reset bawaan')),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(FN.caps('Batal')),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              ctl.set(SettingKeys.updateUrl, controller.text.trim());
+              Navigator.pop(ctx);
+            },
+            child: Text(FN.caps('Simpan')),
+          ),
+        ],
       ),
     );
   }

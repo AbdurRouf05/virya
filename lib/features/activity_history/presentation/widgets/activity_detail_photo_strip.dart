@@ -26,9 +26,8 @@ class PhotoStrip extends StatelessWidget {
             width: 124,
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: FN.paper,
-              border: Border.all(color: FN.ink, width: 1),
-            ),
+              color: FN.cardFill,
+              border: FN.frame(color: FN.ink, width: 1), borderRadius: FN.boxRadius,),
             child: Column(
               children: [
                 Expanded(

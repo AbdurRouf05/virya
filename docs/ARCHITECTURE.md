@@ -71,6 +71,20 @@ Menambah layar lintas modul = tambah method di keduanya.
   dan daftarkan di `styles/styles.dart`. Tidak ada widget yang perlu diubah.
 - Karena token bisa berganti saat runtime, `FN.*` **bukan const**: jangan taruh `FN.*`
   di dalam ekspresi `const`.
+- Ada style gelap, tempat `paper` menjadi gelap dan `ink` menjadi terang. Pilih token menurut
+  apa yang ada **di belakangnya**:
+
+| Di belakang | Teks/ikon |
+|---|---|
+| Halaman (`FN.paper`) | `FN.ink`, `FN.inkSoft`, `FN.inkMuted` |
+| Blok `FN.ink` | `FN.paper`; aksen lewat `FN.onInk(FN.acid)` |
+| `FN.night*`, foto, peta, gradasi gelap | `FN.onNight`, `FN.onNightMuted` |
+| `FN.signal`, `FN.acid` | `FN.onAccent` (gelap) atau `FN.onNight` (terang) |
+| Bayangan, scrim | `FN.onAccent` |
+
+- Kartu, video recap, dan timelapse yang keluar dari aplikasi memakai `FNExport.*`
+  (`lib/app/theme/export_tokens.dart`), selalu Field Notes. Rute di atas peta juga, karena
+  dasar petanya tetap krem.
 
 ## 6. State (Riverpod)
 

@@ -11,24 +11,24 @@ Future<double?> showServiceIntervalDialog(
   final km = await showDialog<double>(
     context: context,
     builder: (c) => AlertDialog(
-      title: const Text('PENGINGAT SERVIS'),
+      title: Text(FN.caps('Pengingat servis')),
       content: TextField(
         controller: ctrl,
         keyboardType: TextInputType.number,
-        decoration: const InputDecoration(
-          labelText: 'INTERVAL (KM)',
+        decoration: InputDecoration(
+          labelText: FN.caps('Interval (km)'),
           suffixText: 'km',
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(c, 0.0),
-          child: const Text('MATIKAN'),
+          child: Text(FN.caps('Matikan')),
         ),
         TextButton(
           onPressed: () => Navigator.pop(c, double.tryParse(ctrl.text)),
           style: TextButton.styleFrom(foregroundColor: FN.signal),
-          child: const Text('SIMPAN'),
+          child: Text(FN.caps('Simpan')),
         ),
       ],
     ),

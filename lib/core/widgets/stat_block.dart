@@ -31,7 +31,7 @@ class StatBlock extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          label.toUpperCase(),
+          FN.caps(label),
           style: FN.label(size: 10, color: muted),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -51,8 +51,11 @@ class StatBlock extends StatelessWidget {
               if (unit != null && unit!.isNotEmpty) ...[
                 const SizedBox(width: 4),
                 Text(
-                  unit!.toUpperCase(),
-                  style: FN.label(size: size * 0.32, color: muted),
+                  FN.caps(unit!),
+                  style: FN.label(
+                    size: FN.isClean ? size * 0.3 : size * 0.32,
+                    color: muted,
+                  ),
                 ),
               ],
             ],
@@ -78,6 +81,7 @@ class StatGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (FN.isClean) return _clean();
     final rows = <Widget>[];
     for (var i = 0; i < children.length; i += columns) {
       final cells = <Widget>[];
@@ -114,4 +118,31 @@ class StatGrid extends StatelessWidget {
       child: Column(children: rows),
     );
   }
+
+  /// Bersih: kisi berjarak lega tanpa garis.
+  Widget _clean() => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: Column(
+      children: [
+        for (var i = 0; i < children.length; i += columns)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 6, 4, 6),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (var c = 0; c < columns; c++)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: i + c < children.length
+                          ? children[i + c]
+                          : const SizedBox(),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+      ],
+    ),
+  );
 }

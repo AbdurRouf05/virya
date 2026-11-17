@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:virya/app/theme/field_notes.dart';
 import 'package:virya/features/recording/domain/recording_state.dart';
 import 'package:virya/features/recording/presentation/widgets/recording_sport_icon.dart';
 
-/// Close button, current sport (tap to change while idle) and GPS chip.
+/// Close button, current sport (tap to change while idle), AMOLED toggle and GPS chip.
 class RecordingTopBar extends StatelessWidget {
   final RecordingState state;
   final VoidCallback onClose;
   final VoidCallback onSport;
+  final bool amoledMode;
+  final VoidCallback onToggleAmoled;
 
   const RecordingTopBar({
     super.key,
     required this.state,
     required this.onClose,
     required this.onSport,
+    this.amoledMode = false,
+    required this.onToggleAmoled,
   });
 
   @override
@@ -26,7 +31,7 @@ class RecordingTopBar extends StatelessWidget {
           if (idle)
             IconButton(
               onPressed: onClose,
-              icon: Icon(Icons.close, color: FN.paper),
+              icon: Icon(Icons.close, color: FN.onNight),
               tooltip: 'Tutup',
             )
           else
@@ -40,25 +45,76 @@ class RecordingTopBar extends StatelessWidget {
                   const SizedBox(width: 8),
                   Flexible(
                     child: Text(
-                      state.sport.displayName.toUpperCase(),
+                      FN.isClean
+                          ? state.sport.displayName
+                          : state.sport.displayName.toUpperCase(),
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontFamily: FN.sans,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: FN.paper,
-                        letterSpacing: 0.8,
-                      ),
+                      style: FN
+                          .title(26, color: FN.onNight)
+                          .copyWith(letterSpacing: FN.track(0.5)),
                     ),
                   ),
-                  if (idle) Icon(Icons.expand_more, color: FN.paperLine),
+                  if (idle) Icon(Icons.expand_more, color: FN.onNightMuted),
                 ],
               ),
             ),
           ),
+          _AmoledChip(active: amoledMode, onToggle: onToggleAmoled),
+          const SizedBox(width: 8),
           _GpsChip(status: state.gps, accuracy: state.snapshot.accuracyMeters),
           const SizedBox(width: 12),
         ],
+      ),
+    );
+  }
+}
+
+class _AmoledChip extends StatelessWidget {
+  final bool active;
+  final VoidCallback onToggle;
+
+  const _AmoledChip({required this.active, required this.onToggle});
+
+  @override
+  Widget build(BuildContext context) {
+    final color = active ? FN.acid : FN.onNightMuted;
+    final bg = active ? Colors.black : FN.nightSurface;
+    final border = active ? FN.acid : FN.nightLine;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onToggle();
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+          decoration: BoxDecoration(
+            color: bg,
+            border: Border.all(color: border, width: active ? 1.5 : 1),
+            borderRadius: FN.smallRadius,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                active ? Icons.battery_saver : Icons.dark_mode_outlined,
+                size: 13,
+                color: color,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                'AMOLED',
+                style: FN
+                    .label(size: 10, color: color)
+                    .copyWith(
+                      fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+                    ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -83,13 +139,14 @@ class _GpsChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: FN.nightSurface,
         border: Border.all(color: color),
+        borderRadius: FN.smallRadius,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           _Blink(active: status == GpsStatus.searching, color: color),
           const SizedBox(width: 6),
-          Text(label, style: FN.label(size: 10, color: color)),
+          Text(FN.caps(label), style: FN.label(size: 10, color: color)),
         ],
       ),
     );
@@ -109,7 +166,27 @@ class _BlinkState extends State<_Blink> with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 700),
-  )..repeat(reverse: true);
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _sync();
+  }
+
+  @override
+  void didUpdateWidget(_Blink old) {
+    super.didUpdateWidget(old);
+    _sync();
+  }
+
+  void _sync() {
+    if (widget.active && !_c.isAnimating) {
+      _c.repeat(reverse: true);
+    } else if (!widget.active) {
+      _c.value = 1;
+    }
+  }
 
   @override
   void dispose() {
@@ -118,24 +195,15 @@ class _BlinkState extends State<_Blink> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
-    if (!widget.active) {
-      return Container(
-        width: 8,
-        height: 8,
-        decoration: BoxDecoration(color: widget.color, shape: BoxShape.circle),
-      );
-    }
-    return AnimatedBuilder(
-      animation: _c,
-      builder: (_, _) => Opacity(
-        opacity: (0.3 + 0.7 * _c.value).clamp(0.0, 1.0),
-        child: Container(
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(color: widget.color, shape: BoxShape.circle),
-        ),
+  Widget build(BuildContext context) => FadeTransition(
+    opacity: _c,
+    child: Container(
+      width: 8,
+      height: 8,
+      decoration: BoxDecoration(
+        color: widget.color,
+        shape: FN.isClean ? BoxShape.circle : BoxShape.rectangle,
       ),
-    );
-  }
+    ),
+  );
 }

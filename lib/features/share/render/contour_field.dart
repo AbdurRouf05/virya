@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 
 /// Procedural topographic contour lines (value-noise + marching squares).
 /// Paths are in grid units; cached per (seed, cols, rows).
@@ -122,7 +122,7 @@ class ContourField {
   }
 }
 
-/// Contour texture filling [rect]. [color] defaults to `FN.paperLine`.
+/// Contour texture filling [rect]. [color] defaults to `FNExport.paperLine`.
 void paintContours(
   Canvas canvas,
   Rect rect, {
@@ -132,7 +132,7 @@ void paintContours(
   Color? indexColor,
   int cols = 48,
 }) {
-  final c = color ?? FN.paperLine;
+  final c = color ?? FNExport.paperLine;
   final field = ContourField.of(seed, aspect: rect.height / rect.width, cols: cols);
   final paths = field.pathsFor(rect.size);
   final thin = Paint()

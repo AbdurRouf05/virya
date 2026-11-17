@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="task_shortcut_short">Tugas baru</string>
+    <string name="task_shortcut_long">Catat tugas baru</string>
+    <string name="task_tile_label">Tugas baru</string>
+    <string name="task_widget_description">Daftar tugas hari ini</string>
+    <string name="task_widget_title">TUGAS HARI INI</string>
+    <string name="task_widget_empty">Belum ada tugas. Ketuk untuk menambah.</string>
+    <string name="task_widget_add">Tambah tugas</string>
+</resources>

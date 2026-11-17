@@ -8,7 +8,7 @@ class InkBox extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final Color? color;
   final Color? _borderColor;
-  Color get borderColor => _borderColor ?? FN.ink;
+  Color get borderColor => _borderColor ?? FN.cardLine;
   final double borderWidth;
   final bool hardShadow;
   final Color? _shadowColor;
@@ -30,14 +30,17 @@ class InkBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Bersih: kartu putih bergaris rambut dan bersudut, tanpa bayangan.
+    final clean = FN.isClean;
     Widget box = Container(
       padding: padding,
       decoration: BoxDecoration(
-        color: color,
-        border: Border.all(color: borderColor, width: borderWidth),
-        boxShadow: hardShadow
-            ? [BoxShadow(color: shadowColor, offset: const Offset(3, 3))]
-            : null,
+        color: color ?? (clean ? FN.cardFill : null),
+        borderRadius: clean ? FN.cardRadius : null,
+        border: clean
+            ? FN.frame(color: _borderColor)
+            : Border.all(color: borderColor, width: borderWidth),
+        boxShadow: hardShadow ? FN.hardShadow(color: shadowColor) : null,
       ),
       child: child,
     );
@@ -56,7 +59,7 @@ class InkBox extends StatelessWidget {
 class InkRule extends StatelessWidget {
   final bool dashed;
   final Color? _color;
-  Color get color => _color ?? FN.ink;
+  Color get color => _color ?? (FN.isClean ? FN.paperLine : FN.ink);
   final double thickness;
   const InkRule({
     super.key,
@@ -67,7 +70,9 @@ class InkRule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!dashed) return Container(height: thickness, color: color);
+    if (!dashed || FN.isClean) {
+      return Container(height: FN.line(thickness), color: color);
+    }
     return SizedBox(
       height: thickness,
       width: double.infinity,

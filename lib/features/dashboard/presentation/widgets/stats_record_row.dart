@@ -31,7 +31,7 @@ class StatsRecordRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    r.title.toUpperCase(),
+                    FN.caps(r.title),
                     style: FN
                         .label(size: 10, color: FN.ink)
                         .copyWith(fontWeight: FontWeight.w700),
@@ -51,7 +51,7 @@ class StatsRecordRow extends StatelessWidget {
               children: [
                 Text(r.value, style: FN.bigNumber(28)),
                 const SizedBox(width: 3),
-                Text(r.unit.toUpperCase(), style: FN.label(size: 9.5)),
+                Text(FN.caps(r.unit), style: FN.label(size: 9.5)),
               ],
             ),
           ],

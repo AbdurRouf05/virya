@@ -37,11 +37,12 @@ class _InkButtonState extends State<InkButton> {
     final ink = scheme.onSurface;
     final enabled = widget.onPressed != null && !widget.busy;
     final (Color bg, Color fg, Color border) = switch (widget.style) {
-      InkButtonStyle.primary => (FN.signal, FN.ink, FN.ink),
+      InkButtonStyle.primary => (FN.signal, FN.onAccent, FN.ink),
       InkButtonStyle.ink => (ink, scheme.surface, ink),
       InkButtonStyle.danger => (Colors.transparent, FN.warn, FN.warn),
       InkButtonStyle.outline => (Colors.transparent, ink, ink),
     };
+    if (FN.isClean) return _clean(enabled, scheme);
     final shadow =
         widget.style == InkButtonStyle.primary ||
         widget.style == InkButtonStyle.ink;
@@ -62,7 +63,7 @@ class _InkButtonState extends State<InkButton> {
         if (widget.busy || widget.icon != null) const SizedBox(width: 8),
         Flexible(
           child: Text(
-            widget.label.toUpperCase(),
+            FN.caps(widget.label),
             overflow: TextOverflow.ellipsis,
             style: FN
                 .label(size: 12.5, color: fg)
@@ -112,6 +113,66 @@ class _InkButtonState extends State<InkButton> {
       ),
     );
   }
+
+  /// Gaya Bersih: blok bersudut tanpa garis tebal dan tanpa bayangan;
+  /// tekan = sedikit memudar.
+  Widget _clean(bool enabled, ColorScheme scheme) {
+    final (Color bg, Color fg, Color? border) = switch (widget.style) {
+      InkButtonStyle.primary => (FN.signal, FN.onNight, null),
+      InkButtonStyle.ink => (FN.ink, FN.paper, null),
+      InkButtonStyle.danger => (FN.cardFill, FN.warn, FN.paperLine),
+      InkButtonStyle.outline => (FN.cardFill, FN.ink, FN.paperLine),
+    };
+    return Semantics(
+      button: true,
+      enabled: enabled,
+      label: widget.label,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown: enabled ? (_) => setState(() => _down = true) : null,
+        onTapCancel: enabled ? () => setState(() => _down = false) : null,
+        onTapUp: enabled ? (_) => setState(() => _down = false) : null,
+        onTap: enabled ? widget.onPressed : null,
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 90),
+          opacity: !enabled && !widget.busy ? 0.4 : (_down ? 0.75 : 1),
+          child: Container(
+            height: widget.height,
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: FN.smallRadius,
+              border: border == null ? null : Border.all(color: border),
+            ),
+            child: _cleanContent(fg),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _cleanContent(Color fg) => Row(
+    mainAxisSize: widget.expand ? MainAxisSize.max : MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      if (widget.busy)
+        SizedBox(
+          width: 14,
+          height: 14,
+          child: CircularProgressIndicator(strokeWidth: 2, color: fg),
+        )
+      else if (widget.icon != null)
+        Icon(widget.icon, size: 18, color: fg),
+      if (widget.busy || widget.icon != null) const SizedBox(width: 8),
+      Flexible(
+        child: Text(
+          FN.caps(widget.label),
+          overflow: TextOverflow.ellipsis,
+          style: FN.heading(size: 14, color: fg),
+        ),
+      ),
+    ],
+  );
 }
 
 /// Small square icon button with ink border.
@@ -136,7 +197,13 @@ class InkIconButton extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        decoration: BoxDecoration(border: Border.all(color: fg, width: 1)),
+        decoration: FN.isClean
+            ? BoxDecoration(
+                color: FN.cardFill,
+                borderRadius: FN.smallRadius,
+                border: Border.all(color: FN.paperLine),
+              )
+            : BoxDecoration(border: Border.all(color: fg, width: 1)),
         child: Icon(icon, size: size * 0.5, color: fg),
       ),
     );
@@ -153,6 +220,7 @@ class InkToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fg = Theme.of(context).colorScheme.onSurface;
+    final clean = FN.isClean;
     return Semantics(
       toggled: value,
       child: GestureDetector(
@@ -162,12 +230,26 @@ class InkToggle extends StatelessWidget {
           width: 48,
           height: 26,
           padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            color: value ? FN.signal : Colors.transparent,
-            border: Border.all(color: fg, width: 1.5),
-          ),
+          decoration: clean
+              ? BoxDecoration(
+                  color: value ? FN.signal : FN.fill,
+                  borderRadius: BorderRadius.circular(13),
+                )
+              : BoxDecoration(
+                  color: value ? FN.signal : Colors.transparent,
+                  border: Border.all(color: fg, width: 1.5),
+                ),
           alignment: value ? Alignment.centerRight : Alignment.centerLeft,
-          child: Container(width: 18, height: 18, color: fg),
+          child: Container(
+            width: clean ? 20 : 18,
+            height: clean ? 20 : 18,
+            decoration: clean
+                ? BoxDecoration(
+                    color: value ? FN.onNight : FN.cardFill,
+                    shape: BoxShape.circle,
+                  )
+                : BoxDecoration(color: fg),
+          ),
         ),
       ),
     );

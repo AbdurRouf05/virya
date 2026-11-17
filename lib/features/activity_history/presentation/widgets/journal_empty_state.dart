@@ -32,7 +32,7 @@ class _JournalEmptyStateState extends ConsumerState<JournalEmptyState> {
         padding: const EdgeInsets.fromLTRB(24, 32, 24, 48),
         children: [
           Text(
-            'JURNAL · HALAMAN 001',
+            FN.caps('Jurnal · halaman 001'),
             style: FN
                 .label(size: 10, color: FN.signal)
                 .copyWith(fontWeight: FontWeight.w700),
@@ -40,12 +40,7 @@ class _JournalEmptyStateState extends ConsumerState<JournalEmptyState> {
           const SizedBox(height: 12),
           Text(
             'HALAMAN\nMASIH\nKOSONG.',
-            style: TextStyle(
-              fontFamily: FN.display,
-              fontSize: 64,
-              height: 0.95,
-              color: FN.ink,
-            ),
+            style: FN.title(64, color: FN.ink, height: 0.95),
           ),
           const SizedBox(height: 16),
           Container(height: 3, color: FN.ink),

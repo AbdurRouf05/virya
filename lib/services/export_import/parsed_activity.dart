@@ -20,12 +20,12 @@ class ParsedActivity {
   DateTime get startTime => samples.first.time;
 
   ParsedActivity copyWith({String? title, SportType? sport}) => ParsedActivity(
-        title: title ?? this.title,
-        sport: sport ?? this.sport,
-        samples: samples,
-        format: format,
-        sourceName: sourceName,
-      );
+    title: title ?? this.title,
+    sport: sport ?? this.sport,
+    samples: samples,
+    format: format,
+    sourceName: sourceName,
+  );
 }
 
 /// Map free-form type strings (Strava types, GPX `type`, TCX Sport) to a
@@ -43,6 +43,9 @@ SportType? sportFromString(String? raw) {
   if (s.contains('trail') && s.contains('run')) return SportType.trailRunning;
   if (s.contains('run') || s == 'jog' || s.contains('jogging')) {
     return SportType.roadRunning;
+  }
+  if (s.contains('weight') || s.contains('strength') || s == 'gym') {
+    return SportType.strength;
   }
   if (s.contains('hik')) return SportType.hiking;
   if (s.contains('walk')) return SportType.walking;
@@ -68,14 +71,15 @@ SportType? sportFromString(String? raw) {
 
 /// Strava-style type name used when exporting.
 String stravaTypeName(SportType s) => switch (s) {
-      SportType.gravelCycling => 'GravelRide',
-      SportType.roadCycling => 'Ride',
-      SportType.mountainBiking => 'MountainBikeRide',
-      SportType.roadRunning => 'Run',
-      SportType.trailRunning => 'TrailRun',
-      SportType.hiking => 'Hike',
-      SportType.walking => 'Walk',
-    };
+  SportType.gravelCycling => 'GravelRide',
+  SportType.roadCycling => 'Ride',
+  SportType.mountainBiking => 'MountainBikeRide',
+  SportType.roadRunning => 'Run',
+  SportType.trailRunning => 'TrailRun',
+  SportType.hiking => 'Hike',
+  SportType.walking => 'Walk',
+  SportType.strength => 'WeightTraining',
+};
 
 /// FIT `sport` / `sub_sport` codes → sport.
 SportType? sportFromFit(int? sport, int? subSport) {

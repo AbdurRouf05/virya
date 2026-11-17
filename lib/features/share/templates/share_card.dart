@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_data.dart';
 import 'package:virya/features/share/domain/share_options.dart';
 import 'package:virya/features/share/templates/field_notes_card.dart';
@@ -42,8 +42,8 @@ class ShareCard extends StatelessWidget {
           textDirection: TextDirection.ltr,
           child: DefaultTextStyle(
             style: TextStyle(
-              fontFamily: FN.mono,
-              color: FN.ink,
+              fontFamily: FNExport.mono,
+              color: FNExport.ink,
               decoration: TextDecoration.none,
             ),
             child: ClipRect(child: child),

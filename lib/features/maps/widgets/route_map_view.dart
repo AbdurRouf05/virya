@@ -24,6 +24,7 @@ class RouteMapView extends StatelessWidget {
     this.live = false,
     this.currentPosition,
     this.bearing,
+    this.plan,
   });
 
   final List<(double lat, double lon)> points;
@@ -36,6 +37,9 @@ class RouteMapView extends StatelessWidget {
   final bool live;
   final (double, double)? currentPosition;
   final double? bearing;
+
+  /// Rute rencana (Buat rute) yang digambar di bawah jejak.
+  final List<(double lat, double lon)>? plan;
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +126,15 @@ class _WebRouteMapState extends State<_WebRouteMap> {
       _map.call('setRoute', [coords, sel, v.colorMode.name, true]);
     }
     _sendPosition();
+    _sendPlan();
+  }
+
+  void _sendPlan() {
+    final plan = v.plan ?? const [];
+    final idx = downsampleIndices(plan, _maxStaticPoints);
+    _map.call('setPlan', [
+      [for (final i in idx) [plan[i].$1, plan[i].$2]],
+    ]);
   }
 
   void _sendLive() {
@@ -172,6 +185,7 @@ class _WebRouteMapState extends State<_WebRouteMap> {
                   o.points.last == v.points.last));
       if (!same) _sendAll();
     }
+    if (!identical(o.plan, v.plan)) _sendPlan();
     if (o.currentPosition != v.currentPosition || o.bearing != v.bearing) {
       _sendPosition();
     }

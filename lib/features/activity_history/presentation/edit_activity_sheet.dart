@@ -99,7 +99,7 @@ class _EditActivitySheetState extends ConsumerState<EditActivitySheet> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'UBAH CATATAN',
+              FN.caps('Ubah catatan'),
               style: FN
                   .label(size: 11, color: FN.signal)
                   .copyWith(fontWeight: FontWeight.w700),
@@ -108,7 +108,7 @@ class _EditActivitySheetState extends ConsumerState<EditActivitySheet> {
             TextField(
               controller: _title,
               textCapitalization: TextCapitalization.sentences,
-              decoration: const InputDecoration(labelText: 'JUDUL'),
+              decoration: InputDecoration(labelText: FN.caps('Judul')),
             ),
             const SizedBox(height: 12),
             TextField(
@@ -116,44 +116,47 @@ class _EditActivitySheetState extends ConsumerState<EditActivitySheet> {
               minLines: 2,
               maxLines: 5,
               textCapitalization: TextCapitalization.sentences,
-              decoration: const InputDecoration(labelText: 'CATATAN'),
+              decoration: InputDecoration(labelText: FN.caps('Catatan')),
             ),
-            const SizedBox(height: 18),
-            Text('OLAHRAGA', style: FN.label(size: 10)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (final s in SportType.values)
+            // Gym (tanpa GPS): olahraga & perlengkapan tidak bisa diubah.
+            if (_sport.isGps) ...[
+              const SizedBox(height: 18),
+              Text(FN.caps('Olahraga'), style: FN.label(size: 10)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final s in SportType.gps)
+                    StampChip(
+                      text: s.label,
+                      icon: s.icon,
+                      selected: _sport == s,
+                      onTap: () => setState(() => _sport = s),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Text(FN.caps('Perlengkapan'), style: FN.label(size: 10)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
                   StampChip(
-                    text: s.label,
-                    icon: s.icon,
-                    selected: _sport == s,
-                    onTap: () => setState(() => _sport = s),
+                    text: FN.caps('Tanpa'),
+                    selected: _gearId == null,
+                    onTap: () => setState(() => _gearId = null),
                   ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            Text('PERLENGKAPAN', style: FN.label(size: 10)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                StampChip(
-                  text: 'TANPA',
-                  selected: _gearId == null,
-                  onTap: () => setState(() => _gearId = null),
-                ),
-                for (final g in usable)
-                  StampChip(
-                    text: g.name,
-                    selected: _gearId == g.id,
-                    onTap: () => setState(() => _gearId = g.id),
-                  ),
-              ],
-            ),
+                  for (final g in usable)
+                    StampChip(
+                      text: g.name,
+                      selected: _gearId == g.id,
+                      onTap: () => setState(() => _gearId = g.id),
+                    ),
+                ],
+              ),
+            ],
             const SizedBox(height: 24),
             InkButton(
               label: 'Simpan & hitung ulang',

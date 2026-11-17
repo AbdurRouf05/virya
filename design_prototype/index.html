@@ -3,39 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Virya - Field Notes Interactive Splash Screen</title>
+  <title>Virya Field Notes - Entry Loading Prototype (FigCraft)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* 4 Official Virya Styles Theme Variables */
     :root {
-      --bg: #F4EFE6;
-      --grid: #E2DAC8;
-      --ink: #1B1813;
-      --ink-soft: #5C5549;
-      --ink-muted: #8E8575;
-      --signal: #EE5A24;
-      --acid: #B8E986;
-    }
-
-    [data-theme="night"] {
-      --bg: #0D0F12;
-      --grid: #1A1F26;
-      --ink: #F4EFE6;
-      --ink-soft: #A2AAB4;
-      --ink-muted: #616D7E;
-      --signal: #FF6B35;
-      --acid: #CCFF00;
+      /* Default: Field Notes */
+      --fn-night: #0E0E0C;
+      --fn-night-surface: #1A1A17;
+      --fn-night-line: #2E2E29;
+      --fn-on-night: #EFE9DC;
+      --fn-on-night-muted: #CFC6B2;
+      --fn-signal: #FF4F00;
+      --fn-acid: #C6FF00;
+      --font-display: 'Anton', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --font-sans: 'IBM Plex Sans', sans-serif;
     }
 
     [data-theme="blueprint"] {
-      --bg: #0F2537;
-      --grid: #1A3E5C;
-      --ink: #EAF4FC;
-      --ink-soft: #8CBEDB;
-      --ink-muted: #4B85A8;
-      --signal: #FF9F1C;
-      --acid: #2EC4B6;
+      /* Cetak Biru */
+      --fn-night: #0B1622;
+      --fn-night-surface: #14212F;
+      --fn-night-line: #26384A;
+      --fn-on-night: #E8EEF2;
+      --fn-on-night-muted: #BCC9D4;
+      --fn-signal: #E8432E;
+      --fn-acid: #7DF9FF;
+    }
+
+    [data-theme="forest"] {
+      /* Hutan */
+      --fn-night: #0F1710;
+      --fn-night-surface: #1A241B;
+      --fn-night-line: #2D3A2E;
+      --fn-on-night: #E9EADB;
+      --fn-on-night-muted: #C2C6AC;
+      --fn-signal: #D4601F;
+      --fn-acid: #D9F05A;
+    }
+
+    [data-theme="night"] {
+      /* Malam */
+      --fn-night: #0B0A08;
+      --fn-night-surface: #1A1914;
+      --fn-night-line: #2E2C25;
+      --fn-on-night: #EFE9DC;
+      --fn-on-night-muted: #CFC6B2;
+      --fn-signal: #FF5A14;
+      --fn-acid: #C6FF00;
     }
 
     * {
@@ -43,383 +61,511 @@
       margin: 0;
       padding: 0;
       user-select: none;
+      -webkit-user-select: none;
     }
 
     body {
-      background-color: #121212;
-      font-family: 'IBM Plex Mono', monospace;
-      color: var(--ink);
-      min-height: 100vh;
+      background-color: #060706;
+      color: var(--fn-on-night);
+      font-family: var(--font-sans);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      overflow-x: hidden;
-      padding: 20px;
+      min-height: 100vh;
+      overflow: hidden;
+      transition: background-color 0.3s ease;
     }
 
+    /* Top Dev Banner & Theme Switcher */
+    .dev-hud {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(23, 26, 24, 0.90);
+      border: 1px solid var(--fn-night-line);
+      backdrop-filter: blur(12px);
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--fn-on-night-muted);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      z-index: 100;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .dev-hud span {
+      color: var(--fn-acid);
+      font-weight: 600;
+    }
+
+    .theme-select {
+      background: var(--fn-night);
+      border: 1px solid var(--fn-night-line);
+      color: var(--fn-on-night);
+      padding: 4px 8px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .btn-replay {
+      background: transparent;
+      border: 1.5px solid var(--fn-signal);
+      color: var(--fn-signal);
+      padding: 4px 10px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+
+    .btn-replay:hover {
+      background: var(--fn-signal);
+      color: #fff;
+    }
+
+    /* Device Mockup Wrapper */
     .phone-container {
-      width: 390px;
+      width: 380px;
       height: 780px;
-      background-color: var(--bg);
-      border: 3px solid #2B2B2B;
+      background: var(--fn-night);
       border-radius: 44px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08);
+      border: 3px solid #282C29;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.05);
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: background-color 0.4s ease;
+      transition: background-color 0.35s ease;
     }
 
-    .status-bar {
-      height: 44px;
-      padding: 0 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      z-index: 10;
-      opacity: 0.75;
-    }
-
-    .grid-bg {
+    /* Technical Grid 32px Canvas Pattern */
+    .grid-background {
       position: absolute;
       inset: 0;
-      background-image: 
-        linear-gradient(to right, var(--grid) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
       background-size: 32px 32px;
-      opacity: 0.8;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
       pointer-events: none;
     }
 
-    .corner-cross {
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      pointer-events: none;
+    /* Dynamic Island / Notch */
+    .notch {
+      width: 120px;
+      height: 28px;
+      background: #000;
+      border-radius: 20px;
+      margin: 10px auto 0;
+      z-index: 10;
     }
-    .corner-cross::before, .corner-cross::after {
-      content: '';
-      position: absolute;
-      background: var(--ink-muted);
-    }
-    .corner-cross::before { left: 0; top: 6px; width: 14px; height: 1.5px; }
-    .corner-cross::after { left: 6px; top: 0; width: 1.5px; height: 14px; }
-    .cc-tl { top: 56px; left: 20px; }
-    .cc-tr { top: 56px; right: 20px; }
-    .cc-bl { bottom: 80px; left: 20px; }
-    .cc-br { bottom: 80px; right: 20px; }
 
-    .splash-content {
-      flex: 1;
+    /* Stage 1: Loading Screen */
+    .screen-loading {
+      position: absolute;
+      inset: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 16px 24px 28px;
+      padding: 36px 28px 40px;
       z-index: 5;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .header-station {
+    .screen-loading.hidden {
+      opacity: 0;
+      transform: scale(0.97);
+      pointer-events: none;
+    }
+
+    /* Header Coordinates */
+    .loading-header {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 18px;
+      font-family: var(--font-mono);
       font-size: 10px;
-      font-weight: 700;
       letter-spacing: 1.2px;
-      border-bottom: 1.5px solid var(--ink);
-      padding-bottom: 6px;
+      color: var(--fn-on-night-muted);
     }
 
-    .center-branding {
+    .coord-tag {
+      border: 1px solid var(--fn-night-line);
+      padding: 3px 6px;
+      background: var(--fn-night-surface);
+      color: var(--fn-on-night-muted);
+    }
+
+    .stamp-badge {
+      display: inline-block;
+      border: 1.5px solid var(--fn-signal);
+      color: var(--fn-signal);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      letter-spacing: 1.5px;
+      transform: rotate(-3deg);
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    /* Center Brand Area with Official Virya Mark */
+    .brand-section {
+      text-align: center;
+      margin: auto 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin: auto 0;
-      text-align: center;
     }
 
-    #compassCanvas {
-      width: 160px;
-      height: 160px;
-      margin-bottom: 24px;
+    /* Official 5-Block Stepped Chevron Logo */
+    .virya-logo-stepped {
+      width: 128px;
+      height: 72px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: logoGlow 2.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes logoGlow {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(-2px);
+      }
     }
 
     .brand-title {
-      font-family: 'Anton', sans-serif;
-      font-size: 54px;
-      letter-spacing: 4px;
+      font-family: var(--font-display);
+      font-size: 58px;
       line-height: 0.9;
-      margin-bottom: 8px;
-    }
-
-    .brand-sub {
-      font-size: 10px;
-      font-weight: 700;
       letter-spacing: 2px;
-      color: var(--ink-soft);
+      color: var(--fn-on-night);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      transition: color 0.3s;
     }
 
-    .calibration-box {
-      border-top: 1.5px solid var(--ink);
-      padding-top: 12px;
+    .brand-subtitle {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 2.5px;
+      color: var(--fn-on-night-muted);
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    /* Progress & Technical Checklist */
+    .loading-footer {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 14px;
     }
 
-    .cal-stage-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-    }
-
-    .progress-bar-wrap {
+    .progress-bar-rail {
       width: 100%;
-      height: 4px;
-      background: var(--grid);
+      height: 3px;
+      background: var(--fn-night-line);
       position: relative;
+      overflow: hidden;
     }
 
     .progress-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
       height: 100%;
-      background: var(--ink);
       width: 0%;
-      transition: width 0.08s linear;
+      background: var(--fn-acid);
+      box-shadow: 0 0 10px rgba(198, 255, 0, 0.4);
+      transition: width 0.15s ease-out, background 0.3s;
     }
 
-    .footer-coords {
+    .checklist-terminal {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--fn-on-night-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-height: 75px;
+    }
+
+    .log-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: all 0.25s ease-out;
+    }
+
+    .log-item.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .log-item .tag {
+      color: var(--fn-acid);
+      font-weight: 700;
+      transition: color 0.3s;
+    }
+
+    .tap-hint {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 1.5px;
+      color: var(--fn-on-night-muted);
+      opacity: 0.6;
+      margin-top: 6px;
+      cursor: pointer;
+    }
+
+    /* Stage 2: Main Home Screen (Transition Target) */
+    .screen-home {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 36px 20px 24px;
+      background: var(--fn-night);
+      opacity: 0;
+      transform: scale(1.03);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .screen-home.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    .home-top-bar {
       display: flex;
       justify-content: space-between;
-      font-size: 9px;
-      color: var(--ink-muted);
-      letter-spacing: 0.5px;
-      margin-top: 2px;
-    }
-
-    .controls-panel {
-      margin-top: 20px;
-      display: flex;
-      gap: 12px;
       align-items: center;
+      margin-top: 14px;
+      margin-bottom: 24px;
     }
 
-    .btn {
-      padding: 10px 18px;
-      background: #222;
-      border: 1px solid #444;
-      color: #FFF;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      font-weight: 600;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn:hover {
-      background: #333;
-      border-color: #666;
+    .home-app-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      letter-spacing: 1px;
     }
 
-    .theme-select {
-      padding: 9px 12px;
-      background: #222;
-      border: 1px solid #444;
-      color: #FFF;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      border-radius: 6px;
-      outline: none;
-      cursor: pointer;
+    .home-card {
+      background: var(--fn-night-surface);
+      border: 1px solid var(--fn-night-line);
+      border-left: 4px solid var(--fn-acid);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .home-card-header {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--fn-on-night-muted);
+      letter-spacing: 1.2px;
+      margin-bottom: 6px;
+    }
+
+    .home-card-metric {
+      font-family: var(--font-display);
+      font-size: 44px;
+      line-height: 1;
+      color: var(--fn-on-night);
+    }
+
+    .home-card-sub {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--fn-acid);
+      margin-top: 6px;
     }
   </style>
 </head>
 <body>
 
-  <div class="phone-container" id="phoneContainer">
-    <div class="grid-bg"></div>
-
-    <div class="corner-cross cc-tl"></div>
-    <div class="corner-cross cc-tr"></div>
-    <div class="corner-cross cc-bl"></div>
-    <div class="corner-cross cc-br"></div>
-
-    <div class="status-bar">
-      <span>09:41</span>
-      <span>● GPS 3D FIX</span>
-    </div>
-
-    <div class="splash-content">
-      <div class="header-station">
-        <span>VIRYA · EXPEDITION V1.0</span>
-        <span>ID: 08-YGY</span>
-      </div>
-
-      <div class="center-branding">
-        <canvas id="compassCanvas" width="320" height="320"></canvas>
-        <div class="brand-title">VIRYA</div>
-        <div class="brand-sub">OFFLINE EXPEDITION & TELEMETRY</div>
-      </div>
-
-      <div class="calibration-box">
-        <div class="cal-stage-row">
-          <span id="stageLabel">CALIBRATING BAROMETER...</span>
-          <span id="percentLabel" style="color: var(--signal);">0%</span>
-        </div>
-        <div class="progress-bar-wrap">
-          <div class="progress-bar-fill" id="progressFill"></div>
-        </div>
-        <div class="footer-coords">
-          <span>7°47'29.0"S 110°22'18.0"E</span>
-          <span>ALT: 142M · READY</span>
-        </div>
-      </div>
-    </div>
+  <!-- Top Controller HUD with Theme Selector -->
+  <div class="dev-hud">
+    <div>TEMA AKTIF:</div>
+    <select class="theme-select" id="themeSelect" onchange="changeTheme(this.value)">
+      <option value="field_notes">Field Notes (Default - Oranye/Krem)</option>
+      <option value="blueprint">Cetak Biru (Blueprint - Cyan/Navy)</option>
+      <option value="forest">Hutan (Forest - Hijau/Karat)</option>
+      <option value="night">Malam (Night - Oranye/Deep Black)</option>
+    </select>
+    <button class="btn-replay" onclick="startLoadingCycle()">REPLAY</button>
   </div>
 
-  <div class="controls-panel">
-    <button class="btn" onclick="startCalibration()">↺ Putar Ulang Animasi</button>
-    <select class="theme-select" id="themeSelector" onchange="changeTheme(this.value)">
-      <option value="field_notes">Tema: Field Notes (Kertas)</option>
-      <option value="night">Tema: Night Ink (Gelap)</option>
-      <option value="blueprint">Tema: Blueprint (Teknis)</option>
-    </select>
+  <!-- Mobile Viewport Mockup -->
+  <div class="phone-container" onclick="handleContainerTap()">
+    <div class="grid-background"></div>
+    <div class="notch"></div>
+
+    <!-- ENTRY LOADING SCREEN -->
+    <div class="screen-loading" id="loadingScreen">
+      <!-- Top Technical Meta -->
+      <div class="loading-header">
+        <div class="coord-tag">SYS//INIT 1.0.3</div>
+        <div class="stamp-badge">OFFLINE-FIRST</div>
+        <div class="coord-tag">50Hz SENSORS</div>
+      </div>
+
+      <!-- Center Logo & Brand Identity (Official Virya Stepped Mark) -->
+      <div class="brand-section">
+        <div class="virya-logo-stepped">
+          <!-- Official 5-block stepped chevron logo with CSS Variables for auto-theming -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
+            <!-- 4 step blocks adapt to onNight of current theme -->
+            <rect x="20" y="68" width="40" height="40" fill="var(--fn-on-night)" style="transition: fill 0.3s;"/>
+            <rect x="64" y="112" width="40" height="40" fill="var(--fn-on-night)" style="transition: fill 0.3s;"/>
+            <rect x="108" y="156" width="40" height="40" fill="var(--fn-on-night)" style="transition: fill 0.3s;"/>
+            <rect x="152" y="112" width="40" height="40" fill="var(--fn-on-night)" style="transition: fill 0.3s;"/>
+            <!-- 5th accent block adapts to signal color of current theme -->
+            <rect x="196" y="68" width="40" height="40" fill="var(--fn-signal)" style="transition: fill 0.3s;"/>
+          </svg>
+        </div>
+        <h1 class="brand-title">VIRYA</h1>
+        <p class="brand-subtitle">PERSONAL FIELD TRACKER</p>
+      </div>
+
+      <!-- Bottom Progress & Checklist -->
+      <div class="loading-footer">
+        <div class="progress-bar-rail">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+
+        <div class="checklist-terminal" id="terminalLog">
+          <div class="log-item" id="log1">
+            <span class="tag">[OK]</span>
+            <span>MENGHUBUNGKAN SQLITE DRIFT...</span>
+          </div>
+          <div class="log-item" id="log2">
+            <span class="tag">[OK]</span>
+            <span>VERIFIKASI PMTILES VECTOR MAP...</span>
+          </div>
+          <div class="log-item" id="log3">
+            <span class="tag">[READY]</span>
+            <span>MEMASUKI INSTRUMEN LAPANGAN</span>
+          </div>
+        </div>
+
+        <div class="tap-hint">[ SENTUH UNTUK LEWATI ]</div>
+      </div>
+    </div>
+
+    <!-- TARGET HOME DASHBOARD -->
+    <div class="screen-home" id="homeScreen">
+      <div class="home-top-bar">
+        <div class="home-app-title">HARI INI</div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--fn-signal);">
+          ● SIAP REKAM
+        </div>
+      </div>
+
+      <div class="home-card">
+        <div class="home-card-header">KILOMETER MINGGU INI</div>
+        <div class="home-card-metric">142.8 <span style="font-size: 18px; font-family: var(--font-mono); color: var(--fn-on-night-muted);">KM</span></div>
+        <div class="home-card-sub">▲ 18% LEBIH TINGGI DARI MINGGU LALU</div>
+      </div>
+
+      <div class="home-card" style="border-left-color: var(--fn-signal);">
+        <div class="home-card-header">REKAP TERAKHIR</div>
+        <div class="home-card-metric">48.2 <span style="font-size: 18px; font-family: var(--font-mono); color: var(--fn-on-night-muted);">KM</span></div>
+        <div class="home-card-sub" style="color: var(--fn-signal);">GRAVEL EXPEDITION • 02:14:09</div>
+      </div>
+    </div>
   </div>
 
   <script>
-    const canvas = document.getElementById('compassCanvas');
-    const ctx = canvas.getContext('2d');
-    const progressFill = document.getElementById('progressFill');
-    const stageLabel = document.getElementById('stageLabel');
-    const percentLabel = document.getElementById('percentLabel');
-    const phoneContainer = document.getElementById('phoneContainer');
-
-    const stages = [
-      "INIT SENSOR FUSION ENGINE...",
-      "CALIBRATING BAROMETRIC ALTIMETER...",
-      "ACQUIRING 3D GPS LOCK · TOPO READY"
-    ];
-
-    let startTime = null;
-    const duration = 2400; // 2.4s
+    let currentStep = 0;
+    let timer = null;
 
     function changeTheme(theme) {
-      if (theme === 'field_notes') phoneContainer.removeAttribute('data-theme');
-      else phoneContainer.setAttribute('data-theme', theme);
-    }
-
-    function drawCompass(rotation, progress) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const cx = 160;
-      const cy = 160;
-      const r = 130;
-
-      const styles = getComputedStyle(phoneContainer);
-      const ink = styles.getPropertyValue('--ink').trim();
-      const signal = styles.getPropertyValue('--signal').trim();
-      const grid = styles.getPropertyValue('--grid').trim();
-
-      // Outer circle ring
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.strokeStyle = ink;
-      ctx.lineWidth = 3.5;
-      ctx.stroke();
-
-      // Inner subtle circle
-      ctx.beginPath();
-      ctx.arc(cx, cy, r * 0.74, 0, Math.PI * 2);
-      ctx.strokeStyle = grid;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Degree tick marks
-      for (let i = 0; i < 36; i++) {
-        const angle = (i * 10) * Math.PI / 180;
-        const isMajor = (i % 9 === 0);
-        const len = isMajor ? 18 : 8;
-
-        const x1 = cx + (r - len) * Math.cos(angle);
-        const y1 = cy + (r - len) * Math.sin(angle);
-        const x2 = cx + r * Math.cos(angle);
-        const y2 = cy + r * Math.sin(angle);
-
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.strokeStyle = isMajor ? ink : ink + '66';
-        ctx.lineWidth = isMajor ? 3 : 1.5;
-        ctx.stroke();
+      if (theme === 'field_notes') {
+        document.documentElement.removeAttribute('data-theme');
+      } else {
+        document.documentElement.setAttribute('data-theme', theme);
       }
-
-      // Rotating Needle
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(rotation * Math.PI * 2);
-
-      // North Arrow (Signal Orange)
-      ctx.beginPath();
-      ctx.moveTo(0, -r * 0.72);
-      ctx.lineTo(12, -r * 0.28);
-      ctx.lineTo(-12, -r * 0.28);
-      ctx.closePath();
-      ctx.fillStyle = signal;
-      ctx.fill();
-
-      // South Arrow
-      ctx.beginPath();
-      ctx.moveTo(0, r * 0.72);
-      ctx.lineTo(12, r * 0.28);
-      ctx.lineTo(-12, r * 0.28);
-      ctx.closePath();
-      ctx.fillStyle = ink + '55';
-      ctx.fill();
-
-      // Center pivot
-      ctx.beginPath();
-      ctx.arc(0, 0, 7, 0, Math.PI * 2);
-      ctx.fillStyle = ink;
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(0, 0, 3, 0, Math.PI * 2);
-      ctx.fillStyle = styles.getPropertyValue('--bg').trim();
-      ctx.fill();
-
-      ctx.restore();
+      startLoadingCycle();
     }
 
-    function animate(time) {
-      if (!startTime) startTime = time;
-      const elapsed = time - startTime;
-      const p = Math.min(1.0, elapsed / duration);
+    function startLoadingCycle() {
+      clearTimeout(timer);
+      const loadingScreen = document.getElementById('loadingScreen');
+      const homeScreen = document.getElementById('homeScreen');
+      const progress = document.getElementById('progressFill');
+      const log1 = document.getElementById('log1');
+      const log2 = document.getElementById('log2');
+      const log3 = document.getElementById('log3');
 
-      // Ease out cubic
-      const easedRotation = 1 - Math.pow(1 - Math.min(1.0, p / 0.85), 3);
+      // Reset
+      homeScreen.classList.remove('active');
+      loadingScreen.classList.remove('hidden');
+      progress.style.width = '0%';
+      log1.classList.remove('active');
+      log2.classList.remove('active');
+      log3.classList.remove('active');
 
-      drawCompass(easedRotation, p);
+      // Step 1 (0.4s)
+      setTimeout(() => {
+        progress.style.width = '35%';
+        log1.classList.add('active');
+      }, 350);
 
-      const stageIdx = Math.min(stages.length - 1, Math.floor(p * stages.length));
-      stageLabel.innerText = stages[stageIdx];
-      percentLabel.innerText = Math.round(p * 100) + '%';
-      progressFill.style.width = (p * 100) + '%';
+      // Step 2 (1.1s)
+      setTimeout(() => {
+        progress.style.width = '75%';
+        log2.classList.add('active');
+      }, 1100);
 
-      if (p < 1.0) {
-        requestAnimationFrame(animate);
+      // Step 3 (1.8s)
+      setTimeout(() => {
+        progress.style.width = '100%';
+        log3.classList.add('active');
+      }, 1800);
+
+      // Transition to Home (2.4s)
+      timer = setTimeout(() => {
+        transitionToHome();
+      }, 2400);
+    }
+
+    function transitionToHome() {
+      document.getElementById('loadingScreen').classList.add('hidden');
+      document.getElementById('homeScreen').classList.add('active');
+    }
+
+    function handleContainerTap() {
+      const loadingScreen = document.getElementById('loadingScreen');
+      if (!loadingScreen.classList.contains('hidden')) {
+        clearTimeout(timer);
+        transitionToHome();
       }
     }
 
-    function startCalibration() {
-      startTime = null;
-      requestAnimationFrame(animate);
-    }
-
-    startCalibration();
+    // Auto start on load
+    window.onload = startLoadingCycle;
   </script>
 </body>
 </html>

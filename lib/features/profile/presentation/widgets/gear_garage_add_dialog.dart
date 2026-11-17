@@ -52,7 +52,7 @@ class _AddGearDialogState extends ConsumerState<AddGearDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('GEAR BARU'),
+      title: Text(FN.caps('Gear baru')),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -60,12 +60,12 @@ class _AddGearDialogState extends ConsumerState<AddGearDialog> {
           children: [
             TextField(
               controller: _name,
-              decoration: const InputDecoration(labelText: 'NAMA'),
+              decoration: InputDecoration(labelText: FN.caps('Nama')),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _brand,
-              decoration: const InputDecoration(labelText: 'MEREK / MODEL'),
+              decoration: InputDecoration(labelText: FN.caps('Merek / model')),
             ),
             const SizedBox(height: 14),
             Wrap(
@@ -87,12 +87,12 @@ class _AddGearDialogState extends ConsumerState<AddGearDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('BATAL'),
+          child: Text(FN.caps('Batal')),
         ),
         TextButton(
           onPressed: _save,
           style: TextButton.styleFrom(foregroundColor: FN.signal),
-          child: const Text('TAMBAH'),
+          child: Text(FN.caps('Tambah')),
         ),
       ],
     );

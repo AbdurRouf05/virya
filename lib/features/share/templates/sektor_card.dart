@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/core/analytics/analysis_models.dart';
 import 'package:virya/core/constants/enums.dart';
 import 'package:virya/features/share/domain/share_data.dart';
@@ -20,7 +20,7 @@ class SektorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final f = options.format;
     final accent = options.accent.resolve(dark: false);
-    final compact = f == CardFormat.square;
+    final compact = f != CardFormat.story;
     final maxRows = switch (f) {
       CardFormat.story => 7,
       CardFormat.feed => 4,
@@ -33,7 +33,7 @@ class SektorCard extends StatelessWidget {
     return CustomPaint(
       painter: PaperPainter(
         seed: data.seed + 11,
-        contour: FN.paperLine.withValues(alpha: 0.55),
+        contour: FNExport.paperLine.withValues(alpha: 0.55),
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(
@@ -50,12 +50,12 @@ class SektorCard extends StatelessWidget {
                 Expanded(
                   child: MonoLabel(
                     '${SF.sport(data.sport)} · ${SF.date(data.start)}',
-                    color: FN.ink,
+                    color: FNExport.ink,
                     weight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(width: 8),
-                MonoLabel(SF.entryNo(data), color: FN.ink),
+                MonoLabel(SF.entryNo(data), color: FNExport.ink),
               ],
             ),
             const SizedBox(height: 5),
@@ -79,7 +79,7 @@ class SektorCard extends StatelessWidget {
                         const SizedBox(height: 4),
                         MonoLabel(
                           '${SF.km(data.distanceM)} KM · ${data.gravelPct.round()}% TANPA ASPAL',
-                          color: FN.inkSoft,
+                          color: FNExport.inkSoft,
                         ),
                       ],
                     ),
@@ -94,11 +94,9 @@ class SektorCard extends StatelessWidget {
                           data.gritScore > 0
                               ? data.gritScore.round().toString()
                               : '—',
-                          style: FN.bigNumber(compact ? 40 : 56, color: accent)),
-                      if (data.gritScore > 0) ...[
-                        const SizedBox(height: 1),
-                        MonoLabel('/100', color: FN.inkSoft),
-                      ],
+                          style: FNExport.bigNumber(compact ? 40 : 56, color: accent)),
+                      if (data.gritScore > 0)
+                        MonoLabel('/100', color: FNExport.inkSoft),
                     ],
                   ),
                 ],
@@ -112,7 +110,7 @@ class SektorCard extends StatelessWidget {
                     ? Center(
                         child: MonoLabel(
                           'TIDAK ADA SEKTOR — MURNI ASPAL',
-                          color: FN.inkSoft,
+                          color: FNExport.inkSoft,
                           size: 9,
                         ),
                       )
@@ -175,7 +173,7 @@ class _SectorRow extends StatelessWidget {
     final s = sector;
     return Container(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: FN.ink, width: 0.5)),
+        border: Border(bottom: BorderSide(color: FNExport.ink, width: 0.5)),
       ),
       child: Row(
         children: [
@@ -198,10 +196,10 @@ class _SectorRow extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: FN.sans,
+                    fontFamily: FNExport.sans,
                     fontWeight: FontWeight.w600,
                     fontSize: 10,
-                    color: FN.ink,
+                    color: FNExport.ink,
                     height: 1.1,
                   ),
                 ),
@@ -238,17 +236,17 @@ class _SurfaceBar extends StatelessWidget {
         .toList();
     final total = entries.fold<double>(0, (a, e) => a + e.value);
     if (total <= 0) {
-      return Container(height: height, color: FN.paperDeep);
+      return Container(height: height, color: FNExport.paperDeep);
     }
     return Container(
       height: height,
-      decoration: BoxDecoration(border: Border.all(color: FN.ink, width: 0.8)),
+      decoration: BoxDecoration(border: Border.all(color: FNExport.ink, width: 0.8)),
       child: Row(
         children: [
           for (final e in entries)
             Expanded(
               flex: math.max(1, (e.value / total * 1000).round()),
-              child: Container(color: FN.surface[e.key]),
+              child: Container(color: FNExport.surface[e.key]),
             ),
         ],
       ),
@@ -273,13 +271,13 @@ class _SurfaceLegend extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(width: 6, height: 6, color: FN.surface[s]),
+                Container(width: 6, height: 6, color: FNExport.surface[s]),
                 const SizedBox(width: 3),
                 MonoLabel(
                   '${SF.surface(s)} ${((data.surfaceDistanceM[s] ?? 0) / total * 100).round()}%',
                   size: 6.2,
                   spacing: 0.6,
-                  color: FN.inkSoft,
+                  color: FNExport.inkSoft,
                 ),
               ],
             ),

@@ -21,43 +21,43 @@ class FlyoverTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FlyoverGradient(
-        top: true,
-        child: SafeArea(
-          bottom: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(4, 4, 16, 18),
-            child: Row(
-              children: [
-                BackButton(
-                  color: FN.paper,
-                  onPressed: busy ? null : () => Navigator.maybePop(context),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'VIRYA // FLYOVER',
-                        style: FN.label(size: 10, color: FN.acid),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        title.toUpperCase(),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: FN.bigNumber(22, color: FN.paper),
-                      ),
-                    ],
-                  ),
-                ),
-                FlyoverChip(
-                  is3d ? '3D' : '2D',
-                  selected: true,
-                  onTap: busy ? null : onToggle3d,
-                ),
-              ],
+    top: true,
+    child: SafeArea(
+      bottom: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(4, 4, 16, 18),
+        child: Row(
+          children: [
+            BackButton(
+              color: FN.onNight,
+              onPressed: busy ? null : () => Navigator.maybePop(context),
             ),
-          ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'VIRYA // FLYOVER',
+                    style: FN.label(size: 10, color: FN.acid),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    title.toUpperCase(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: FN.bigNumber(22, color: FN.onNight),
+                  ),
+                ],
+              ),
+            ),
+            FlyoverChip(
+              is3d ? '3D' : '2D',
+              selected: true,
+              onTap: busy ? null : onToggle3d,
+            ),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:virya/core/location/location_fix.dart';
 import 'package:virya/core/location/location_source.dart';
+import 'package:virya/core/sensors/heart_rate_source.dart';
 import 'package:virya/core/sensors/sensor_sources.dart';
 import 'package:virya/features/recording/application/recording_platform.dart';
 import 'package:virya/features/recording/application/recording_session.dart';
@@ -12,14 +13,18 @@ class RecordingSources {
   static const _gpsTimeout = Duration(seconds: 5);
 
   final RecordingPlatform Function() _platform;
-  RecordingSources(this._platform);
+  final HeartRateSource Function()? _heartRateFactory;
+  RecordingSources(this._platform, {HeartRateSource Function()? heartRate})
+    : _heartRateFactory = heartRate;
 
   LocationSource? _location;
   VibrationSource? _vibration;
   PressureSource? _pressure;
+  HeartRateSource? _heartRate;
   StreamSubscription<LocationFix>? _fixSub;
   StreamSubscription<double>? _vibSub;
   StreamSubscription<double>? _pressSub;
+  StreamSubscription<int?>? _heartRateSub;
   Timer? _watchdog;
   DateTime? _lastFixWall;
 
@@ -68,6 +73,11 @@ class RecordingSources {
     _vibSub = _vibration!.start().listen(session.onVibration);
     _pressure = _platform().createPressureSource(simulated: simulated);
     _pressSub = _pressure!.start().listen(session.pipeline.setPressure);
+    // Simulated routes carry their own pulse inside each fix.
+    if (!simulated) {
+      _heartRate = _heartRateFactory?.call();
+      _heartRateSub = _heartRate?.start().listen(session.pipeline.setHeartRate);
+    }
   }
 
   Future<void> teardown() async {
@@ -76,13 +86,17 @@ class RecordingSources {
     await _fixSub?.cancel();
     await _vibSub?.cancel();
     await _pressSub?.cancel();
+    await _heartRateSub?.cancel();
     _fixSub = _vibSub = null;
     _pressSub = null;
+    _heartRateSub = null;
     await _location?.stop();
     await _vibration?.stop();
     await _pressure?.stop();
+    await _heartRate?.stop();
     _location = null;
     _vibration = null;
     _pressure = null;
+    _heartRate = null;
   }
 }

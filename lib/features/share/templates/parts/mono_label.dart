@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 
-/// Mono uppercase label. [color] defaults to `FN.inkMuted`.
+/// Mono uppercase label. [color] defaults to `FNExport.inkMuted`.
 class MonoLabel extends StatelessWidget {
   final String text;
   final double size;
@@ -27,11 +27,11 @@ class MonoLabel extends StatelessWidget {
     overflow: TextOverflow.ellipsis,
     softWrap: false,
     style: TextStyle(
-      fontFamily: FN.mono,
+      fontFamily: FNExport.mono,
       fontSize: size,
       fontWeight: weight,
       letterSpacing: spacing,
-      color: color ?? FN.inkMuted,
+      color: color ?? FNExport.inkMuted,
       height: 1.15,
     ),
   );

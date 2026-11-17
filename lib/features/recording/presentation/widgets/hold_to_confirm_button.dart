@@ -32,16 +32,17 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
     with SingleTickerProviderStateMixin {
   bool _triggered = false;
 
-  late final AnimationController _c =
-      AnimationController(vsync: this, duration: widget.holdDuration)
-        ..addStatusListener((s) {
-          if (s == AnimationStatus.completed && !_triggered) {
-            _triggered = true;
-            HapticFeedback.heavyImpact();
-            widget.onConfirmed();
-            _c.value = 0;
-          }
-        });
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: widget.holdDuration,
+  )..addStatusListener((s) {
+      if (s == AnimationStatus.completed && !_triggered) {
+        _triggered = true;
+        HapticFeedback.heavyImpact();
+        widget.onConfirmed();
+        _c.value = 0;
+      }
+    });
 
   @override
   void dispose() {
@@ -62,19 +63,21 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
       if (wasLow) {
         ScaffoldMessenger.maybeOf(context)
           ?..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(
-            content: Text(
-              'Tahan tombol untuk menyelesaikan',
-              style: TextStyle(
-                fontFamily: FN.sans,
-                fontSize: 13,
-                color: FN.paper,
+          ..showSnackBar(
+            SnackBar(
+              content: Text(
+                'Tahan tombol untuk menyelesaikan',
+                style: TextStyle(
+                  fontFamily: FN.sans,
+                  fontSize: 13,
+                  color: FN.paper,
+                ),
               ),
+              backgroundColor: FN.nightSurface,
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(seconds: 1),
             ),
-            backgroundColor: FN.nightSurface,
-            behavior: SnackBarBehavior.floating,
-            duration: const Duration(seconds: 1),
-          ));
+          );
       }
     }
   }
@@ -94,9 +97,11 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
           builder: (context, _) => Container(
             height: widget.height,
             decoration: BoxDecoration(
-              border: Border.all(color: color, width: 2),
+              border: Border.all(color: color, width: FN.line(2)),
+              borderRadius: FN.boxRadius,
               color: FN.night,
             ),
+            clipBehavior: FN.isClean ? Clip.antiAlias : Clip.none,
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -105,32 +110,29 @@ class _HoldToConfirmButtonState extends State<HoldToConfirmButton>
                   heightFactor: _c.value,
                   child: ColoredBox(color: color),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      widget.icon,
-                      size: 30,
-                      color: _c.value > 0.5 ? FN.ink : color,
-                    ),
-                    const SizedBox(height: 5),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Text(
-                        widget.label,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        widget.icon,
+                        size: 30,
+                        color: _c.value > 0.5 ? FN.onAccent : color,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        FN.caps(widget.label),
                         textAlign: TextAlign.center,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontFamily: FN.sans,
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.1,
-                          color: _c.value > 0.5 ? FN.ink : color,
+                        style: FN.label(
+                          size: 11,
+                          color: _c.value > 0.5 ? FN.onAccent : color,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

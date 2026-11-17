@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/painting.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/render/paper_painters.dart';
 import 'package:virya/features/share/render/topo_ink_renderer.dart';
@@ -37,7 +37,7 @@ void paintRecapRoute(Canvas c, RecapStage s, RecapFrame f) {
   if (data.surface.isNotEmpty) {
     final sf = data.surface[idx.clamp(0, data.surface.length - 1)];
     final y = h * 0.77;
-    c.drawRect(Rect.fromLTWH(22, y + 1, 8, 8), Paint()..color = FN.surface[sf]!);
+    c.drawRect(Rect.fromLTWH(22, y + 1, 8, 8), Paint()..color = FNExport.surface[sf]!);
     recapText(c, 'PERMUKAAN · ${SF.surface(sf)}', 36, y,
         mono: true, size: 8, color: pal.ink, bold: true);
   }
@@ -82,25 +82,25 @@ void _hud(Canvas c, RecapStage s, int idx, double distShown) {
   }
   sp = n == 0 ? 0 : sp / n;
 
-  recapText(c, data.title.toUpperCase(), 22, 32,
+  recapText(c, data.title.toUpperCase(), 22, 24,
       mono: true, size: 8, color: pal.muted, maxW: 230);
-  recapTextR(c, SF.date(data.start), 338, 32, size: 8, color: pal.muted);
-  c.drawRect(Rect.fromLTWH(22, 48, 316, 0.8), Paint()..color = pal.line);
-  recapText(c, 'JARAK', 22, 58, mono: true, size: 7, color: pal.muted);
+  recapTextR(c, SF.date(data.start), 338, 24, size: 8, color: pal.muted);
+  c.drawRect(Rect.fromLTWH(22, 38, 316, 0.8), Paint()..color = pal.line);
+  recapText(c, 'JARAK', 22, 46, mono: true, size: 7, color: pal.muted);
   final dv = TextPainter(
     text: TextSpan(children: [
-      TextSpan(text: SF.km(distShown), style: FN.bigNumber(58, color: pal.ink)),
-      TextSpan(text: ' KM', style: FN.bigNumber(18, color: pal.accent)),
+      TextSpan(text: SF.km(distShown), style: FNExport.bigNumber(54, color: pal.ink)),
+      TextSpan(text: ' KM', style: FNExport.bigNumber(18, color: pal.accent)),
     ]),
     textDirection: TextDirection.ltr,
   )..layout();
-  dv.paint(c, const Offset(22, 72));
-  recapText(c, 'ELEV', 232, 58, mono: true, size: 7, color: pal.muted);
-  recapText(c, '+${gain.round()} M', 232, 72, size: 22, color: pal.ink);
+  dv.paint(c, const Offset(22, 58));
+  recapText(c, 'ELEV', 232, 46, mono: true, size: 7, color: pal.muted);
+  recapText(c, '+${gain.round()} M', 232, 58, size: 20, color: pal.ink);
   final runner = data.sport.isRunning;
-  recapText(c, runner ? 'PACE' : 'KEC', 232, 104, mono: true, size: 7, color: pal.muted);
-  recapText(c, runner ? '${SF.pace(sp)}/KM' : '${SF.kmh(sp)} KM/J', 232, 118,
-      size: 22, color: pal.ink);
+  recapText(c, runner ? 'PACE' : 'KEC', 232, 86, mono: true, size: 7, color: pal.muted);
+  recapText(c, runner ? '${SF.pace(sp)}/KM' : '${SF.kmh(sp)} KM/J', 232, 98,
+      size: 20, color: pal.ink);
 }
 
 void _elevationStrip(Canvas c, RecapStage s, double p, int idx, double distShown) {
@@ -113,8 +113,8 @@ void _elevationStrip(Canvas c, RecapStage s, double p, int idx, double distShown
       ele: data.ele,
       grade: data.grade,
       byGrade: !night,
-      fill: night ? pal.panel : FN.ink,
-      edge: night ? pal.muted : FN.ink,
+      fill: night ? pal.panel : FNExport.ink,
+      edge: night ? pal.muted : FNExport.ink,
       edgeWidth: 1,
       hatch: !night,
       headroom: 0.05);

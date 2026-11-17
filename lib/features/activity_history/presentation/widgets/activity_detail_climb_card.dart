@@ -25,7 +25,8 @@ class ClimbCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: FN.paper,
-        border: Border.all(color: FN.ink, width: 1),
+        border: FN.frame(color: FN.ink, width: 1),
+        borderRadius: FN.boxRadius,
       ),
       child: IntrinsicHeight(
         child: Row(
@@ -38,11 +39,11 @@ class ClimbCard extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('KAT', style: FN.label(size: 8.5, color: FN.paper)),
+                  Text(FN.caps('Kat'), style: FN.label(size: 8.5, color: FN.onNight)),
                   const SizedBox(height: 3),
                   FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text(cat, style: FN.bigNumber(34, color: FN.paper)),
+                    child: Text(cat, style: FN.bigNumber(34, color: FN.onNight)),
                   ),
                 ],
               ),
@@ -54,7 +55,7 @@ class ClimbCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'TANJAKAN ${index + 1} · ${fmt.distUnit} ${fmt.distance(c.startDistanceM, decimals: 1)} → ${fmt.distance(c.endDistanceM, decimals: 1)}',
+                      FN.caps('Tanjakan ${index + 1} · ${fmt.distUnit} ${fmt.distance(c.startDistanceM, decimals: 1)} → ${fmt.distance(c.endDistanceM, decimals: 1)}'),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: FN.label(size: 9.5),

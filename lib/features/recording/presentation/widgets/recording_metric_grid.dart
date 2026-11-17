@@ -8,8 +8,11 @@ import 'package:virya/features/recording/presentation/recording_format.dart';
 class RecordingMetricGrid extends StatelessWidget {
   final RecordingState state;
   final RecFormat fmt;
-  const RecordingMetricGrid(
-      {super.key, required this.state, required this.fmt});
+  const RecordingMetricGrid({
+    super.key,
+    required this.state,
+    required this.fmt,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +21,17 @@ class RecordingMetricGrid extends StatelessWidget {
     final tiles = <_Tile>[
       _Tile('JARAK', fmt.distance(s.totalDistanceMeters), fmt.distanceUnit),
       _Tile('WAKTU GERAK', RecFormat.duration(s.movingTimeSeconds), ''),
-      _Tile('ELEV NAIK', fmt.elevation(s.totalElevationGainMeters),
-          fmt.elevationUnit),
-      _Tile('TANJAKAN', RecFormat.grade(s.currentGradePct), '%',
-          accent: s.currentGradePct >= 3 ? FN.grade(s.currentGradePct) : null),
+      _Tile(
+        'ELEV NAIK',
+        fmt.elevation(s.totalElevationGainMeters),
+        fmt.elevationUnit,
+      ),
+      _Tile(
+        'TANJAKAN',
+        RecFormat.grade(s.currentGradePct),
+        '%',
+        accent: s.currentGradePct >= 3 ? FN.grade(s.currentGradePct) : null,
+      ),
       cycling
           ? _Tile('RATA-RATA', fmt.speed(s.averageSpeedKmh), fmt.speedUnit)
           : _Tile('PACE RATA²', fmt.pace(s.averageSpeedKmh), fmt.paceUnit),
@@ -66,30 +76,39 @@ class _TileView extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
       decoration: BoxDecoration(
         color: FN.nightSurface,
-        border: Border(
-          left: BorderSide(color: tile.accent ?? FN.nightLine, width: 3),
-          top: BorderSide(color: FN.nightLine.withValues(alpha: 0.4), width: 1),
-          right: BorderSide(color: FN.nightLine.withValues(alpha: 0.4), width: 1),
-          bottom: BorderSide(color: FN.nightLine.withValues(alpha: 0.4), width: 1),
-        ),
+        borderRadius: FN.boxRadius,
+        border: FN.isClean
+            ? null
+            : Border(
+                left: BorderSide(
+                  color: tile.accent ?? FN.nightLine,
+                  width: 3,
+                ),
+                top: BorderSide(
+                  color: FN.nightLine.withValues(alpha: 0.4),
+                  width: 1,
+                ),
+                right: BorderSide(
+                  color: FN.nightLine.withValues(alpha: 0.4),
+                  width: 1,
+                ),
+                bottom: BorderSide(
+                  color: FN.nightLine.withValues(alpha: 0.4),
+                  width: 1,
+                ),
+              ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            tile.label,
+            FN.caps(tile.label),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontFamily: FN.mono,
-              fontSize: 9,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.8,
-              color: FN.paperLine,
-            ),
+            style: FN.label(size: 9, color: FN.onNightMuted),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 5),
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
@@ -99,19 +118,18 @@ class _TileView extends StatelessWidget {
               children: [
                 Text(
                   tile.value,
-                  style: FN.bigNumber(26, color: FN.paper),
+                  style: FN.bigNumber(
+                    30,
+                    color: FN.isClean && tile.accent != null
+                        ? tile.accent
+                        : FN.onNight,
+                  ),
                 ),
                 if (tile.unit.isNotEmpty) ...[
                   const SizedBox(width: 4),
                   Text(
                     tile.unit,
-                    style: TextStyle(
-                      fontFamily: FN.mono,
-                      fontSize: 9,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.8,
-                      color: FN.paperLine,
-                    ),
+                    style: FN.label(size: 9, color: FN.onNightMuted),
                   ),
                 ],
               ],

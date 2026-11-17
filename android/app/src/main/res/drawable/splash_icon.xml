@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+ splash icon: Virya mark centred in the 240dp splash icon box. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="240dp"
+    android:height="240dp"
+    android:viewportWidth="240"
+    android:viewportHeight="240">
+    <path
+        android:fillColor="#141414"
+        android:pathData="M60.000,84.444h22.222v22.222h-22.222z" />
+    <path
+        android:fillColor="#141414"
+        android:pathData="M84.444,108.889h22.222v22.222h-22.222z" />
+    <path
+        android:fillColor="#141414"
+        android:pathData="M108.889,133.333h22.222v22.222h-22.222z" />
+    <path
+        android:fillColor="#141414"
+        android:pathData="M133.333,108.889h22.222v22.222h-22.222z" />
+    <path
+        android:fillColor="#FF4F00"
+        android:pathData="M157.778,84.444h22.222v22.222h-22.222z" />
+</vector>

@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/painting.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 
 export 'package:virya/features/share/render/contour_field.dart';
 export 'package:virya/features/share/render/elevation_profile.dart';
@@ -115,8 +115,8 @@ void paintStartFinish(
   canvas.restore();
 }
 
-/// Mono text helper for painters. [color] defaults to `FN.ink`,
-/// [family] to `FN.mono`.
+/// Mono text helper for painters. [color] defaults to `FNExport.ink`,
+/// [family] to `FNExport.mono`.
 TextPainter monoText(
   String s, {
   double size = 9,
@@ -131,11 +131,11 @@ TextPainter monoText(
       text: TextSpan(
         text: s,
         style: TextStyle(
-          fontFamily: family ?? FN.mono,
+          fontFamily: family ?? FNExport.mono,
           fontSize: size,
           fontWeight: weight,
           letterSpacing: spacing,
-          color: color ?? FN.ink,
+          color: color ?? FNExport.ink,
           height: height,
           shadows: shadows,
         ),

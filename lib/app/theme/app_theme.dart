@@ -5,18 +5,17 @@ import 'package:virya/app/theme/field_notes.dart';
 class FieldNotesTheme {
   FieldNotesTheme._();
 
-  static const _square = RoundedRectangleBorder(
-    borderRadius: BorderRadius.zero,
-  );
+  static RoundedRectangleBorder get _square =>
+      RoundedRectangleBorder(borderRadius: FN.smallRadius);
 
   static ThemeData get paper => _build(
-    brightness: Brightness.light,
+    brightness: FN.palette.brightness,
     bg: FN.paper,
     surface: FN.paper,
     surfaceHigh: FN.paperDeep,
     fg: FN.ink,
     muted: FN.inkMuted,
-    line: FN.ink,
+    line: FN.isClean ? FN.paperLine : FN.ink,
     accent: FN.signal,
   );
 
@@ -25,8 +24,8 @@ class FieldNotesTheme {
     bg: FN.night,
     surface: FN.nightSurface,
     surfaceHigh: FN.nightLine,
-    fg: FN.paper,
-    muted: FN.paperLine,
+    fg: FN.onNight,
+    muted: FN.onNightMuted,
     line: FN.nightLine,
     accent: FN.acid,
   );
@@ -46,11 +45,11 @@ class FieldNotesTheme {
       primary: fg,
       onPrimary: bg,
       secondary: accent,
-      onSecondary: FN.ink,
+      onSecondary: FN.onAccent,
       tertiary: FN.signal,
-      onTertiary: FN.ink,
+      onTertiary: FN.onAccent,
       error: FN.warn,
-      onError: FN.paper,
+      onError: FN.onNight,
       surface: surface,
       onSurface: fg,
       onSurfaceVariant: muted,
@@ -69,11 +68,13 @@ class FieldNotesTheme {
       displayColor: fg,
       fontFamily: FN.sans,
     );
+    final clean = FN.isClean;
     final mono = FN.label(size: 12, color: fg);
     final border = OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(color: fg, width: 1),
+      borderRadius: FN.smallRadius,
+      borderSide: BorderSide(color: clean ? line : fg, width: 1),
     );
+    final rule = clean ? line : fg;
     return base.copyWith(
       scaffoldBackgroundColor: bg,
       canvasColor: bg,
@@ -85,13 +86,8 @@ class FieldNotesTheme {
         displayMedium: FN.bigNumber(48, color: fg),
         displaySmall: FN.bigNumber(36, color: fg),
         headlineMedium: FN.bigNumber(28, color: fg),
-        titleLarge: TextStyle(
-          fontFamily: FN.display,
-          fontSize: 24,
-          color: fg,
-          height: 1.0,
-        ),
-        labelLarge: mono.copyWith(fontWeight: FontWeight.w700),
+        titleLarge: FN.title(24, color: fg, height: 1.0),
+        labelLarge: FN.labelStrong(size: 12, color: fg),
         labelMedium: FN.label(size: 11, color: muted),
         labelSmall: FN.label(size: 10, color: muted),
       ),
@@ -102,12 +98,14 @@ class FieldNotesTheme {
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
         centerTitle: false,
-        titleTextStyle: FN
-            .label(size: 13, color: fg)
-            .copyWith(fontWeight: FontWeight.w700, letterSpacing: 2),
-        shape: Border(bottom: BorderSide(color: fg, width: 1)),
+        titleTextStyle: clean
+            ? FN.heading(size: 17, color: fg)
+            : FN
+                  .label(size: 13, color: fg)
+                  .copyWith(fontWeight: FontWeight.w700, letterSpacing: 2),
+        shape: Border(bottom: BorderSide(color: rule, width: 1)),
       ),
-      dividerTheme: DividerThemeData(color: fg, thickness: 1, space: 1),
+      dividerTheme: DividerThemeData(color: rule, thickness: 1, space: 1),
       iconTheme: IconThemeData(color: fg, size: 20),
       inputDecorationTheme: InputDecorationTheme(
         border: border,
@@ -118,7 +116,8 @@ class FieldNotesTheme {
         labelStyle: FN.label(size: 11, color: muted),
         floatingLabelStyle: FN.label(size: 11, color: fg),
         isDense: true,
-        filled: false,
+        filled: clean,
+        fillColor: clean ? FN.cardFill : null,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 12,
@@ -138,19 +137,14 @@ class FieldNotesTheme {
         elevation: 0,
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: bg,
+        backgroundColor: clean ? FN.cardFill : bg,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
-          side: BorderSide(color: fg, width: 2),
+          borderRadius: clean ? BorderRadius.circular(18) : BorderRadius.zero,
+          side: clean ? BorderSide.none : BorderSide(color: fg, width: 2),
         ),
-        titleTextStyle: TextStyle(
-          fontFamily: FN.display,
-          fontSize: 26,
-          color: fg,
-          height: 1.05,
-        ),
+        titleTextStyle: FN.title(26, color: fg, height: 1.05),
         contentTextStyle: TextStyle(
           fontFamily: FN.sans,
           fontSize: 14,
@@ -158,19 +152,23 @@ class FieldNotesTheme {
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: bg,
+        backgroundColor: clean ? FN.cardFill : bg,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         modalElevation: 0,
-        shape: Border(top: BorderSide(color: fg, width: 2)),
+        shape: clean
+            ? const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+              )
+            : Border(top: BorderSide(color: fg, width: 2)),
       ),
       popupMenuTheme: PopupMenuThemeData(
-        color: bg,
+        color: clean ? FN.cardFill : bg,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
-          side: BorderSide(color: fg, width: 1),
+          borderRadius: FN.smallRadius,
+          side: BorderSide(color: clean ? line : fg, width: 1),
         ),
         textStyle: mono,
       ),
@@ -181,11 +179,14 @@ class FieldNotesTheme {
       ),
       sliderTheme: SliderThemeData(
         activeTrackColor: fg,
-        inactiveTrackColor: fg.withValues(alpha: 0.2),
-        thumbColor: accent,
+        inactiveTrackColor: clean ? FN.fill : fg.withValues(alpha: 0.2),
+        thumbColor: clean ? FN.cardFill : accent,
         overlayColor: accent.withValues(alpha: 0.15),
-        trackHeight: 2,
-        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+        trackHeight: clean ? 4 : 2,
+        thumbShape: RoundSliderThumbShape(
+          enabledThumbRadius: clean ? 10 : 8,
+          elevation: clean ? 2 : 1,
+        ),
         valueIndicatorColor: FN.ink,
         valueIndicatorTextStyle: FN.label(size: 11, color: FN.paper),
       ),
@@ -193,9 +194,22 @@ class FieldNotesTheme {
         style: TextButton.styleFrom(
           foregroundColor: fg,
           shape: _square,
-          textStyle: mono.copyWith(fontWeight: FontWeight.w700),
+          textStyle: clean
+              ? FN.heading(size: 14)
+              : mono.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
+      switchTheme: clean
+          ? SwitchThemeData(
+              thumbColor: WidgetStatePropertyAll(FN.cardFill),
+              trackColor: WidgetStateProperty.resolveWith(
+                (s) => s.contains(WidgetState.selected) ? FN.signal : FN.fill,
+              ),
+              trackOutlineColor: const WidgetStatePropertyAll(
+                Colors.transparent,
+              ),
+            )
+          : null,
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
           TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),

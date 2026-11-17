@@ -24,7 +24,7 @@ class ActivityDetailStatus extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'MEMBACA CATATAN…',
+                FN.caps('Membaca catatan…'),
                 style: FN.label(size: 12, color: FN.ink),
               ),
               const SizedBox(height: 12),
@@ -51,12 +51,8 @@ class ActivityDetailStatus extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              t.toUpperCase(),
-              style: TextStyle(
-                fontFamily: FN.display,
-                fontSize: 40,
-                color: FN.ink,
-              ),
+              FN.caps(t),
+              style: FN.title(40, color: FN.ink),
             ),
             const SizedBox(height: 8),
             Text(body ?? ''),

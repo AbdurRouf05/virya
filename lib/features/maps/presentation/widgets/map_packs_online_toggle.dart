@@ -2,35 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:virya/app/theme/field_notes.dart';
 import 'package:virya/features/maps/presentation/widgets/map_packs_box.dart';
 
-/// Switch for the online (OpenFreeMap) fallback basemap.
+/// Switch: may the map fetch new tiles from the internet (OpenFreeMap)?
 class MapPacksOnlineToggle extends StatelessWidget {
-  const MapPacksOnlineToggle({super.key, required this.value, required this.onChanged});
+  const MapPacksOnlineToggle({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
   final bool value;
   final ValueChanged<bool> onChanged;
 
   @override
   Widget build(BuildContext context) => MapPacksBox(
-        child: Row(children: [
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('PETA ONLINE CADANGAN', style: FN.label(size: 12, color: FN.ink)),
+    child: Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                FN.caps('AMBIL PETA DARI INTERNET'),
+                style: FN.label(size: 12, color: FN.ink),
+              ),
               const SizedBox(height: 4),
               Text(
-                'Bila belum ada basemap offline dan perangkat online, pakai '
-                'OpenFreeMap (gaya Field Notes).',
+                'Matikan untuk hemat kuota: peta hanya memakai cache dan '
+                'wilayah yang sudah diunduh.',
                 style: TextStyle(
-                    fontFamily: FN.sans, fontSize: 12, color: FN.inkSoft, height: 1.35),
+                  fontFamily: FN.sans,
+                  fontSize: 12,
+                  color: FN.inkSoft,
+                  height: 1.35,
+                ),
               ),
-            ]),
+            ],
           ),
-          Switch(
-            value: value,
-            activeColor: FN.paper,
-            activeTrackColor: FN.signal,
-            inactiveThumbColor: FN.inkMuted,
-            inactiveTrackColor: FN.paperDeep,
-            onChanged: onChanged,
-          ),
-        ]),
-      );
+        ),
+        Switch(
+          value: value,
+          activeColor: FN.onNight,
+          activeTrackColor: FN.signal,
+          inactiveThumbColor: FN.inkMuted,
+          inactiveTrackColor: FN.paperDeep,
+          onChanged: onChanged,
+        ),
+      ],
+    ),
+  );
 }

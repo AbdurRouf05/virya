@@ -11,6 +11,7 @@ extension SportUi on SportType {
     SportType.trailRunning => 'LARI TRAIL',
     SportType.hiking => 'HIKING',
     SportType.walking => 'JALAN KAKI',
+    SportType.strength => 'GYM',
   };
 
   IconData get icon => switch (this) {
@@ -21,19 +22,23 @@ extension SportUi on SportType {
     SportType.trailRunning => Icons.landscape,
     SportType.hiking => Icons.hiking,
     SportType.walking => Icons.directions_walk,
+    SportType.strength => Icons.fitness_center,
   };
 
   SportGroup get group => isCycling
       ? SportGroup.cycling
       : isRunning
       ? SportGroup.running
-      : SportGroup.foot;
+      : isGps
+      ? SportGroup.foot
+      : SportGroup.strength;
 }
 
 enum SportGroup {
   cycling('SEPEDA'),
   running('LARI'),
-  foot('JALAN & HIKING');
+  foot('JALAN & HIKING'),
+  strength('GYM');
 
   final String label;
   const SportGroup(this.label);

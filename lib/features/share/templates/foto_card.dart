@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_data.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/domain/share_options.dart';
@@ -27,7 +27,7 @@ class FotoCard extends StatelessWidget {
     };
 
     return Container(
-      color: FN.night,
+      color: FNExport.night,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -47,7 +47,7 @@ class FotoCard extends StatelessWidget {
                         child: MonoLabel(
                           '[ PILIH FOTO ]',
                           size: 11,
-                          color: FN.inkSoft,
+                          color: FNExport.inkSoft,
                           weight: FontWeight.w700,
                         ),
                       ),
@@ -65,7 +65,7 @@ class FotoCard extends StatelessWidget {
                       top: 10,
                       child: CardNote(
                         lines: [SF.coord(data.startLat, data.startLon)],
-                        color: photo != null ? FN.paper : FN.ink,
+                        color: photo != null ? FNExport.paper : FNExport.ink,
                         size: 7,
                       ),
                     ),
@@ -82,7 +82,7 @@ class FotoCard extends StatelessWidget {
               12,
               compact ? 8 : 12,
             ),
-            color: FN.paper,
+            color: FNExport.paper,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -97,7 +97,7 @@ class FotoCard extends StatelessWidget {
                       padding: EdgeInsets.only(bottom: big * 0.1),
                       child: Text(
                         'KM',
-                        style: FN.bigNumber(big * 0.28, color: accent),
+                        style: FNExport.bigNumber(big * 0.28, color: accent),
                       ),
                     ),
                     const Spacer(),
@@ -111,7 +111,7 @@ class FotoCard extends StatelessWidget {
                           width: 1.6,
                           bleed: false,
                           padding: 4,
-                          markFill: FN.paper,
+                          markFill: FNExport.paper,
                         ),
                       ),
                     ),

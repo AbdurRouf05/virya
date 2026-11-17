@@ -20,24 +20,27 @@ class MarkLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fg = filled
-        ? (color.computeLuminance() > 0.35 ? FN.ink : FN.paper)
+        ? (color.computeLuminance() > 0.35 ? FN.onAccent : FN.onNight)
         : color;
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: fontSize * 0.6,
         vertical: fontSize * 0.3,
       ),
-      decoration: filled
+      decoration: FN.isClean
+          ? BoxDecoration(
+              color: filled ? color : color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(6),
+            )
+          : filled
           ? BoxDecoration(color: color)
           : BoxDecoration(
               border: Border(left: BorderSide(color: color, width: 3)),
             ),
       child: Text(
-        text.toUpperCase(),
+        FN.caps(text),
         maxLines: 1,
-        style: FN
-            .label(size: fontSize, color: fg)
-            .copyWith(fontWeight: FontWeight.w700),
+        style: FN.labelStrong(size: fontSize, color: fg),
       ),
     );
   }

@@ -43,86 +43,80 @@ class RecordingControls extends StatelessWidget {
   }
 
   Widget _idle() => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _BigButton(
-            label: 'MULAI',
-            icon: Icons.play_arrow,
-            color: FN.signal,
-            onTap: busy ? null : onStart,
-          ),
-          const SizedBox(height: 4),
-          _SimToggle(value: state.simulated, onChanged: onToggleSim),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      _BigButton(
+        label: 'MULAI',
+        icon: Icons.play_arrow,
+        color: FN.signal,
+        onTap: busy ? null : onStart,
+      ),
+      const SizedBox(height: 4),
+      _SimToggle(value: state.simulated, onChanged: onToggleSim),
+    ],
+  );
 
   Widget _recording() => Row(
+    children: [
+      _SquareButton(icon: Icons.photo_camera, onTap: onPhoto),
+      const SizedBox(width: 8),
+      Expanded(
+        child: _BigButton(
+          label: 'JEDA',
+          icon: Icons.pause,
+          color: FN.onNight,
+          onTap: onPause,
+        ),
+      ),
+      const SizedBox(width: 8),
+      SizedBox(
+        width: 88,
+        child: HoldToConfirmButton(
+          label: 'SELESAI',
+          icon: Icons.stop,
+          onConfirmed: onStop,
+        ),
+      ),
+    ],
+  );
+
+  Widget _paused() => Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Row(
         children: [
-          _SquareButton(icon: Icons.photo_camera, onTap: onPhoto),
-          const SizedBox(width: 8),
           Expanded(
             child: _BigButton(
-              label: 'JEDA',
-              icon: Icons.pause,
-              color: FN.paper,
-              onTap: onPause,
+              label: 'LANJUT',
+              icon: Icons.play_arrow,
+              color: FN.acid,
+              onTap: onResume,
             ),
           ),
           const SizedBox(width: 8),
-          SizedBox(
-            width: 96,
+          Expanded(
             child: HoldToConfirmButton(
-              label: 'SELESAI',
+              label: 'TAHAN · SELESAI',
               icon: Icons.stop,
               onConfirmed: onStop,
             ),
           ),
         ],
-      );
-
-  Widget _paused() => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: _BigButton(
-                  label: 'LANJUT',
-                  icon: Icons.play_arrow,
-                  color: FN.acid,
-                  onTap: onResume,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: HoldToConfirmButton(
-                  label: 'TAHAN · SELESAI',
-                  icon: Icons.stop,
-                  onConfirmed: onStop,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          TextButton(
-            onPressed: onDiscard,
-            style: TextButton.styleFrom(
-              minimumSize: const Size(140, 48),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            ),
-            child: Text(
-              'BUANG AKTIVITAS',
-              style: TextStyle(
-                fontFamily: FN.sans,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.2,
-                color: FN.warn,
-              ),
-            ),
-          ),
-        ],
-      );
+      ),
+      const SizedBox(height: 4),
+      TextButton(
+        style: TextButton.styleFrom(
+          minimumSize: const Size(140, 48),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        ),
+        onPressed: onDiscard,
+        child: Text(
+          FN.caps('BUANG AKTIVITAS'),
+          style: FN.label(size: 11, color: FN.warn),
+        ),
+      ),
+    ],
+  );
 }
 
 class _BigButton extends StatelessWidget {
@@ -142,30 +136,29 @@ class _BigButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: onTap == null ? color.withValues(alpha: 0.4) : color,
+      borderRadius: FN.boxRadius,
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: onTap == null
-            ? null
-            : () {
-                HapticFeedback.mediumImpact();
-                onTap!();
-              },
+        onTap:
+            onTap == null
+                ? null
+                : () {
+                    HapticFeedback.mediumImpact();
+                    onTap!();
+                  },
         child: SizedBox(
           height: 88,
           width: double.infinity,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 34, color: FN.ink),
+              Icon(icon, size: 34, color: FN.onAccent),
               const SizedBox(width: 10),
               Text(
-                label,
-                style: TextStyle(
-                  fontFamily: FN.sans,
-                  fontSize: 26,
-                  fontWeight: FontWeight.w800,
-                  color: FN.ink,
-                  letterSpacing: 1.2,
-                ),
+                FN.caps(label),
+                style: FN
+                    .title(32, color: FN.onAccent)
+                    .copyWith(letterSpacing: FN.track(1)),
               ),
             ],
           ),
@@ -185,16 +178,16 @@ class _SquareButton extends StatelessWidget {
     return Material(
       color: FN.nightSurface,
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: FN.nightLine, width: 2),
+        borderRadius: FN.cardRadius,
+        side: BorderSide(color: FN.nightLine, width: FN.line(2)),
       ),
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: SizedBox(
           width: 72,
           height: 88,
-          child: Center(
-            child: Icon(icon, color: FN.paper, size: 28),
-          ),
+          child: Icon(icon, color: FN.onNight, size: 28),
         ),
       ),
     );
@@ -214,14 +207,8 @@ class _SimToggle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'GPS SIMULASI (DEV)',
-            style: TextStyle(
-              fontFamily: FN.mono,
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 1.0,
-              color: FN.paperLine,
-            ),
+            FN.caps('GPS SIMULASI (DEV)'),
+            style: FN.label(size: 10, color: FN.onNightMuted),
           ),
           const SizedBox(width: 6),
           Transform.scale(
@@ -230,7 +217,7 @@ class _SimToggle extends StatelessWidget {
               value: value,
               onChanged: onChanged,
               activeColor: FN.acid,
-              inactiveThumbColor: FN.paperLine,
+              inactiveThumbColor: FN.onNightMuted,
               inactiveTrackColor: FN.nightSurface,
             ),
           ),

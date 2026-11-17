@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/render/paper_painters.dart';
 
-/// Paper background: fill, contours, grain. [fill] defaults to `FN.paper`,
-/// [contour] to `FN.paperLine`.
+/// Paper background: fill, contours, grain. [fill] defaults to `FNExport.paper`,
+/// [contour] to `FNExport.paperLine`.
 class PaperPainter extends CustomPainter {
   final int seed;
   final Color? fill;
@@ -25,12 +25,12 @@ class PaperPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final r = Offset.zero & size;
-    canvas.drawRect(r, Paint()..color = fill ?? FN.paper);
+    canvas.drawRect(r, Paint()..color = fill ?? FNExport.paper);
     paintContours(
       canvas,
       r,
       seed: seed,
-      color: contour ?? FN.paperLine,
+      color: contour ?? FNExport.paperLine,
       indexColor: indexContour,
       width: 0.6,
     );

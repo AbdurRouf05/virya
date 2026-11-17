@@ -11,15 +11,16 @@ Future<bool?> showDiscardRecordingDialog(BuildContext context) {
       backgroundColor: FN.nightSurface,
       shape: RoundedRectangleBorder(
         side: BorderSide(color: FN.nightLine, width: 1.5),
+        borderRadius: FN.cardRadius,
       ),
       title: Text(
-        'BUANG AKTIVITAS?',
+        FN.caps('BUANG AKTIVITAS?'),
         style: TextStyle(
           fontFamily: FN.sans,
           fontSize: 16,
           fontWeight: FontWeight.w800,
           letterSpacing: 0.8,
-          color: FN.paper,
+          color: FN.onNight,
         ),
       ),
       content: Text(
@@ -28,7 +29,7 @@ Future<bool?> showDiscardRecordingDialog(BuildContext context) {
           fontFamily: FN.sans,
           fontSize: 13,
           height: 1.4,
-          color: FN.paperLine,
+          color: FN.onNightMuted,
         ),
       ),
       actions: [
@@ -39,13 +40,13 @@ Future<bool?> showDiscardRecordingDialog(BuildContext context) {
           ),
           onPressed: () => Navigator.pop(ctx, false),
           child: Text(
-            'BATAL',
+            FN.caps('BATAL'),
             style: TextStyle(
               fontFamily: FN.sans,
               fontSize: 13,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.0,
-              color: FN.paperLine,
+              color: FN.onNightMuted,
             ),
           ),
         ),
@@ -56,7 +57,7 @@ Future<bool?> showDiscardRecordingDialog(BuildContext context) {
           ),
           onPressed: () => Navigator.pop(ctx, true),
           child: Text(
-            'BUANG',
+            FN.caps('BUANG'),
             style: TextStyle(
               fontFamily: FN.sans,
               fontSize: 13,
@@ -151,7 +152,7 @@ Future<SportType?> showRecordingSportPicker(
               Padding(
                 padding: const EdgeInsets.only(left: 4, bottom: 14),
                 child: Text(
-                  'PILIH JENIS OLAHRAGA',
+                  FN.caps('PILIH JENIS OLAHRAGA'),
                   style: TextStyle(
                     fontFamily: FN.sans,
                     fontSize: 14,
@@ -173,13 +174,13 @@ Future<SportType?> showRecordingSportPicker(
                         margin: const EdgeInsets.only(right: 8),
                       ),
                       Text(
-                        groupTitle,
+                        FN.caps(groupTitle),
                         style: TextStyle(
                           fontFamily: FN.mono,
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.2,
-                          color: FN.paperLine,
+                          color: FN.onNightMuted,
                         ),
                       ),
                     ],
@@ -190,6 +191,7 @@ Future<SportType?> showRecordingSportPicker(
                     margin: const EdgeInsets.only(bottom: 6),
                     decoration: BoxDecoration(
                       color: sport == current ? FN.night : Colors.transparent,
+                      borderRadius: FN.boxRadius,
                       border: Border.all(
                         color: sport == current
                             ? FN.acid
@@ -210,25 +212,26 @@ Future<SportType?> showRecordingSportPicker(
                           color: sport == current
                               ? FN.acid.withValues(alpha: 0.15)
                               : FN.night,
+                          borderRadius: FN.smallRadius,
                           border: Border.all(
                             color: sport == current ? FN.acid : FN.nightLine,
                           ),
                         ),
                         child: Icon(
                           sportIcon(sport),
-                          color: sport == current ? FN.acid : FN.paper,
+                          color: sport == current ? FN.acid : FN.onNight,
                           size: 20,
                         ),
                       ),
                       title: Text(
-                        name,
+                        FN.isClean ? name : name.toUpperCase(),
                         style: TextStyle(
                           fontFamily: FN.sans,
                           fontSize: 15,
                           fontWeight: sport == current
                               ? FontWeight.w700
                               : FontWeight.w600,
-                          color: sport == current ? FN.acid : FN.paper,
+                          color: sport == current ? FN.acid : FN.onNight,
                         ),
                       ),
                       subtitle: Text(
@@ -236,7 +239,7 @@ Future<SportType?> showRecordingSportPicker(
                         style: TextStyle(
                           fontFamily: FN.sans,
                           fontSize: 12,
-                          color: FN.paperLine,
+                          color: FN.onNightMuted,
                         ),
                       ),
                       trailing: sport == current

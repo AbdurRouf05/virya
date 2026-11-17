@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/painting.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 
 /// Output formats. Cards are laid out at 360 logical px wide and exported
 /// with pixelRatio = width / 360, giving exact pixel sizes.
@@ -41,6 +41,7 @@ enum ShareStat {
   time('WAKTU'),
   elevation('ELEV'),
   speed('RATA2'),
+  topSpeed('TOP'),
   grit('GRIT'),
   heartRate('HR');
 
@@ -80,15 +81,15 @@ enum AccentChoice {
 
   /// Acid stays on dark grounds only; on paper it becomes a readable olive.
   Color resolve({required bool dark}) => switch (this) {
-        AccentChoice.signal => FN.signal,
-        AccentChoice.acid => dark ? FN.acid : const Color(0xFF5E7A00),
-        AccentChoice.ink => dark ? FN.paper : FN.ink,
+        AccentChoice.signal => FNExport.signal,
+        AccentChoice.acid => dark ? FNExport.acid : const Color(0xFF5E7A00),
+        AccentChoice.ink => dark ? FNExport.paper : FNExport.ink,
       };
 
   Color get swatch => switch (this) {
-        AccentChoice.signal => FN.signal,
-        AccentChoice.acid => FN.acid,
-        AccentChoice.ink => FN.ink,
+        AccentChoice.signal => FNExport.signal,
+        AccentChoice.acid => FNExport.acid,
+        AccentChoice.ink => FNExport.ink,
       };
 }
 
@@ -107,6 +108,7 @@ class ShareOptions {
       ShareStat.time,
       ShareStat.elevation,
       ShareStat.speed,
+      ShareStat.topSpeed,
       ShareStat.grit,
     },
     this.photo,

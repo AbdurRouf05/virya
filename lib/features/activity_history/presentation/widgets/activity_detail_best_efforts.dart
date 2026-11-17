@@ -29,7 +29,7 @@ class BestEffortsTable extends StatelessWidget {
                 SizedBox(
                   width: 80,
                   child: Text(
-                    efforts[i].label.toUpperCase(),
+                    FN.caps(efforts[i].label),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: detailTd(bold: true),

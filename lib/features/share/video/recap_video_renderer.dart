@@ -11,7 +11,7 @@ import 'package:virya/features/share/video/recap_palette.dart';
 import 'package:virya/features/share/video/recap_route_scene.dart';
 import 'package:virya/features/share/video/recap_stage.dart';
 import 'package:virya/features/share/video/recap_timeline.dart';
-import 'package:virya/features/share/video/video_encoder.dart';
+import 'package:virya/core/video/video_encoder.dart';
 
 class RecapCancelled implements Exception {
   @override

@@ -215,6 +215,10 @@ class TelemetryPipeline {
       ));
     }
     setManualPause(false);
+    // Stored readings are old news: a resumed session starts without a pulse
+    // until the sensor reports again.
+    setHeartRate(null);
+    setCadence(null);
   }
 
   LiveTelemetrySnapshot snapshotAt(DateTime time) => _snapshot(time);

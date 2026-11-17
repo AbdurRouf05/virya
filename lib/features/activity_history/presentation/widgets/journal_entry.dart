@@ -18,7 +18,8 @@ class JournalEntry extends ConsumerWidget {
     final a = activity;
     final fmt = ref.watch(fmtProvider);
     final sport = sportFromName(a.sportType);
-    final thumb = ref.watch(routeThumbProvider(a.id));
+    final gps = sport.isGps;
+    final thumb = gps ? ref.watch(routeThumbProvider(a.id)) : null;
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -59,26 +60,32 @@ class JournalEntry extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text(
-                        fmt.distance(a.totalDistanceMeters),
-                        style: FN.bigNumber(30),
-                      ),
-                      const SizedBox(width: 3),
-                      Text(fmt.distUnit, style: FN.label(size: 10)),
-                      const SizedBox(width: 12),
-                      Flexible(
-                        child: Text(
-                          '${Fmt.duration(a.movingTimeSeconds)}  ▲${fmt.elevation(a.elevationGainMeters)}${fmt.eleUnit.toLowerCase()}',
-                          overflow: TextOverflow.ellipsis,
-                          style: FN.label(size: 11, color: FN.ink),
+                  if (!gps)
+                    Text(
+                      Fmt.duration(a.elapsedTimeSeconds),
+                      style: FN.bigNumber(30),
+                    )
+                  else
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          fmt.distance(a.totalDistanceMeters),
+                          style: FN.bigNumber(30),
                         ),
-                      ),
-                    ],
-                  ),
+                        const SizedBox(width: 3),
+                        Text(fmt.distUnit, style: FN.label(size: 10)),
+                        const SizedBox(width: 12),
+                        Flexible(
+                          child: Text(
+                            '${Fmt.duration(a.movingTimeSeconds)}  ▲${fmt.elevation(a.elevationGainMeters)}${fmt.eleUnit.toLowerCase()}',
+                            overflow: TextOverflow.ellipsis,
+                            style: FN.label(size: 11, color: FN.ink),
+                          ),
+                        ),
+                      ],
+                    ),
                   if (a.gravelPercentage > 0.5) ...[
                     const SizedBox(height: 6),
                     Row(
@@ -88,7 +95,7 @@ class JournalEntry extends ConsumerWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'GRAVEL ${a.gravelPercentage.round()}%',
+                          FN.caps('Gravel ${a.gravelPercentage.round()}%'),
                           style: FN.label(size: 9.5, color: FN.ink),
                         ),
                       ],
@@ -102,15 +109,16 @@ class JournalEntry extends ConsumerWidget {
               width: 76,
               height: 76,
               decoration: BoxDecoration(
-                color: FN.paper,
-                border: Border.all(color: FN.ink, width: 1),
-              ),
-              child: thumb.maybeWhen(
-                data: (pts) => pts.length < 2
-                    ? const Center(child: Text('—'))
-                    : RouteThumbnail(points: pts, strokeWidth: 1.4),
-                orElse: () => const SizedBox.shrink(),
-              ),
+                color: FN.cardFill,
+                border: FN.frame(color: FN.ink, width: 1), borderRadius: FN.boxRadius,),
+              child: thumb == null
+                  ? Icon(sport.icon, size: 34, color: FN.ink)
+                  : thumb.maybeWhen(
+                      data: (pts) => pts.length < 2
+                          ? const Center(child: Text('—'))
+                          : RouteThumbnail(points: pts, strokeWidth: 1.4),
+                      orElse: () => const SizedBox.shrink(),
+                    ),
             ),
           ],
         ),
@@ -127,7 +135,7 @@ class _DateStamp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 46,
-      decoration: BoxDecoration(border: Border.all(color: FN.ink, width: 1.2)),
+      decoration: BoxDecoration(border: FN.frame(color: FN.ink, width: 1.2), borderRadius: FN.boxRadius,),
       child: Column(
         children: [
           Container(

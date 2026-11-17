@@ -56,6 +56,7 @@ class SF {
         SportType.trailRunning => 'TRAIL RUN',
         SportType.hiking => 'HIKING',
         SportType.walking => 'JALAN',
+        SportType.strength => 'GYM',
       };
 
   static String stars(int n) {
@@ -108,6 +109,12 @@ List<StatValue> statValues(ShareData d, Set<ShareStat> stats) {
           out.add(StatValue('PACE', SF.pace(d.avgSpeedMps), '/KM'));
         } else {
           out.add(StatValue('RATA2', SF.kmh(d.avgSpeedMps), 'KM/J'));
+        }
+      case ShareStat.topSpeed:
+        if (d.maxSpeedMps > 0) {
+          out.add(d.sport.isRunning
+              ? StatValue('PACE TOP', SF.pace(d.maxSpeedMps), '/KM')
+              : StatValue('TOP SPEED', SF.kmh(d.maxSpeedMps), 'KM/J'));
         }
       case ShareStat.grit:
         out.add(StatValue(

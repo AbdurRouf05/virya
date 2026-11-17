@@ -46,7 +46,7 @@ class StatsTotals extends StatelessWidget {
                     unit: fmt.distUnit,
                     size: 48,
                     valueColor: FN.paper,
-                    labelColor: FN.signal,
+                    labelColor: FN.onInk(FN.signal),
                   ),
                 ),
                 Column(
@@ -61,7 +61,7 @@ class StatsTotals extends StatelessWidget {
                       style: FN.label(size: 13, color: FN.paper),
                     ),
                     Text(
-                      '${all.count}× AKTIVITAS',
+                      FN.caps('${all.count}× aktivitas'),
                       style: FN.label(size: 13, color: FN.paper),
                     ),
                   ],

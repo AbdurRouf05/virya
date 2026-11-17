@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:virya/app/theme/field_notes.dart';
+import 'package:virya/app/theme/export_tokens.dart';
 import 'package:virya/features/share/domain/share_data.dart';
 import 'package:virya/features/share/domain/share_format.dart';
 import 'package:virya/features/share/domain/share_options.dart';
@@ -17,19 +17,20 @@ class NightInkCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final f = options.format;
     final accent = options.accent == AccentChoice.signal
-        ? FN
+        ? FNExport
               .acid // night default
         : options.accent.resolve(dark: true);
-    final compact = f == CardFormat.square;
+    final isStory = f == CardFormat.story;
+    final compact = !isStory;
     final big = switch (f) {
       CardFormat.story => 120.0,
-      CardFormat.feed => 92.0,
-      CardFormat.square => 70.0,
+      CardFormat.feed => 80.0,
+      CardFormat.square => 66.0,
     };
     const muted = Color(0xFF8C887D);
 
     return Container(
-      color: FN.night,
+      color: FNExport.night,
       child: Stack(
         children: [
           Positioned.fill(
@@ -37,7 +38,7 @@ class NightInkCard extends StatelessWidget {
               painter: _TopoPainter(
                 data: data,
                 accent: accent,
-                compact: compact,
+                format: f,
               ),
             ),
           ),
@@ -66,7 +67,7 @@ class NightInkCard extends StatelessWidget {
                     Expanded(
                       child: MonoLabel(
                         'NIGHT INK · ${SF.entryNo(data)}',
-                        color: FN.paper,
+                        color: FNExport.paper,
                         weight: FontWeight.w700,
                       ),
                     ),
@@ -75,7 +76,7 @@ class NightInkCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 5),
-                HairRule(color: FN.nightLine, thickness: 1),
+                HairRule(color: FNExport.nightLine, thickness: 1),
                 const SizedBox(height: 6),
                 Row(
                   children: [
@@ -85,11 +86,11 @@ class NightInkCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontFamily: FN.sans,
+                          fontFamily: FNExport.sans,
                           fontWeight: FontWeight.w600,
                           fontSize: 11,
                           letterSpacing: 0.6,
-                          color: FN.paper,
+                          color: FNExport.paper,
                         ),
                       ),
                     ),
@@ -109,7 +110,7 @@ class NightInkCard extends StatelessWidget {
                       child: PosterNumber(
                         SF.km(data.distanceM),
                         size: big,
-                        color: FN.paper,
+                        color: FNExport.paper,
                       ),
                     ),
                     const SizedBox(width: 6),
@@ -117,23 +118,23 @@ class NightInkCard extends StatelessWidget {
                       padding: EdgeInsets.only(bottom: big * 0.1),
                       child: Text(
                         'KM',
-                        style: FN.bigNumber(big * 0.22, color: accent),
+                        style: FNExport.bigNumber(big * 0.22, color: accent),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                HairRule(color: FN.nightLine),
+                HairRule(color: FNExport.nightLine),
                 const SizedBox(height: 7),
                 StatStrip(
                   stats: statValues(data, options.stats),
-                  ink: FN.paper,
+                  ink: FNExport.paper,
                   muted: muted,
-                  rule: FN.nightLine,
+                  rule: FNExport.nightLine,
                   valueSize: compact ? 18 : 22,
                 ),
                 const SizedBox(height: 7),
-                HairRule(color: FN.nightLine),
+                HairRule(color: FNExport.nightLine),
                 const SizedBox(height: 6),
                 Row(
                   children: [
@@ -159,11 +160,11 @@ class NightInkCard extends StatelessWidget {
 class _TopoPainter extends CustomPainter {
   final ShareData data;
   final Color accent;
-  final bool compact;
+  final CardFormat format;
   _TopoPainter({
     required this.data,
     required this.accent,
-    required this.compact,
+    required this.format,
   });
 
   @override
@@ -179,8 +180,10 @@ class _TopoPainter extends CustomPainter {
           if (data.distanceM > 0) p.distanceM / data.distanceM,
       ],
     );
-    final top = compact ? 0.12 : 0.1;
-    final bottom = compact ? 0.48 : 0.42;
+    final top = format == CardFormat.story ? 0.08 : 0.12;
+    final bottom = format == CardFormat.story
+        ? 0.40
+        : (format == CardFormat.feed ? 0.48 : 0.52);
     final vp = Rect.fromLTRB(
       0,
       size.height * top,
@@ -195,11 +198,11 @@ class _TopoPainter extends CustomPainter {
       tilt: 1.0,
       viewport: vp,
       style: TopoInkStyle.night(accent: accent, background: false),
-      zoom: compact ? 1.0 : 1.08,
+      zoom: format == CardFormat.story ? 1.08 : 1.0,
     );
   }
 
   @override
   bool shouldRepaint(_TopoPainter old) =>
-      old.data != data || old.accent != accent;
+      old.data != data || old.accent != accent || old.format != format;
 }

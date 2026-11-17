@@ -12,22 +12,24 @@ class MapPacksSectionTitle extends StatelessWidget {
     final trailing = this.trailing;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Row(children: [
-        Flexible(
-          child: Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: FN.label(size: 12, color: FN.ink),
+      child: Row(
+        children: [
+          Flexible(
+            child: Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: FN.label(size: 12, color: FN.ink),
+            ),
           ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(child: Divider(color: FN.ink, thickness: 1)),
-        if (trailing != null) ...[
           const SizedBox(width: 8),
-          Text(trailing, style: FN.label(size: 12, color: FN.ink)),
+          Expanded(child: Divider(color: FN.ink, thickness: 1)),
+          if (trailing != null) ...[
+            const SizedBox(width: 8),
+            Text(trailing, style: FN.label(size: 12, color: FN.ink)),
+          ],
         ],
-      ]),
+      ),
     );
   }
 }

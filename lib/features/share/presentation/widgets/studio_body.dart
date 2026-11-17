@@ -62,8 +62,8 @@ class _ShareStudioBodyState extends State<ShareStudioBody> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
-        backgroundColor: FN.paper,
-        content: Text(msg, style: FN.label(size: 11, color: FN.ink)),
+        backgroundColor: FN.onNight,
+        content: Text(msg, style: FN.label(size: 11, color: FN.onAccent)),
       ));
   }
 
@@ -125,7 +125,11 @@ class _ShareStudioBodyState extends State<ShareStudioBody> {
 
   Future<void> _save() => _run(() async {
         final f = await _renderPng();
-        _snack('Tersimpan: ${f.path}');
+        final loc = await ShareExport.exportImageToGallery(
+          f,
+          '${_template.name}_${_opts.format.name}',
+        );
+        _snack('Tersimpan di Galeri: $loc');
       });
 
   Future<void> _makeVideo() async {
@@ -157,9 +161,76 @@ class _ShareStudioBodyState extends State<ShareStudioBody> {
         barrierDismissible: false,
         builder: (_) => StudioVideoDialog(renderer: renderer, job: job),
       );
-      if (path == null) return;
-      _snack('Video tersimpan: $path');
-      await ShareExport.shareFile(path, mime: 'video/mp4');
+      if (path == null || !mounted) return;
+
+      // Pilihan setelah render: Simpan ke Galeri HP atau Bagikan
+      await showModalBottomSheet<void>(
+        context: context,
+        backgroundColor: FN.nightSurface,
+        shape: FN.isClean ? null : const RoundedRectangleBorder(),
+        builder: (ctx) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.check_circle_outline, color: FN.signal, size: 20),
+                    const SizedBox(width: 8),
+                    Text(
+                      FN.caps('Video recap selesai'),
+                      style: FN
+                          .label(size: 13, color: FN.onNight)
+                          .copyWith(fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Video berhasil dibuat (${_hd ? '1080p HD' : '720p'}). Silakan pilih tindakan:',
+                  style: TextStyle(fontFamily: FN.sans, color: FN.onNightMuted, fontSize: 12),
+                ),
+                const SizedBox(height: 16),
+                FilledButton.icon(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: FN.acid,
+                    foregroundColor: FN.night,
+                    shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  icon: const Icon(Icons.download_rounded),
+                  label: Text(
+                    FN.caps('Simpan ke galeri'),
+                    style: FN.label(size: 12, color: FN.night).copyWith(fontWeight: FontWeight.w700),
+                  ),
+                  onPressed: () async {
+                    Navigator.pop(ctx);
+                    final loc = await ShareExport.exportVideoToGallery(path);
+                    _snack('Video tersimpan di Galeri: $loc');
+                  },
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: FN.onNight,
+                    side: FN.side(color: FN.onNightMuted),
+                    shape: RoundedRectangleBorder(borderRadius: FN.smallRadius),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  icon: const Icon(Icons.share_rounded),
+                  label: Text(FN.caps('Bagikan video'), style: FN.label(size: 12, color: FN.onNight)),
+                  onPressed: () async {
+                    Navigator.pop(ctx);
+                    await ShareExport.shareFile(path, mime: 'video/mp4');
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
     });
   }
 

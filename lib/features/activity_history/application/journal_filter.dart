@@ -7,7 +7,8 @@ enum JournalFilter {
   gravel('GRAVEL'),
   cycling('SEPEDA'),
   running('LARI'),
-  foot('JALAN & HIKING');
+  foot('JALAN & HIKING'),
+  gym('GYM');
 
   final String label;
   const JournalFilter(this.label);
@@ -18,5 +19,6 @@ enum JournalFilter {
     JournalFilter.cycling => s.isCycling,
     JournalFilter.running => s.isRunning,
     JournalFilter.foot => s.group == SportGroup.foot,
+    JournalFilter.gym => !s.isGps,
   };
 }

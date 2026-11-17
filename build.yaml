@@ -1,0 +1,14 @@
+# Generator Drift hanya untuk lapisan database. Membatasi input membuat build
+# cepat dan menghindari analyzer membaca paket platform yang tidak relevan.
+targets:
+  $default:
+    builders:
+      drift_dev:
+        generate_for:
+          - lib/core/database/**
+      drift_dev:preparing_builder:
+        generate_for:
+          - lib/core/database/**
+      source_gen:combining_builder:
+        generate_for:
+          - lib/core/database/**

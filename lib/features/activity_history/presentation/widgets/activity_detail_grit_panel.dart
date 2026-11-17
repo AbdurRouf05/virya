@@ -10,12 +10,12 @@ class ActivityDetailGritPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = score.clamp(0, 100).toDouble();
     final word = s >= 75
-        ? 'BRUTAL'
+        ? FN.caps('Brutal')
         : s >= 50
-        ? 'KERAS'
+        ? FN.caps('Keras')
         : s >= 25
-        ? 'SEDANG'
-        : 'RINGAN';
+        ? FN.caps('Sedang')
+        : FN.caps('Ringan');
     return InkBox(
       color: FN.paperDeep,
       child: Row(
@@ -37,7 +37,7 @@ class ActivityDetailGritPanel extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'GRIT SCORE · $word',
+                  FN.caps('Grit score · $word'),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: FN

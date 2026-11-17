@@ -7,12 +7,14 @@ import 'package:virya/core/constants/enums.dart';
 import 'package:virya/core/database/app_database.dart';
 import 'package:virya/core/location/location_fix.dart';
 import 'package:virya/core/models/track_sample.dart';
+import 'package:virya/core/sensors/heart_rate_source.dart';
 import 'package:virya/features/recording/application/recording_platform.dart';
 import 'package:virya/features/recording/application/recording_session.dart';
 import 'package:virya/features/recording/application/recording_sources.dart';
 import 'package:virya/features/recording/application/recording_store.dart';
 import 'package:virya/features/recording/domain/recording_settings.dart';
 import 'package:virya/features/recording/domain/recording_state.dart';
+import 'package:virya/features/segments/data/live_segment_feed.dart';
 import 'package:virya/services/audio_cues/audio_cue_service.dart';
 
 /// Live recording session: idle → recording ⇄ paused → saving → idle.
@@ -20,14 +22,17 @@ import 'package:virya/services/audio_cues/audio_cue_service.dart';
 /// Kept alive (not autoDispose) so a recording survives leaving the screen.
 class RecordingController extends Notifier<RecordingState> {
   RecordingSettings _settings = const RecordingSettings();
-  late final RecordingSources _sources =
-      RecordingSources(() => ref.read(recordingPlatformProvider));
+  late final RecordingSources _sources = RecordingSources(
+    () => ref.read(recordingPlatformProvider),
+    heartRate: () => ref.read(heartRateSourceProvider),
+  );
   RecordingSession? _session;
 
   AppDatabase get _db => ref.read(databaseProvider);
   RecordingStore get _store => RecordingStore(_db);
   RecordingPlatform get _platform => ref.read(recordingPlatformProvider);
   AudioCueService get _cues => ref.read(audioCueServiceProvider);
+  LiveSegmentFeed get _feed => ref.read(liveSegmentFeedProvider.notifier);
 
   @override
   RecordingState build() {
@@ -137,6 +142,7 @@ class RecordingController extends Notifier<RecordingState> {
       splitUnits: _settings.ttsSplit,
       sport: sport,
     );
+    await _feed.begin(sport);
     final snap =
         session.pipeline.snapshotAt(session.lastSampleTime ?? startTime);
     if (history.isNotEmpty) _cues.seed(snap);
@@ -238,6 +244,10 @@ class RecordingController extends Notifier<RecordingState> {
     final snap = r.snapshot;
     if (r.autoPauseChanged) _cues.onAutoPause(session.pipeline.isAutoPaused);
     _cues.onSnapshot(snap);
+    final p = r.sample;
+    if (p != null && !session.pipeline.isManuallyPaused) {
+      _cues.announce(_feed.onFix(p.lat, p.lon, p.time));
+    }
 
     state = state.copyWith(
       snapshot: snap,
@@ -263,6 +273,7 @@ class RecordingController extends Notifier<RecordingState> {
   /// releases the wakelock and stops audio cues.
   Future<void> _closeSession({bool logFlushError = true}) async {
     state = state.copyWith(phase: RecordingPhase.saving);
+    _feed.end();
     await _sources.teardown();
     try {
       await _session?.closeFlush();

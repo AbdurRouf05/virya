@@ -25,7 +25,7 @@ class FlyoverHud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gradeCol = k.gradePct < 3 ? FN.paper : FN.grade(k.gradePct);
+    final gradeCol = k.gradePct < 3 ? FN.onNight : FN.grade(k.gradePct);
     return Column(
       children: [
         Row(
@@ -59,40 +59,40 @@ class _Cell extends StatelessWidget {
   const _Cell(this.label, this.value, this.unit, {this.color});
   final String label, value, unit;
 
-  /// Defaults to [FN.paper].
+  /// Defaults to [FN.onNight].
   final Color? color;
 
   @override
   Widget build(BuildContext context) => Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: FN.label(size: 9, color: FN.paperLine),
-            ),
-            const SizedBox(height: 5),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: value,
-                      style: FN.bigNumber(30, color: color ?? FN.paper),
-                    ),
-                    TextSpan(
-                      text: ' $unit',
-                      style: FN.label(size: 10, color: FN.paperLine),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: FN.label(size: 9, color: FN.onNightMuted),
         ),
-      );
+        const SizedBox(height: 4),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: value,
+                  style: FN.bigNumber(30, color: color ?? FN.onNight),
+                ),
+                TextSpan(
+                  text: ' $unit',
+                  style: FN.label(size: 10, color: FN.onNightMuted),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }

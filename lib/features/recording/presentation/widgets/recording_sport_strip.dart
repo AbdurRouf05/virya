@@ -62,7 +62,7 @@ class _SportChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = selected ? FN.ink : FN.paper;
+    final fg = selected ? FN.onAccent : FN.onNight;
     return Semantics(
       button: true,
       selected: selected,
@@ -73,8 +73,11 @@ class _SportChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(
             color: selected ? FN.acid : Colors.transparent,
+            borderRadius: FN.isClean ? BorderRadius.circular(28) : null,
             border:
-                selected ? null : Border.all(color: FN.paperLine, width: 1.2),
+                selected
+                    ? null
+                    : Border.all(color: FN.onNightMuted, width: 1.2),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -82,14 +85,10 @@ class _SportChip extends StatelessWidget {
               Icon(sportIcon(sport), size: 20, color: fg),
               const SizedBox(width: 8),
               Text(
-                label,
-                style: TextStyle(
-                  fontFamily: FN.sans,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.8,
-                  color: fg,
-                ),
+                FN.caps(label),
+                style: FN
+                    .label(size: 12, color: fg)
+                    .copyWith(fontWeight: FontWeight.w700),
               ),
             ],
           ),

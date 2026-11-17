@@ -32,20 +32,15 @@ class ActivityDetailHeader extends StatelessWidget {
             children: [
               StampChip(text: sport.label, icon: sport.icon, selected: true),
               if (gear != null) StampChip(text: gear!.name),
-              if (act.source == 'imported') const StampChip(text: 'IMPOR'),
+              if (act.source == 'imported') StampChip(text: FN.caps('Impor')),
             ],
           ),
           const SizedBox(height: 10),
           GestureDetector(
             onTap: onEdit,
             child: Text(
-              act.title.toUpperCase(),
-              style: TextStyle(
-                fontFamily: FN.display,
-                fontSize: 38,
-                height: 1.0,
-                color: FN.ink,
-              ),
+              FN.caps(act.title),
+              style: FN.title(38, color: FN.ink, height: 1.0),
             ),
           ),
           if ((act.description ?? '').isNotEmpty) ...[

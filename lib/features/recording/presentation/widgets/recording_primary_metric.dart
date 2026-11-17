@@ -7,17 +7,23 @@ import 'package:virya/features/recording/presentation/recording_format.dart';
 class RecordingPrimaryMetric extends StatelessWidget {
   final RecordingState state;
   final RecFormat fmt;
-  const RecordingPrimaryMetric(
-      {super.key, required this.state, required this.fmt});
+  const RecordingPrimaryMetric({
+    super.key,
+    required this.state,
+    required this.fmt,
+  });
 
   @override
   Widget build(BuildContext context) {
     final snap = state.snapshot;
     final cycling = state.sport.isCycling;
     final value =
-        cycling ? fmt.speed(snap.currentSpeedKmh) : fmt.pace(snap.currentSpeedKmh);
-    final label = cycling ? 'KECEPATAN · ${fmt.speedUnit}' : 'PACE · ${fmt.paceUnit}';
-    final size = (MediaQuery.sizeOf(context).width * 0.28).clamp(68.0, 128.0);
+        cycling
+            ? fmt.speed(snap.currentSpeedKmh)
+            : fmt.pace(snap.currentSpeedKmh);
+    final label =
+        cycling ? 'KECEPATAN · ${fmt.speedUnit}' : 'PACE · ${fmt.paceUnit}';
+    final size = (MediaQuery.sizeOf(context).width * 0.30).clamp(72.0, 132.0);
 
     String? ribbon;
     Color ribbonBg = FN.acid;
@@ -40,26 +46,19 @@ class RecordingPrimaryMetric extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontFamily: FN.mono,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 1.1,
-                  color: FN.paperLine,
-                ),
-              ),
+              Text(FN.caps(label), style: FN.label(color: FN.onNightMuted)),
               if (ribbon != null)
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: ribbonBg,
-                    borderRadius: BorderRadius.circular(2),
+                    borderRadius: FN.smallRadius,
                   ),
                   child: Text(
-                    ribbon,
+                    FN.caps(ribbon),
                     style: TextStyle(
                       fontFamily: FN.sans,
                       fontSize: 10,
@@ -72,19 +71,17 @@ class RecordingPrimaryMetric extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 6),
-          SizedBox(
-            height: size * 0.98,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.center,
-              child: Text(
-                value,
-                style: FN.bigNumber(
-                  size,
-                  color: state.isActive && !snap.isPaused
-                      ? FN.paper
-                      : FN.paper.withValues(alpha: 0.55),
-                ),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.center,
+            child: Text(
+              value,
+              style: FN.bigNumber(
+                size,
+                color:
+                    state.isActive && !snap.isPaused
+                        ? FN.onNight
+                        : FN.onNight.withValues(alpha: 0.55),
               ),
             ),
           ),

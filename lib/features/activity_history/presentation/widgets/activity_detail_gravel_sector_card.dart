@@ -14,11 +14,8 @@ class GravelSectorCard extends StatelessWidget {
     final s = sector;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: FN.paper,
-        border: Border.fromBorderSide(BorderSide(color: FN.ink, width: 2)),
-        boxShadow: [BoxShadow(color: FN.ink, offset: const Offset(3, 3))],
-      ),
+      clipBehavior: FN.isClean ? Clip.antiAlias : Clip.none,
+      decoration: FN.card(shadow: true, shadowOffset: 3),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -27,7 +24,7 @@ class GravelSectorCard extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
             child: Row(
               children: [
-                Text('SEKTOR', style: FN.label(size: 10, color: FN.paper)),
+                Text(FN.caps('Sektor'), style: FN.label(size: 10, color: FN.paper)),
                 const SizedBox(width: 8),
                 Text('${s.number}', style: FN.bigNumber(30, color: FN.paper)),
                 const Spacer(),
@@ -95,12 +92,11 @@ class GravelSectorCard extends StatelessWidget {
                       height: 14,
                       decoration: BoxDecoration(
                         color: FN.surface[s.dominantSurface],
-                        border: Border.all(color: FN.ink, width: 0.8),
-                      ),
+                        border: FN.frame(color: FN.ink, width: 0.8), borderRadius: FN.boxRadius,),
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      s.dominantSurface.label.toUpperCase(),
+                      FN.caps(s.dominantSurface.label),
                       style: FN.label(size: 10, color: FN.ink),
                     ),
                   ],

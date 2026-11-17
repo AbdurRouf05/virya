@@ -37,7 +37,10 @@ class SurfaceBar extends StatelessWidget {
     ];
     final bar = Container(
       height: height,
-      decoration: BoxDecoration(border: Border.all(color: fg, width: 1)),
+      clipBehavior: FN.isClean ? Clip.antiAlias : Clip.none,
+      decoration: FN.isClean
+          ? BoxDecoration(color: FN.fill, borderRadius: BorderRadius.circular(4))
+          : BoxDecoration(border: Border.all(color: fg, width: 1)),
       child: total <= 0
           ? const SizedBox.expand()
           : Row(
@@ -66,7 +69,10 @@ class SurfaceBar extends StatelessWidget {
                   height: 12,
                   decoration: BoxDecoration(
                     color: FN.surface[s],
-                    border: Border.all(color: fg, width: 0.8),
+                    shape: FN.isClean ? BoxShape.circle : BoxShape.rectangle,
+                    border: FN.isClean
+                        ? null
+                        : Border.all(color: fg, width: 0.8),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -111,7 +117,10 @@ class GravelShareBar extends StatelessWidget {
     final g = gravelPct.clamp(0, 100).toDouble();
     return Container(
       height: height,
-      decoration: BoxDecoration(border: Border.all(color: fg, width: 0.8)),
+      clipBehavior: FN.isClean ? Clip.antiAlias : Clip.none,
+      decoration: FN.isClean
+          ? BoxDecoration(color: FN.fill, borderRadius: BorderRadius.circular(3))
+          : BoxDecoration(border: Border.all(color: fg, width: 0.8)),
       child: Row(
         children: [
           if (g > 0)
@@ -140,13 +149,6 @@ class HrZoneBar extends StatelessWidget {
     required this.formatTime,
   });
 
-  static List<Color> get zoneColors => [
-    const Color(0xFFBDB6A6),
-    const Color(0xFF8C8A80),
-    const Color(0xFFD8B23A),
-    const Color(0xFFE8812A),
-    FN.signal,
-  ];
   static const zoneNames = [
     'PEMULIHAN',
     'DAYA TAHAN',
@@ -194,7 +196,7 @@ class HrZoneBar extends StatelessWidget {
                         child: Container(
                           height: 12,
                           width: (c.maxWidth * f).clamp(1, c.maxWidth),
-                          color: zoneColors[z - 1],
+                          color: FN.hrZones[z - 1],
                         ),
                       );
                     },

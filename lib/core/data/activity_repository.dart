@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:virya/core/analytics/activity_analyzer.dart';
 import 'package:virya/core/analytics/analysis_models.dart';
 import 'package:virya/core/constants/enums.dart';
@@ -37,10 +40,30 @@ class ActivityRepository {
     final activity = await db.activitiesDao.getActivityById(activityId);
     if (activity == null) return null;
     final points = await db.trackPointsDao.getPointsForActivity(activityId);
-    final photos = await db.waypointPhotosDao.getPhotosForActivity(activityId);
+    final rawPhotos = await db.waypointPhotosDao.getPhotosForActivity(activityId);
+
+    // Resolusi fallback jika path foto berpindah setelah restore backup atau reinstall
+    final docs = await getApplicationDocumentsDirectory();
+    final photos = rawPhotos.map((ph) {
+      if (File(ph.filePath).existsSync()) return ph;
+      final alt = File(p.join(docs.path, 'photos', p.basename(ph.filePath)));
+      if (alt.existsSync()) {
+        return ph.copyWith(filePath: alt.path);
+      }
+      return ph;
+    }).toList();
+
+    var act = activity;
+    if (act.primaryPhotoPath != null && !File(act.primaryPhotoPath!).existsSync()) {
+      final alt = File(p.join(docs.path, 'photos', p.basename(act.primaryPhotoPath!)));
+      if (alt.existsSync()) {
+        act = act.copyWith(primaryPhotoPath: Value(alt.path));
+      }
+    }
+
     final samples = points.map(TrackSample.fromTrackPoint).toList();
     final sport = SportType.values.firstWhere(
-      (s) => s.name == activity.sportType,
+      (s) => s.name == act.sportType,
       orElse: () => SportType.gravelCycling,
     );
     final athlete = await _athleteParams();
@@ -48,7 +71,7 @@ class ActivityRepository {
       () => const ActivityAnalyzer().analyze(samples, sport, athlete: athlete),
     );
     return ActivityBundle(
-      activity: activity,
+      activity: act,
       samples: samples,
       photos: photos,
       analysis: analysis,
