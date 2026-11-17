@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:virya/app/theme/app_theme.dart';
 import 'package:virya/app/theme/field_notes.dart';
 import 'package:virya/features/home/presentation/home_shell.dart';
+import 'package:virya/features/splash/presentation/splash_screen.dart';
 
 class ViryaApp extends StatelessWidget {
   const ViryaApp({super.key});
@@ -20,7 +21,7 @@ class ViryaApp extends StatelessWidget {
         title: 'Virya',
         debugShowCheckedModeBanner: false,
         theme: FieldNotesTheme.paper,
-        home: const HomeShell(),
+        home: const SplashScreen(nextScreen: HomeShell()),
       ),
     );
   }

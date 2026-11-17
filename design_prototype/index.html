@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virya - Field Notes Interactive Splash Screen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F4EFE6;
+      --grid: #E2DAC8;
+      --ink: #1B1813;
+      --ink-soft: #5C5549;
+      --ink-muted: #8E8575;
+      --signal: #EE5A24;
+      --acid: #B8E986;
+    }
+
+    [data-theme="night"] {
+      --bg: #0D0F12;
+      --grid: #1A1F26;
+      --ink: #F4EFE6;
+      --ink-soft: #A2AAB4;
+      --ink-muted: #616D7E;
+      --signal: #FF6B35;
+      --acid: #CCFF00;
+    }
+
+    [data-theme="blueprint"] {
+      --bg: #0F2537;
+      --grid: #1A3E5C;
+      --ink: #EAF4FC;
+      --ink-soft: #8CBEDB;
+      --ink-muted: #4B85A8;
+      --signal: #FF9F1C;
+      --acid: #2EC4B6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: #121212;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    .phone-container {
+      width: 390px;
+      height: 780px;
+      background-color: var(--bg);
+      border: 3px solid #2B2B2B;
+      border-radius: 44px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.4s ease;
+    }
+
+    .status-bar {
+      height: 44px;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      z-index: 10;
+      opacity: 0.75;
+    }
+
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .corner-cross {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      pointer-events: none;
+    }
+    .corner-cross::before, .corner-cross::after {
+      content: '';
+      position: absolute;
+      background: var(--ink-muted);
+    }
+    .corner-cross::before { left: 0; top: 6px; width: 14px; height: 1.5px; }
+    .corner-cross::after { left: 6px; top: 0; width: 1.5px; height: 14px; }
+    .cc-tl { top: 56px; left: 20px; }
+    .cc-tr { top: 56px; right: 20px; }
+    .cc-bl { bottom: 80px; left: 20px; }
+    .cc-br { bottom: 80px; right: 20px; }
+
+    .splash-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px 24px 28px;
+      z-index: 5;
+    }
+
+    .header-station {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      border-bottom: 1.5px solid var(--ink);
+      padding-bottom: 6px;
+    }
+
+    .center-branding {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: auto 0;
+      text-align: center;
+    }
+
+    #compassCanvas {
+      width: 160px;
+      height: 160px;
+      margin-bottom: 24px;
+    }
+
+    .brand-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 54px;
+      letter-spacing: 4px;
+      line-height: 0.9;
+      margin-bottom: 8px;
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--ink-soft);
+    }
+
+    .calibration-box {
+      border-top: 1.5px solid var(--ink);
+      padding-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cal-stage-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+    }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 4px;
+      background: var(--grid);
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--ink);
+      width: 0%;
+      transition: width 0.08s linear;
+    }
+
+    .footer-coords {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--ink-muted);
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .controls-panel {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      background: #222;
+      border: 1px solid #444;
+      color: #FFF;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn:hover {
+      background: #333;
+      border-color: #666;
+    }
+
+    .theme-select {
+      padding: 9px 12px;
+      background: #222;
+      border: 1px solid #444;
+      color: #FFF;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-container" id="phoneContainer">
+    <div class="grid-bg"></div>
+
+    <div class="corner-cross cc-tl"></div>
+    <div class="corner-cross cc-tr"></div>
+    <div class="corner-cross cc-bl"></div>
+    <div class="corner-cross cc-br"></div>
+
+    <div class="status-bar">
+      <span>09:41</span>
+      <span>● GPS 3D FIX</span>
+    </div>
+
+    <div class="splash-content">
+      <div class="header-station">
+        <span>VIRYA · EXPEDITION V1.0</span>
+        <span>ID: 08-YGY</span>
+      </div>
+
+      <div class="center-branding">
+        <canvas id="compassCanvas" width="320" height="320"></canvas>
+        <div class="brand-title">VIRYA</div>
+        <div class="brand-sub">OFFLINE EXPEDITION & TELEMETRY</div>
+      </div>
+
+      <div class="calibration-box">
+        <div class="cal-stage-row">
+          <span id="stageLabel">CALIBRATING BAROMETER...</span>
+          <span id="percentLabel" style="color: var(--signal);">0%</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <div class="footer-coords">
+          <span>7°47'29.0"S 110°22'18.0"E</span>
+          <span>ALT: 142M · READY</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls-panel">
+    <button class="btn" onclick="startCalibration()">↺ Putar Ulang Animasi</button>
+    <select class="theme-select" id="themeSelector" onchange="changeTheme(this.value)">
+      <option value="field_notes">Tema: Field Notes (Kertas)</option>
+      <option value="night">Tema: Night Ink (Gelap)</option>
+      <option value="blueprint">Tema: Blueprint (Teknis)</option>
+    </select>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('compassCanvas');
+    const ctx = canvas.getContext('2d');
+    const progressFill = document.getElementById('progressFill');
+    const stageLabel = document.getElementById('stageLabel');
+    const percentLabel = document.getElementById('percentLabel');
+    const phoneContainer = document.getElementById('phoneContainer');
+
+    const stages = [
+      "INIT SENSOR FUSION ENGINE...",
+      "CALIBRATING BAROMETRIC ALTIMETER...",
+      "ACQUIRING 3D GPS LOCK · TOPO READY"
+    ];
+
+    let startTime = null;
+    const duration = 2400; // 2.4s
+
+    function changeTheme(theme) {
+      if (theme === 'field_notes') phoneContainer.removeAttribute('data-theme');
+      else phoneContainer.setAttribute('data-theme', theme);
+    }
+
+    function drawCompass(rotation, progress) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cx = 160;
+      const cy = 160;
+      const r = 130;
+
+      const styles = getComputedStyle(phoneContainer);
+      const ink = styles.getPropertyValue('--ink').trim();
+      const signal = styles.getPropertyValue('--signal').trim();
+      const grid = styles.getPropertyValue('--grid').trim();
+
+      // Outer circle ring
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = ink;
+      ctx.lineWidth = 3.5;
+      ctx.stroke();
+
+      // Inner subtle circle
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 0.74, 0, Math.PI * 2);
+      ctx.strokeStyle = grid;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Degree tick marks
+      for (let i = 0; i < 36; i++) {
+        const angle = (i * 10) * Math.PI / 180;
+        const isMajor = (i % 9 === 0);
+        const len = isMajor ? 18 : 8;
+
+        const x1 = cx + (r - len) * Math.cos(angle);
+        const y1 = cy + (r - len) * Math.sin(angle);
+        const x2 = cx + r * Math.cos(angle);
+        const y2 = cy + r * Math.sin(angle);
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = isMajor ? ink : ink + '66';
+        ctx.lineWidth = isMajor ? 3 : 1.5;
+        ctx.stroke();
+      }
+
+      // Rotating Needle
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(rotation * Math.PI * 2);
+
+      // North Arrow (Signal Orange)
+      ctx.beginPath();
+      ctx.moveTo(0, -r * 0.72);
+      ctx.lineTo(12, -r * 0.28);
+      ctx.lineTo(-12, -r * 0.28);
+      ctx.closePath();
+      ctx.fillStyle = signal;
+      ctx.fill();
+
+      // South Arrow
+      ctx.beginPath();
+      ctx.moveTo(0, r * 0.72);
+      ctx.lineTo(12, r * 0.28);
+      ctx.lineTo(-12, r * 0.28);
+      ctx.closePath();
+      ctx.fillStyle = ink + '55';
+      ctx.fill();
+
+      // Center pivot
+      ctx.beginPath();
+      ctx.arc(0, 0, 7, 0, Math.PI * 2);
+      ctx.fillStyle = ink;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(0, 0, 3, 0, Math.PI * 2);
+      ctx.fillStyle = styles.getPropertyValue('--bg').trim();
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function animate(time) {
+      if (!startTime) startTime = time;
+      const elapsed = time - startTime;
+      const p = Math.min(1.0, elapsed / duration);
+
+      // Ease out cubic
+      const easedRotation = 1 - Math.pow(1 - Math.min(1.0, p / 0.85), 3);
+
+      drawCompass(easedRotation, p);
+
+      const stageIdx = Math.min(stages.length - 1, Math.floor(p * stages.length));
+      stageLabel.innerText = stages[stageIdx];
+      percentLabel.innerText = Math.round(p * 100) + '%';
+      progressFill.style.width = (p * 100) + '%';
+
+      if (p < 1.0) {
+        requestAnimationFrame(animate);
+      }
+    }
+
+    function startCalibration() {
+      startTime = null;
+      requestAnimationFrame(animate);
+    }
+
+    startCalibration();
+  </script>
+</body>
+</html>
