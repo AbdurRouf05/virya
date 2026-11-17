@@ -14,19 +14,19 @@ enum SportType {
   String get displayName {
     switch (this) {
       case SportType.gravelCycling:
-        return 'Gravel Ride';
+        return 'Sepeda Gravel (Gravel)';
       case SportType.roadCycling:
-        return 'Road Cycling';
+        return 'Sepeda Balap (Roadbike)';
       case SportType.mountainBiking:
-        return 'Mountain Bike (MTB)';
+        return 'Sepeda Gunung (MTB)';
       case SportType.roadRunning:
-        return 'Road Run';
+        return 'Lari (Road Run)';
       case SportType.trailRunning:
-        return 'Trail Run';
+        return 'Lari Trail (Trail Run)';
       case SportType.hiking:
-        return 'Hike';
+        return 'Mendaki (Hiking)';
       case SportType.walking:
-        return 'Walk';
+        return 'Jalan Kaki (Walking)';
     }
   }
 
