@@ -1,9 +1,8 @@
 {
-  "versionCode": 3,
-  "versionName": "1.0.2",
-  "downloadUrl": "https://github.com/AbdurRouf05/virya/releases/download/v1.0.2/app-release.apk",
-  "changelog": "• Mode Ramah m-Banking: Modul Fokus & Anti-Doom Scrolling berjalan tanpa butuh izin Aksesibilitas, bebas blokir SeaBank, BCA, & bank lainnya!\n• Peringatan heads-up notifikasi saat kuota harian tercapai\n• Kompatibilitas Android 14/15 (compileSdk 35) & perbaikan stabilitas",
+  "versionCode": 4,
+  "versionName": "1.0.3",
+  "downloadUrl": "https://github.com/AbdurRouf05/virya/releases/download/v1.0.3/app-release.apk",
+  "changelog": "• Integrasi tema Lapangan, Bersih, Gelap & Kontras Tinggi\n• Pilihan sub-kategori sepeda (Gravel, Roadbike, MTB) dan lari/jalan\n• Anti-collision layout & perbaikan HUD live recording & recap video\n• Fitur Latihan Beban (Gym), Fokus, dan Tugas Harian",
   "mandatory": false,
-  "releaseDate": "2026-11-10"
+  "releaseDate": "2026-11-18"
 }
-
