@@ -1,4 +1,4 @@
-name: CI (Code Quality & Tests)
+name: CI & DevSecOps (Quality, Security & Tests)
 
 on:
   push:
@@ -13,12 +13,19 @@ on:
 
 jobs:
   analyze-and-test:
-    name: Lint & Unit Tests
+    name: Lint, Security & Tests
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: DevSecOps - Secret Leak Detection (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Java 17
         uses: actions/setup-java@v4
@@ -36,7 +43,14 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Analyze code (dart analyze)
+      - name: DevSecOps - Dependency Security Scan (OSV-Scanner)
+        uses: google/osv-scanner-action/v1
+        continue-on-error: true
+        with:
+          scan-args: |-
+            --lockfile=pubspec.lock
+
+      - name: SAST & Lint (dart analyze)
         run: dart analyze
 
       - name: Run test suite (flutter test)
@@ -61,17 +75,18 @@ jobs:
 
           if [ "$STATUS" = "success" ]; then
             EMOJI="✅"
-            TITLE="<b>${EMOJI} CI Berhasil — Virya</b>"
-            DESC="🎉 Analisis kode & 624 unit test lulus 100%!"
+            TITLE="<b>${EMOJI} CI & DevSecOps Berhasil — Virya</b>"
+            DESC="🎉 Kode lolos audit keamanan (SAST & Secret Scan) & 624 unit test lulus 100%!"
           else
             EMOJI="❌"
-            TITLE="<b>${EMOJI} CI Gagal — Virya</b>"
-            DESC="⚠️ Ditemukan masalah pada kode atau unit test."
+            TITLE="<b>${EMOJI} CI & DevSecOps Gagal — Virya</b>"
+            DESC="⚠️ Ditemukan masalah pada kode, audit keamanan, atau unit test."
           fi
 
           MESSAGE="${TITLE}%0A%0A"
           MESSAGE="${MESSAGE}🌿 <b>Branch:</b> <code>${BRANCH}</code>%0A"
           MESSAGE="${MESSAGE}👤 <b>Pusher:</b> ${ACTOR}%0A"
+          MESSAGE="${MESSAGE}🛡️ <b>Security:</b> SAST + Gitleaks Secret Scan%0A"
           MESSAGE="${MESSAGE}📝 <b>Status:</b> ${DESC}%0A%0A"
           MESSAGE="${MESSAGE}🔗 <a href='${RUN_URL}'>Lihat Log di GitHub Actions</a>"
 
@@ -79,4 +94,3 @@ jobs:
             -d "chat_id=${TELEGRAM_CHAT_ID}" \
             -d "parse_mode=HTML" \
             -d "text=${MESSAGE}"
-
