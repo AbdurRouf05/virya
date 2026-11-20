@@ -51,7 +51,7 @@ jobs:
           cp build/app/outputs/flutter-apk/app-x86_64-release.apk dist/virya-${TAG}-x86_64.apk
 
       - name: Upload APK sebagai artifact (untuk preview)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: apk-${{ github.ref_name }}
           path: dist/
