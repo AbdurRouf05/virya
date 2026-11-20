@@ -72,22 +72,22 @@ jobs:
 
           if [ "$STATUS" = "success" ]; then
             EMOJI="✅"
-            TITLE="<b>${EMOJI} CI & DevSecOps Berhasil — Virya</b>"
-            DESC="🎉 Kode lolos audit keamanan (SAST & Secret Scan) & 624 unit test lulus 100%!"
+            TITLE="<b>${EMOJI} CI + DevSecOps Berhasil — Virya</b>"
+            DESC="🎉 Kode lolos audit keamanan (SAST + Secret Scan) dan 624 unit test lulus 100%!"
           else
             EMOJI="❌"
-            TITLE="<b>${EMOJI} CI & DevSecOps Gagal — Virya</b>"
+            TITLE="<b>${EMOJI} CI + DevSecOps Gagal — Virya</b>"
             DESC="⚠️ Ditemukan masalah pada kode, audit keamanan, atau unit test."
           fi
 
-          MESSAGE="${TITLE}%0A%0A"
-          MESSAGE="${MESSAGE}🌿 <b>Branch:</b> <code>${BRANCH}</code>%0A"
-          MESSAGE="${MESSAGE}👤 <b>Pusher:</b> ${ACTOR}%0A"
-          MESSAGE="${MESSAGE}🛡️ <b>Security:</b> SAST + Gitleaks Secret Scan%0A"
-          MESSAGE="${MESSAGE}📝 <b>Status:</b> ${DESC}%0A%0A"
+          MESSAGE="${TITLE}"$'\n\n'
+          MESSAGE="${MESSAGE}🌿 <b>Branch:</b> <code>${BRANCH}</code>"$'\n'
+          MESSAGE="${MESSAGE}👤 <b>Pusher:</b> ${ACTOR}"$'\n'
+          MESSAGE="${MESSAGE}🛡️ <b>Security:</b> SAST + Gitleaks Secret Scan"$'\n'
+          MESSAGE="${MESSAGE}📝 <b>Status:</b> ${DESC}"$'\n\n'
           MESSAGE="${MESSAGE}🔗 <a href='${RUN_URL}'>Lihat Log di GitHub Actions</a>"
 
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-            -d "chat_id=${TELEGRAM_CHAT_ID}" \
-            -d "parse_mode=HTML" \
-            -d "text=${MESSAGE}"
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "parse_mode=HTML" \
+            --data-urlencode "text=${MESSAGE}"

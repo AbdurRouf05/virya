@@ -97,16 +97,16 @@ jobs:
           RUN_URL="https://github.com/${REPO}/actions/runs/${{ github.run_id }}"
 
           if [ "$STATUS" = "success" ]; then
-            MESSAGE="🚀 <b>Virya ${TAG} Berhasil Dirilis!</b>%0A%0A"
-            MESSAGE="${MESSAGE}📦 <b>File APK:</b> arm64, arm32, x86_64 sudah terunggah.%0A"
+            MESSAGE="🚀 <b>Virya ${TAG} Berhasil Dirilis!</b>"$'\n\n'
+            MESSAGE="${MESSAGE}📦 <b>File APK:</b> arm64, arm32, x86_64 sudah terunggah."$'\n'
             MESSAGE="${MESSAGE}📥 <a href='${RELEASE_URL}'>Download APK di GitHub Releases</a>"
           else
-            MESSAGE="❌ <b>Build Rilis ${TAG} Gagal!</b>%0A%0A"
+            MESSAGE="❌ <b>Build Rilis ${TAG} Gagal!</b>"$'\n\n'
             MESSAGE="${MESSAGE}⚠️ Cek log kegagalan build: <a href='${RUN_URL}'>Lihat Log</a>"
           fi
 
           curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-            -d "chat_id=${TELEGRAM_CHAT_ID}" \
-            -d "parse_mode=HTML" \
-            -d "text=${MESSAGE}"
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "parse_mode=HTML" \
+            --data-urlencode "text=${MESSAGE}"
 
