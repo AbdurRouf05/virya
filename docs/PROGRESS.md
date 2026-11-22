@@ -18,6 +18,13 @@ Newest entries on top. Baru bergabung? Mulai dari [PANDUAN.md](PANDUAN.md). Atur
 
 ## Log
 
+### 2026-11-22 — Kunci rilis keluar dari repo ✅
+- `virya-release.jks` (password `android`, tersimpan di repo publik) dihapus. Kunci baru RSA-4096, alias `virya`, SHA-256 `3a:e1:dc:76:…:ca:0b:22`.
+- `android/app/build.gradle.kts` membaca kunci dari `android/key.properties` (lokal, di-gitignore) atau env `VIRYA_KEYSTORE_PATH/_PASSWORD`, `VIRYA_KEY_ALIAS`, `VIRYA_KEY_PASSWORD`. Tanpa keduanya, build release memakai debug key (untuk `flutter run --release` di mesin tim).
+- `release.yml` mengambil kunci dari GitHub Secrets (`VIRYA_KEYSTORE_BASE64` + tiga secret di atas) dan gagal kalau secret tidak ada, supaya APK rilis tidak pernah tertanda debug key.
+- Dampak: APK v1.0.4 ke bawah tidak bisa di-update ke versi berikutnya; pasang ulang sekali (cadangkan dulu lewat Pengaturan → Buat cadangan).
+- Catatan: dua info `activeColor` deprecated dibiarkan; penggantinya `activeThumbColor` belum ada di Flutter 3.29 yang dipakai CI.
+
 ### 2026-11-17 — Pratinjau gaya + layar rekam ikut Bersih ✅
 - `core/widgets/look_preview.dart` (+ `look_preview_parts.dart`): layar mini "Hari ini" 9:16 digambar dengan palet & gaya sendiri (tidak lewat `FN`), jadi Tegas dan Bersih tampil berdampingan.
 - Layar pilih gaya pertama: dua kartu berdampingan berisi pratinjau. Pengaturan → Tampilan: segmen Gaya diganti dua pratinjau yang bisa disentuh; pratinjau Tegas ikut warna yang dipilih, Bersih ikut kecerahan.

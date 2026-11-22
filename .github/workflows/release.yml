@@ -41,8 +41,27 @@ jobs:
       - name: Run tests
         run: flutter test
 
+      - name: Siapkan kunci release
+        env:
+          KEYSTORE_BASE64: ${{ secrets.VIRYA_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::Secret VIRYA_KEYSTORE_BASE64 belum diatur. APK rilis harus ditandatangani kunci resmi."
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/virya-upload.jks"
+          echo "VIRYA_KEYSTORE_PATH=$RUNNER_TEMP/virya-upload.jks" >> "$GITHUB_ENV"
+
       - name: Build APK (release)
+        env:
+          VIRYA_KEYSTORE_PASSWORD: ${{ secrets.VIRYA_KEYSTORE_PASSWORD }}
+          VIRYA_KEY_ALIAS: ${{ secrets.VIRYA_KEY_ALIAS }}
+          VIRYA_KEY_PASSWORD: ${{ secrets.VIRYA_KEY_PASSWORD }}
         run: flutter build apk --release --split-per-abi
+
+      - name: Hapus kunci dari runner
+        if: always()
+        run: rm -f "$RUNNER_TEMP/virya-upload.jks"
 
       - name: Rename APK
         run: |
