@@ -42,6 +42,9 @@ class SettingKeys {
 
   /// Periksa pembaruan secara otomatis saat aplikasi dibuka.
   static const autoCheckUpdate = 'auto_check_update';
+
+  /// `true` bila panduan mulai cepat di layar Hari Ini ditutup oleh pengguna.
+  static const quickstartDismissed = 'quickstart_dismissed';
 }
 
 const Map<String, String> settingDefaults = {
@@ -56,6 +59,7 @@ const Map<String, String> settingDefaults = {
   SettingKeys.useSimulatedGps: 'false',
   SettingKeys.updateUrl: '',
   SettingKeys.autoCheckUpdate: 'true',
+  SettingKeys.quickstartDismissed: 'false',
 };
 
 /// In-memory mirror of the AppSettings table; writes go through to SQLite.

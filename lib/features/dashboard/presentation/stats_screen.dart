@@ -7,6 +7,7 @@ import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/activity_history/data/journal_providers.dart';
 import 'package:virya/features/activity_history/presentation/activity_detail_screen.dart';
 import 'package:virya/features/dashboard/domain/stats_math.dart';
+import 'package:virya/features/dashboard/presentation/widgets/stats_comparison_card.dart';
 import 'package:virya/features/dashboard/presentation/widgets/stats_fitness_panel.dart';
 import 'package:virya/features/dashboard/presentation/widgets/stats_records.dart';
 import 'package:virya/features/dashboard/presentation/widgets/stats_totals.dart';
@@ -48,6 +49,9 @@ class _StatsScreenState extends ConsumerState<StatsScreen> {
               SectionHeader(number: sec.next(), title: 'Total'),
               _periodPicker(),
               StatsTotals(activities: list, from: _period.start(now), fmt: fmt),
+              SectionHeader(
+                  number: sec.next(), title: 'Perbandingan bulan ini'),
+              StatsComparisonCard(activities: list, fmt: fmt, now: now),
               SectionHeader(number: sec.next(), title: 'Kebugaran & bentuk'),
               const StatsFitnessPanel(),
               SectionHeader(number: sec.next(), title: 'Kalender 26 minggu'),

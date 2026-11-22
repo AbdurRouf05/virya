@@ -26,11 +26,31 @@ class RegionDownloadSheet extends StatefulWidget {
   State<RegionDownloadSheet> createState() => _RegionDownloadSheetState();
 }
 
+class _MapPreset {
+  final String label;
+  final String name;
+  final double lat;
+  final double lon;
+  final int defaultRadius;
+
+  const _MapPreset(this.label, this.name, this.lat, this.lon,
+      [this.defaultRadius = 25]);
+}
+
+const _popularPresets = [
+  _MapPreset('Bandung/Lembang', 'Bandung & Lembang', -6.835, 107.620, 25),
+  _MapPreset('Jabodetabek', 'Jabodetabek', -6.2088, 106.8456, 35),
+  _MapPreset('Jogja/Merapi', 'Yogyakarta & Merapi', -7.7956, 110.3695, 25),
+  _MapPreset('Bali', 'Bali Selatan', -8.6500, 115.2167, 30),
+  _MapPreset('Bromo/Malang', 'Malang & Bromo', -7.9797, 112.6304, 25),
+];
+
 class _RegionDownloadSheetState extends State<RegionDownloadSheet> {
   static const _radii = [10, 25, 50, 100];
   int _radius = 25;
   (double, double)? _pos;
   String? _error;
+  String? _selectedPreset;
   final _name = TextEditingController();
 
   @override
@@ -111,9 +131,70 @@ class _RegionDownloadSheetState extends State<RegionDownloadSheet> {
           Text(FN.caps('UNDUH WILAYAH'), style: FN.bigNumber(26)),
           const SizedBox(height: 4),
           Text(
-            'Area persegi di sekitar posisi kamu sekarang, detail sampai '
-            'tingkat jalan setapak.',
+            'Area persegi di sekitar posisi kamu sekarang atau pilih destinasi populer, '
+            'detail sampai tingkat jalan setapak.',
             style: body,
+          ),
+          const SizedBox(height: 14),
+          Text(
+            FN.caps('PILIH KOTA / WILAYAH'),
+            style: FN.label(size: 11, color: FN.ink),
+          ),
+          const SizedBox(height: 6),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                ChoiceChip(
+                  label: Text(
+                    '📍 Posisi GPS',
+                    style: FN.label(
+                      size: 11.5,
+                      color: _selectedPreset == null ? FN.paper : FN.ink,
+                    ),
+                  ),
+                  selected: _selectedPreset == null,
+                  showCheckmark: false,
+                  selectedColor: FN.ink,
+                  backgroundColor: FN.paper,
+                  shape: RoundedRectangleBorder(side: FN.side()),
+                  onSelected: (_) {
+                    setState(() {
+                      _selectedPreset = null;
+                      _name.clear();
+                      _pos = null;
+                    });
+                    _locate();
+                  },
+                ),
+                for (final p in _popularPresets) ...[
+                  const SizedBox(width: 8),
+                  ChoiceChip(
+                    label: Text(
+                      p.label,
+                      style: FN.label(
+                        size: 11.5,
+                        color: _selectedPreset == p.label ? FN.paper : FN.ink,
+                      ),
+                    ),
+                    selected: _selectedPreset == p.label,
+                    showCheckmark: false,
+                    selectedColor: FN.ink,
+                    backgroundColor: FN.paper,
+                    shape: RoundedRectangleBorder(side: FN.side()),
+                    onSelected: (_) {
+                      setState(() {
+                        _selectedPreset = p.label;
+                        _pos = (p.lat, p.lon);
+                        _radius = p.defaultRadius;
+                        _name.text = p.name;
+                        _error = null;
+                      });
+                    },
+                  ),
+                ],
+              ],
+            ),
           ),
           const SizedBox(height: 14),
           Text(

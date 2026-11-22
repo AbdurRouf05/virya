@@ -8,6 +8,7 @@ import 'package:virya/features/today/application/today_controller.dart';
 import 'package:virya/features/today/domain/today_models.dart';
 import 'package:virya/features/today/presentation/widgets/today_header.dart';
 import 'package:virya/features/today/presentation/widgets/today_last_card.dart';
+import 'package:virya/features/today/presentation/widgets/today_quickstart_card.dart';
 import 'package:virya/features/today/presentation/widgets/today_training_card.dart';
 import 'package:virya/features/today/presentation/widgets/today_week_strip.dart';
 
@@ -56,6 +57,19 @@ class TodayScreen extends ConsumerWidget {
             children: [
               ref.read(integrationsProvider).todayTasksCard(),
               ref.read(integrationsProvider).todayFocusCard(),
+              if (s.last == null &&
+                  ref.watch(settingsProvider)[SettingKeys.quickstartDismissed] !=
+                      'true') ...[
+                TodayQuickstartCard(
+                  onStart: onStart,
+                  onDismiss: () {
+                    ref
+                        .read(settingsProvider.notifier)
+                        .set(SettingKeys.quickstartDismissed, 'true');
+                  },
+                ),
+                gap,
+              ],
               TodayTrainingCard(summary: s, fmt: fmt, onStart: onStart),
               gap,
               TodayWeekStrip(week: s.week),
