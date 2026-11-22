@@ -1,8 +1,8 @@
 {
-  "versionCode": 4,
-  "versionName": "1.0.3",
-  "downloadUrl": "https://github.com/AbdurRouf05/virya/releases/download/v1.0.3/app-release.apk",
-  "changelog": "• Integrasi tema Lapangan, Bersih, Gelap & Kontras Tinggi\n• Pilihan sub-kategori sepeda (Gravel, Roadbike, MTB) dan lari/jalan\n• Anti-collision layout & perbaikan HUD live recording & recap video\n• Fitur Latihan Beban (Gym), Fokus, dan Tugas Harian",
+  "versionCode": 5,
+  "versionName": "1.0.4",
+  "downloadUrl": "https://github.com/AbdurRouf05/virya/releases/download/v1.0.4/virya-v1.0.4-arm64.apk",
+  "changelog": "• Nama daerah, kota, kecamatan & puncak di peta rute (Lembang, Bandung, Tangkuban Perahu, dll)\n• Hub Mulai Cepat / Onboarding card di tab Hari Ini (1-tap demo rute, panduan optimasi baterai, import Strava)\n• Perbandingan statistik bulanan (Jarak, Waktu, Elevasi, Aktivitas)\n• Preset download peta offline (Bandung & Lembang, Jabodetabek, Jogja, dll)\n• Notifikasi CI & DevSecOps otomatis ke Telegram",
   "mandatory": false,
-  "releaseDate": "2026-11-18"
+  "releaseDate": "2026-11-22"
 }
