@@ -1,4 +1,4 @@
-// Field Notes map style builder (no text labels → no glyph dependency).
+// Field Notes map style builder with place labels & terrain.
 // Supports Protomaps basemap v4 (offline PMTiles) and OpenMapTiles
 // (OpenFreeMap online fallback).
 (function () {
@@ -14,6 +14,10 @@
 
   function w(z0, w0, z1, w1) {
     return ['interpolate', ['exponential', 1.6], ['zoom'], z0, w0, z1, w1];
+  }
+
+  function wLin(z0, w0, z1, w1) {
+    return ['interpolate', ['linear'], ['zoom'], z0, w0, z1, w1];
   }
 
   // ---------- Protomaps v4 ----------
@@ -61,7 +65,84 @@
         filter: ['==', ['get', 'kind'], 'rail'],
         paint: { 'line-color': C.inkMuted, 'line-width': 1, 'line-dasharray': [4, 2] } },
       { id: 'boundaries', type: 'line', source: src, 'source-layer': 'boundaries',
-        paint: { 'line-color': C.inkMuted, 'line-width': 0.8, 'line-dasharray': [3, 2], 'line-opacity': 0.5 } }
+        paint: { 'line-color': C.inkMuted, 'line-width': 0.8, 'line-dasharray': [3, 2], 'line-opacity': 0.5 } },
+      // Mountain peaks / landmarks
+      {
+        id: 'poi-mountain', type: 'symbol', source: src, 'source-layer': 'places', minzoom: 8,
+        filter: ['==', ['get', 'kind'], 'peak'],
+        layout: {
+          'text-field': ['concat', '▲ ', ['coalesce', ['get', 'name:latin'], ['get', 'name']]],
+          'text-font': ['Noto Sans Italic'],
+          'text-size': wLin(8, 9, 14, 12),
+          'text-max-width': 8,
+          'text-letter-spacing': 0.05,
+          'text-optional': true
+        },
+        paint: {
+          'text-color': C.inkMuted,
+          'text-halo-color': C.paper,
+          'text-halo-width': 1.5,
+          'text-halo-blur': 0.5
+        }
+      },
+      // Villages / neighbourhoods / districts
+      {
+        id: 'place-village', type: 'symbol', source: src, 'source-layer': 'places', minzoom: 9,
+        filter: ['any',
+          ['all', ['==', ['get', 'kind'], 'locality'], ['in', ['get', 'kind_detail'], ['literal', ['village', 'hamlet']]]],
+          ['in', ['get', 'kind'], ['literal', ['neighbourhood', 'suburb']]]],
+        layout: {
+          'text-field': ['coalesce', ['get', 'name:latin'], ['get', 'name']],
+          'text-font': ['Noto Sans Regular'],
+          'text-size': wLin(9, 9.5, 14, 12),
+          'text-max-width': 8,
+          'text-letter-spacing': 0.02,
+          'text-optional': true
+        },
+        paint: {
+          'text-color': C.inkSoft,
+          'text-halo-color': C.paper,
+          'text-halo-width': 1.5,
+          'text-halo-blur': 0.5
+        }
+      },
+      // Towns (e.g. Lembang)
+      {
+        id: 'place-town', type: 'symbol', source: src, 'source-layer': 'places', minzoom: 6,
+        filter: ['all', ['==', ['get', 'kind'], 'locality'], ['==', ['get', 'kind_detail'], 'town']],
+        layout: {
+          'text-field': ['coalesce', ['get', 'name:latin'], ['get', 'name']],
+          'text-font': ['Noto Sans Bold'],
+          'text-size': wLin(6, 10, 14, 14),
+          'text-max-width': 9,
+          'text-letter-spacing': 0.03
+        },
+        paint: {
+          'text-color': C.inkSoft,
+          'text-halo-color': C.paper,
+          'text-halo-width': 1.8,
+          'text-halo-blur': 0.8
+        }
+      },
+      // Major cities (e.g. Bandung)
+      {
+        id: 'place-city', type: 'symbol', source: src, 'source-layer': 'places', minzoom: 3,
+        filter: ['all', ['==', ['get', 'kind'], 'locality'], ['==', ['get', 'kind_detail'], 'city']],
+        layout: {
+          'text-field': ['coalesce', ['get', 'name:latin'], ['get', 'name']],
+          'text-font': ['Noto Sans Bold'],
+          'text-size': wLin(4, 11, 14, 17),
+          'text-transform': 'uppercase',
+          'text-letter-spacing': 0.08,
+          'text-max-width': 10
+        },
+        paint: {
+          'text-color': C.ink,
+          'text-halo-color': C.paper,
+          'text-halo-width': 2.0,
+          'text-halo-blur': 1.0
+        }
+      }
     ];
   }
 
@@ -99,7 +180,84 @@
       road('road-highway', ['motorway'], C.ink, w(5, 0.6, 18, 9)),
       { id: 'rail', type: 'line', source: src, 'source-layer': 'transportation', minzoom: 10,
         filter: ['==', ['get', 'class'], 'rail'],
-        paint: { 'line-color': C.inkMuted, 'line-width': 1, 'line-dasharray': [4, 2] } }
+        paint: { 'line-color': C.inkMuted, 'line-width': 1, 'line-dasharray': [4, 2] } },
+      // Mountain peaks / landmarks (e.g. Tangkuban Perahu)
+      {
+        id: 'poi-mountain', type: 'symbol', source: src, 'source-layer': 'poi', minzoom: 8,
+        filter: ['in', ['get', 'class'], ['literal', ['mountain_peak', 'volcano']]],
+        layout: {
+          'text-field': ['concat', '▲ ', ['coalesce', ['get', 'name:latin'], ['get', 'name']]],
+          'text-font': ['Noto Sans Italic'],
+          'text-size': wLin(8, 9, 14, 12),
+          'text-max-width': 8,
+          'text-letter-spacing': 0.05,
+          'text-optional': true
+        },
+        paint: {
+          'text-color': C.inkMuted,
+          'text-halo-color': C.paper,
+          'text-halo-width': 1.5,
+          'text-halo-blur': 0.5
+        }
+      },
+      // Villages / suburbs / neighbourhoods (e.g. Cikole, Maribaya, Parongpong)
+      {
+        id: 'place-village', type: 'symbol', source: src, 'source-layer': 'place', minzoom: 9,
+        filter: ['in', ['get', 'class'], ['literal', ['village', 'suburb', 'neighbourhood', 'hamlet']]],
+        layout: {
+          'text-field': ['coalesce', ['get', 'name:latin'], ['get', 'name']],
+          'text-font': ['Noto Sans Regular'],
+          'text-size': wLin(9, 9.5, 14, 12),
+          'text-max-width': 8,
+          'text-letter-spacing': 0.02,
+          'text-optional': true
+        },
+        paint: {
+          'text-color': C.inkSoft,
+          'text-halo-color': C.paper,
+          'text-halo-width': 1.5,
+          'text-halo-blur': 0.5
+        }
+      },
+      // Towns (e.g. Lembang, Soreang, Padalarang)
+      {
+        id: 'place-town', type: 'symbol', source: src, 'source-layer': 'place', minzoom: 6,
+        filter: ['==', ['get', 'class'], 'town'],
+        layout: {
+          'text-field': ['coalesce', ['get', 'name:latin'], ['get', 'name']],
+          'text-font': ['Noto Sans Bold'],
+          'text-size': wLin(6, 10, 14, 14),
+          'text-max-width': 9,
+          'text-letter-spacing': 0.03,
+          'symbol-sort-key': ['coalesce', ['get', 'rank'], 5]
+        },
+        paint: {
+          'text-color': C.inkSoft,
+          'text-halo-color': C.paper,
+          'text-halo-width': 1.8,
+          'text-halo-blur': 0.8
+        }
+      },
+      // Cities (e.g. Bandung, Cimahi, Jakarta)
+      {
+        id: 'place-city', type: 'symbol', source: src, 'source-layer': 'place', minzoom: 3,
+        filter: ['==', ['get', 'class'], 'city'],
+        layout: {
+          'text-field': ['coalesce', ['get', 'name:latin'], ['get', 'name']],
+          'text-font': ['Noto Sans Bold'],
+          'text-size': wLin(4, 11, 14, 17),
+          'text-transform': 'uppercase',
+          'text-letter-spacing': 0.08,
+          'text-max-width': 10,
+          'symbol-sort-key': ['coalesce', ['get', 'rank'], 1]
+        },
+        paint: {
+          'text-color': C.ink,
+          'text-halo-color': C.paper,
+          'text-halo-width': 2.0,
+          'text-halo-blur': 1.0
+        }
+      }
     ];
   }
 
@@ -109,7 +267,7 @@
         'hillshade-accent-color': C.inkMuted, 'hillshade-exaggeration': 0.35 } };
   }
 
-  // cfg: { basemapUrl, demUrl, online, tilesUrl }
+  // cfg: { basemapUrl, demUrl, online, tilesUrl, glyphsUrl }
   function build(cfg) {
     var sources = {};
     var layers = [{ id: 'background', type: 'background', paint: { 'background-color': C.paper } }];
@@ -135,7 +293,8 @@
     layers = layers.concat(base.slice(0, split));
     if (cfg.demUrl) layers.push(hillshade());
     layers = layers.concat(base.slice(split));
-    return { version: 8, sources: sources, layers: layers };
+    var glyphs = cfg.glyphsUrl || 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf';
+    return { version: 8, sources: sources, layers: layers, glyphs: glyphs };
   }
 
   window.ViryaStyle = { build: build, colors: C };

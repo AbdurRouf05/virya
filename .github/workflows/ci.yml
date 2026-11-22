@@ -58,36 +58,53 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          STATUS: ${{ job.status }}
+          BRANCH: ${{ github.ref_name }}
+          ACTOR: ${{ github.actor }}
+          RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
-            echo "Telegram secrets not configured, skipping notification."
-            exit 0
-          fi
+          python3 -c "
+          import os, sys, json, urllib.request
 
-          STATUS="${{ job.status }}"
-          REPO="${{ github.repository }}"
-          BRANCH="${{ github.ref_name }}"
-          ACTOR="${{ github.actor }}"
-          RUN_URL="https://github.com/${REPO}/actions/runs/${{ github.run_id }}"
+          token = os.environ.get('TELEGRAM_BOT_TOKEN', '').strip()
+          chat_id = os.environ.get('TELEGRAM_CHAT_ID', '').strip()
+          if not token or not chat_id:
+              print('⚠️ Telegram secrets not configured (TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is empty), skipping.')
+              sys.exit(0)
 
-          if [ "$STATUS" = "success" ]; then
-            EMOJI="✅"
-            TITLE="<b>${EMOJI} CI + DevSecOps Berhasil — Virya</b>"
-            DESC="🎉 Kode lolos audit keamanan (SAST + Secret Scan) dan 624 unit test lulus 100%!"
-          else
-            EMOJI="❌"
-            TITLE="<b>${EMOJI} CI + DevSecOps Gagal — Virya</b>"
-            DESC="⚠️ Ditemukan masalah pada kode, audit keamanan, atau unit test."
-          fi
+          status = os.environ.get('STATUS', '')
+          branch = os.environ.get('BRANCH', '')
+          actor = os.environ.get('ACTOR', '')
+          run_url = os.environ.get('RUN_URL', '')
 
-          MESSAGE="${TITLE}"$'\n\n'
-          MESSAGE="${MESSAGE}🌿 <b>Branch:</b> <code>${BRANCH}</code>"$'\n'
-          MESSAGE="${MESSAGE}👤 <b>Pusher:</b> ${ACTOR}"$'\n'
-          MESSAGE="${MESSAGE}🛡️ <b>Security:</b> SAST + Gitleaks Secret Scan"$'\n'
-          MESSAGE="${MESSAGE}📝 <b>Status:</b> ${DESC}"$'\n\n'
-          MESSAGE="${MESSAGE}🔗 <a href='${RUN_URL}'>Lihat Log di GitHub Actions</a>"
+          if status == 'success':
+              title = '✅ <b>CI + DevSecOps Berhasil — Virya</b>'
+              desc = '🎉 Kode lolos audit keamanan (SAST + Secret Scan) dan 624 unit test lulus 100%!'
+          else:
+              title = '❌ <b>CI + DevSecOps Gagal — Virya</b>'
+              desc = '⚠️ Ditemukan masalah pada kode, audit keamanan, atau unit test.'
 
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
-            --data-urlencode "parse_mode=HTML" \
-            --data-urlencode "text=${MESSAGE}"
+          text = f'{title}\n\n🌿 <b>Branch:</b> <code>{branch}</code>\n👤 <b>Pusher:</b> {actor}\n🛡️ <b>Security:</b> SAST + Gitleaks Secret Scan\n📝 <b>Status:</b> {desc}\n\n🔗 <a href=\"{run_url}\">Lihat Log di GitHub Actions</a>'
+
+          data = json.dumps({
+              'chat_id': chat_id,
+              'text': text,
+              'parse_mode': 'HTML',
+              'disable_web_page_preview': True
+          }).encode('utf-8')
+
+          req = urllib.request.Request(
+              f'https://api.telegram.org/bot{token}/sendMessage',
+              data=data,
+              headers={'Content-Type': 'application/json'}
+          )
+          try:
+              with urllib.request.urlopen(req) as resp:
+                  result = json.loads(resp.read().decode('utf-8'))
+                  if result.get('ok'):
+                      print('✅ Telegram notification successfully sent!')
+                  else:
+                      print('⚠️ Telegram response:', result)
+          except Exception as e:
+              print(f'❌ Telegram send error: {e}')
+          "
