@@ -51,6 +51,9 @@ android {
                 storePassword = signingValue("storePassword", "VIRYA_KEYSTORE_PASSWORD")
                 keyAlias = signingValue("keyAlias", "VIRYA_KEY_ALIAS")
                 keyPassword = signingValue("keyPassword", "VIRYA_KEY_PASSWORD")
+                enableV1Signing = true
+                enableV2Signing = true
+                enableV3Signing = true
             }
         }
     }

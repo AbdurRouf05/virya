@@ -59,6 +59,52 @@ class UpdateService {
     return uri;
   }
 
+  /// Membandingkan versi lokal dan remote dengan prioritas semver (`versionName`),
+  /// lalu fallback ke `versionCode` jika semver identik.
+  /// Ini mencegah mismatch jika APK lokal memakai offset ABI `--split-per-abi`.
+  static bool isNewerVersion({
+    required String localVersionName,
+    required int localVersionCode,
+    required String remoteVersionName,
+    required int remoteVersionCode,
+  }) {
+    final localParts = _parseSemver(localVersionName);
+    final remoteParts = _parseSemver(remoteVersionName);
+
+    if (localParts != null && remoteParts != null) {
+      for (var i = 0; i < 3; i++) {
+        if (remoteParts[i] != localParts[i]) {
+          return remoteParts[i] > localParts[i];
+        }
+      }
+      return remoteVersionCode > localVersionCode;
+    }
+
+    return remoteVersionCode > localVersionCode;
+  }
+
+  static List<int>? _parseSemver(String raw) {
+    final cleaned = raw
+        .trim()
+        .replaceFirst(RegExp(r'^[vV]'), '')
+        .split('+')
+        .first
+        .split('-')
+        .first;
+    if (cleaned.isEmpty) return null;
+    final segments = cleaned.split('.');
+    final nums = <int>[];
+    for (final s in segments) {
+      final parsed = int.tryParse(s);
+      if (parsed == null) return null;
+      nums.add(parsed);
+    }
+    while (nums.length < 3) {
+      nums.add(0);
+    }
+    return nums.take(3).toList();
+  }
+
   /// Memeriksa apakah ada versi baru yang tersedia.
   /// Mengembalikan [AppUpdateInfo] jika ada versi baru, atau `null` jika sudah terbaru.
   static Future<AppUpdateInfo?> checkForUpdate({String? updateUrl}) async {
@@ -93,7 +139,12 @@ class UpdateService {
         'Remote=${remoteInfo.versionCode} (${remoteInfo.versionName})',
       );
 
-      if (remoteInfo.versionCode > localInfo.versionCode) {
+      if (isNewerVersion(
+        localVersionName: localInfo.versionName,
+        localVersionCode: localInfo.versionCode,
+        remoteVersionName: remoteInfo.versionName,
+        remoteVersionCode: remoteInfo.versionCode,
+      )) {
         return remoteInfo;
       }
 

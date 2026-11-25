@@ -52,25 +52,98 @@ jobs:
           echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/virya-upload.jks"
           echo "VIRYA_KEYSTORE_PATH=$RUNNER_TEMP/virya-upload.jks" >> "$GITHUB_ENV"
 
-      - name: Build APK (release)
+      - name: Build APK Universal (release)
         env:
           VIRYA_KEYSTORE_PASSWORD: ${{ secrets.VIRYA_KEYSTORE_PASSWORD }}
           VIRYA_KEY_ALIAS: ${{ secrets.VIRYA_KEY_ALIAS }}
           VIRYA_KEY_PASSWORD: ${{ secrets.VIRYA_KEY_PASSWORD }}
-        run: flutter build apk --release --split-per-abi
+        run: flutter build apk --release
 
       - name: Hapus kunci dari runner
         if: always()
         run: rm -f "$RUNNER_TEMP/virya-upload.jks"
 
-      - name: Rename APK
+      - name: Siapkan file APK rilis
         run: |
           TAG=${GITHUB_REF_NAME:-${{ github.event.inputs.tag }}}
           mkdir -p dist
-          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk dist/virya-${TAG}-arm64.apk
-          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk dist/virya-${TAG}-arm32.apk
-          cp build/app/outputs/flutter-apk/app-x86_64-release.apk dist/virya-${TAG}-x86_64.apk
-          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk dist/app-release.apk
+          cp build/app/outputs/flutter-apk/app-release.apk "dist/virya-${TAG}.apk"
+          echo "APK_PATH=dist/virya-${TAG}.apk" >> "$GITHUB_ENV"
+
+      - name: Verifikasi struktur, signature & kompatibilitas APK
+        run: |
+          set -e
+          BUILD_TOOLS=$(find "${ANDROID_SDK_ROOT:-$ANDROID_HOME}/build-tools" -maxdepth 1 -mindepth 1 -type d | sort -V | tail -n 1)
+          echo "Using build-tools: $BUILD_TOOLS"
+
+          echo "=== 1. Zipalign (4-byte + 16KB page compatibility) ==="
+          "$BUILD_TOOLS/zipalign" -c -P 16 -v 4 "$APK_PATH" | tail -n 5
+
+          echo "=== 2. Signature Check (wajib kunci release resmi) ==="
+          SIGN_OUT=$("$BUILD_TOOLS/apksigner" verify --verbose --print-certs "$APK_PATH")
+          echo "$SIGN_OUT"
+          if echo "$SIGN_OUT" | grep -q "CN=Android Debug"; then
+            echo "::error::APK rilis tertandatangani oleh debug key!"
+            exit 1
+          fi
+
+          echo "=== 3. Manifest & Universal ABI Check ==="
+          BADGING=$("$BUILD_TOOLS/aapt2" dump badging "$APK_PATH")
+          echo "$BADGING" | grep -E "package:|sdkVersion:|native-code:|uses-feature"
+          for ABI in arm64-v8a armeabi-v7a x86_64; do
+            if ! echo "$BADGING" | grep -q "$ABI"; then
+              echo "::error::ABI $ABI tidak ditemukan di APK universal!"
+              exit 1
+            fi
+          done
+
+      - name: Aktifkan KVM untuk Emulator
+        run: |
+          if [ -e /dev/kvm ]; then
+            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+            sudo udevadm control --reload-rules
+            sudo udevadm trigger --name-match=kvm
+          fi
+
+      - name: Test Install & Launch APK di Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: default
+          arch: x86_64
+          profile: pixel_6
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          disable-animations: true
+          script: |
+            set -e
+            echo "=== 1. Clean Install APK ==="
+            adb uninstall com.abdurrouf.virya || true
+            adb install "$APK_PATH"
+
+            echo "=== 2. Verifikasi Package Terpasang ==="
+            adb shell pm path com.abdurrouf.virya
+            adb shell dumpsys package com.abdurrouf.virya | grep -E "versionCode|versionName"
+
+            echo "=== 3. Test Upgrade Install (Re-install) ==="
+            adb install -r "$APK_PATH"
+
+            echo "=== 4. Test Launch Aplikasi & Cek Crash ==="
+            adb logcat -c
+            adb shell am start -W -n com.abdurrouf.virya/.MainActivity
+            sleep 6
+            PID=$(adb shell pidof com.abdurrouf.virya || true)
+            echo "App PID: $PID"
+            if [ -z "$PID" ]; then
+              echo "::error::Aplikasi tidak berjalan setelah diluncurkan!"
+              adb logcat -d | tail -n 100
+              exit 1
+            fi
+            if adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime.*com\.abdurrouf\.virya"; then
+              echo "::error::Terdeteksi crash saat aplikasi dijalankan!"
+              adb logcat -d | tail -n 100
+              exit 1
+            fi
+            echo "APK berhasil di-install, di-upgrade, dan dijalankan tanpa crash!"
 
       - name: Upload APK sebagai artifact (untuk preview)
         uses: actions/upload-artifact@v4
@@ -78,6 +151,42 @@ jobs:
           name: apk-${{ github.ref_name }}
           path: dist/
           retention-days: 7
+
+      - name: Bersihkan asset APK lama pada release tag yang sama (jika ada)
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          python3 - << 'EOF'
+          import json, os, urllib.request, urllib.error
+
+          token = os.environ["GITHUB_TOKEN"]
+          repo = os.environ["REPO"]
+          tag = os.environ["TAG"]
+          headers = {
+              "Authorization": f"Bearer {token}",
+              "Accept": "application/vnd.github+json",
+              "User-Agent": "virya-release-bot",
+          }
+          url = f"https://api.github.com/repos/{repo}/releases/tags/{tag}"
+          try:
+              with urllib.request.urlopen(urllib.request.Request(url, headers=headers)) as resp:
+                  rel = json.loads(resp.read().decode("utf-8"))
+          except urllib.error.HTTPError as e:
+              if e.code == 404:
+                  print("No existing release for tag, skipping cleanup.")
+                  raise SystemExit(0)
+              raise
+
+          for asset in rel.get("assets", []):
+              if asset["name"].endswith(".apk"):
+                  del_url = f"https://api.github.com/repos/{repo}/releases/assets/{asset['id']}"
+                  req = urllib.request.Request(del_url, headers=headers, method="DELETE")
+                  with urllib.request.urlopen(req):
+                      print(f"Deleted stale asset: {asset['name']}")
+          EOF
 
       - name: Publish ke GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
@@ -89,15 +198,10 @@ jobs:
           body: |
             ## Download
 
-            Pilih APK sesuai perangkat lu:
+            Download file **`virya-${{ github.ref_name }}.apk`** (Universal APK — mendukung semua HP Android: arm64, arm32, dan x86_64, serta telah lolos verifikasi signature & uji install di Android Emulator).
 
-            | File | Perangkat |
-            |------|-----------|
-            | `virya-*-arm64.apk` | HP modern (2016+), Infinix, Samsung, Xiaomi, dll |
-            | `virya-*-arm32.apk` | HP lama 32-bit |
-            | `virya-*-x86_64.apk` | Emulator / PC Android |
-
-            Sebagian besar pengguna download `arm64`.
+            > **Catatan Penting untuk pengguna v1.0.4 ke bawah:**
+            > Mulai v1.0.5, APK ditandatangani menggunakan kunci rilis permanen baru agar update berikutnya berjalan mulus. Jika lu meng-update dari **v1.0.4 atau lebih lama**, lakukan **Pengaturan → Buat cadangan** terlebih dahulu, **uninstall versi lama sekali**, lalu install APK v1.0.5 ini.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -129,7 +233,7 @@ jobs:
 
           if status == 'success':
               title = f'🚀 <b>Virya {tag} Berhasil Dirilis!</b>'
-              body = f'📦 <b>File APK:</b> arm64, arm32, x86_64 sudah terunggah.\n📥 <a href=\"{release_url}\">Download APK di GitHub Releases</a>'
+              body = f'📦 <b>Universal APK:</b> Lolos verifikasi signature, zipalign, & uji install Android Emulator.\n📥 <a href=\"{release_url}\">Download APK di GitHub Releases</a>'
           else:
               title = f'❌ <b>Build Rilis {tag} Gagal!</b>'
               body = f'⚠️ Cek log kegagalan build: <a href=\"{run_url}\">Lihat Log</a>'

@@ -133,6 +133,48 @@ void main() {
         rawGist,
       );
     });
+
+    test('isNewerVersion mendeteksi pembaruan semver meski versionCode lokal terpengaruh ABI split', () {
+      expect(
+        UpdateService.isNewerVersion(
+          localVersionName: '1.0.4',
+          localVersionCode: 2005,
+          remoteVersionName: '1.0.5',
+          remoteVersionCode: 6,
+        ),
+        isTrue,
+      );
+
+      expect(
+        UpdateService.isNewerVersion(
+          localVersionName: '1.0.5',
+          localVersionCode: 2006,
+          remoteVersionName: '1.0.5',
+          remoteVersionCode: 6,
+        ),
+        isFalse,
+      );
+
+      expect(
+        UpdateService.isNewerVersion(
+          localVersionName: '1.0.5',
+          localVersionCode: 6,
+          remoteVersionName: '1.0.5',
+          remoteVersionCode: 7,
+        ),
+        isTrue,
+      );
+
+      expect(
+        UpdateService.isNewerVersion(
+          localVersionName: '1.0.6',
+          localVersionCode: 7,
+          remoteVersionName: '1.0.5',
+          remoteVersionCode: 6,
+        ),
+        isFalse,
+      );
+    });
   });
 }
 
