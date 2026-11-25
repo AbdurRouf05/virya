@@ -38,6 +38,42 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Cache Gradle & Mirror Maven Central
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties', 'android/build.gradle.kts', 'android/app/build.gradle.kts', 'android/settings.gradle.kts') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: Konfigurasi Gradle mirror (cegah Maven Central 429)
+        run: |
+          mkdir -p ~/.gradle/init.d
+          cat << 'EOF' > ~/.gradle/init.d/maven-mirror.gradle
+          def mirrorUrl = "https://maven-central.storage-download.googleapis.com/maven2"
+          def rewriteRepos = { repos ->
+              repos.all { repo ->
+                  if (repo instanceof MavenArtifactRepository) {
+                      def u = repo.url.toString()
+                      if (u.startsWith("https://repo.maven.apache.org/maven2") ||
+                          u.startsWith("https://repo1.maven.org/maven2")) {
+                          repo.setUrl(mirrorUrl)
+                      }
+                  }
+              }
+          }
+          gradle.beforeSettings { settings ->
+              rewriteRepos(settings.pluginManagement.repositories)
+              rewriteRepos(settings.dependencyResolutionManagement.repositories)
+          }
+          gradle.allprojects { proj ->
+              rewriteRepos(proj.buildscript.repositories)
+              rewriteRepos(proj.repositories)
+          }
+          EOF
+
       - name: Run tests
         run: flutter test
 
@@ -125,6 +161,40 @@ jobs:
             echo "::warning::/dev/kvm tidak tersedia di runner ini."
           fi
 
+      - name: Siapkan script verifikasi emulator
+        run: |
+          cat << 'EOF' > /tmp/verify_apk.sh
+          #!/usr/bin/env bash
+          set -euo pipefail
+          APK_PATH=$(ls dist/virya-*.apk | head -n 1)
+          echo "=== 1. Clean Install APK ($APK_PATH) ==="
+          adb uninstall com.abdurrouf.virya || true
+          adb install "$APK_PATH"
+          echo "=== 2. Verifikasi Package Terpasang ==="
+          adb shell pm path com.abdurrouf.virya
+          adb shell dumpsys package com.abdurrouf.virya | grep -E "versionCode|versionName"
+          echo "=== 3. Test Upgrade Install (Re-install) ==="
+          adb install -r "$APK_PATH"
+          echo "=== 4. Test Launch & Cek Crash ==="
+          adb logcat -c
+          adb shell am start -W -n com.abdurrouf.virya/.MainActivity
+          sleep 6
+          PID=$(adb shell pidof com.abdurrouf.virya || true)
+          echo "App PID: $PID"
+          if [ -z "$PID" ]; then
+            echo "::error::Aplikasi tidak berjalan setelah diluncurkan!"
+            adb logcat -d | tail -n 100
+            exit 1
+          fi
+          if adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime.*com\.abdurrouf\.virya"; then
+            echo "::error::Terdeteksi crash saat aplikasi dijalankan!"
+            adb logcat -d | tail -n 100
+            exit 1
+          fi
+          echo "APK berhasil di-install, di-upgrade, dan dijalankan tanpa crash!"
+          EOF
+          chmod +x /tmp/verify_apk.sh
+
       - name: Test Install & Launch APK di Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -133,31 +203,7 @@ jobs:
           arch: x86_64
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           disable-animations: true
-          script: |
-            set -e
-            APK_PATH=$(ls dist/virya-*.apk | head -n 1)
-            echo "Testing APK: $APK_PATH"
-            adb uninstall com.abdurrouf.virya || true
-            adb install "$APK_PATH"
-            adb shell pm path com.abdurrouf.virya
-            adb shell dumpsys package com.abdurrouf.virya | grep -E "versionCode|versionName"
-            adb install -r "$APK_PATH"
-            adb logcat -c
-            adb shell am start -W -n com.abdurrouf.virya/.MainActivity
-            sleep 6
-            PID=$(adb shell pidof com.abdurrouf.virya || true)
-            echo "App PID: $PID"
-            if [ -z "$PID" ]; then
-              echo "::error::Aplikasi tidak berjalan setelah diluncurkan!"
-              adb logcat -d | tail -n 100
-              exit 1
-            fi
-            if adb logcat -d | grep -E "FATAL EXCEPTION|AndroidRuntime.*com\.abdurrouf\.virya"; then
-              echo "::error::Terdeteksi crash saat aplikasi dijalankan!"
-              adb logcat -d | tail -n 100
-              exit 1
-            fi
-            echo "APK berhasil di-install, di-upgrade, dan dijalankan tanpa crash!"
+          script: bash /tmp/verify_apk.sh
 
   publish:
     name: Publish GitHub Release
