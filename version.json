@@ -1,8 +1,8 @@
 {
-  "versionCode": 5,
-  "versionName": "1.0.4",
-  "downloadUrl": "https://github.com/AbdurRouf05/virya/releases/download/v1.0.4/virya-v1.0.4-arm64.apk",
-  "changelog": "• Nama daerah, kota, kecamatan & puncak di peta rute (Lembang, Bandung, Tangkuban Perahu, dll)\n• Hub Mulai Cepat / Onboarding card di tab Hari Ini (1-tap demo rute, panduan optimasi baterai, import Strava)\n• Perbandingan statistik bulanan (Jarak, Waktu, Elevasi, Aktivitas)\n• Preset download peta offline (Bandung & Lembang, Jabodetabek, Jogja, dll)\n• Notifikasi CI & DevSecOps otomatis ke Telegram",
+  "versionCode": 6,
+  "versionName": "1.0.5",
+  "downloadUrl": "https://github.com/AbdurRouf05/virya/releases/download/v1.0.5/virya-v1.0.5-arm64.apk",
+  "changelog": "• Private Offline Running Circles (komunitas lari lokal offline tanpa server cloud)\n• Undangan lingkaran via QR code / link teks lokal\n• Berbagi catatan rute & aktivitas ke lingkaran tanpa lacakan internet",
   "mandatory": false,
-  "releaseDate": "2026-11-22"
+  "releaseDate": "2026-11-25"
 }
