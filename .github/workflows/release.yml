@@ -98,7 +98,7 @@ jobs:
           done
 
       - name: Upload APK sebagai artifact (untuk verifikasi & preview)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: apk-${{ github.ref_name }}
           path: dist/
