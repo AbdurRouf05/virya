@@ -105,9 +105,9 @@ jobs:
           retention-days: 7
 
   verify-install:
-    name: Verify APK Install (Android ARM64 Emulator)
+    name: Verify APK Install (Android Emulator)
     needs: build
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Download APK artifact
@@ -116,12 +116,21 @@ jobs:
           name: apk-${{ github.ref_name }}
           path: dist/
 
-      - name: Test Install & Launch APK di Android Emulator (arm64-v8a)
+      - name: Aktifkan izin KVM untuk Emulator
+        run: |
+          if [ -e /dev/kvm ]; then
+            sudo chmod 666 /dev/kvm
+            ls -la /dev/kvm
+          else
+            echo "::warning::/dev/kvm tidak tersedia di runner ini."
+          fi
+
+      - name: Test Install & Launch APK di Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
           target: default
-          arch: arm64-v8a
+          arch: x86_64
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           disable-animations: true
           script: |
