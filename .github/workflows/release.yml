@@ -97,37 +97,42 @@ jobs:
             fi
           done
 
-      - name: Aktifkan KVM untuk Emulator
-        run: |
-          if [ -e /dev/kvm ]; then
-            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-            sudo udevadm control --reload-rules
-            sudo udevadm trigger --name-match=kvm
-          fi
+      - name: Upload APK sebagai artifact (untuk verifikasi & preview)
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-${{ github.ref_name }}
+          path: dist/
+          retention-days: 7
 
-      - name: Test Install & Launch APK di Android Emulator
+  verify-install:
+    name: Verify APK Install (Android ARM64 Emulator)
+    needs: build
+    runs-on: macos-latest
+
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: apk-${{ github.ref_name }}
+          path: dist/
+
+      - name: Test Install & Launch APK di Android Emulator (arm64-v8a)
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
           target: default
-          arch: x86_64
-          profile: pixel_6
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          arch: arm64-v8a
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           disable-animations: true
           script: |
             set -e
-            echo "=== 1. Clean Install APK ==="
+            APK_PATH=$(ls dist/virya-*.apk | head -n 1)
+            echo "Testing APK: $APK_PATH"
             adb uninstall com.abdurrouf.virya || true
             adb install "$APK_PATH"
-
-            echo "=== 2. Verifikasi Package Terpasang ==="
             adb shell pm path com.abdurrouf.virya
             adb shell dumpsys package com.abdurrouf.virya | grep -E "versionCode|versionName"
-
-            echo "=== 3. Test Upgrade Install (Re-install) ==="
             adb install -r "$APK_PATH"
-
-            echo "=== 4. Test Launch Aplikasi & Cek Crash ==="
             adb logcat -c
             adb shell am start -W -n com.abdurrouf.virya/.MainActivity
             sleep 6
@@ -145,12 +150,20 @@ jobs:
             fi
             echo "APK berhasil di-install, di-upgrade, dan dijalankan tanpa crash!"
 
-      - name: Upload APK sebagai artifact (untuk preview)
-        uses: actions/upload-artifact@v4
+  publish:
+    name: Publish GitHub Release
+    needs: [build, verify-install]
+    if: always() && needs.build.result == 'success' && needs.verify-install.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
         with:
           name: apk-${{ github.ref_name }}
           path: dist/
-          retention-days: 7
 
       - name: Bersihkan asset APK lama pada release tag yang sama (jika ada)
         if: startsWith(github.ref, 'refs/tags/')

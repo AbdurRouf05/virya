@@ -156,26 +156,36 @@ jobs:
             fi
           done
 
-      - name: Aktifkan KVM untuk Emulator
-        run: |
-          if [ -e /dev/kvm ]; then
-            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-            sudo udevadm control --reload-rules
-            sudo udevadm trigger --name-match=kvm
-          fi
+      - name: Upload APK untuk emulator test
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-apk-${{ github.run_id }}
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 1
 
-      - name: Test Install & Launch APK di Android Emulator
+  verify-emulator-install:
+    name: "Android Emulator Install & Launch (ARM64)"
+    needs: verify-apk-install
+    runs-on: macos-latest
+
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ci-apk-${{ github.run_id }}
+          path: dist/
+
+      - name: Test Install & Launch APK di Android Emulator (arm64-v8a)
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
           target: default
-          arch: x86_64
-          profile: pixel_6
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          arch: arm64-v8a
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           disable-animations: true
           script: |
             set -e
-            APK_PATH="build/app/outputs/flutter-apk/app-release.apk"
+            APK_PATH="dist/app-release.apk"
             adb uninstall com.abdurrouf.virya || true
             adb install "$APK_PATH"
             adb shell pm path com.abdurrouf.virya
