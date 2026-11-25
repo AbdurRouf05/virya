@@ -9,6 +9,7 @@ import 'package:virya/features/profile/data/profile_providers.dart';
 import 'package:virya/features/profile/presentation/gear_garage.dart';
 import 'package:virya/features/profile/presentation/widgets/profile_athlete_edit_dialog.dart';
 import 'package:virya/features/settings/presentation/settings_screen.dart';
+import 'package:virya/features/social/presentation/social_screen.dart';
 
 /// "PROFIL" — athlete card, lifetime totals, gear garage.
 class ProfileScreen extends ConsumerWidget {
@@ -33,19 +34,21 @@ class ProfileScreen extends ConsumerWidget {
               Masthead(
                 kicker: 'Kartu atlet',
                 title: profile?.displayName ?? 'Tanpa nama',
-                subtitle: profile == null
-                    ? 'Isi profil agar kalori & zona akurat'
-                    : 'Sejak ${Fmt.dateStamp(profile.createdAt, withTime: false)}',
+                subtitle:
+                    profile == null
+                        ? 'Isi profil agar kalori & zona akurat'
+                        : 'Sejak ${Fmt.dateStamp(profile.createdAt, withTime: false)}',
                 actions: [
                   InkIconButton(
                     icon: Icons.tune,
                     tooltip: 'Pengaturan',
                     size: 36,
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => const SettingsScreen(),
-                      ),
-                    ),
+                    onPressed:
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (_) => const SettingsScreen(),
+                          ),
+                        ),
                   ),
                 ],
               ),
@@ -84,10 +87,11 @@ class ProfileScreen extends ConsumerWidget {
                 number: sec.next(),
                 title: 'Data atlet',
                 trailing: GestureDetector(
-                  onTap: () => showDialog<void>(
-                    context: context,
-                    builder: (_) => AthleteEditDialog(profile: profile),
-                  ),
+                  onTap:
+                      () => showDialog<void>(
+                        context: context,
+                        builder: (_) => AthleteEditDialog(profile: profile),
+                      ),
                   child: Text(
                     FN.caps('Ubah'),
                     style: FN
@@ -131,23 +135,43 @@ class ProfileScreen extends ConsumerWidget {
                   expand: true,
                   onPressed: () {
                     final screen = ref.read(integrationsProvider).bodyHome();
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(builder: (_) => screen),
-                    );
+                    Navigator.of(
+                      context,
+                    ).push(MaterialPageRoute<void>(builder: (_) => screen));
                   },
                 ),
               ),
               SectionHeader(number: sec.next(), title: 'Garasi'),
               const GearGarage(),
-              SectionHeader(number: sec.next(), title: 'Peta Offline & Wilayah'),
+              SectionHeader(number: sec.next(), title: 'Circle'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: InkButton(
+                  label: 'Run club privat',
+                  icon: Icons.groups_outlined,
+                  expand: true,
+                  onPressed:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const SocialScreen(),
+                        ),
+                      ),
+                ),
+              ),
+              SectionHeader(
+                number: sec.next(),
+                title: 'Peta Offline & Wilayah',
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: InkWell(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => ref.read(integrationsProvider).mapPacks(),
-                    ),
-                  ),
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder:
+                              (_) => ref.read(integrationsProvider).mapPacks(),
+                        ),
+                      ),
                   child: InkBox(
                     child: Padding(
                       padding: const EdgeInsets.all(14),
@@ -158,21 +182,34 @@ class ProfileScreen extends ConsumerWidget {
                             height: 36,
                             color: FN.paper,
                             alignment: Alignment.center,
-                            child: Icon(Icons.map_outlined, size: 20, color: FN.ink),
+                            child: Icon(
+                              Icons.map_outlined,
+                              size: 20,
+                              color: FN.ink,
+                            ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(FN.caps('Kelola paket peta (.pmtiles)'), style: FN.heading(size: 13, color: FN.ink)),
+                                Text(
+                                  FN.caps('Kelola paket peta (.pmtiles)'),
+                                  style: FN.heading(size: 13, color: FN.ink),
+                                ),
                                 const SizedBox(height: 2),
-                                Text('Unduh atau impor peta vektor & elevasi DEM 3D',
-                                    style: FN.body(size: 11, color: FN.inkMuted)),
+                                Text(
+                                  'Unduh atau impor peta vektor & elevasi DEM 3D',
+                                  style: FN.body(size: 11, color: FN.inkMuted),
+                                ),
                               ],
                             ),
                           ),
-                          Icon(Icons.chevron_right, size: 20, color: FN.inkMuted),
+                          Icon(
+                            Icons.chevron_right,
+                            size: 20,
+                            color: FN.inkMuted,
+                          ),
                         ],
                       ),
                     ),

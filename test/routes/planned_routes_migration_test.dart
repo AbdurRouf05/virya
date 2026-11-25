@@ -4,7 +4,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:virya/core/database/app_database.dart';
 
-/// Migrasi skema 7 → 8: tabel rute rencana dibuat tanpa menyentuh data lama.
+/// Upgrade dari skema 7 tetap membuat tabel rute tanpa menyentuh data lama.
 void main() {
   late Directory dir;
   late File file;
@@ -18,7 +18,7 @@ void main() {
     if (dir.existsSync()) dir.deleteSync(recursive: true);
   });
 
-  test('database v7 naik ke v8 dengan tabel planned_routes', () async {
+  test('database v7 naik dengan tabel planned_routes', () async {
     final at = DateTime.utc(2026, 11, 16);
     var db = AppDatabase.forTesting(NativeDatabase(file));
     await db.focusDao.upsertLimit(
@@ -39,7 +39,6 @@ void main() {
         .map((r) => r.read<int>('user_version'))
         .getSingle();
     expect(version, db.schemaVersion);
-    expect(version, 8);
 
     final limits = await db.focusDao.getLimits();
     expect(limits.single.packageName, 'a');

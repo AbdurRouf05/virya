@@ -13,6 +13,7 @@ import 'package:virya/core/database/daos/gears_dao.dart';
 import 'package:virya/core/database/daos/gym_dao.dart';
 import 'package:virya/core/database/daos/planned_routes_dao.dart';
 import 'package:virya/core/database/daos/segments_dao.dart';
+import 'package:virya/core/database/daos/social_dao.dart';
 import 'package:virya/core/database/daos/tasks_dao.dart';
 import 'package:virya/core/database/daos/track_points_dao.dart';
 import 'package:virya/core/database/daos/waypoint_photos_dao.dart';
@@ -24,6 +25,7 @@ import 'package:virya/core/database/tables/gears_table.dart';
 import 'package:virya/core/database/tables/gym_tables.dart';
 import 'package:virya/core/database/tables/planned_routes_table.dart';
 import 'package:virya/core/database/tables/segments_table.dart';
+import 'package:virya/core/database/tables/social_tables.dart';
 import 'package:virya/core/database/tables/tasks_table.dart';
 import 'package:virya/core/database/tables/track_points_table.dart';
 import 'package:virya/core/database/tables/user_profile_table.dart';
@@ -51,6 +53,9 @@ part 'app_database.g.dart';
     BodyCheckins,
     BodyPhotos,
     PlannedRoutes,
+    SocialIdentities,
+    SocialCircles,
+    CircleMembers,
   ],
   daos: [
     ActivitiesDao,
@@ -63,6 +68,7 @@ part 'app_database.g.dart';
     BodyDao,
     SegmentsDao,
     PlannedRoutesDao,
+    SocialDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -79,7 +85,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -101,6 +107,7 @@ class AppDatabase extends _$AppDatabase {
           );
           await _createGymIndexes();
           await _createTaskIndexes();
+          await _createSocialIndexes();
           await seedExerciseLibrary(this);
         },
         onUpgrade: (Migrator m, int from, int to) async {
@@ -146,6 +153,12 @@ class AppDatabase extends _$AppDatabase {
           if (from < 8) {
             await m.createTable(plannedRoutes);
           }
+          if (from < 9) {
+            await m.createTable(socialIdentities);
+            await m.createTable(socialCircles);
+            await m.createTable(circleMembers);
+            await _createSocialIndexes();
+          }
         },
         beforeOpen: (details) async {
           // Aktifkan Foreign Keys di SQLite
@@ -176,6 +189,17 @@ class AppDatabase extends _$AppDatabase {
   Future<void> _createTaskIndexes() => customStatement(
     'CREATE INDEX IF NOT EXISTS idx_tasks_done_at ON tasks (done_at);',
   );
+
+  Future<void> _createSocialIndexes() async {
+    await customStatement(
+      'CREATE UNIQUE INDEX IF NOT EXISTS idx_social_one_local_identity '
+      'ON social_identities (is_local) WHERE is_local = 1;',
+    );
+    await customStatement(
+      'CREATE INDEX IF NOT EXISTS idx_social_circles_owner '
+      'ON social_circles (owner_identity_id, updated_at DESC);',
+    );
+  }
 }
 
 /// Fungsi pembuka koneksi file database lokal di storage internal ponsel
@@ -229,6 +253,10 @@ final plannedRoutesDaoProvider = Provider<PlannedRoutesDao>((ref) {
 
 final gearsDaoProvider = Provider<GearsDao>((ref) {
   return ref.watch(databaseProvider).gearsDao;
+});
+
+final socialDaoProvider = Provider<SocialDao>((ref) {
+  return ref.watch(databaseProvider).socialDao;
 });
 /// Typed helpers over the AppSettings key/value table.
 extension AppSettingsX on AppDatabase {

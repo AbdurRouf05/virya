@@ -18,6 +18,10 @@ Newest entries on top. Baru bergabung? Mulai dari [PANDUAN.md](PANDUAN.md). Atur
 
 ## Log
 
+### 2026-11-25 — Fondasi circle privat lokal
+- Identitas perangkat dan circle privat tersimpan lokal. Undangan copy/paste sudah ditandatangani pemilik, terikat pada satu penerima, dan punya masa berlaku.
+- Batasan jujur: isi undangan belum terenkripsi; QR kamera, Bluetooth/Wi-Fi Direct, transfer antarperangkat, sinkronisasi, event, dan feed belum dibuat.
+
 ### 2026-11-22 — Kunci rilis keluar dari repo ✅
 - `virya-release.jks` (password `android`, tersimpan di repo publik) dihapus. Kunci baru RSA-4096, alias `virya`, SHA-256 `3a:e1:dc:76:…:ca:0b:22`.
 - `android/app/build.gradle.kts` membaca kunci dari `android/key.properties` (lokal, di-gitignore) atau env `VIRYA_KEYSTORE_PATH/_PASSWORD`, `VIRYA_KEY_ALIAS`, `VIRYA_KEY_PASSWORD`. Tanpa keduanya, build release memakai debug key (untuk `flutter run --release` di mesin tim).

@@ -10449,6 +10449,1076 @@ class PlannedRoutesCompanion extends UpdateCompanion<PlannedRoute> {
   }
 }
 
+class $SocialIdentitiesTable extends SocialIdentities
+    with TableInfo<$SocialIdentitiesTable, SocialIdentity> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SocialIdentitiesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _displayNameMeta = const VerificationMeta(
+    'displayName',
+  );
+  @override
+  late final GeneratedColumn<String> displayName = GeneratedColumn<String>(
+    'display_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _publicKeyMeta = const VerificationMeta(
+    'publicKey',
+  );
+  @override
+  late final GeneratedColumn<String> publicKey = GeneratedColumn<String>(
+    'public_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isLocalMeta = const VerificationMeta(
+    'isLocal',
+  );
+  @override
+  late final GeneratedColumn<bool> isLocal = GeneratedColumn<bool>(
+    'is_local',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_local" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    displayName,
+    publicKey,
+    isLocal,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'social_identities';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SocialIdentity> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('display_name')) {
+      context.handle(
+        _displayNameMeta,
+        displayName.isAcceptableOrUnknown(
+          data['display_name']!,
+          _displayNameMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_displayNameMeta);
+    }
+    if (data.containsKey('public_key')) {
+      context.handle(
+        _publicKeyMeta,
+        publicKey.isAcceptableOrUnknown(data['public_key']!, _publicKeyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_publicKeyMeta);
+    }
+    if (data.containsKey('is_local')) {
+      context.handle(
+        _isLocalMeta,
+        isLocal.isAcceptableOrUnknown(data['is_local']!, _isLocalMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SocialIdentity map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SocialIdentity(
+      id:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}id'],
+          )!,
+      displayName:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}display_name'],
+          )!,
+      publicKey:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}public_key'],
+          )!,
+      isLocal:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.bool,
+            data['${effectivePrefix}is_local'],
+          )!,
+      createdAt:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.dateTime,
+            data['${effectivePrefix}created_at'],
+          )!,
+    );
+  }
+
+  @override
+  $SocialIdentitiesTable createAlias(String alias) {
+    return $SocialIdentitiesTable(attachedDatabase, alias);
+  }
+}
+
+class SocialIdentity extends DataClass implements Insertable<SocialIdentity> {
+  final String id;
+  final String displayName;
+  final String publicKey;
+  final bool isLocal;
+  final DateTime createdAt;
+  const SocialIdentity({
+    required this.id,
+    required this.displayName,
+    required this.publicKey,
+    required this.isLocal,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['display_name'] = Variable<String>(displayName);
+    map['public_key'] = Variable<String>(publicKey);
+    map['is_local'] = Variable<bool>(isLocal);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  SocialIdentitiesCompanion toCompanion(bool nullToAbsent) {
+    return SocialIdentitiesCompanion(
+      id: Value(id),
+      displayName: Value(displayName),
+      publicKey: Value(publicKey),
+      isLocal: Value(isLocal),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory SocialIdentity.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SocialIdentity(
+      id: serializer.fromJson<String>(json['id']),
+      displayName: serializer.fromJson<String>(json['displayName']),
+      publicKey: serializer.fromJson<String>(json['publicKey']),
+      isLocal: serializer.fromJson<bool>(json['isLocal']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'displayName': serializer.toJson<String>(displayName),
+      'publicKey': serializer.toJson<String>(publicKey),
+      'isLocal': serializer.toJson<bool>(isLocal),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  SocialIdentity copyWith({
+    String? id,
+    String? displayName,
+    String? publicKey,
+    bool? isLocal,
+    DateTime? createdAt,
+  }) => SocialIdentity(
+    id: id ?? this.id,
+    displayName: displayName ?? this.displayName,
+    publicKey: publicKey ?? this.publicKey,
+    isLocal: isLocal ?? this.isLocal,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  SocialIdentity copyWithCompanion(SocialIdentitiesCompanion data) {
+    return SocialIdentity(
+      id: data.id.present ? data.id.value : this.id,
+      displayName:
+          data.displayName.present ? data.displayName.value : this.displayName,
+      publicKey: data.publicKey.present ? data.publicKey.value : this.publicKey,
+      isLocal: data.isLocal.present ? data.isLocal.value : this.isLocal,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SocialIdentity(')
+          ..write('id: $id, ')
+          ..write('displayName: $displayName, ')
+          ..write('publicKey: $publicKey, ')
+          ..write('isLocal: $isLocal, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, displayName, publicKey, isLocal, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SocialIdentity &&
+          other.id == this.id &&
+          other.displayName == this.displayName &&
+          other.publicKey == this.publicKey &&
+          other.isLocal == this.isLocal &&
+          other.createdAt == this.createdAt);
+}
+
+class SocialIdentitiesCompanion extends UpdateCompanion<SocialIdentity> {
+  final Value<String> id;
+  final Value<String> displayName;
+  final Value<String> publicKey;
+  final Value<bool> isLocal;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const SocialIdentitiesCompanion({
+    this.id = const Value.absent(),
+    this.displayName = const Value.absent(),
+    this.publicKey = const Value.absent(),
+    this.isLocal = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SocialIdentitiesCompanion.insert({
+    required String id,
+    required String displayName,
+    required String publicKey,
+    this.isLocal = const Value.absent(),
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       displayName = Value(displayName),
+       publicKey = Value(publicKey),
+       createdAt = Value(createdAt);
+  static Insertable<SocialIdentity> custom({
+    Expression<String>? id,
+    Expression<String>? displayName,
+    Expression<String>? publicKey,
+    Expression<bool>? isLocal,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (displayName != null) 'display_name': displayName,
+      if (publicKey != null) 'public_key': publicKey,
+      if (isLocal != null) 'is_local': isLocal,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SocialIdentitiesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? displayName,
+    Value<String>? publicKey,
+    Value<bool>? isLocal,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return SocialIdentitiesCompanion(
+      id: id ?? this.id,
+      displayName: displayName ?? this.displayName,
+      publicKey: publicKey ?? this.publicKey,
+      isLocal: isLocal ?? this.isLocal,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (displayName.present) {
+      map['display_name'] = Variable<String>(displayName.value);
+    }
+    if (publicKey.present) {
+      map['public_key'] = Variable<String>(publicKey.value);
+    }
+    if (isLocal.present) {
+      map['is_local'] = Variable<bool>(isLocal.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SocialIdentitiesCompanion(')
+          ..write('id: $id, ')
+          ..write('displayName: $displayName, ')
+          ..write('publicKey: $publicKey, ')
+          ..write('isLocal: $isLocal, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SocialCirclesTable extends SocialCircles
+    with TableInfo<$SocialCirclesTable, SocialCircle> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SocialCirclesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ownerIdentityIdMeta = const VerificationMeta(
+    'ownerIdentityId',
+  );
+  @override
+  late final GeneratedColumn<String> ownerIdentityId = GeneratedColumn<String>(
+    'owner_identity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES social_identities (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    ownerIdentityId,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'social_circles';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SocialCircle> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('owner_identity_id')) {
+      context.handle(
+        _ownerIdentityIdMeta,
+        ownerIdentityId.isAcceptableOrUnknown(
+          data['owner_identity_id']!,
+          _ownerIdentityIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_ownerIdentityIdMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SocialCircle map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SocialCircle(
+      id:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}id'],
+          )!,
+      name:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}name'],
+          )!,
+      ownerIdentityId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}owner_identity_id'],
+          )!,
+      createdAt:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.dateTime,
+            data['${effectivePrefix}created_at'],
+          )!,
+      updatedAt:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.dateTime,
+            data['${effectivePrefix}updated_at'],
+          )!,
+    );
+  }
+
+  @override
+  $SocialCirclesTable createAlias(String alias) {
+    return $SocialCirclesTable(attachedDatabase, alias);
+  }
+}
+
+class SocialCircle extends DataClass implements Insertable<SocialCircle> {
+  final String id;
+  final String name;
+  final String ownerIdentityId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  const SocialCircle({
+    required this.id,
+    required this.name,
+    required this.ownerIdentityId,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['name'] = Variable<String>(name);
+    map['owner_identity_id'] = Variable<String>(ownerIdentityId);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  SocialCirclesCompanion toCompanion(bool nullToAbsent) {
+    return SocialCirclesCompanion(
+      id: Value(id),
+      name: Value(name),
+      ownerIdentityId: Value(ownerIdentityId),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory SocialCircle.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SocialCircle(
+      id: serializer.fromJson<String>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      ownerIdentityId: serializer.fromJson<String>(json['ownerIdentityId']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'name': serializer.toJson<String>(name),
+      'ownerIdentityId': serializer.toJson<String>(ownerIdentityId),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  SocialCircle copyWith({
+    String? id,
+    String? name,
+    String? ownerIdentityId,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => SocialCircle(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    ownerIdentityId: ownerIdentityId ?? this.ownerIdentityId,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  SocialCircle copyWithCompanion(SocialCirclesCompanion data) {
+    return SocialCircle(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      ownerIdentityId:
+          data.ownerIdentityId.present
+              ? data.ownerIdentityId.value
+              : this.ownerIdentityId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SocialCircle(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('ownerIdentityId: $ownerIdentityId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, name, ownerIdentityId, createdAt, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SocialCircle &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.ownerIdentityId == this.ownerIdentityId &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class SocialCirclesCompanion extends UpdateCompanion<SocialCircle> {
+  final Value<String> id;
+  final Value<String> name;
+  final Value<String> ownerIdentityId;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const SocialCirclesCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.ownerIdentityId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SocialCirclesCompanion.insert({
+    required String id,
+    required String name,
+    required String ownerIdentityId,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       name = Value(name),
+       ownerIdentityId = Value(ownerIdentityId),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<SocialCircle> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<String>? ownerIdentityId,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (ownerIdentityId != null) 'owner_identity_id': ownerIdentityId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SocialCirclesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? name,
+    Value<String>? ownerIdentityId,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return SocialCirclesCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      ownerIdentityId: ownerIdentityId ?? this.ownerIdentityId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (ownerIdentityId.present) {
+      map['owner_identity_id'] = Variable<String>(ownerIdentityId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SocialCirclesCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('ownerIdentityId: $ownerIdentityId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CircleMembersTable extends CircleMembers
+    with TableInfo<$CircleMembersTable, CircleMember> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CircleMembersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _circleIdMeta = const VerificationMeta(
+    'circleId',
+  );
+  @override
+  late final GeneratedColumn<String> circleId = GeneratedColumn<String>(
+    'circle_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES social_circles (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _identityIdMeta = const VerificationMeta(
+    'identityId',
+  );
+  @override
+  late final GeneratedColumn<String> identityId = GeneratedColumn<String>(
+    'identity_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES social_identities (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _roleMeta = const VerificationMeta('role');
+  @override
+  late final GeneratedColumn<String> role = GeneratedColumn<String>(
+    'role',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('member'),
+  );
+  static const VerificationMeta _joinedAtMeta = const VerificationMeta(
+    'joinedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> joinedAt = GeneratedColumn<DateTime>(
+    'joined_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [circleId, identityId, role, joinedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'circle_members';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CircleMember> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('circle_id')) {
+      context.handle(
+        _circleIdMeta,
+        circleId.isAcceptableOrUnknown(data['circle_id']!, _circleIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_circleIdMeta);
+    }
+    if (data.containsKey('identity_id')) {
+      context.handle(
+        _identityIdMeta,
+        identityId.isAcceptableOrUnknown(data['identity_id']!, _identityIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_identityIdMeta);
+    }
+    if (data.containsKey('role')) {
+      context.handle(
+        _roleMeta,
+        role.isAcceptableOrUnknown(data['role']!, _roleMeta),
+      );
+    }
+    if (data.containsKey('joined_at')) {
+      context.handle(
+        _joinedAtMeta,
+        joinedAt.isAcceptableOrUnknown(data['joined_at']!, _joinedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_joinedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {circleId, identityId};
+  @override
+  CircleMember map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CircleMember(
+      circleId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}circle_id'],
+          )!,
+      identityId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}identity_id'],
+          )!,
+      role:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}role'],
+          )!,
+      joinedAt:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.dateTime,
+            data['${effectivePrefix}joined_at'],
+          )!,
+    );
+  }
+
+  @override
+  $CircleMembersTable createAlias(String alias) {
+    return $CircleMembersTable(attachedDatabase, alias);
+  }
+}
+
+class CircleMember extends DataClass implements Insertable<CircleMember> {
+  final String circleId;
+  final String identityId;
+  final String role;
+  final DateTime joinedAt;
+  const CircleMember({
+    required this.circleId,
+    required this.identityId,
+    required this.role,
+    required this.joinedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['circle_id'] = Variable<String>(circleId);
+    map['identity_id'] = Variable<String>(identityId);
+    map['role'] = Variable<String>(role);
+    map['joined_at'] = Variable<DateTime>(joinedAt);
+    return map;
+  }
+
+  CircleMembersCompanion toCompanion(bool nullToAbsent) {
+    return CircleMembersCompanion(
+      circleId: Value(circleId),
+      identityId: Value(identityId),
+      role: Value(role),
+      joinedAt: Value(joinedAt),
+    );
+  }
+
+  factory CircleMember.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CircleMember(
+      circleId: serializer.fromJson<String>(json['circleId']),
+      identityId: serializer.fromJson<String>(json['identityId']),
+      role: serializer.fromJson<String>(json['role']),
+      joinedAt: serializer.fromJson<DateTime>(json['joinedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'circleId': serializer.toJson<String>(circleId),
+      'identityId': serializer.toJson<String>(identityId),
+      'role': serializer.toJson<String>(role),
+      'joinedAt': serializer.toJson<DateTime>(joinedAt),
+    };
+  }
+
+  CircleMember copyWith({
+    String? circleId,
+    String? identityId,
+    String? role,
+    DateTime? joinedAt,
+  }) => CircleMember(
+    circleId: circleId ?? this.circleId,
+    identityId: identityId ?? this.identityId,
+    role: role ?? this.role,
+    joinedAt: joinedAt ?? this.joinedAt,
+  );
+  CircleMember copyWithCompanion(CircleMembersCompanion data) {
+    return CircleMember(
+      circleId: data.circleId.present ? data.circleId.value : this.circleId,
+      identityId:
+          data.identityId.present ? data.identityId.value : this.identityId,
+      role: data.role.present ? data.role.value : this.role,
+      joinedAt: data.joinedAt.present ? data.joinedAt.value : this.joinedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CircleMember(')
+          ..write('circleId: $circleId, ')
+          ..write('identityId: $identityId, ')
+          ..write('role: $role, ')
+          ..write('joinedAt: $joinedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(circleId, identityId, role, joinedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CircleMember &&
+          other.circleId == this.circleId &&
+          other.identityId == this.identityId &&
+          other.role == this.role &&
+          other.joinedAt == this.joinedAt);
+}
+
+class CircleMembersCompanion extends UpdateCompanion<CircleMember> {
+  final Value<String> circleId;
+  final Value<String> identityId;
+  final Value<String> role;
+  final Value<DateTime> joinedAt;
+  final Value<int> rowid;
+  const CircleMembersCompanion({
+    this.circleId = const Value.absent(),
+    this.identityId = const Value.absent(),
+    this.role = const Value.absent(),
+    this.joinedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CircleMembersCompanion.insert({
+    required String circleId,
+    required String identityId,
+    this.role = const Value.absent(),
+    required DateTime joinedAt,
+    this.rowid = const Value.absent(),
+  }) : circleId = Value(circleId),
+       identityId = Value(identityId),
+       joinedAt = Value(joinedAt);
+  static Insertable<CircleMember> custom({
+    Expression<String>? circleId,
+    Expression<String>? identityId,
+    Expression<String>? role,
+    Expression<DateTime>? joinedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (circleId != null) 'circle_id': circleId,
+      if (identityId != null) 'identity_id': identityId,
+      if (role != null) 'role': role,
+      if (joinedAt != null) 'joined_at': joinedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CircleMembersCompanion copyWith({
+    Value<String>? circleId,
+    Value<String>? identityId,
+    Value<String>? role,
+    Value<DateTime>? joinedAt,
+    Value<int>? rowid,
+  }) {
+    return CircleMembersCompanion(
+      circleId: circleId ?? this.circleId,
+      identityId: identityId ?? this.identityId,
+      role: role ?? this.role,
+      joinedAt: joinedAt ?? this.joinedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (circleId.present) {
+      map['circle_id'] = Variable<String>(circleId.value);
+    }
+    if (identityId.present) {
+      map['identity_id'] = Variable<String>(identityId.value);
+    }
+    if (role.present) {
+      map['role'] = Variable<String>(role.value);
+    }
+    if (joinedAt.present) {
+      map['joined_at'] = Variable<DateTime>(joinedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CircleMembersCompanion(')
+          ..write('circleId: $circleId, ')
+          ..write('identityId: $identityId, ')
+          ..write('role: $role, ')
+          ..write('joinedAt: $joinedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -10473,6 +11543,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $BodyCheckinsTable bodyCheckins = $BodyCheckinsTable(this);
   late final $BodyPhotosTable bodyPhotos = $BodyPhotosTable(this);
   late final $PlannedRoutesTable plannedRoutes = $PlannedRoutesTable(this);
+  late final $SocialIdentitiesTable socialIdentities = $SocialIdentitiesTable(
+    this,
+  );
+  late final $SocialCirclesTable socialCircles = $SocialCirclesTable(this);
+  late final $CircleMembersTable circleMembers = $CircleMembersTable(this);
   late final ActivitiesDao activitiesDao = ActivitiesDao(this as AppDatabase);
   late final TrackPointsDao trackPointsDao = TrackPointsDao(
     this as AppDatabase,
@@ -10489,6 +11564,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final PlannedRoutesDao plannedRoutesDao = PlannedRoutesDao(
     this as AppDatabase,
   );
+  late final SocialDao socialDao = SocialDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -10512,6 +11588,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     bodyCheckins,
     bodyPhotos,
     plannedRoutes,
+    socialIdentities,
+    socialCircles,
+    circleMembers,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -10556,6 +11635,27 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('body_photos', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'social_identities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('social_circles', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'social_circles',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('circle_members', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'social_identities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('circle_members', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -17458,6 +18558,1256 @@ typedef $$PlannedRoutesTableProcessedTableManager =
       PlannedRoute,
       PrefetchHooks Function()
     >;
+typedef $$SocialIdentitiesTableCreateCompanionBuilder =
+    SocialIdentitiesCompanion Function({
+      required String id,
+      required String displayName,
+      required String publicKey,
+      Value<bool> isLocal,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$SocialIdentitiesTableUpdateCompanionBuilder =
+    SocialIdentitiesCompanion Function({
+      Value<String> id,
+      Value<String> displayName,
+      Value<String> publicKey,
+      Value<bool> isLocal,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$SocialIdentitiesTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $SocialIdentitiesTable, SocialIdentity> {
+  $$SocialIdentitiesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static MultiTypedResultKey<$SocialCirclesTable, List<SocialCircle>>
+  _socialCirclesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.socialCircles,
+    aliasName: $_aliasNameGenerator(
+      db.socialIdentities.id,
+      db.socialCircles.ownerIdentityId,
+    ),
+  );
+
+  $$SocialCirclesTableProcessedTableManager get socialCirclesRefs {
+    final manager = $$SocialCirclesTableTableManager(
+      $_db,
+      $_db.socialCircles,
+    ).filter(
+      (f) => f.ownerIdentityId.id.sqlEquals($_itemColumn<String>('id')!),
+    );
+
+    final cache = $_typedResult.readTableOrNull(_socialCirclesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$CircleMembersTable, List<CircleMember>>
+  _circleMembersRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.circleMembers,
+    aliasName: $_aliasNameGenerator(
+      db.socialIdentities.id,
+      db.circleMembers.identityId,
+    ),
+  );
+
+  $$CircleMembersTableProcessedTableManager get circleMembersRefs {
+    final manager = $$CircleMembersTableTableManager(
+      $_db,
+      $_db.circleMembers,
+    ).filter((f) => f.identityId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_circleMembersRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$SocialIdentitiesTableFilterComposer
+    extends Composer<_$AppDatabase, $SocialIdentitiesTable> {
+  $$SocialIdentitiesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get publicKey => $composableBuilder(
+    column: $table.publicKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isLocal => $composableBuilder(
+    column: $table.isLocal,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> socialCirclesRefs(
+    Expression<bool> Function($$SocialCirclesTableFilterComposer f) f,
+  ) {
+    final $$SocialCirclesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.socialCircles,
+      getReferencedColumn: (t) => t.ownerIdentityId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SocialCirclesTableFilterComposer(
+            $db: $db,
+            $table: $db.socialCircles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> circleMembersRefs(
+    Expression<bool> Function($$CircleMembersTableFilterComposer f) f,
+  ) {
+    final $$CircleMembersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.circleMembers,
+      getReferencedColumn: (t) => t.identityId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CircleMembersTableFilterComposer(
+            $db: $db,
+            $table: $db.circleMembers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$SocialIdentitiesTableOrderingComposer
+    extends Composer<_$AppDatabase, $SocialIdentitiesTable> {
+  $$SocialIdentitiesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get publicKey => $composableBuilder(
+    column: $table.publicKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isLocal => $composableBuilder(
+    column: $table.isLocal,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$SocialIdentitiesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SocialIdentitiesTable> {
+  $$SocialIdentitiesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get publicKey =>
+      $composableBuilder(column: $table.publicKey, builder: (column) => column);
+
+  GeneratedColumn<bool> get isLocal =>
+      $composableBuilder(column: $table.isLocal, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  Expression<T> socialCirclesRefs<T extends Object>(
+    Expression<T> Function($$SocialCirclesTableAnnotationComposer a) f,
+  ) {
+    final $$SocialCirclesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.socialCircles,
+      getReferencedColumn: (t) => t.ownerIdentityId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SocialCirclesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.socialCircles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> circleMembersRefs<T extends Object>(
+    Expression<T> Function($$CircleMembersTableAnnotationComposer a) f,
+  ) {
+    final $$CircleMembersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.circleMembers,
+      getReferencedColumn: (t) => t.identityId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CircleMembersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.circleMembers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$SocialIdentitiesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SocialIdentitiesTable,
+          SocialIdentity,
+          $$SocialIdentitiesTableFilterComposer,
+          $$SocialIdentitiesTableOrderingComposer,
+          $$SocialIdentitiesTableAnnotationComposer,
+          $$SocialIdentitiesTableCreateCompanionBuilder,
+          $$SocialIdentitiesTableUpdateCompanionBuilder,
+          (SocialIdentity, $$SocialIdentitiesTableReferences),
+          SocialIdentity,
+          PrefetchHooks Function({
+            bool socialCirclesRefs,
+            bool circleMembersRefs,
+          })
+        > {
+  $$SocialIdentitiesTableTableManager(
+    _$AppDatabase db,
+    $SocialIdentitiesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () =>
+                  $$SocialIdentitiesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$SocialIdentitiesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer:
+              () => $$SocialIdentitiesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> displayName = const Value.absent(),
+                Value<String> publicKey = const Value.absent(),
+                Value<bool> isLocal = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SocialIdentitiesCompanion(
+                id: id,
+                displayName: displayName,
+                publicKey: publicKey,
+                isLocal: isLocal,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String displayName,
+                required String publicKey,
+                Value<bool> isLocal = const Value.absent(),
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => SocialIdentitiesCompanion.insert(
+                id: id,
+                displayName: displayName,
+                publicKey: publicKey,
+                isLocal: isLocal,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$SocialIdentitiesTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({
+            socialCirclesRefs = false,
+            circleMembersRefs = false,
+          }) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (socialCirclesRefs) db.socialCircles,
+                if (circleMembersRefs) db.circleMembers,
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (socialCirclesRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$SocialIdentitiesTableReferences
+                          ._socialCirclesRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$SocialIdentitiesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).socialCirclesRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.ownerIdentityId == item.id,
+                          ),
+                      typedResults: items,
+                    ),
+                  if (circleMembersRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$SocialIdentitiesTableReferences
+                          ._circleMembersRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$SocialIdentitiesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).circleMembersRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.identityId == item.id,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$SocialIdentitiesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SocialIdentitiesTable,
+      SocialIdentity,
+      $$SocialIdentitiesTableFilterComposer,
+      $$SocialIdentitiesTableOrderingComposer,
+      $$SocialIdentitiesTableAnnotationComposer,
+      $$SocialIdentitiesTableCreateCompanionBuilder,
+      $$SocialIdentitiesTableUpdateCompanionBuilder,
+      (SocialIdentity, $$SocialIdentitiesTableReferences),
+      SocialIdentity,
+      PrefetchHooks Function({bool socialCirclesRefs, bool circleMembersRefs})
+    >;
+typedef $$SocialCirclesTableCreateCompanionBuilder =
+    SocialCirclesCompanion Function({
+      required String id,
+      required String name,
+      required String ownerIdentityId,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$SocialCirclesTableUpdateCompanionBuilder =
+    SocialCirclesCompanion Function({
+      Value<String> id,
+      Value<String> name,
+      Value<String> ownerIdentityId,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+final class $$SocialCirclesTableReferences
+    extends BaseReferences<_$AppDatabase, $SocialCirclesTable, SocialCircle> {
+  $$SocialCirclesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $SocialIdentitiesTable _ownerIdentityIdTable(_$AppDatabase db) =>
+      db.socialIdentities.createAlias(
+        $_aliasNameGenerator(
+          db.socialCircles.ownerIdentityId,
+          db.socialIdentities.id,
+        ),
+      );
+
+  $$SocialIdentitiesTableProcessedTableManager get ownerIdentityId {
+    final $_column = $_itemColumn<String>('owner_identity_id')!;
+
+    final manager = $$SocialIdentitiesTableTableManager(
+      $_db,
+      $_db.socialIdentities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_ownerIdentityIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$CircleMembersTable, List<CircleMember>>
+  _circleMembersRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.circleMembers,
+    aliasName: $_aliasNameGenerator(
+      db.socialCircles.id,
+      db.circleMembers.circleId,
+    ),
+  );
+
+  $$CircleMembersTableProcessedTableManager get circleMembersRefs {
+    final manager = $$CircleMembersTableTableManager(
+      $_db,
+      $_db.circleMembers,
+    ).filter((f) => f.circleId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_circleMembersRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$SocialCirclesTableFilterComposer
+    extends Composer<_$AppDatabase, $SocialCirclesTable> {
+  $$SocialCirclesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$SocialIdentitiesTableFilterComposer get ownerIdentityId {
+    final $$SocialIdentitiesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.ownerIdentityId,
+      referencedTable: $db.socialIdentities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SocialIdentitiesTableFilterComposer(
+            $db: $db,
+            $table: $db.socialIdentities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> circleMembersRefs(
+    Expression<bool> Function($$CircleMembersTableFilterComposer f) f,
+  ) {
+    final $$CircleMembersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.circleMembers,
+      getReferencedColumn: (t) => t.circleId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CircleMembersTableFilterComposer(
+            $db: $db,
+            $table: $db.circleMembers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$SocialCirclesTableOrderingComposer
+    extends Composer<_$AppDatabase, $SocialCirclesTable> {
+  $$SocialCirclesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$SocialIdentitiesTableOrderingComposer get ownerIdentityId {
+    final $$SocialIdentitiesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.ownerIdentityId,
+      referencedTable: $db.socialIdentities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SocialIdentitiesTableOrderingComposer(
+            $db: $db,
+            $table: $db.socialIdentities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$SocialCirclesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SocialCirclesTable> {
+  $$SocialCirclesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$SocialIdentitiesTableAnnotationComposer get ownerIdentityId {
+    final $$SocialIdentitiesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.ownerIdentityId,
+      referencedTable: $db.socialIdentities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SocialIdentitiesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.socialIdentities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> circleMembersRefs<T extends Object>(
+    Expression<T> Function($$CircleMembersTableAnnotationComposer a) f,
+  ) {
+    final $$CircleMembersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.circleMembers,
+      getReferencedColumn: (t) => t.circleId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CircleMembersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.circleMembers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$SocialCirclesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $SocialCirclesTable,
+          SocialCircle,
+          $$SocialCirclesTableFilterComposer,
+          $$SocialCirclesTableOrderingComposer,
+          $$SocialCirclesTableAnnotationComposer,
+          $$SocialCirclesTableCreateCompanionBuilder,
+          $$SocialCirclesTableUpdateCompanionBuilder,
+          (SocialCircle, $$SocialCirclesTableReferences),
+          SocialCircle,
+          PrefetchHooks Function({bool ownerIdentityId, bool circleMembersRefs})
+        > {
+  $$SocialCirclesTableTableManager(_$AppDatabase db, $SocialCirclesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$SocialCirclesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () =>
+                  $$SocialCirclesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$SocialCirclesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> ownerIdentityId = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SocialCirclesCompanion(
+                id: id,
+                name: name,
+                ownerIdentityId: ownerIdentityId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String name,
+                required String ownerIdentityId,
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => SocialCirclesCompanion.insert(
+                id: id,
+                name: name,
+                ownerIdentityId: ownerIdentityId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$SocialCirclesTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({
+            ownerIdentityId = false,
+            circleMembersRefs = false,
+          }) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (circleMembersRefs) db.circleMembers,
+              ],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (ownerIdentityId) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.ownerIdentityId,
+                            referencedTable: $$SocialCirclesTableReferences
+                                ._ownerIdentityIdTable(db),
+                            referencedColumn:
+                                $$SocialCirclesTableReferences
+                                    ._ownerIdentityIdTable(db)
+                                    .id,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (circleMembersRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$SocialCirclesTableReferences
+                          ._circleMembersRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$SocialCirclesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).circleMembersRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.circleId == item.id,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$SocialCirclesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $SocialCirclesTable,
+      SocialCircle,
+      $$SocialCirclesTableFilterComposer,
+      $$SocialCirclesTableOrderingComposer,
+      $$SocialCirclesTableAnnotationComposer,
+      $$SocialCirclesTableCreateCompanionBuilder,
+      $$SocialCirclesTableUpdateCompanionBuilder,
+      (SocialCircle, $$SocialCirclesTableReferences),
+      SocialCircle,
+      PrefetchHooks Function({bool ownerIdentityId, bool circleMembersRefs})
+    >;
+typedef $$CircleMembersTableCreateCompanionBuilder =
+    CircleMembersCompanion Function({
+      required String circleId,
+      required String identityId,
+      Value<String> role,
+      required DateTime joinedAt,
+      Value<int> rowid,
+    });
+typedef $$CircleMembersTableUpdateCompanionBuilder =
+    CircleMembersCompanion Function({
+      Value<String> circleId,
+      Value<String> identityId,
+      Value<String> role,
+      Value<DateTime> joinedAt,
+      Value<int> rowid,
+    });
+
+final class $$CircleMembersTableReferences
+    extends BaseReferences<_$AppDatabase, $CircleMembersTable, CircleMember> {
+  $$CircleMembersTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $SocialCirclesTable _circleIdTable(_$AppDatabase db) =>
+      db.socialCircles.createAlias(
+        $_aliasNameGenerator(db.circleMembers.circleId, db.socialCircles.id),
+      );
+
+  $$SocialCirclesTableProcessedTableManager get circleId {
+    final $_column = $_itemColumn<String>('circle_id')!;
+
+    final manager = $$SocialCirclesTableTableManager(
+      $_db,
+      $_db.socialCircles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_circleIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $SocialIdentitiesTable _identityIdTable(_$AppDatabase db) =>
+      db.socialIdentities.createAlias(
+        $_aliasNameGenerator(
+          db.circleMembers.identityId,
+          db.socialIdentities.id,
+        ),
+      );
+
+  $$SocialIdentitiesTableProcessedTableManager get identityId {
+    final $_column = $_itemColumn<String>('identity_id')!;
+
+    final manager = $$SocialIdentitiesTableTableManager(
+      $_db,
+      $_db.socialIdentities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_identityIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$CircleMembersTableFilterComposer
+    extends Composer<_$AppDatabase, $CircleMembersTable> {
+  $$CircleMembersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get role => $composableBuilder(
+    column: $table.role,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get joinedAt => $composableBuilder(
+    column: $table.joinedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$SocialCirclesTableFilterComposer get circleId {
+    final $$SocialCirclesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.circleId,
+      referencedTable: $db.socialCircles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SocialCirclesTableFilterComposer(
+            $db: $db,
+            $table: $db.socialCircles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$SocialIdentitiesTableFilterComposer get identityId {
+    final $$SocialIdentitiesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.identityId,
+      referencedTable: $db.socialIdentities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SocialIdentitiesTableFilterComposer(
+            $db: $db,
+            $table: $db.socialIdentities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CircleMembersTableOrderingComposer
+    extends Composer<_$AppDatabase, $CircleMembersTable> {
+  $$CircleMembersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get role => $composableBuilder(
+    column: $table.role,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get joinedAt => $composableBuilder(
+    column: $table.joinedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$SocialCirclesTableOrderingComposer get circleId {
+    final $$SocialCirclesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.circleId,
+      referencedTable: $db.socialCircles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SocialCirclesTableOrderingComposer(
+            $db: $db,
+            $table: $db.socialCircles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$SocialIdentitiesTableOrderingComposer get identityId {
+    final $$SocialIdentitiesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.identityId,
+      referencedTable: $db.socialIdentities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SocialIdentitiesTableOrderingComposer(
+            $db: $db,
+            $table: $db.socialIdentities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CircleMembersTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CircleMembersTable> {
+  $$CircleMembersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get role =>
+      $composableBuilder(column: $table.role, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get joinedAt =>
+      $composableBuilder(column: $table.joinedAt, builder: (column) => column);
+
+  $$SocialCirclesTableAnnotationComposer get circleId {
+    final $$SocialCirclesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.circleId,
+      referencedTable: $db.socialCircles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SocialCirclesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.socialCircles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$SocialIdentitiesTableAnnotationComposer get identityId {
+    final $$SocialIdentitiesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.identityId,
+      referencedTable: $db.socialIdentities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SocialIdentitiesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.socialIdentities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$CircleMembersTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CircleMembersTable,
+          CircleMember,
+          $$CircleMembersTableFilterComposer,
+          $$CircleMembersTableOrderingComposer,
+          $$CircleMembersTableAnnotationComposer,
+          $$CircleMembersTableCreateCompanionBuilder,
+          $$CircleMembersTableUpdateCompanionBuilder,
+          (CircleMember, $$CircleMembersTableReferences),
+          CircleMember,
+          PrefetchHooks Function({bool circleId, bool identityId})
+        > {
+  $$CircleMembersTableTableManager(_$AppDatabase db, $CircleMembersTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$CircleMembersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () =>
+                  $$CircleMembersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$CircleMembersTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> circleId = const Value.absent(),
+                Value<String> identityId = const Value.absent(),
+                Value<String> role = const Value.absent(),
+                Value<DateTime> joinedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CircleMembersCompanion(
+                circleId: circleId,
+                identityId: identityId,
+                role: role,
+                joinedAt: joinedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String circleId,
+                required String identityId,
+                Value<String> role = const Value.absent(),
+                required DateTime joinedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => CircleMembersCompanion.insert(
+                circleId: circleId,
+                identityId: identityId,
+                role: role,
+                joinedAt: joinedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$CircleMembersTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({circleId = false, identityId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (circleId) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.circleId,
+                            referencedTable: $$CircleMembersTableReferences
+                                ._circleIdTable(db),
+                            referencedColumn:
+                                $$CircleMembersTableReferences
+                                    ._circleIdTable(db)
+                                    .id,
+                          )
+                          as T;
+                }
+                if (identityId) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.identityId,
+                            referencedTable: $$CircleMembersTableReferences
+                                ._identityIdTable(db),
+                            referencedColumn:
+                                $$CircleMembersTableReferences
+                                    ._identityIdTable(db)
+                                    .id,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$CircleMembersTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CircleMembersTable,
+      CircleMember,
+      $$CircleMembersTableFilterComposer,
+      $$CircleMembersTableOrderingComposer,
+      $$CircleMembersTableAnnotationComposer,
+      $$CircleMembersTableCreateCompanionBuilder,
+      $$CircleMembersTableUpdateCompanionBuilder,
+      (CircleMember, $$CircleMembersTableReferences),
+      CircleMember,
+      PrefetchHooks Function({bool circleId, bool identityId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -17498,4 +19848,10 @@ class $AppDatabaseManager {
       $$BodyPhotosTableTableManager(_db, _db.bodyPhotos);
   $$PlannedRoutesTableTableManager get plannedRoutes =>
       $$PlannedRoutesTableTableManager(_db, _db.plannedRoutes);
+  $$SocialIdentitiesTableTableManager get socialIdentities =>
+      $$SocialIdentitiesTableTableManager(_db, _db.socialIdentities);
+  $$SocialCirclesTableTableManager get socialCircles =>
+      $$SocialCirclesTableTableManager(_db, _db.socialCircles);
+  $$CircleMembersTableTableManager get circleMembers =>
+      $$CircleMembersTableTableManager(_db, _db.circleMembers);
 }
