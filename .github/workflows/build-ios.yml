@@ -45,7 +45,7 @@ jobs:
           rm -rf Payload
 
       - name: Upload IPA as Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: virya-ios-ipa
           path: dist/virya-ios.ipa
