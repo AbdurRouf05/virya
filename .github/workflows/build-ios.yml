@@ -13,6 +13,16 @@ on:
       - main
     tags:
       - "v*.*.*"
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'design_prototype/**'
+      - 'virya-motion/**'
+      - '.gitignore'
+
+concurrency:
+  group: build-ios-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-ios:

@@ -11,6 +11,10 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build APK
@@ -21,6 +25,56 @@ jobs:
     steps:
       - name: Checkout kode
         uses: actions/checkout@v4
+
+      - name: Verifikasi sinkronisasi versi (pubspec.yaml, version.json & git tag)
+        run: |
+          python3 - << 'EOF'
+          import json, os, re, sys
+
+          ref_name = os.environ.get("GITHUB_REF_NAME", "")
+          input_tag = os.environ.get("INPUT_TAG", "")
+          tag = ref_name if ref_name.startswith("v") else input_tag
+          if not tag:
+              print("::error::Tag rilis tidak ditemukan.")
+              sys.exit(1)
+
+          semver = tag.lstrip("v")
+          print(f"=== Validasi Versi Rilis: Tag={tag} (SemVer={semver}) ===")
+
+          with open("pubspec.yaml", "r", encoding="utf-8") as f:
+              pub_match = re.search(r"^version:\s*([^\+\s]+)", f.read(), re.M)
+              if not pub_match:
+                  print("::error::Field version di pubspec.yaml tidak ditemukan!")
+                  sys.exit(1)
+              pub_ver = pub_match.group(1).strip()
+
+          with open("version.json", "r", encoding="utf-8") as f:
+              vj = json.load(f)
+              json_ver = str(vj.get("versionName", "")).strip()
+              json_url = str(vj.get("downloadUrl", "")).strip()
+
+          print(f"  • pubspec.yaml version : {pub_ver}")
+          print(f"  • version.json name    : {json_ver}")
+          print(f"  • version.json URL     : {json_url}")
+
+          errors = []
+          if pub_ver != semver:
+              errors.append(f"Versi pubspec.yaml ({pub_ver}) != Tag rilis ({semver})")
+          if json_ver != semver:
+              errors.append(f"versionName di version.json ({json_ver}) != Tag rilis ({semver})")
+          expected_apk = f"virya-{tag}.apk"
+          if expected_apk not in json_url:
+              errors.append(f"downloadUrl di version.json tidak mengarah ke {expected_apk}")
+
+          if errors:
+              for err in errors:
+                  print(f"::error::{err}")
+              sys.exit(1)
+
+          print("✅ Sinkronisasi versi valid 100%!")
+          EOF
+        env:
+          INPUT_TAG: ${{ github.event.inputs.tag }}
 
       - name: Setup Java 17
         uses: actions/setup-java@v4
@@ -99,11 +153,15 @@ jobs:
         if: always()
         run: rm -f "$RUNNER_TEMP/virya-upload.jks"
 
-      - name: Siapkan file APK rilis
+      - name: Siapkan file APK rilis & checksum
         run: |
           TAG=${GITHUB_REF_NAME:-${{ github.event.inputs.tag }}}
           mkdir -p dist
           cp build/app/outputs/flutter-apk/app-release.apk "dist/virya-${TAG}.apk"
+          cd dist
+          sha256sum "virya-${TAG}.apk" > sha256-checksums.txt
+          cat sha256-checksums.txt
+          cd ..
           echo "APK_PATH=dist/virya-${TAG}.apk" >> "$GITHUB_ENV"
 
       - name: Verifikasi struktur, signature & kompatibilitas APK
@@ -260,13 +318,18 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/*.apk
+          files: |
+            dist/*.apk
+            dist/sha256-checksums.txt
           generate_release_notes: true
           name: "Virya ${{ github.ref_name }}"
           body: |
             ## Download
 
             Download file **`virya-${{ github.ref_name }}.apk`** (Universal APK — mendukung semua HP Android: arm64, arm32, dan x86_64, serta telah lolos verifikasi signature & uji install di Android Emulator).
+
+            ### Verifikasi Keaslian File (SHA-256)
+            Checksum integritas tersedia di lampiran `sha256-checksums.txt`.
 
             > **Catatan Penting untuk pengguna v1.0.4 ke bawah:**
             > Mulai v1.0.5, APK ditandatangani menggunakan kunci rilis permanen baru agar update berikutnya berjalan mulus. Jika lu meng-update dari **v1.0.4 atau lebih lama**, lakukan **Pengaturan → Buat cadangan** terlebih dahulu, **uninstall versi lama sekali**, lalu install APK v1.0.5 ini.

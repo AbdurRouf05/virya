@@ -5,11 +5,27 @@ on:
     branches:
       - main
       - dev1
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'design_prototype/**'
+      - 'virya-motion/**'
+      - '.gitignore'
   pull_request:
     branches:
       - main
       - dev1
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'design_prototype/**'
+      - 'virya-motion/**'
+      - '.gitignore'
   workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   analyze-and-test:
