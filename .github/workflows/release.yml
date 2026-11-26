@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout kode
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Verifikasi sinkronisasi versi (pubspec.yaml, version.json & git tag)
         run: |
