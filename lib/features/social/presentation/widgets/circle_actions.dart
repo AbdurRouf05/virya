@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/social/data/social_repository.dart';
 import 'package:virya/features/social/domain/circle_invite.dart';
+import 'package:virya/features/social/presentation/circle_qr_scanner_screen.dart';
 
 Future<void> showIdentityDialog(
   BuildContext context,

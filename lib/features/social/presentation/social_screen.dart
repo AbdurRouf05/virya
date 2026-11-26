@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:virya/core/widgets/field_kit.dart';
 import 'package:virya/features/social/data/social_providers.dart';
+import 'package:virya/features/social/presentation/circle_qr_scanner_screen.dart';
 import 'package:virya/features/social/presentation/widgets/circle_actions.dart';
 
 class SocialScreen extends ConsumerWidget {
@@ -24,8 +25,21 @@ class SocialScreen extends ConsumerWidget {
                 subtitle: 'Privat di perangkatmu',
                 actions: [
                   InkIconButton(
+                    icon: Icons.qr_code_scanner,
+                    tooltip: 'Pindai QR Circle',
+                    size: 36,
+                    onPressed: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const CircleQrScannerScreen(),
+                        ),
+                      );
+                      ref.invalidate(socialCirclesProvider);
+                    },
+                  ),
+                  InkIconButton(
                     icon: Icons.person_add_alt_1_outlined,
-                    tooltip: 'Simpan undangan',
+                    tooltip: 'Simpan undangan manual',
                     size: 36,
                     onPressed:
                         identity == null
@@ -157,7 +171,11 @@ class _IdentityCard extends StatelessWidget {
           Expanded(
             child: Text(name, style: FN.heading(size: 16, color: FN.ink)),
           ),
-          TextButton(onPressed: onCopy, child: const Text('Kode saya')),
+          TextButton.icon(
+            icon: const Icon(Icons.qr_code, size: 16),
+            label: const Text('Kode QR'),
+            onPressed: onCopy,
+          ),
         ],
       ),
     ),
